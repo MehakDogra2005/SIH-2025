@@ -1,0 +1,479 @@
+{% extends "base_new.html" %}
+
+{% block title %}Dashboard - Emergency Management System{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Preparedness Score Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="text-muted mb-2">Your disaster preparedness score is <strong class="text-primary">{{ stats.preparedness_score }}%</strong> - Great job! Keep learning to improve your safety knowledge.</h5>
+                        <div class="progress mb-3" style="height: 12px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ stats.preparedness_score }}%"></div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <span class="badge bg-success">5 Badges</span>
+                            <span class="badge bg-info">4 Completed Modules</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-play me-2"></i>Continue Learning
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="stats-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number">{{ stats.total_incidents }}</div>
+                    <div class="stats-label">Total Incidents</div>
+                </div>
+                <div>
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="stats-card warning">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number">{{ stats.active_incidents }}</div>
+                    <div class="stats-label">Active Alerts</div>
+                </div>
+                <div>
+                    <i class="fas fa-bell" style="font-size: 2rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="stats-card success">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number">{{ stats.safe_checkins }}</div>
+                    <div class="stats-label">Safe Zones</div>
+                </div>
+                <div>
+                    <i class="fas fa-shield-alt" style="font-size: 2rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="stats-card info">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stats-number">72</div>
+                    <div class="stats-label">Drills This Year</div>
+                </div>
+                <div>
+                    <i class="fas fa-users-cog" style="font-size: 2rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Row -->
+<div class="row">
+    <!-- Left Column - Interactive Learning Modules -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-graduation-cap me-2 text-primary"></i>
+                    Interactive Learning Modules
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Module Tabs -->
+                <ul class="nav nav-pills mb-4" id="module-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="mitigation-tab" data-bs-toggle="pill" data-bs-target="#mitigation" type="button">
+                            Mitigation
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preparedness-tab" data-bs-toggle="pill" data-bs-target="#preparedness" type="button">
+                            Preparedness
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="first-aid-tab" data-bs-toggle="pill" data-bs-target="#first-aid" type="button">
+                            First Aid
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Module Content -->
+                <div class="tab-content" id="module-content">
+                    <div class="tab-pane fade show active" id="mitigation" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="module-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="fas fa-mountain text-warning me-2"></i>
+                                                    Earthquake Mitigation
+                                                </h6>
+                                                <small class="text-muted">Learn earthquake safety protocols</small>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm">Continue</button>
+                                        </div>
+                                        <div class="progress mb-2" style="height: 6px;">
+                                            <div class="progress-bar bg-warning" style="width: 75%"></div>
+                                        </div>
+                                        <small class="text-muted">75% Complete</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="module-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="fas fa-water text-info me-2"></i>
+                                                    Flood Mitigation
+                                                </h6>
+                                                <small class="text-muted">Flood response and safety measures</small>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm">Start</button>
+                                        </div>
+                                        <div class="progress mb-2" style="height: 6px;">
+                                            <div class="progress-bar bg-info" style="width: 45%"></div>
+                                        </div>
+                                        <small class="text-muted">45% Complete</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="preparedness" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="module-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="fas fa-box text-success me-2"></i>
+                                                    Emergency Kit
+                                                </h6>
+                                                <small class="text-muted">Essential emergency supplies</small>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm">Start</button>
+                                        </div>
+                                        <div class="progress mb-2" style="height: 6px;">
+                                            <div class="progress-bar bg-success" style="width: 0%"></div>
+                                        </div>
+                                        <small class="text-muted">Not Started</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="module-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="fas fa-route text-primary me-2"></i>
+                                                    Evacuation Planning
+                                                </h6>
+                                                <small class="text-muted">Emergency evacuation procedures</small>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm">Start</button>
+                                        </div>
+                                        <div class="progress mb-2" style="height: 6px;">
+                                            <div class="progress-bar bg-primary" style="width: 0%"></div>
+                                        </div>
+                                        <small class="text-muted">Not Started</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="first-aid" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="module-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="fas fa-heart text-danger me-2"></i>
+                                                    CPR Training
+                                                </h6>
+                                                <small class="text-muted">Cardiopulmonary resuscitation</small>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm">Start</button>
+                                        </div>
+                                        <div class="progress mb-2" style="height: 6px;">
+                                            <div class="progress-bar bg-danger" style="width: 0%"></div>
+                                        </div>
+                                        <small class="text-muted">Not Started</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="module-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="fas fa-band-aid text-warning me-2"></i>
+                                                    Basic First Aid
+                                                </h6>
+                                                <small class="text-muted">Essential first aid techniques</small>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm">Start</button>
+                                        </div>
+                                        <div class="progress mb-2" style="height: 6px;">
+                                            <div class="progress-bar bg-warning" style="width: 0%"></div>
+                                        </div>
+                                        <small class="text-muted">Not Started</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column - Notifications and Quick Actions -->
+    <div class="col-lg-4">
+        <!-- Recent Notifications -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-bell me-2 text-warning"></i>
+                    Recent Notifications
+                </h6>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_notifications %}
+                    {% for notification in recent_notifications[:3] %}
+                    <div class="notification-item">
+                        <div class="d-flex">
+                            <i class="fas fa-{% if notification.type == 'alert' %}exclamation-triangle text-warning{% elif notification.type == 'drill' %}users-cog text-info{% else %}info-circle text-primary{% endif %} me-2 mt-1"></i>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <strong style="font-size: 0.9rem;">{{ notification.title }}</strong>
+                                    <small class="text-muted">10 min ago</small>
+                                </div>
+                                <p class="text-muted mb-0" style="font-size: 0.8rem;">{{ notification.message }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="notification-item">
+                    <div class="d-flex">
+                        <i class="fas fa-exclamation-triangle text-warning me-2 mt-1"></i>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong style="font-size: 0.9rem;">Flood Warning</strong>
+                                <small class="text-muted">10 min ago</small>
+                            </div>
+                            <p class="text-muted mb-0" style="font-size: 0.8rem;">Heavy rainfall alert issued for your region</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="d-flex">
+                        <i class="fas fa-users-cog text-info me-2 mt-1"></i>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong style="font-size: 0.9rem;">Drill Scheduled</strong>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                            <p class="text-muted mb-0" style="font-size: 0.8rem;">Earthquake drill scheduled for tomorrow 11 AM</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="d-flex">
+                        <i class="fas fa-info-circle text-primary me-2 mt-1"></i>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong style="font-size: 0.9rem;">New Module Added</strong>
+                                <small class="text-muted">1 day ago</small>
+                            </div>
+                            <p class="text-muted mb-0" style="font-size: 0.8rem;">Check out the new Fire Safety module</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-bolt me-2 text-primary"></i>
+                    Quick Actions
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('create_incident') }}" class="btn btn-outline-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Report Incident
+                    </a>
+                    <button class="btn btn-outline-success" onclick="quickCheckin()">
+                        <i class="fas fa-user-check me-2"></i>Quick Check-in
+                    </button>
+                    <a href="{{ url_for('emergency_contacts') }}" class="btn btn-outline-info">
+                        <i class="fas fa-phone-alt me-2"></i>Emergency Contacts
+                    </a>
+                    {% if session.get('user_role') == 'admin' %}
+                    <a href="{{ url_for('create_drill') }}" class="btn btn-outline-warning">
+                        <i class="fas fa-users-cog me-2"></i>Create Drill
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Incidents -->
+{% if recent_incidents %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">
+                        <i class="fas fa-clock me-2 text-secondary"></i>
+                        Recent Incidents
+                    </h6>
+                    <a href="{{ url_for('incidents') }}" class="btn btn-outline-primary btn-sm">View All</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for incident in recent_incidents %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-{% if incident.type == 'fire' %}danger{% elif incident.type == 'flood' %}info{% elif incident.type == 'earthquake' %}warning{% else %}secondary{% endif %}">
+                                        {{ incident.type.title() }}
+                                    </span>
+                                </td>
+                                <td>{{ incident.location }}</td>
+                                <td>
+                                    <span class="badge bg-{% if incident.status == 'resolved' %}success{% elif incident.status == 'assigned' %}warning{% else %}danger{% endif %}">
+                                        {{ incident.status.title() }}
+                                    </span>
+                                </td>
+                                <td><small class="text-muted">{{ incident.created_at.strftime('%H:%M') }}</small></td>
+                                <td>
+                                    <a href="{{ url_for('incident_detail', id=incident.id) }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function quickCheckin() {
+    const modal = new bootstrap.Modal(document.getElementById('checkinModal') || createCheckinModal());
+    modal.show();
+}
+
+function createCheckinModal() {
+    const modalHtml = `
+        <div class="modal fade" id="checkinModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Quick Safety Check-in</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="checkinForm">
+                            <div class="mb-3">
+                                <label class="form-label">Current Status</label>
+                                <div class="d-grid gap-2">
+                                    <button type="button" class="btn btn-outline-success" onclick="submitCheckin('safe')">
+                                        <i class="fas fa-check me-2"></i>I'm Safe
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning" onclick="submitCheckin('need_help')">
+                                        <i class="fas fa-hand-paper me-2"></i>Need Help
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger" onclick="submitCheckin('emergency')">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>Emergency
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    return document.getElementById('checkinModal');
+}
+
+function submitCheckin(status) {
+    fetch('/checkin', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `status=${status}&location=Dashboard`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('checkinModal')).hide();
+            location.reload();
+        }
+    });
+}
+
+// Auto-refresh dashboard every 30 seconds
+setInterval(function() {
+    // You can add AJAX calls here to update specific sections
+}, 30000);
+</script>
+{% endblock %}

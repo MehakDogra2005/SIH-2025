@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+
+{% block title %}Report Incident - Emergency Management System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h1 class="display-6 fw-bold text-danger">
+                    <i class="fas fa-exclamation-triangle me-3"></i>Report Emergency Incident
+                </h1>
+                <p class="lead text-muted">Provide detailed information about the emergency situation</p>
+            </div>
+
+            <!-- Alert -->
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-bell me-2"></i>
+                <strong>Emergency Alert:</strong> For immediate life-threatening emergencies, call 
+                <strong>112</strong> or use the emergency button in the bottom right corner.
+            </div>
+
+            <!-- Form -->
+            <div class="card form-card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Incident Report Form
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('create_incident') }}" id="incidentForm">
+                        <div class="row g-3">
+                            <!-- Emergency Type -->
+                            <div class="col-md-6">
+                                <label for="type" class="form-label">
+                                    <i class="fas fa-tags me-1 text-danger"></i>Emergency Type *
+                                </label>
+                                <select class="form-select" id="type" name="type" required>
+                                    <option value="">Select emergency type</option>
+                                    <option value="fire">🔥 Fire Emergency</option>
+                                    <option value="flood">🌊 Flood/Water Emergency</option>
+                                    <option value="earthquake">🏔️ Earthquake</option>
+                                    <option value="trapped">🚪 Person Trapped</option>
+                                    <option value="medical">🏥 Medical Emergency</option>
+                                    <option value="security">🔒 Security Threat</option>
+                                    <option value="chemical">⚠️ Chemical Spill</option>
+                                    <option value="other">❓ Other Emergency</option>
+                                </select>
+                            </div>
+
+                            <!-- Severity Level -->
+                            <div class="col-md-6">
+                                <label for="severity" class="form-label">
+                                    <i class="fas fa-exclamation-circle me-1 text-warning"></i>Severity Level *
+                                </label>
+                                <select class="form-select" id="severity" name="severity" required>
+                                    <option value="low">🟢 Low - Minor incident</option>
+                                    <option value="medium" selected>🟡 Medium - Requires attention</option>
+                                    <option value="high">🟠 High - Urgent response needed</option>
+                                    <option value="critical">🔴 Critical - Life threatening</option>
+                                </select>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="col-12">
+                                <label for="location" class="form-label">
+                                    <i class="fas fa-map-marker-alt me-1 text-info"></i>Location *
+                                </label>
+                                <input type="text" class="form-control" id="location" name="location" 
+                                       placeholder="Describe the exact location (e.g., Building A, Room 205)" required>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Be as specific as possible to help responders locate you quickly
+                                </div>
+                            </div>
+
+                            <!-- Building/Area ID -->
+                            <div class="col-md-6">
+                                <label for="building_id" class="form-label">
+                                    <i class="fas fa-building me-1 text-secondary"></i>Building/Area ID
+                                </label>
+                                <input type="text" class="form-control" id="building_id" name="building_id" 
+                                       placeholder="e.g., BLDG-A, ZONE-1">
+                                <div class="form-text">Optional: Building or zone identifier</div>
+                            </div>
+
+                            <!-- Get Location Button -->
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-crosshairs me-1 text-success"></i>GPS Coordinates
+                                </label>
+                                <button type="button" class="btn btn-outline-success w-100" id="getLocationBtn">
+                                    <i class="fas fa-map-pin me-2"></i>Get My Location
+                                </button>
+                                <div class="form-text" id="locationStatus">Click to share your GPS location</div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-12">
+                                <label for="description" class="form-label">
+                                    <i class="fas fa-clipboard me-1 text-primary"></i>Incident Description *
+                                </label>
+                                <textarea class="form-control" id="description" name="description" rows="4" 
+                                          placeholder="Provide a detailed description of the incident..." required></textarea>
+                                <div class="form-text">
+                                    Include: What happened? How many people affected? Any injuries? 
+                                    What immediate actions were taken?
+                                </div>
+                            </div>
+
+                            <!-- Additional Information -->
+                            <div class="col-md-6">
+                                <label for="affected_count" class="form-label">
+                                    <i class="fas fa-users me-1 text-info"></i>People Affected
+                                </label>
+                                <input type="number" class="form-control" id="affected_count" name="affected_count" 
+                                       min="0" placeholder="Number of people affected">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="contact_number" class="form-label">
+                                    <i class="fas fa-phone me-1 text-success"></i>Contact Number
+                                </label>
+                                <input type="tel" class="form-control" id="contact_number" name="contact_number" 
+                                       placeholder="Your contact number">
+                            </div>
+
+                            <!-- Media Upload -->
+                            <div class="col-12">
+                                <label for="media" class="form-label">
+                                    <i class="fas fa-camera me-1 text-secondary"></i>Attach Photos/Videos
+                                </label>
+                                <input type="file" class="form-control" id="media" name="media" 
+                                       accept="image/*,video/*" multiple>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Photos and videos help responders assess the situation better
+                                </div>
+                            </div>
+
+                            <!-- Immediate Actions Taken -->
+                            <div class="col-12">
+                                <label class="form-label">
+                                    <i class="fas fa-check-square me-1 text-success"></i>Immediate Actions Taken
+                                </label>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="evacuated" name="actions" value="evacuated">
+                                            <label class="form-check-label" for="evacuated">
+                                                <i class="fas fa-running me-1"></i>Area evacuated
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="first_aid" name="actions" value="first_aid">
+                                            <label class="form-check-label" for="first_aid">
+                                                <i class="fas fa-medkit me-1"></i>First aid provided
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="authorities" name="actions" value="authorities">
+                                            <label class="form-check-label" for="authorities">
+                                                <i class="fas fa-phone-alt me-1"></i>Authorities called
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="isolated" name="actions" value="isolated">
+                                            <label class="form-check-label" for="isolated">
+                                                <i class="fas fa-ban me-1"></i>Area isolated
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hidden inputs for GPS coordinates -->
+                        <input type="hidden" id="latitude" name="latitude">
+                        <input type="hidden" id="longitude" name="longitude">
+
+                        <!-- Form Actions -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Cancel
+                                    </a>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-primary me-2" id="saveAsDraftBtn">
+                                            <i class="fas fa-save me-2"></i>Save as Draft
+                                        </button>
+                                        <button type="submit" class="btn btn-danger btn-lg">
+                                            <i class="fas fa-paper-plane me-2"></i>Submit Incident Report
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Safety Tips -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>Safety Reminders
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Ensure your immediate safety first
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Call emergency services if life-threatening
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Follow evacuation procedures if required
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Stay calm and provide accurate information
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Do not put yourself in danger
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Wait for professional help if needed
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Get user location
+document.getElementById('getLocationBtn').addEventListener('click', function() {
+    const btn = this;
+    const statusDiv = document.getElementById('locationStatus');
+    
+    if (!navigator.geolocation) {
+        statusDiv.innerHTML = '<i class="fas fa-times text-danger me-1"></i>Geolocation not supported';
+        return;
+    }
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Getting location...';
+    statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin text-info me-1"></i>Locating...';
+    
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+            
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check text-success me-2"></i>Location Obtained';
+            btn.classList.remove('btn-outline-success');
+            btn.classList.add('btn-success');
+            
+            statusDiv.innerHTML = `<i class="fas fa-check text-success me-1"></i>
+                Coordinates: ${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
+        },
+        function(error) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-map-pin me-2"></i>Get My Location';
+            
+            let errorMsg = 'Location access denied';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMsg = 'Location access denied by user';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMsg = 'Location information unavailable';
+                    break;
+                case error.TIMEOUT:
+                    errorMsg = 'Location request timed out';
+                    break;
+            }
+            statusDiv.innerHTML = `<i class="fas fa-times text-danger me-1"></i>${errorMsg}`;
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
+        }
+    );
+});
+
+// Form validation
+document.getElementById('incidentForm').addEventListener('submit', function(e) {
+    if (!validateForm('incidentForm')) {
+        e.preventDefault();
+        showAlert('Please fill in all required fields', 'warning');
+        return;
+    }
+    
+    // Show confirmation
+    if (!confirm('Are you sure you want to submit this incident report?')) {
+        e.preventDefault();
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+});
+
+// Save as draft
+document.getElementById('saveAsDraftBtn').addEventListener('click', function() {
+    const formData = new FormData(document.getElementById('incidentForm'));
+    const data = Object.fromEntries(formData);
+    localStorage.setItem('incident_draft', JSON.stringify(data));
+    showAlert('Draft saved successfully', 'success');
+});
+
+// Load draft on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const draft = localStorage.getItem('incident_draft');
+    if (draft) {
+        const data = JSON.parse(draft);
+        Object.keys(data).forEach(key => {
+            const input = document.querySelector(`[name="${key}"]`);
+            if (input && input.type !== 'file') {
+                input.value = data[key];
+            }
+        });
+        
+        showAlert('Draft loaded', 'info');
+    }
+});
+
+// Character counter for description
+document.getElementById('description').addEventListener('input', function() {
+    const maxLength = 1000;
+    const currentLength = this.value.length;
+    const remaining = maxLength - currentLength;
+    
+    let counterElement = document.getElementById('descriptionCounter');
+    if (!counterElement) {
+        counterElement = document.createElement('small');
+        counterElement.id = 'descriptionCounter';
+        counterElement.className = 'text-muted';
+        this.parentNode.appendChild(counterElement);
+    }
+    
+    counterElement.textContent = `${currentLength}/${maxLength} characters`;
+    if (remaining < 100) {
+        counterElement.className = 'text-warning';
+    } else {
+        counterElement.className = 'text-muted';
+    }
+    
+    if (currentLength > maxLength) {
+        this.value = this.value.substring(0, maxLength);
+    }
+});
+</script>
+{% endblock %}

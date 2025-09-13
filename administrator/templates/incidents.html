@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block title %}Incidents - Emergency Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-primary">
+                        <i class="fas fa-exclamation-triangle me-3"></i>Incident Management
+                    </h1>
+                    <p class="text-muted mb-0">Monitor and manage emergency incidents in real-time</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('create_incident') }}" class="btn btn-danger btn-lg">
+                        <i class="fas fa-plus-circle me-2"></i>Report Incident
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Actions -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label fw-600">Filter by Type</label>
+                            <select class="form-select" id="typeFilter" onchange="filterIncidents()">
+                                <option value="">All Types</option>
+                                <option value="fire" {{ 'selected' if request.args.get('type') == 'fire' }}>Fire</option>
+                                <option value="flood" {{ 'selected' if request.args.get('type') == 'flood' }}>Flood</option>
+                                <option value="earthquake" {{ 'selected' if request.args.get('type') == 'earthquake' }}>Earthquake</option>
+                                <option value="trapped" {{ 'selected' if request.args.get('type') == 'trapped' }}>Trapped</option>
+                                <option value="medical" {{ 'selected' if request.args.get('type') == 'medical' }}>Medical</option>
+                                <option value="other" {{ 'selected' if request.args.get('type') == 'other' }}>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-600">Filter by Status</label>
+                            <select class="form-select" id="statusFilter" onchange="filterIncidents()">
+                                <option value="">All Status</option>
+                                <option value="open" {{ 'selected' if request.args.get('status') == 'open' }}>Open</option>
+                                <option value="acknowledged" {{ 'selected' if request.args.get('status') == 'acknowledged' }}>Acknowledged</option>
+                                <option value="assigned" {{ 'selected' if request.args.get('status') == 'assigned' }}>Assigned</option>
+                                <option value="resolved" {{ 'selected' if request.args.get('status') == 'resolved' }}>Resolved</option>
+                                <option value="false_alarm" {{ 'selected' if request.args.get('status') == 'false_alarm' }}>False Alarm</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-600">Search</label>
+                            <input type="text" class="form-control" placeholder="Search incidents..." id="searchInput">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100" onclick="exportData('incidents')">
+                                <i class="fas fa-download me-2"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-3">
+                            <div class="text-danger">
+                                <i class="fas fa-exclamation-circle fa-2x"></i>
+                                <div class="fw-bold mt-1">{{ incidents.total if incidents.total else 0 }}</div>
+                                <small class="text-muted">Total</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-warning">
+                                <i class="fas fa-clock fa-2x"></i>
+                                <div class="fw-bold mt-1">{{ incidents.items|selectattr('status', 'in', ['open', 'acknowledged'])|list|length }}</div>
+                                <small class="text-muted">Pending</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-info">
+                                <i class="fas fa-user-check fa-2x"></i>
+                                <div class="fw-bold mt-1">{{ incidents.items|selectattr('status', 'equalto', 'assigned')|list|length }}</div>
+                                <small class="text-muted">Assigned</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-success">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                                <div class="fw-bold mt-1">{{ incidents.items|selectattr('status', 'equalto', 'resolved')|list|length }}</div>
+                                <small class="text-muted">Resolved</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incidents List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-custom">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>Active Incidents
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if incidents.items %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Reporter</th>
+                                    <th>Status</th>
+                                    <th>Severity</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for incident in incidents.items %}
+                                <tr class="incident-row" data-incident-id="{{ incident.id }}">
+                                    <td class="fw-bold text-primary">#{{ incident.id }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            {% if incident.type == 'fire' %}
+                                                <i class="fas fa-fire me-1"></i>Fire
+                                            {% elif incident.type == 'flood' %}
+                                                <i class="fas fa-water me-1"></i>Flood
+                                            {% elif incident.type == 'earthquake' %}
+                                                <i class="fas fa-mountain me-1"></i>Earthquake
+                                            {% elif incident.type == 'trapped' %}
+                                                <i class="fas fa-user-lock me-1"></i>Trapped
+                                            {% elif incident.type == 'medical' %}
+                                                <i class="fas fa-ambulance me-1"></i>Medical
+                                            {% else %}
+                                                <i class="fas fa-exclamation me-1"></i>{{ incident.type.title() }}
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="fw-600">{{ incident.location }}</div>
+                                        {% if incident.building_id %}
+                                        <small class="text-muted">Building: {{ incident.building_id }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-user-circle text-muted me-2"></i>
+                                            <div>
+                                                <div class="fw-600">{{ incident.reporter.name if incident.reporter else 'Unknown' }}</div>
+                                                <small class="text-muted">{{ incident.reporter.role.title() if incident.reporter else '' }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="incident-status status-{{ incident.status }}">
+                                            {{ incident.status.replace('_', ' ').title() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="severity-indicator severity-{{ incident.severity }}"></span>
+                                            <span class="fw-600">{{ incident.severity.title() }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-600">{{ incident.created_at.strftime('%Y-%m-%d') if incident.created_at else 'Unknown' }}</div>
+                                        <small class="text-muted">{{ incident.created_at.strftime('%H:%M') if incident.created_at else '' }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ url_for('incident_detail', id=incident.id) }}" 
+                                               class="btn btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            {% if session.user_role in ['admin', 'spoc'] and incident.status == 'open' %}
+                                            <button class="btn btn-outline-warning" 
+                                                    onclick="updateIncidentStatus({{ incident.id }}, 'acknowledged')"
+                                                    title="Acknowledge">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            {% endif %}
+                                            {% if session.user_role in ['admin', 'spoc'] and incident.status in ['acknowledged', 'open'] %}
+                                            <button class="btn btn-outline-info" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#assignModal" 
+                                                    data-incident-id="{{ incident.id }}"
+                                                    title="Assign">
+                                                <i class="fas fa-user-plus"></i>
+                                            </button>
+                                            {% endif %}
+                                            {% if session.user_role in ['admin', 'spoc'] and incident.status != 'resolved' %}
+                                            <button class="btn btn-outline-success" 
+                                                    onclick="updateIncidentStatus({{ incident.id }}, 'resolved')"
+                                                    title="Mark Resolved">
+                                                <i class="fas fa-check-circle"></i>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if incidents.pages > 1 %}
+                    <div class="card-footer">
+                        <nav aria-label="Incidents pagination">
+                            <ul class="pagination pagination-sm mb-0 justify-content-center">
+                                {% if incidents.has_prev %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('incidents', page=incidents.prev_num, type=request.args.get('type', ''), status=request.args.get('status', '')) }}">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for page_num in incidents.iter_pages() %}
+                                    {% if page_num %}
+                                        {% if page_num != incidents.page %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for('incidents', page=page_num, type=request.args.get('type', ''), status=request.args.get('status', '')) }}">
+                                                {{ page_num }}
+                                            </a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ page_num }}</span>
+                                        </li>
+                                        {% endif %}
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if incidents.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('incidents', page=incidents.next_num, type=request.args.get('type', ''), status=request.args.get('status', '')) }}">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        <div class="text-center mt-2">
+                            <small class="text-muted">
+                                Showing {{ incidents.per_page * (incidents.page - 1) + 1 }} to 
+                                {{ incidents.per_page * incidents.page if incidents.has_next else incidents.total }} 
+                                of {{ incidents.total }} incidents
+                            </small>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-clipboard-list fa-4x text-muted mb-3"></i>
+                        <h5 class="text-muted">No incidents found</h5>
+                        <p class="text-muted mb-4">No incidents match your current filters</p>
+                        <a href="{{ url_for('create_incident') }}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle me-2"></i>Report New Incident
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Modal -->
+<div class="modal fade" id="assignModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-plus me-2"></i>Assign Responder
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assignForm">
+                    <input type="hidden" id="assignIncidentId" name="incident_id">
+                    <div class="mb-3">
+                        <label class="form-label">Select Responder</label>
+                        <select class="form-select" name="assigned_to" required>
+                            <option value="">Choose a responder...</option>
+                            <option value="1">Fire Department Team A</option>
+                            <option value="2">Medical Response Unit</option>
+                            <option value="3">Security Team Alpha</option>
+                            <option value="4">NDRF Squad 1</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Priority Instructions</label>
+                        <textarea class="form-control" name="instructions" rows="3" 
+                                  placeholder="Special instructions for the responder..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="assignResponder()">
+                    <i class="fas fa-user-check me-2"></i>Assign
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Assign modal handling
+document.getElementById('assignModal').addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const incidentId = button.getAttribute('data-incident-id');
+    document.getElementById('assignIncidentId').value = incidentId;
+});
+
+function assignResponder() {
+    const form = document.getElementById('assignForm');
+    const formData = new FormData(form);
+    const incidentId = formData.get('incident_id');
+    const assignedTo = formData.get('assigned_to');
+    
+    if (!assignedTo) {
+        showAlert('Please select a responder', 'warning');
+        return;
+    }
+    
+    updateIncidentStatus(incidentId, 'assigned', assignedTo);
+    bootstrap.Modal.getInstance(document.getElementById('assignModal')).hide();
+}
+
+// Search functionality
+document.getElementById('searchInput').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('.incident-row');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

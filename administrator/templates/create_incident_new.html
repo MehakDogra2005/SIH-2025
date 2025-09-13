@@ -1,0 +1,268 @@
+{% extends "base_new.html" %}
+
+{% block title %}Report Incident - Emergency Management System{% endblock %}
+{% block page_title %}Report Emergency Incident{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-1">Report Emergency Incident</h4>
+                <p class="text-muted mb-0">Submit detailed information about the emergency situation</p>
+            </div>
+            <a href="{{ url_for('incidents') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Incidents
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Emergency Incident Report
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="incidentForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="type" class="form-label">
+                                    <i class="fas fa-tag me-1"></i>
+                                    Incident Type <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-control" id="type" name="type" required>
+                                    <option value="">Select incident type</option>
+                                    <option value="fire">🔥 Fire Emergency</option>
+                                    <option value="flood">🌊 Flood/Water Emergency</option>
+                                    <option value="earthquake">🏔️ Earthquake</option>
+                                    <option value="medical">💊 Medical Emergency</option>
+                                    <option value="security">🔒 Security Threat</option>
+                                    <option value="gas_leak">⚠️ Gas Leak</option>
+                                    <option value="structural">🏗️ Structural Damage</option>
+                                    <option value="chemical">🧪 Chemical Spill</option>
+                                    <option value="power_outage">⚡ Power Outage</option>
+                                    <option value="other">❓ Other Emergency</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="severity" class="form-label">
+                                    <i class="fas fa-thermometer-half me-1"></i>
+                                    Severity Level <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-control" id="severity" name="severity" required>
+                                    <option value="">Select severity</option>
+                                    <option value="low">🟢 Low - Minor incident</option>
+                                    <option value="medium">🟡 Medium - Moderate concern</option>
+                                    <option value="high">🟠 High - Serious situation</option>
+                                    <option value="critical">🔴 Critical - Life threatening</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">
+                            <i class="fas fa-align-left me-1"></i>
+                            Detailed Description <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required
+                                  placeholder="Provide a detailed description of the incident including what happened, when it occurred, and any immediate dangers..."></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="location" class="form-label">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    Location <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="location" name="location" required
+                                       placeholder="e.g., Building A, Room 101, Main Campus">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="building_id" class="form-label">
+                                    <i class="fas fa-building me-1"></i>
+                                    Building/Area ID
+                                </label>
+                                <input type="text" class="form-control" id="building_id" name="building_id"
+                                       placeholder="e.g., BLDG-A-101">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="latitude" class="form-label">
+                                    <i class="fas fa-globe me-1"></i>
+                                    Latitude (Optional)
+                                </label>
+                                <input type="number" step="any" class="form-control" id="latitude" name="latitude"
+                                       placeholder="e.g., 28.6139">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="longitude" class="form-label">
+                                    <i class="fas fa-globe me-1"></i>
+                                    Longitude (Optional)
+                                </label>
+                                <input type="number" step="any" class="form-control" id="longitude" name="longitude"
+                                       placeholder="e.g., 77.2090">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <button type="button" class="btn btn-outline-info" onclick="getLocation()">
+                            <i class="fas fa-crosshairs me-2"></i>Use My Current Location
+                        </button>
+                        <small class="text-muted ms-3">This will automatically fill in your GPS coordinates</small>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Important:</strong> This report will be immediately visible to emergency responders and administrators. 
+                        Only submit genuine emergency situations. False reports may result in penalties.
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('incidents') }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-times me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-exclamation-triangle me-1"></i>Submit Emergency Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emergency Guidelines -->
+<div class="row mt-4">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle me-2 text-info"></i>
+                    Emergency Reporting Guidelines
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">When to Report:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Immediate danger to life or property</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Active fires or smoke</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Medical emergencies</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Structural damage or collapse</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Chemical spills or gas leaks</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-warning">Before Reporting:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-warning me-2"></i>Ensure your own safety first</li>
+                            <li><i class="fas fa-check text-warning me-2"></i>Call local emergency services if needed</li>
+                            <li><i class="fas fa-check text-warning me-2"></i>Gather accurate information</li>
+                            <li><i class="fas fa-check text-warning me-2"></i>Note exact location and time</li>
+                            <li><i class="fas fa-check text-warning me-2"></i>Document any injuries or damage</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
+                document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
+                
+                // Show success message
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-success alert-dismissible fade show mt-2';
+                alert.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>
+                    Location captured successfully!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector('form').insertBefore(alert, document.querySelector('.alert-warning'));
+                
+                // Auto dismiss after 3 seconds
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, 3000);
+            },
+            function(error) {
+                let message = 'Location access denied or unavailable.';
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = 'Location access denied by user.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = 'Location information unavailable.';
+                        break;
+                    case error.TIMEOUT:
+                        message = 'Location request timed out.';
+                        break;
+                }
+                
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-warning alert-dismissible fade show mt-2';
+                alert.innerHTML = `
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector('form').insertBefore(alert, document.querySelector('.alert-warning'));
+                
+                // Auto dismiss after 5 seconds
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, 5000);
+            }
+        );
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+
+document.getElementById('incidentForm').addEventListener('submit', function(e) {
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Submitting Report...';
+    submitBtn.disabled = true;
+});
+
+// Add real-time validation
+document.getElementById('type').addEventListener('change', function() {
+    const severity = document.getElementById('severity');
+    if (this.value === 'fire' || this.value === 'medical' || this.value === 'gas_leak') {
+        severity.value = 'high';
+    }
+});
+</script>
+{% endblock %}

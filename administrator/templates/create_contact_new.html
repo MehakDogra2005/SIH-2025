@@ -1,0 +1,161 @@
+{% extends "base_new.html" %}
+
+{% block title %}Add Emergency Contact - Emergency Management System{% endblock %}
+{% block page_title %}Add Emergency Contact{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-1">Add Emergency Contact</h4>
+                <p class="text-muted mb-0">Add a new emergency service contact to the directory</p>
+            </div>
+            <a href="{{ url_for('emergency_contacts') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Contacts
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-phone-alt me-2"></i>
+                    Contact Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">
+                                    <i class="fas fa-user me-1"></i>
+                                    Contact Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="name" name="name" required
+                                       placeholder="e.g., Central Fire Station">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="organization" class="form-label">
+                                    <i class="fas fa-building me-1"></i>
+                                    Organization <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="organization" name="organization" required
+                                       placeholder="e.g., City Fire Department">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="role" class="form-label">
+                                    <i class="fas fa-tag me-1"></i>
+                                    Service Type <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-control" id="role" name="role" required>
+                                    <option value="">Select service type</option>
+                                    <option value="fire">🔥 Fire Department</option>
+                                    <option value="police">👮 Police Department</option>
+                                    <option value="ambulance">🚑 Medical/Ambulance</option>
+                                    <option value="NDRF">🛡️ NDRF Team</option>
+                                    <option value="hospital">🏥 Hospital</option>
+                                    <option value="utility">⚡ Utility Services</option>
+                                    <option value="other">📞 Other Emergency</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">
+                                    <i class="fas fa-phone me-1"></i>
+                                    Phone Number <span class="text-danger">*</span>
+                                </label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required
+                                       placeholder="e.g., +91-123-456-7890">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="fas fa-envelope me-1"></i>
+                                    Email Address
+                                </label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                       placeholder="e.g., contact@firedept.gov">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="region" class="form-label">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    Service Region <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="region" name="region" required
+                                       placeholder="e.g., Central District, North Zone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">
+                            <i class="fas fa-home me-1"></i>
+                            Full Address
+                        </label>
+                        <textarea class="form-control" id="address" name="address" rows="3"
+                                  placeholder="Complete address including landmarks and area details..."></textarea>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Note:</strong> This contact will be visible to all users and will appear in the emergency contacts directory. 
+                        Please ensure all information is accurate and up-to-date.
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('emergency_contacts') }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-times me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Add Contact
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const submitBtn = document.querySelector('button[type="submit"]');
+    
+    form.addEventListener('submit', function() {
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Adding Contact...';
+        submitBtn.disabled = true;
+    });
+
+    // Phone number formatting
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 10) {
+            value = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+        }
+        e.target.value = value;
+    });
+});
+</script>
+{% endblock %}
