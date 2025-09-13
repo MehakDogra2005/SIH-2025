@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta viewport="width=device-width, initial-scale=1.0">
+    <title>Sandbox Virtual Simulator - DisasterSafe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --safe: #4285f4;
+            --light: #f8f9fa;
+            --dark: #202124;
+            --card-bg: #ffffff;
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gradient-bg);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        .header-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .header-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .simulator-controls {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            text-align: center;
+        }
+
+        .control-group h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .control-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .control-btn:hover,
+        .control-btn.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .simulator-main {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid rgba(26, 115, 232, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .scenario-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid #e0e0e0;
+        }
+
+        .scenario-item:hover {
+            background: rgba(26, 115, 232, 0.05);
+            border-color: var(--primary);
+        }
+
+        .scenario-item.active {
+            background: rgba(26, 115, 232, 0.1);
+            border-color: var(--primary);
+        }
+
+        .scenario-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: white;
+        }
+
+        .scenario-icon.flood {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+        }
+
+        .scenario-icon.earthquake {
+            background: linear-gradient(135deg, #795548, #5d4037);
+        }
+
+        .scenario-icon.fire {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+        }
+
+        .scenario-icon.tornado {
+            background: linear-gradient(135deg, #9e9e9e, #616161);
+        }
+
+        .scenario-icon.tsunami {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+        }
+
+        .scenario-info h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .scenario-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .main-viewer {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .viewer-header {
+            background: linear-gradient(to right, var(--primary), var(--safe));
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .viewer-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .viewer-btn {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .viewer-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .simulation-area {
+            height: 600px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .simulation-canvas {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .simulation-placeholder {
+            text-align: center;
+            color: #666;
+        }
+
+        .simulation-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary), #4caf50);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .tools-panel {
+            padding: 20px 0;
+        }
+
+        .tool-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tool-item:hover {
+            background: rgba(26, 115, 232, 0.05);
+        }
+
+        .tool-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .tool-icon.emergency {
+            background: var(--accent);
+        }
+
+        .tool-icon.evacuation {
+            background: var(--warning);
+        }
+
+        .tool-icon.rescue {
+            background: var(--secondary);
+        }
+
+        .tool-icon.communication {
+            background: var(--primary);
+        }
+
+        .stats-panel {
+            background: rgba(26, 115, 232, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background: var(--safe);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .simulation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            z-index: 10;
+        }
+
+        .disaster-animations {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .water-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, #1976d2, #42a5f5);
+            opacity: 0.7;
+            animation: flood-rise 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes flood-rise {
+            0% { height: 0%; }
+            100% { height: 60%; }
+        }
+
+        .earthquake-shake {
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .fire-effect {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(to top, #d32f2f, #ff5722, #ff9800);
+            opacity: 0.8;
+            animation: fire-flicker 1s infinite alternate;
+        }
+
+        @keyframes fire-flicker {
+            0% { opacity: 0.6; transform: scaleY(0.9); }
+            100% { opacity: 0.9; transform: scaleY(1.1); }
+        }
+
+        .floating-objects {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #666;
+            border-radius: 50%;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @media (max-width: 1200px) {
+            .simulator-main {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .header-section h1 {
+                font-size: 2rem;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                Disaster Simulator
+            </div>
+            <ul class="nav-menu">
+                <li><a href="dashboard-student.html">Dashboard</a></li>
+                <li><a href="education-modules.html">Education</a></li>
+                <li><a href="gamified-learning.html">Games</a></li>
+                <li><a href="profile-badges.html">Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Sandbox Virtual Simulator</h1>
+            <p>Experience realistic disaster scenarios in a safe, controlled environment</p>
+        </div>
+
+        <div class="simulator-controls">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <h3>Simulation Mode</h3>
+                    <div class="control-buttons">
+                        <button class="control-btn active" data-mode="training">Training</button>
+                        <button class="control-btn" data-mode="assessment">Assessment</button>
+                        <button class="control-btn" data-mode="multiplayer">Multiplayer</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <h3>Difficulty Level</h3>
+                    <div class="control-buttons">
+                        <button class="control-btn active" data-difficulty="beginner">Beginner</button>
+                        <button class="control-btn" data-difficulty="intermediate">Intermediate</button>
+                        <button class="control-btn" data-difficulty="expert">Expert</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <h3>Environment</h3>
+                    <div class="control-buttons">
+                        <button class="control-btn active" data-environment="urban">Urban</button>
+                        <button class="control-btn" data-environment="rural">Rural</button>
+                        <button class="control-btn" data-environment="coastal">Coastal</button>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-primary" onclick="startSimulation()">Start New Simulation</button>
+                <button class="btn-secondary" onclick="loadScenario()">Load Saved Scenario</button>
+            </div>
+        </div>
+
+        <div class="simulator-main">
+            <div class="sidebar">
+                <h3>Disaster Scenarios</h3>
+                <div class="scenario-item active" data-scenario="flood">
+                    <div class="scenario-icon flood">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <div class="scenario-info">
+                        <h4>Flash Flood</h4>
+                        <p>Rapid water rise simulation</p>
+                    </div>
+                </div>
+                <div class="scenario-item" data-scenario="earthquake">
+                    <div class="scenario-icon earthquake">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <div class="scenario-info">
+                        <h4>Earthquake</h4>
+                        <p>Seismic activity and aftershocks</p>
+                    </div>
+                </div>
+                <div class="scenario-item" data-scenario="fire">
+                    <div class="scenario-icon fire">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="scenario-info">
+                        <h4>Wildfire</h4>
+                        <p>Spreading fire simulation</p>
+                    </div>
+                </div>
+                <div class="scenario-item" data-scenario="tornado">
+                    <div class="scenario-icon tornado">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="scenario-info">
+                        <h4>Tornado</h4>
+                        <p>Severe weather conditions</p>
+                    </div>
+                </div>
+                <div class="scenario-item" data-scenario="tsunami">
+                    <div class="scenario-icon tsunami">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <div class="scenario-info">
+                        <h4>Tsunami</h4>
+                        <p>Coastal wave simulation</p>
+                    </div>
+                </div>
+
+                <div class="stats-panel">
+                    <h4>Current Session</h4>
+                    <div class="stat-row">
+                        <span>People Saved:</span>
+                        <span class="stat-value" id="peopleSaved">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Time Elapsed:</span>
+                        <span class="stat-value" id="timeElapsed">00:00</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Score:</span>
+                        <span class="stat-value" id="currentScore">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Efficiency:</span>
+                        <span class="stat-value" id="efficiency">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-viewer">
+                <div class="viewer-header">
+                    <h3 id="currentScenario">Flash Flood Simulation</h3>
+                    <div class="viewer-controls">
+                        <button class="viewer-btn" onclick="pauseSimulation()">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        <button class="viewer-btn" onclick="resetSimulation()">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                        <button class="viewer-btn" onclick="toggleFullscreen()">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="simulation-area">
+                    <div class="simulation-canvas" id="simulationCanvas">
+                        <div class="simulation-placeholder">
+                            <i class="fas fa-play-circle"></i>
+                            <h3>Click "Start Simulation" to begin</h3>
+                            <p>Choose a disaster scenario and simulation settings</p>
+                        </div>
+                    </div>
+                    <div class="disaster-animations" id="disasterAnimations">
+                        <!-- Disaster effects will be added here -->
+                    </div>
+                    <div class="simulation-overlay" id="simulationOverlay">
+                        <div>
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading Simulation...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <h3>Response Tools</h3>
+                <div class="tools-panel">
+                    <div class="tool-item" onclick="useTool('emergency')">
+                        <div class="tool-icon emergency">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h4>Emergency Call</h4>
+                            <p>Contact emergency services</p>
+                        </div>
+                    </div>
+                    <div class="tool-item" onclick="useTool('evacuation')">
+                        <div class="tool-icon evacuation">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <div>
+                            <h4>Evacuation Route</h4>
+                            <p>Plan escape routes</p>
+                        </div>
+                    </div>
+                    <div class="tool-item" onclick="useTool('rescue')">
+                        <div class="tool-icon rescue">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div>
+                            <h4>Rescue Team</h4>
+                            <p>Deploy rescue operations</p>
+                        </div>
+                    </div>
+                    <div class="tool-item" onclick="useTool('communication')">
+                        <div class="tool-icon communication">
+                            <i class="fas fa-broadcast-tower"></i>
+                        </div>
+                        <div>
+                            <h4>Public Alert</h4>
+                            <p>Send emergency alerts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Objectives</h3>
+                <div class="objectives-list" id="objectivesList">
+                    <div class="objective-item">
+                        <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                        <span>Evacuate 50 people</span>
+                    </div>
+                    <div class="objective-item">
+                        <i class="far fa-circle" style="color: #ccc;"></i>
+                        <span>Establish safe zones</span>
+                    </div>
+                    <div class="objective-item">
+                        <i class="far fa-circle" style="color: #ccc;"></i>
+                        <span>Coordinate with authorities</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSimulation = null;
+        let simulationTimer = null;
+        let startTime = null;
+        let currentScore = 0;
+        let peopleSaved = 0;
+
+        // Control button functionality
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const type = this.dataset.mode || this.dataset.difficulty || this.dataset.environment;
+                const group = this.parentElement;
+                
+                group.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Scenario selection
+        document.querySelectorAll('.scenario-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.scenario-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                const scenario = this.dataset.scenario;
+                updateScenarioDisplay(scenario);
+            });
+        });
+
+        function updateScenarioDisplay(scenario) {
+            const scenarios = {
+                flood: 'Flash Flood Simulation',
+                earthquake: 'Earthquake Simulation',
+                fire: 'Wildfire Simulation',
+                tornado: 'Tornado Simulation',
+                tsunami: 'Tsunami Simulation'
+            };
+            
+            document.getElementById('currentScenario').textContent = scenarios[scenario];
+        }
+
+        function startSimulation() {
+            const overlay = document.getElementById('simulationOverlay');
+            const canvas = document.getElementById('simulationCanvas');
+            const animations = document.getElementById('disasterAnimations');
+            
+            // Show loading overlay
+            overlay.style.display = 'flex';
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                canvas.innerHTML = '';
+                
+                // Get active scenario
+                const activeScenario = document.querySelector('.scenario-item.active').dataset.scenario;
+                
+                // Start simulation based on scenario
+                switch(activeScenario) {
+                    case 'flood':
+                        startFloodSimulation(animations);
+                        break;
+                    case 'earthquake':
+                        startEarthquakeSimulation(animations);
+                        break;
+                    case 'fire':
+                        startFireSimulation(animations);
+                        break;
+                    case 'tornado':
+                        startTornadoSimulation(animations);
+                        break;
+                    case 'tsunami':
+                        startTsunamiSimulation(animations);
+                        break;
+                }
+                
+                // Start timer and progress
+                startTimer();
+                updateProgress();
+            }, 2000);
+        }
+
+        function startFloodSimulation(container) {
+            container.innerHTML = '<div class="water-wave"></div>';
+            
+            // Add floating debris
+            for(let i = 0; i < 5; i++) {
+                const debris = document.createElement('div');
+                debris.className = 'floating-objects';
+                debris.style.left = Math.random() * 80 + '%';
+                debris.style.top = Math.random() * 60 + '%';
+                debris.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(debris);
+            }
+            
+            simulateRescueOperations();
+        }
+
+        function startEarthquakeSimulation(container) {
+            container.innerHTML = '';
+            document.getElementById('simulationCanvas').classList.add('earthquake-shake');
+            
+            // Add falling objects
+            for(let i = 0; i < 8; i++) {
+                const debris = document.createElement('div');
+                debris.className = 'floating-objects';
+                debris.style.left = Math.random() * 90 + '%';
+                debris.style.top = '0%';
+                debris.style.animation = 'fall 2s linear infinite';
+                debris.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(debris);
+            }
+            
+            simulateRescueOperations();
+        }
+
+        function startFireSimulation(container) {
+            container.innerHTML = '<div class="fire-effect"></div>';
+            simulateRescueOperations();
+        }
+
+        function startTornadoSimulation(container) {
+            container.innerHTML = '';
+            // Add spinning debris
+            for(let i = 0; i < 10; i++) {
+                const debris = document.createElement('div');
+                debris.className = 'floating-objects';
+                debris.style.left = Math.random() * 80 + '%';
+                debris.style.top = Math.random() * 80 + '%';
+                debris.style.animation = 'spin 1s linear infinite';
+                debris.style.animationDelay = Math.random() * 1 + 's';
+                container.appendChild(debris);
+            }
+            simulateRescueOperations();
+        }
+
+        function startTsunamiSimulation(container) {
+            container.innerHTML = '<div class="water-wave" style="animation: tsunami-wave 8s ease-in-out infinite;"></div>';
+            simulateRescueOperations();
+        }
+
+        function simulateRescueOperations() {
+            currentSimulation = setInterval(() => {
+                // Randomly update rescue statistics
+                if (Math.random() > 0.7) {
+                    peopleSaved += Math.floor(Math.random() * 5) + 1;
+                    currentScore += Math.floor(Math.random() * 100) + 50;
+                    updateStats();
+                }
+            }, 2000);
+        }
+
+        function startTimer() {
+            startTime = Date.now();
+            simulationTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const minutes = Math.floor(elapsed / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+                document.getElementById('timeElapsed').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function updateProgress() {
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 2;
+                document.getElementById('progressFill').style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    completeSimulation();
+                }
+            }, 1000);
+        }
+
+        function updateStats() {
+            document.getElementById('peopleSaved').textContent = peopleSaved;
+            document.getElementById('currentScore').textContent = currentScore;
+            
+            const efficiency = Math.min(100, Math.floor((peopleSaved / 100) * 100));
+            document.getElementById('efficiency').textContent = efficiency + '%';
+        }
+
+        function useTool(tool) {
+            const tools = {
+                emergency: 'Emergency services contacted! Response time: 5 minutes',
+                evacuation: 'Evacuation route established! Guiding people to safety',
+                rescue: 'Rescue team deployed! Searching for survivors',
+                communication: 'Public alert sent! Warning broadcasted to all devices'
+            };
+            
+            alert(tools[tool]);
+            
+            // Update score based on tool used
+            currentScore += 150;
+            updateStats();
+        }
+
+        function pauseSimulation() {
+            if (currentSimulation) {
+                clearInterval(currentSimulation);
+                clearInterval(simulationTimer);
+                alert('Simulation paused');
+            }
+        }
+
+        function resetSimulation() {
+            if (currentSimulation) clearInterval(currentSimulation);
+            if (simulationTimer) clearInterval(simulationTimer);
+            
+            document.getElementById('disasterAnimations').innerHTML = '';
+            document.getElementById('simulationCanvas').className = 'simulation-canvas';
+            document.getElementById('simulationCanvas').innerHTML = `
+                <div class="simulation-placeholder">
+                    <i class="fas fa-play-circle"></i>
+                    <h3>Click "Start Simulation" to begin</h3>
+                    <p>Choose a disaster scenario and simulation settings</p>
+                </div>
+            `;
+            document.getElementById('progressFill').style.width = '0%';
+            
+            // Reset stats
+            peopleSaved = 0;
+            currentScore = 0;
+            document.getElementById('timeElapsed').textContent = '00:00';
+            updateStats();
+        }
+
+        function toggleFullscreen() {
+            const viewer = document.querySelector('.main-viewer');
+            if (!document.fullscreenElement) {
+                viewer.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function loadScenario() {
+            alert('Load saved scenario functionality would connect to user progress database');
+        }
+
+        function completeSimulation() {
+            if (currentSimulation) clearInterval(currentSimulation);
+            if (simulationTimer) clearInterval(simulationTimer);
+            
+            const finalScore = currentScore + (peopleSaved * 100);
+            alert(`Simulation Complete!\n\nFinal Score: ${finalScore}\nPeople Saved: ${peopleSaved}\n\nGreat job! Check your profile for badges and achievements.`);
+        }
+
+        // Add CSS for additional animations
+        const additionalCSS = `
+            @keyframes fall {
+                0% { transform: translateY(-50px); }
+                100% { transform: translateY(600px); }
+            }
+            
+            @keyframes spin {
+                0% { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+                100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+            }
+            
+            @keyframes tsunami-wave {
+                0% { height: 0%; }
+                50% { height: 80%; }
+                100% { height: 20%; }
+            }
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = additionalCSS;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

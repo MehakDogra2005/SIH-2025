@@ -1,0 +1,38 @@
+# Requirements for Disaster Psychology SLM Training Pipeline
+
+# Core ML libraries
+torch>=2.0.0
+transformers>=4.35.0
+datasets>=2.14.0
+accelerate>=0.24.0
+
+# Data processing
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Image processing for visual disaster assessment
+Pillow>=10.0.0
+opencv-python>=4.8.0
+torchvision>=0.15.0
+
+# Web framework for API integration
+flask>=2.3.0
+flask-cors>=4.0.0
+
+# JSON and file handling
+jsonlines>=4.0.0
+pyyaml>=6.0.1
+
+# Logging and monitoring
+tqdm>=4.66.0
+wandb>=0.16.0
+
+# Optional: For LLAMA-specific models (requires approval)
+# peft>=0.6.0
+# bitsandbytes>=0.41.0
+
+# Development tools
+pytest>=7.4.0
+black>=23.9.0
+flake8>=6.1.0
