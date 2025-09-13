@@ -509,6 +509,117 @@
             transform: scale(1.05);
         }
 
+        .enhanced-chat-btn {
+            background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%) !important;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .enhanced-chat-btn:hover {
+            background: linear-gradient(135deg, #8e24aa 0%, #5e35b1 100%) !important;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(156, 39, 176, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Feature Banner Styles */
+        .feature-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        .banner-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .banner-text {
+            flex: 1;
+            color: white;
+        }
+
+        .banner-text h4 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .banner-text p {
+            opacity: 0.9;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .banner-action {
+            margin-left: auto;
+        }
+
+        .banner-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .banner-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
         .photo-upload-section {
             display: none;
             padding: 20px;
@@ -770,6 +881,24 @@
         </div>
 
         <div class="main-content">
+            <!-- Feature Highlight Banner -->
+            <div class="feature-banner">
+                <div class="banner-content">
+                    <div class="banner-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="banner-text">
+                        <h4>🎉 New: Enhanced AI Chatbot</h4>
+                        <p>Experience our upgraded DisasterAI Assistant with advanced UI, animations, and better emergency support!</p>
+                    </div>
+                    <div class="banner-action">
+                        <button class="banner-btn" onclick="openEnhancedChatbot()">
+                            <i class="fas fa-robot"></i> Try Enhanced Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="chat-section">
                 <div class="chat-header">
                     <div class="therapist-avatar">
@@ -788,6 +917,9 @@
                         </button>
                         <button class="tool-btn" onclick="emergencyProtocol()" title="Emergency protocols">
                             <i class="fas fa-exclamation-triangle"></i>
+                        </button>
+                        <button class="tool-btn enhanced-chat-btn" onclick="openEnhancedChatbot()" title="Open Enhanced AI Chatbot (Full Screen)">
+                            <i class="fas fa-robot"></i>
                         </button>
                     </div>
                 </div>
@@ -1429,6 +1561,33 @@
                 addMessage(protocol, 'ai');
                 showEmergencyStatus(true, 'Emergency Protocol Active');
                 setTimeout(() => showEmergencyStatus(false), 5000);
+            }
+        }
+
+        // Enhanced Chatbot Integration
+        function openEnhancedChatbot() {
+            const confirmed = confirm('🤖 Enhanced AI Chatbot\n\nOpen the full-screen DisasterAI Assistant with advanced features?\n\n✨ Features:\n• Enhanced UI/UX with animations\n• Advanced AI responses\n• File upload support\n• Typing indicators\n• Better emergency protocols\n\nThis will open in a new window.');
+            
+            if (confirmed) {
+                // Open chatbot in new window with optimal size
+                const chatbotWindow = window.open(
+                    'chatbot.html',
+                    'DisasterAI_Chatbot',
+                    'width=1000,height=700,resizable=yes,scrollbars=yes,status=yes,location=no,toolbar=no,menubar=no'
+                );
+                
+                if (chatbotWindow) {
+                    chatbotWindow.focus();
+                    
+                    // Add message to current chat indicating the user opened enhanced chatbot
+                    addMessage('🚀 Enhanced AI Chatbot opened in new window. You can use both interfaces simultaneously for comprehensive support.', 'ai');
+                } else {
+                    // Fallback if popup was blocked
+                    alert('❌ Popup blocked!\n\nPlease allow popups for this site or manually open chatbot.html in a new tab.\n\nYou can also:\n1. Right-click the robot button\n2. Select "Open link in new tab"\n3. Or copy this URL: chatbot.html');
+                    
+                    // Provide alternative navigation
+                    addMessage('💡 **Alternative:** You can also navigate directly to chatbot.html for the enhanced experience.', 'ai');
+                }
             }
         }
 

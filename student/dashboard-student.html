@@ -98,6 +98,23 @@
             font-size: 18px;
         }
 
+        .new-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: auto;
+            animation: pulse-badge 2s infinite;
+            box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
         /* Main Content Styles */
         .main-content {
             grid-column: 2;
@@ -830,6 +847,7 @@
                 <div class="menu-item">
                     <i class="fas fa-brain"></i>
                     <span>Psychological Help</span>
+                    <span class="new-badge">NEW</span>
                 </div>
                 <div class="menu-item">
                     <i class="fas fa-graduation-cap"></i>
@@ -1486,13 +1504,159 @@
         // Start real-time alerts when page loads
         startRealTimeAlerts();
 
-        // Menu item interactivity
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
+        // Menu item navigation and interactivity
+        function initializeMenuNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            // Define page mappings for each menu item
+            const pageMapping = {
+                'Dashboard': 'dashboard-student.html',
+                'Education Modules': 'education-modules.html',
+                'Sandbox Simulator': 'sandbox-simulator.html',
+                'Emergency Contacts': '#emergency-contacts', // Scroll to emergency contacts section
+                'Disaster Map': '../advanced-map.html',
+                'Psychological Help': 'consultation.html',
+                'Gamified Learning': 'gamified-learning.html',
+                'Profile & Badges': 'profile-badges.html'
+            };
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Update active state
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Get the menu item text
+                    const menuText = this.querySelector('span').textContent.trim();
+                    const targetPage = pageMapping[menuText];
+                    
+                    if (targetPage) {
+                        if (targetPage.startsWith('#')) {
+                            // Handle anchor links (scroll to section)
+                            if (targetPage === '#emergency-contacts') {
+                                document.querySelector('.emergency-contacts-section').scrollIntoView({
+                                    behavior: 'smooth'
+                                });
+                            }
+                        } else {
+                            // Navigate to page
+                            navigateToPage(targetPage, menuText);
+                        }
+                    }
+                });
+                
+                // Add hover effect
+                item.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
             });
-        });
+        }
+        
+        function navigateToPage(targetPage, menuText) {
+            // Show loading indicator
+            showLoadingIndicator();
+            
+            // Add smooth transition
+            document.body.style.opacity = '0.8';
+            document.body.style.transition = 'opacity 0.3s ease';
+            
+            setTimeout(() => {
+                try {
+                    window.location.href = targetPage;
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    hideLoadingIndicator();
+                    showNavigationError(menuText);
+                    document.body.style.opacity = '1';
+                }
+            }, 300);
+        }
+        
+        function showLoadingIndicator() {
+            // Create loading overlay if it doesn't exist
+            if (!document.getElementById('loadingOverlay')) {
+                const loadingHTML = `
+                    <div id="loadingOverlay" style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(26, 115, 232, 0.9);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                        color: white;
+                    ">
+                        <div style="
+                            width: 50px;
+                            height: 50px;
+                            border: 3px solid rgba(255, 255, 255, 0.3);
+                            border-top: 3px solid white;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            margin-bottom: 20px;
+                        "></div>
+                        <h3>Loading...</h3>
+                        <p>Navigating to your selected page</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+                document.body.insertAdjacentHTML('beforeend', loadingHTML);
+            }
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        
+        function hideLoadingIndicator() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+        
+        function showNavigationError(menuText) {
+            alert(`⚠️ Navigation Error\n\nSorry, the ${menuText} page is currently unavailable.\n\nThis might be because:\n• The page is still being developed\n• The file path has changed\n• There's a temporary server issue\n\nPlease try again later or contact support.`);
+        }
+        
+        // Add keyboard navigation
+        function initializeKeyboardNavigation() {
+            document.addEventListener('keydown', function(e) {
+                if (e.altKey) {
+                    const menuItems = document.querySelectorAll('.menu-item');
+                    const currentActive = document.querySelector('.menu-item.active');
+                    let currentIndex = Array.from(menuItems).indexOf(currentActive);
+                    
+                    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        currentIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+                        menuItems[currentIndex].click();
+                    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        currentIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
+                        menuItems[currentIndex].click();
+                    }
+                }
+            });
+        }
+        
+        // Initialize navigation when page loads
+        initializeMenuNavigation();
+        initializeKeyboardNavigation();
     </script>
 </body>
 </html>

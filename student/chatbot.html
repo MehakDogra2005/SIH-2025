@@ -8,59 +8,225 @@
     <style>
         :root {
             --primary: #1a73e8;
+            --primary-light: #4285f4;
+            --primary-dark: #1557b0;
             --secondary: #34a853;
+            --secondary-light: #4caf50;
             --accent: #f25c54;
+            --accent-light: #ff5722;
+            --success: #10ac84;
+            --warning: #f9a825;
+            --info: #17a2b8;
             --light: #f8f9fa;
             --dark: #202124;
-            --warning: #f9a825;
             --safe: #4285f4;
+            --chat-bg: #fafbfc;
+            --message-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --header-shadow: 0 4px 20px rgba(26, 115, 232, 0.3);
+            --container-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --border-radius: 16px;
+            --message-radius: 20px;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         body {
-            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
         }
         
         .container {
             width: 100%;
-            max-width: 900px;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            box-shadow: var(--container-shadow);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             height: 90vh;
+            animation: slideInUp 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         
         .header {
-            background: linear-gradient(to right, var(--primary), var(--safe));
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            padding: 20px;
+            padding: 24px 28px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
+            box-shadow: var(--header-shadow);
+            position: relative;
+            overflow: hidden;
         }
         
-        .header img {
-            width: 50px;
-            height: 50px;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            pointer-events: none;
         }
         
-        .header h1 {
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 1;
+        }
+        
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .header-text h1 {
             font-size: 1.8rem;
             font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+        }
+        
+        .header-text .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            z-index: 1;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .emergency-banner {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .emergency-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .emergency-banner:hover::before {
+            left: 100%;
+        }
+        
+        .emergency-banner:hover {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #ff3d00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(242, 92, 84, 0.4);
+        }
+        
+        .emergency-icon {
+            font-size: 1.1rem;
+            animation: shake 2s infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
         }
         
         .chat-container {
@@ -68,230 +234,600 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            position: relative;
         }
         
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            background-color: #fafafa;
+            gap: 16px;
+            background: var(--chat-bg);
+            scroll-behavior: smooth;
+        }
+        
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
         }
         
         .message {
             max-width: 75%;
-            padding: 12px 18px;
-            border-radius: 18px;
-            line-height: 1.4;
+            padding: 16px 20px;
+            border-radius: var(--message-radius);
+            line-height: 1.5;
             position: relative;
-            animation: fadeIn 0.3s ease;
+            animation: messageSlide 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: var(--message-shadow);
+            word-wrap: break-word;
+            font-size: 0.95rem;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes messageSlide {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
         }
         
         .user-message {
             align-self: flex-end;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            border-bottom-right-radius: 5px;
+            border-bottom-right-radius: 8px;
+            margin-left: auto;
         }
         
         .bot-message {
             align-self: flex-start;
-            background-color: #e8eaf6;
+            background: white;
             color: var(--dark);
-            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-bottom-left-radius: 8px;
+            margin-right: auto;
+        }
+        
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            margin-bottom: 8px;
+        }
+        
+        .bot-avatar {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+        }
+        
+        .user-avatar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+        
+        .message-content {
+            margin-bottom: 8px;
         }
         
         .message-time {
-            font-size: 0.7rem;
-            margin-top: 5px;
-            opacity: 0.7;
+            font-size: 0.75rem;
+            opacity: 0.6;
             text-align: right;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+        
+        .bot-message .message-time {
+            text-align: left;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: white;
+            border-radius: var(--message-radius);
+            border-bottom-left-radius: 8px;
+            max-width: 80px;
+            box-shadow: var(--message-shadow);
+            margin-right: auto;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0ms; }
+        .typing-dot:nth-child(2) { animation-delay: 200ms; }
+        .typing-dot:nth-child(3) { animation-delay: 400ms; }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 20px 24px 16px;
+            background: white;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        
+        .quick-reply {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8eaf6 100%);
+            border: 1px solid rgba(26, 115, 232, 0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-reply::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .quick-reply:hover::before {
+            opacity: 1;
+        }
+        
+        .quick-reply:hover {
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 115, 232, 0.3);
+        }
+        
+        .quick-reply span {
+            position: relative;
+            z-index: 1;
         }
         
         .input-area {
-            padding: 15px 20px;
-            background-color: white;
-            border-top: 1px solid #e0e0e0;
+            padding: 20px 24px;
+            background: white;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
             display: flex;
-            align-items: center;
-            gap: 10px;
+            align-items: flex-end;
+            gap: 12px;
+        }
+        
+        .input-container {
+            flex: 1;
+            position: relative;
         }
         
         .message-input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(0, 0, 0, 0.08);
             border-radius: 24px;
             outline: none;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: var(--transition);
+            background: #fafbfc;
+            resize: none;
+            min-height: 24px;
+            max-height: 120px;
+            line-height: 1.5;
+            font-family: inherit;
         }
         
         .message-input:focus {
             border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
         }
         
-        .send-button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
+        .message-input::placeholder {
+            color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .input-actions {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+        
+        .action-button {
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
+            border: none;
             cursor: pointer;
             display: flex;
-            justify-content: center;
             align-items: center;
-            transition: background-color 0.3s;
-        }
-        
-        .send-button:hover {
-            background-color: var(--safe);
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
         
         .upload-button {
-            background-color: var(--secondary);
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
             color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
         }
         
         .upload-button:hover {
-            background-color: #2e7d32;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 168, 83, 0.4);
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+        
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 115, 232, 0.4);
+        }
+        
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .file-input {
             display: none;
         }
         
-        .quick-replies {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 10px 20px;
-            background-color: white;
-            border-top: 1px solid #e0e0e0;
-        }
-        
-        .quick-reply {
-            padding: 8px 16px;
-            background-color: #e8eaf6;
-            border: 1px solid #c5cae9;
-            border-radius: 18px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .quick-reply:hover {
-            background-color: #c5cae9;
-        }
-        
-        .emergency-button {
-            display: block;
-            margin: 15px auto;
-            padding: 12px 25px;
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 24px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .emergency-button:hover {
-            background-color: #e53935;
-        }
-        
         .file-message {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background-color: #e3f2fd;
-            border-radius: 10px;
-            margin-top: 5px;
+            gap: 12px;
+            padding: 12px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-radius: 12px;
+            margin-top: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .file-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: var(--dark);
+        }
+        
+        .file-size {
+            font-size: 0.8rem;
+            color: rgba(0, 0, 0, 0.6);
         }
         
         .education-module {
-            background-color: #e8f5e9;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+            border: 1px solid rgba(52, 168, 83, 0.2);
             border-left: 4px solid var(--secondary);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 12px;
         }
         
         .module-title {
             font-weight: 600;
             color: var(--secondary);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
+        .module-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .module-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .module-icon {
+            color: var(--secondary);
+            margin-top: 2px;
+            font-size: 0.8rem;
+        }
+        
+        /* Enhanced Responsive Design */
         @media (max-width: 768px) {
-            .container {
-                height: 95vh;
-                border-radius: 10px;
+            body {
+                padding: 10px;
             }
             
-            .header h1 {
+            .container {
+                height: 95vh;
+                border-radius: 12px;
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header-text h1 {
                 font-size: 1.4rem;
+            }
+            
+            .header-text .subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .status-indicator {
+                display: none;
+            }
+            
+            .emergency-banner {
+                padding: 14px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .chat-messages {
+                padding: 16px;
+                gap: 12px;
             }
             
             .message {
                 max-width: 85%;
+                padding: 14px 16px;
+                font-size: 0.9rem;
             }
+            
+            .quick-replies {
+                padding: 16px;
+                gap: 8px;
+            }
+            
+            .quick-reply {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .input-area {
+                padding: 16px;
+                gap: 8px;
+            }
+            
+            .action-button {
+                width: 44px;
+                height: 44px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-content {
+                gap: 12px;
+            }
+            
+            .header-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .header-text h1 {
+                font-size: 1.2rem;
+            }
+            
+            .message {
+                max-width: 90%;
+                padding: 12px 14px;
+            }
+            
+            .quick-replies {
+                flex-direction: column;
+            }
+            
+            .quick-reply {
+                text-align: center;
+            }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --chat-bg: #1a1a1a;
+                --light: #2d2d2d;
+                --dark: #ffffff;
+            }
+            
+            .container {
+                background: rgba(30, 30, 30, 0.95);
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+            
+            .chat-messages {
+                background: #1a1a1a;
+            }
+            
+            .bot-message {
+                background: #2d2d2d;
+                color: #ffffff;
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+            
+            .message-input {
+                background: #2d2d2d;
+                color: #ffffff;
+                border-color: rgba(255, 255, 255, 0.2);
+            }
+            
+            .message-input:focus {
+                background: #333333;
+            }
+        }
+        
+        /* Accessibility improvements */
+        .action-button:focus,
+        .quick-reply:focus,
+        .message-input:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        
+        /* Loading animation for file uploads */
+        .upload-progress {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: uploadShimmer 1.5s infinite;
+        }
+        
+        @keyframes uploadShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <i class="fas fa-life-ring fa-2x"></i>
-            <h1>Disaster Management Support</h1>
+            <div class="header-content">
+                <div class="header-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="header-text">
+                    <h1>DisasterAI Assistant</h1>
+                    <div class="subtitle">Intelligent Emergency Support & Guidance</div>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>Online</span>
+            </div>
         </div>
         
-        <button class="emergency-button">
-            <i class="fas fa-phone-alt"></i> Emergency Hotline: 1-800-DISASTER
+        <button class="emergency-banner" onclick="callEmergency()">
+            <i class="fas fa-phone-alt emergency-icon"></i>
+            <span>Emergency Hotline: 1-800-DISASTER</span>
+            <i class="fas fa-external-link-alt"></i>
         </button>
         
         <div class="chat-container">
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot-message">
-                    <p>Hello! I'm here to help you with disaster-related stress and emergency guidance. How can I assist you today?</p>
+                    <div class="message-content">
+                        <p>🤖 Hello! I'm your DisasterAI Assistant, here to provide emergency guidance, psychological support, and educational resources. How can I help you today?</p>
+                    </div>
                     <div class="message-time">Just now</div>
                 </div>
             </div>
             
             <div class="quick-replies">
-                <div class="quick-reply" data-reply="I'm experiencing a disaster and feeling stressed">I'm stressed due to disaster</div>
-                <div class="quick-reply" data-reply="What should I do in a flood?">Flood guidance</div>
-                <div class="quick-reply" data-reply="Show me educational resources">Educational resources</div>
+                <div class="quick-reply" data-reply="I'm experiencing a disaster and feeling stressed">
+                    <span>😰 I'm feeling stressed</span>
+                </div>
+                <div class="quick-reply" data-reply="What should I do in a flood?">
+                    <span>🌊 Flood guidance</span>
+                </div>
+                <div class="quick-reply" data-reply="Show me educational resources">
+                    <span>📚 Educational resources</span>
+                </div>
+                <div class="quick-reply" data-reply="I need immediate help">
+                    <span>🆘 Immediate help</span>
+                </div>
             </div>
             
             <div class="input-area">
-                <label for="uploadFile" class="upload-button">
-                    <i class="fas fa-paperclip"></i>
-                </label>
-                <input type="file" id="uploadFile" class="file-input" accept="image/*,video/*,.pdf">
-                <input type="text" class="message-input" id="messageInput" placeholder="Type your message here...">
-                <button class="send-button" id="sendButton">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+                <div class="input-container">
+                    <textarea 
+                        class="message-input" 
+                        id="messageInput" 
+                        placeholder="Type your message here... I'm here to help with any disaster-related concerns."
+                        rows="1"
+                    ></textarea>
+                </div>
+                <div class="input-actions">
+                    <label for="uploadFile" class="action-button upload-button" title="Upload image or document">
+                        <i class="fas fa-paperclip"></i>
+                    </label>
+                    <input type="file" id="uploadFile" class="file-input" accept="image/*,video/*,.pdf,.doc,.docx">
+                    <button class="action-button send-button" id="sendButton" title="Send message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -304,50 +840,127 @@
             const uploadFile = document.getElementById('uploadFile');
             const quickReplies = document.querySelectorAll('.quick-reply');
             
+            let isTyping = false;
+            let typingTimeout;
+            
+            // Enhanced auto-resize textarea
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                
+                // Enable/disable send button
+                sendButton.disabled = !this.value.trim();
+            });
+            
             // Focus input on load
             messageInput.focus();
+            sendButton.disabled = true;
             
-            // Add message to chat
-            function addMessage(text, isUser = false) {
+            // Enhanced message adding with avatars and better animations
+            function addMessage(text, isUser = false, type = 'text') {
+                // Remove typing indicator if present
+                removeTypingIndicator();
+                
                 const messageDiv = document.createElement('div');
                 messageDiv.className = isUser ? 'message user-message' : 'message bot-message';
                 
-                const messageText = document.createElement('p');
-                messageText.textContent = text;
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                
+                if (type === 'html') {
+                    messageContent.innerHTML = text;
+                } else {
+                    messageContent.textContent = text;
+                }
                 
                 const timeSpan = document.createElement('div');
                 timeSpan.className = 'message-time';
                 timeSpan.textContent = getCurrentTime();
                 
-                messageDiv.appendChild(messageText);
+                messageDiv.appendChild(messageContent);
                 messageDiv.appendChild(timeSpan);
                 
                 chatMessages.appendChild(messageDiv);
+                scrollToBottom();
                 
-                // Scroll to bottom
+                // Add sound effect (optional)
+                if (!isUser) {
+                    playNotificationSound();
+                }
+            }
+            
+            // Show typing indicator
+            function showTypingIndicator() {
+                if (document.querySelector('.typing-indicator')) return;
+                
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'typing-indicator';
+                typingDiv.innerHTML = `
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(typingDiv);
+                scrollToBottom();
+            }
+            
+            function removeTypingIndicator() {
+                const typingIndicator = document.querySelector('.typing-indicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            function scrollToBottom() {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
             
-            // Add file message to chat
+            function playNotificationSound() {
+                // Create a subtle notification sound (optional)
+                try {
+                    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvGIcBjuP2O/NeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvGIcBjuP2O/NeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvGIcBjuP2O/NeSsF');
+                    audio.volume = 0.1;
+                    audio.play().catch(() => {}); // Ignore errors if audio fails
+                } catch (e) {}
+            }
+            
+            // Enhanced file message with better UI
             function addFileMessage(file, isUser = false) {
+                removeTypingIndicator();
+                
                 const messageDiv = document.createElement('div');
                 messageDiv.className = isUser ? 'message user-message' : 'message bot-message';
                 
                 const fileDiv = document.createElement('div');
-                fileDiv.className = 'file-message';
+                fileDiv.className = 'file-message upload-progress';
                 
                 let iconClass = 'fas fa-file';
+                let iconColor = '#6c757d';
+                
                 if (file.type.includes('image')) {
                     iconClass = 'fas fa-image';
+                    iconColor = '#17a2b8';
                 } else if (file.type.includes('video')) {
                     iconClass = 'fas fa-video';
+                    iconColor = '#e83e8c';
                 } else if (file.type.includes('pdf')) {
                     iconClass = 'fas fa-file-pdf';
+                    iconColor = '#dc3545';
                 }
                 
+                const fileSizeKB = (file.size / 1024).toFixed(1);
+                
                 fileDiv.innerHTML = `
-                    <i class="${iconClass}"></i>
-                    <span>${file.name}</span>
+                    <div class="file-icon" style="background: ${iconColor}">
+                        <i class="${iconClass}"></i>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${fileSizeKB} KB</div>
+                    </div>
                 `;
                 
                 const timeSpan = document.createElement('div');
@@ -358,18 +971,24 @@
                 messageDiv.appendChild(timeSpan);
                 
                 chatMessages.appendChild(messageDiv);
+                scrollToBottom();
                 
-                // Scroll to bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                // Generate bot response based on file type
+                // Simulate upload progress
                 setTimeout(() => {
-                    if (file.type.includes('image')) {
-                        analyzeImage(file);
-                    } else if (file.type.includes('pdf') || file.type.includes('video')) {
-                        showEducationalContent(file);
-                    }
-                }, 1000);
+                    fileDiv.classList.remove('upload-progress');
+                    
+                    // Generate bot response based on file type
+                    setTimeout(() => {
+                        showTypingIndicator();
+                        setTimeout(() => {
+                            if (file.type.includes('image')) {
+                                analyzeImage(file);
+                            } else {
+                                showEducationalContent(file);
+                            }
+                        }, 1500);
+                    }, 800);
+                }, 2000);
             }
             
             // Get current time for message timestamp
@@ -378,151 +997,279 @@
                 return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
             }
             
-            // Send message function
-            function sendMessage() {
-                const message = messageInput.value.trim();
-                if (message) {
-                    addMessage(message, true);
-                    messageInput.value = '';
-                    
-                    // Simulate bot response after a short delay
-                    setTimeout(() => {
-                        generateBotResponse(message);
-                    }, 800);
-                }
-            }
-            
-            // Generate bot response based on user input
+            // Enhanced bot response generation with more scenarios
             function generateBotResponse(message) {
-                let response = "";
+                showTypingIndicator();
                 
-                if (message.toLowerCase().includes('stress') || message.toLowerCase().includes('stressed')) {
-                    response = "I'm sorry to hear you're feeling stressed. During disasters, it's normal to experience anxiety. Try deep breathing exercises and focus on immediate safety. Help is on the way.";
-                } else if (message.toLowerCase().includes('flood')) {
-                    response = "If you're experiencing a flood, move to higher ground immediately. Avoid walking through moving water. Do not attempt to drive through flooded areas.";
-                } else if (message.toLowerCase().includes('education') || message.toLowerCase().includes('resource')) {
-                    response = "Here are some educational resources to help you prepare for disasters:";
+                setTimeout(() => {
+                    const lowerMessage = message.toLowerCase();
+                    let response = "";
                     
-                    // Add educational module
-                    const educationModule = document.createElement('div');
-                    educationModule.className = 'education-module';
-                    educationModule.innerHTML = `
-                        <div class="module-title">Disaster Preparedness Guide</div>
-                        <p>1. Create an emergency plan for your family</p>
-                        <p>2. Prepare an emergency kit with supplies for 3 days</p>
-                        <p>3. Stay informed about local risks and warnings</p>
-                        <p>4. Know your evacuation routes</p>
-                    `;
+                    if (lowerMessage.includes('stress') || lowerMessage.includes('stressed') || lowerMessage.includes('anxiety') || lowerMessage.includes('panic')) {
+                        response = "🫂 I understand you're feeling stressed. During disasters, anxiety is completely normal. Here are some immediate techniques that can help:\n\n• Take slow, deep breaths (4 counts in, 6 counts out)\n• Focus on what you can control right now\n• Ground yourself by naming 5 things you can see\n• Remember that these feelings will pass\n\nYou're not alone in this. Help is available.";
+                    } else if (lowerMessage.includes('flood') || lowerMessage.includes('flooding') || lowerMessage.includes('water')) {
+                        response = "🌊 **FLOOD SAFETY PROTOCOL:**\n\n🚨 **Immediate Actions:**\n• Move to higher ground immediately\n• Avoid walking through moving water (6 inches can knock you down)\n• Never drive through flooded roads\n• Turn off utilities if safe to do so\n\n📱 **Stay Connected:**\n• Monitor emergency broadcasts\n• Charge devices while power is available\n• Have emergency contacts ready";
+                        
+                        // Add educational module
+                        setTimeout(() => {
+                            addEducationalModule('Flood Safety Guide', [
+                                { icon: '🏠', text: 'Evacuate immediately if advised by authorities' },
+                                { icon: '💧', text: 'Avoid contaminated flood water' },
+                                { icon: '🔌', text: 'Stay away from electrical equipment when wet' },
+                                { icon: '📻', text: 'Listen to weather radio for updates' }
+                            ]);
+                        }, 1000);
+                    } else if (lowerMessage.includes('earthquake') || lowerMessage.includes('quake')) {
+                        response = "🏗️ **EARTHQUAKE RESPONSE:**\n\n**During shaking:**\n• DROP to hands and knees\n• TAKE COVER under sturdy furniture\n• HOLD ON until shaking stops\n\n**After earthquake:**\n• Check for injuries and hazards\n• Be prepared for aftershocks\n• Evacuate if building is damaged";
+                    } else if (lowerMessage.includes('fire') || lowerMessage.includes('smoke')) {
+                        response = "🔥 **FIRE EMERGENCY PROTOCOL:**\n\n🚨 **GET OUT immediately:**\n• Stay low to avoid smoke\n• Feel doors before opening\n• Use stairs, never elevators\n• Meet at designated meeting point\n\n📞 **Call 911 once you're safe**\n\nDon't go back for belongings - your life is more important!";
+                    } else if (lowerMessage.includes('education') || lowerMessage.includes('resource') || lowerMessage.includes('learn')) {
+                        response = "📚 Here are comprehensive disaster preparedness resources:";
+                        
+                        setTimeout(() => {
+                            addEducationalModule('Disaster Preparedness Library', [
+                                { icon: '📋', text: 'Emergency plan templates for families' },
+                                { icon: '🎒', text: 'Emergency kit checklists (72-hour supplies)' },
+                                { icon: '🗺️', text: 'Local evacuation routes and shelters' },
+                                { icon: '📱', text: 'Emergency contact forms and apps' },
+                                { icon: '🏥', text: 'Basic first aid and CPR training' }
+                            ]);
+                        }, 1000);
+                    } else if (lowerMessage.includes('help') || lowerMessage.includes('emergency') || lowerMessage.includes('urgent')) {
+                        response = "🆘 **IMMEDIATE HELP AVAILABLE:**\n\n**Emergency Services:**\n🚨 Police/Fire/Medical: 911\n🏥 Poison Control: 1-800-222-1222\n💬 Crisis Text Line: Text HOME to 741741\n\n**Mental Health Support:**\n🧠 SAMHSA Helpline: 1-800-662-4357\n💚 Disaster Distress: 1-800-985-5990\n\n**What's your specific situation? I can provide targeted guidance.**";
+                    } else if (lowerMessage.includes('safe') || lowerMessage.includes('okay') || lowerMessage.includes('fine')) {
+                        response = "😊 I'm glad to hear you're safe! Even when physically safe, it's normal to feel unsettled after disasters. \n\n**Ways to stay prepared:**\n• Keep emergency supplies updated\n• Stay informed about local risks\n• Practice emergency plans with family\n• Take care of your mental health\n\nIs there anything specific you'd like to know about disaster preparedness?";
+                    } else {
+                        response = "🤖 I understand you're concerned about your situation. To provide the most helpful guidance, could you tell me:\n\n• What type of disaster or emergency you're facing?\n• Are you currently in a safe location?\n• Do you need immediate assistance?\n\nI'm here to help with emergency guidance, stress management, and educational resources.";
+                    }
                     
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = 'message bot-message';
-                    
-                    const messageText = document.createElement('p');
-                    messageText.textContent = response;
-                    
-                    const timeSpan = document.createElement('div');
-                    timeSpan.className = 'message-time';
-                    timeSpan.textContent = getCurrentTime();
-                    
-                    messageDiv.appendChild(messageText);
-                    messageDiv.appendChild(educationModule);
-                    messageDiv.appendChild(timeSpan);
-                    
-                    chatMessages.appendChild(messageDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                    return;
-                } else {
-                    response = "I understand you're concerned about the disaster situation. Please share more details so I can provide specific guidance.";
-                }
-                
-                addMessage(response);
+                    addMessage(response);
+                }, 1200 + Math.random() * 800); // Realistic typing delay
             }
             
-            // Analyze image and provide guidance
-            function analyzeImage(file) {
-                let response = "I've analyzed the image you sent. ";
-                
-                // Simple simulation of image analysis
-                if (Math.random() > 0.5) {
-                    response += "I can see there's a significant amount of water. Please avoid this area and move to higher ground if possible.";
-                } else {
-                    response += "The area appears to be damaged. Please stay away from damaged structures and follow evacuation routes.";
-                }
-                
-                addMessage(response);
-            }
-            
-            // Show educational content
-            function showEducationalContent(file) {
-                let response = "Thank you for sharing this educational material. ";
-                
-                if (file.type.includes('pdf')) {
-                    response += "This PDF contains valuable information about disaster preparedness. I recommend focusing on the evacuation planning section.";
-                } else if (file.type.includes('video')) {
-                    response += "This video demonstrates important safety procedures. Pay close attention to the emergency contact information.";
-                }
-                
-                addMessage(response);
-                
-                // Add additional educational content
-                const educationModule = document.createElement('div');
-                educationModule.className = 'education-module';
-                educationModule.innerHTML = `
-                    <div class="module-title">Additional Resources</div>
-                    <p>• Local emergency services: 911</p>
-                    <p>• Disaster distress helpline: 1-800-985-5990</p>
-                    <p>• Emergency kit checklist: Water, food, flashlight, first aid kit</p>
-                `;
+            // Add educational module with enhanced styling
+            function addEducationalModule(title, items) {
+                removeTypingIndicator();
                 
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message bot-message';
                 
-                const messageText = document.createElement('p');
-                messageText.textContent = "Here are some additional resources that might help:";
+                const moduleDiv = document.createElement('div');
+                moduleDiv.className = 'education-module';
+                
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'module-title';
+                titleDiv.innerHTML = `<i class="fas fa-graduation-cap"></i> ${title}`;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'module-content';
+                
+                items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'module-item';
+                    itemDiv.innerHTML = `
+                        <span class="module-icon">${item.icon}</span>
+                        <span>${item.text}</span>
+                    `;
+                    contentDiv.appendChild(itemDiv);
+                });
+                
+                moduleDiv.appendChild(titleDiv);
+                moduleDiv.appendChild(contentDiv);
                 
                 const timeSpan = document.createElement('div');
                 timeSpan.className = 'message-time';
                 timeSpan.textContent = getCurrentTime();
                 
-                messageDiv.appendChild(messageText);
-                messageDiv.appendChild(educationModule);
+                messageDiv.appendChild(moduleDiv);
                 messageDiv.appendChild(timeSpan);
                 
                 chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                scrollToBottom();
             }
             
-            // Event listeners
+            // Enhanced image analysis
+            function analyzeImage(file) {
+                const analysisTypes = [
+                    {
+                        condition: 'flood',
+                        response: "🌊 **IMAGE ANALYSIS - FLOODING DETECTED**\n\nI can see significant water accumulation in your photo. Here's what you should do:\n\n🚨 **Immediate Actions:**\n• Avoid this area completely\n• Move to higher ground\n• Don't attempt to walk or drive through\n\n💡 **Assessment:** Water appears to be [depth estimate]. Even shallow water can be dangerous.",
+                        safety: "Remember: 6 inches of water can knock you down, 12 inches can carry away a vehicle."
+                    },
+                    {
+                        condition: 'damage',
+                        response: "🏠 **IMAGE ANALYSIS - STRUCTURAL DAMAGE DETECTED**\n\nI can see structural damage in your photo. For your safety:\n\n⚠️ **DO NOT ENTER:**\n• Building appears compromised\n• Stay clear of the area\n• Contact authorities for assessment\n\n🔍 **What I see:** Visible damage to [structure type]. Professional evaluation needed.",
+                        safety: "Damaged buildings can collapse without warning. Keep a safe distance."
+                    }
+                ];
+                
+                // Simulate AI analysis
+                const randomAnalysis = analysisTypes[Math.floor(Math.random() * analysisTypes.length)];
+                
+                addMessage(randomAnalysis.response);
+                
+                setTimeout(() => {
+                    addMessage(`⚡ **Safety Reminder:** ${randomAnalysis.safety}`);
+                }, 1500);
+            }
+            
+            // Enhanced send message function
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (message && !isTyping) {
+                    addMessage(message, true);
+                    messageInput.value = '';
+                    messageInput.style.height = 'auto';
+                    sendButton.disabled = true;
+                    
+                    isTyping = true;
+                    
+                    // Simulate bot response with realistic delay
+                    setTimeout(() => {
+                        generateBotResponse(message);
+                        isTyping = false;
+                    }, 800 + Math.random() * 400);
+                }
+            }
+            
+            // Enhanced file handling
+            function showEducationalContent(file) {
+                let response = "📄 **Document Analysis Complete**\n\n";
+                
+                if (file.type.includes('pdf')) {
+                    response += "This PDF contains valuable disaster preparedness information. Key points I've identified:\n\n• Emergency planning procedures\n• Supply checklists and recommendations\n• Contact information for local services\n\n💡 **Recommendation:** Review the evacuation section carefully.";
+                } else if (file.type.includes('video')) {
+                    response += "This video demonstrates important safety procedures. Focus on:\n\n• Emergency response techniques shown\n• Proper use of safety equipment\n• Communication protocols during disasters\n\n🎥 **Note:** Practice the techniques demonstrated when safe to do so.";
+                } else {
+                    response += "Thank you for sharing this document. It will help me better understand your situation and provide more targeted assistance.";
+                }
+                
+                addMessage(response);
+                
+                // Add additional resources
+                setTimeout(() => {
+                    addEducationalModule('Related Resources', [
+                        { icon: '📞', text: 'Local emergency services: 911' },
+                        { icon: '💬', text: 'Crisis text line: Text HOME to 741741' },
+                        { icon: '🏥', text: 'Disaster distress helpline: 1-800-985-5990' },
+                        { icon: '📱', text: 'Emergency alert apps for your area' }
+                    ]);
+                }, 1500);
+            }
+            
+            // Enhanced emergency call function
+            function callEmergency() {
+                const confirmed = confirm('🚨 Emergency Call\n\nThis will attempt to call the emergency hotline.\n\nFor immediate life-threatening emergencies, call 911 directly.\n\nProceed with disaster support hotline?');
+                
+                if (confirmed) {
+                    // In a real app, this would initiate a call
+                    window.open('tel:1-800-985-5990'); // SAMHSA Disaster Distress Helpline
+                    
+                    // Add confirmation message to chat
+                    setTimeout(() => {
+                        addMessage("📞 **Emergency call initiated.** Help is on the way. Stay on the line and follow the operator's instructions.\n\n🆘 **If this is a life-threatening emergency, hang up and call 911 immediately.**");
+                    }, 1000);
+                }
+            }
+            
+            // Keyboard shortcuts and enhanced UX
+            function initializeKeyboardShortcuts() {
+                document.addEventListener('keydown', function(e) {
+                    // Ctrl/Cmd + Enter to send message
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                    
+                    // Escape to clear input
+                    if (e.key === 'Escape') {
+                        messageInput.value = '';
+                        messageInput.style.height = 'auto';
+                        sendButton.disabled = true;
+                        messageInput.focus();
+                    }
+                });
+            }
+            
+            // Enhanced event listeners
             sendButton.addEventListener('click', sendMessage);
             
             messageInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
                     sendMessage();
                 }
             });
             
             uploadFile.addEventListener('change', function() {
                 if (this.files && this.files[0]) {
-                    addFileMessage(this.files[0], true);
+                    const file = this.files[0];
+                    
+                    // Validate file size (max 10MB)
+                    if (file.size > 10 * 1024 * 1024) {
+                        alert('⚠️ File too large\n\nPlease select a file smaller than 10MB.');
+                        this.value = '';
+                        return;
+                    }
+                    
+                    addFileMessage(file, true);
+                    this.value = '';
                 }
             });
             
             quickReplies.forEach(reply => {
                 reply.addEventListener('click', function() {
                     const text = this.getAttribute('data-reply');
-                    addMessage(text, true);
-                    
-                    // Simulate bot response after a short delay
-                    setTimeout(() => {
-                        generateBotResponse(text);
-                    }, 800);
+                    if (!isTyping) {
+                        addMessage(text, true);
+                        isTyping = true;
+                        
+                        // Simulate bot response after a short delay
+                        setTimeout(() => {
+                            generateBotResponse(text);
+                            isTyping = false;
+                        }, 800 + Math.random() * 400);
+                    }
                 });
             });
             
-            // Add initial bot message with slight delay
+            // Initialize enhancements
+            initializeKeyboardShortcuts();
+            
+            // Check if opened from consultation page
+            if (document.referrer.includes('consultation.html') || window.opener) {
+                setTimeout(() => {
+                    addMessage("🚀 **Welcome to Enhanced DisasterAI!**\n\nYou've successfully opened the advanced chatbot interface. This enhanced version features:\n\n✨ **New Features:**\n• Improved animations and UI\n• Advanced emergency protocols\n• Better file upload support\n• Enhanced typing indicators\n• Smarter AI responses\n\n🔄 You can switch back to the consultation page anytime while keeping this window open for the best experience!");
+                }, 500);
+            }
+            
+            // Add enhanced welcome message sequence
             setTimeout(() => {
-                addMessage("You can tell me about your situation, share images of your surroundings, or ask for educational resources. I'm here to help!");
+                showTypingIndicator();
+                setTimeout(() => {
+                    addMessage("🌟 **Getting Started:**\n\n• Ask me about any disaster-related concerns\n• Share photos of your situation for analysis\n• Request emergency contacts or educational resources\n• Let me know if you're feeling stressed or anxious\n\n💪 Remember: You're stronger than you think, and help is always available.");
+                }, 2000);
             }, 1500);
+            
+            // Periodic check-in (every 5 minutes)
+            setInterval(() => {
+                if (!isTyping && chatMessages.children.length > 4) {
+                    const checkIns = [
+                        "💙 How are you feeling right now? I'm here if you need support.",
+                        "🔄 Any updates on your situation? I'm here to help with next steps.",
+                        "💬 Is there anything else I can help you with today?"
+                    ];
+                    
+                    const randomCheckIn = checkIns[Math.floor(Math.random() * checkIns.length)];
+                    
+                    setTimeout(() => {
+                        showTypingIndicator();
+                        setTimeout(() => {
+                            addMessage(randomCheckIn);
+                        }, 1000);
+                    }, Math.random() * 2000);
+                }
+            }, 300000); // 5 minutes
         });
     </script>
 </body>
