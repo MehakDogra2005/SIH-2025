@@ -1,0 +1,218 @@
+{% extends "base_new.html" %}
+
+{% block title %}Emergency Analytics - Emergency Management System{% endblock %}
+
+{% block page_title %}Emergency Analytics{% endblock %}
+
+{% block content %}
+<div class="dashboard-content">
+    <div class="page-header">
+        <h1>Emergency Analytics</h1>
+        <p>Comprehensive analysis of emergency management data</p>
+    </div>
+    
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="info-card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Total Incidents</h6>
+                            <h3 class="mb-0">{{ analytics.incident_types.values() | list | sum if analytics.incident_types else 0 }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="info-card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Total Drills</h6>
+                            <h3 class="mb-0">{{ analytics.drill_stats | length if analytics.drill_stats else 0 }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-users-cog fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="info-card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Avg Drill Score</h6>
+                            <h3 class="mb-0">
+                                {% if analytics.drill_stats %}
+                                    {{ "%.1f" | format((analytics.drill_stats | map(attribute='avg_score') | list | sum) / (analytics.drill_stats | length)) }}%
+                                {% else %}
+                                    0%
+                                {% endif %}
+                            </h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="info-card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Active Cases</h6>
+                            <h3 class="mb-0">{{ analytics.incident_status.get('open', 0) + analytics.incident_status.get('acknowledged', 0) + analytics.incident_status.get('assigned', 0) }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-clock fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <!-- Incident Types Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="info-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Incidents by Type
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="incidentTypesChart" height="300"></canvas>
+                    {% if not analytics.incident_types %}
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-chart-pie fa-3x mb-3"></i>
+                        <p>No incident data available yet</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Incident Status Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="info-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-donut me-2"></i>
+                        Incidents by Status
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="incidentStatusChart" height="300"></canvas>
+                    {% if not analytics.incident_status %}
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-chart-donut fa-3x mb-3"></i>
+                        <p>No status data available yet</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Trends -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="info-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-area me-2"></i>
+                        Monthly Incident Trends
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyTrendsChart" height="100"></canvas>
+                    {% if not analytics.monthly_incidents %}
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-chart-area fa-3x mb-3"></i>
+                        <p>No monthly trend data available yet</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drill Statistics Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="info-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-table me-2"></i>
+                        Drill Performance Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if analytics.drill_stats %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th><i class="fas fa-tag me-1"></i>Drill Type</th>
+                                    <th><i class="fas fa-hashtag me-1"></i>Total Drills</th>
+                                    <th><i class="fas fa-star me-1"></i>Average Score</th>
+                                    <th><i class="fas fa-chart-bar me-1"></i>Performance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stat in analytics.drill_stats %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-secondary me-2">
+                                            {{ stat.type.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ stat.total }}</td>
+                                    <td>{{ stat.avg_score }}%</td>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar 
+                                                {% if stat.avg_score >= 80 %}bg-success
+                                                {% elif stat.avg_score >= 60 %}bg-warning
+                                                {% else %}bg-danger{% endif %}" 
+                                                role="progressbar" 
+                                                style="width: {{ stat.avg_score }}%"
+                                                aria-valuenow="{{ stat.avg_score }}" 
+                                                aria-valuemin="0" 
+                                                aria-valuemax="100">
+                                                {{ stat.avg_score }}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-table fa-3x mb-3"></i>
+                        <p>No drill statistics available yet</p>
+                        <a href="{{ url_for('create_drill') }}" class="btn btn-warning">
+                            <i class="fas fa-plus me-1"></i>Create First Drill
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Emergency Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-primary">
+                        <i class="fas fa-tachometer-alt me-3"></i>Emergency Management Dashboard
+                    </h1>
+                    <p class="text-muted mb-0">Welcome back, {{ user.name }}. Stay prepared, stay safe.</p>
+                </div>
+                <div class="text-end">
+                    <div class="badge bg-success fs-6 p-2">
+                        <i class="fas fa-circle me-1"></i>System Online
+                    </div>
+                    <div class="small text-muted mt-1">
+                        Last updated: <span id="lastUpdated">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-primary text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="display-4 fw-bold" id="total-incidents">{{ stats.total_incidents }}</div>
+                        <div class="card-title mb-0">Total Incidents</div>
+                        <small class="opacity-75">
+                            <i class="fas fa-chart-line me-1"></i>All time
+                        </small>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-exclamation-triangle fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-warning text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="display-4 fw-bold" id="active-incidents">{{ stats.active_incidents }}</div>
+                        <div class="card-title mb-0">Active Alerts</div>
+                        <small class="opacity-75">
+                            <i class="fas fa-clock me-1"></i>Requires attention
+                        </small>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-bell fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-success text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="display-4 fw-bold">24</div>
+                        <div class="card-title mb-0">Safe Zones</div>
+                        <small class="opacity-75">
+                            <i class="fas fa-shield-alt me-1"></i>Operational
+                        </small>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-map-marked-alt fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-info text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="display-4 fw-bold">{{ stats.preparedness_score }}%</div>
+                        <div class="card-title mb-0">Preparedness</div>
+                        <small class="opacity-75">
+                            <i class="fas fa-chart-pie me-1"></i>Current score
+                        </small>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-clipboard-check fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Row -->
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-lg-8">
+            <!-- Emergency Alert System -->
+            <div class="card shadow-custom mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                            Emergency Alert System
+                        </h5>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="emergencyNotifications" checked>
+                            <label class="form-check-label fw-600" for="emergencyNotifications">
+                                Enable Emergency Notifications
+                            </label>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-3">In case of an emergency, use the red button to notify authorities and get immediate assistance.</p>
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#testAlertModal">
+                                <i class="fas fa-volume-up me-2"></i>Test Alert
+                            </button>
+                        </div>
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <div class="text-center">
+                                <small class="text-muted d-block">Last drill:</small>
+                                <strong class="text-success">2 hours ago</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Learning Modules -->
+            <div class="card shadow-custom">
+                <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-graduation-cap me-2"></i>Interactive Learning Modules
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-mountain text-warning fa-2x"></i>
+                                    </div>
+                                    <h6 class="card-title">Earthquake Mitigation</h6>
+                                    <div class="progress mb-2" style="height: 6px;">
+                                        <div class="progress-bar bg-warning" style="width: 75%"></div>
+                                    </div>
+                                    <small class="text-muted">75% Complete</small>
+                                    <div class="mt-3">
+                                        <button class="btn btn-outline-primary btn-sm">Continue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-water text-info fa-2x"></i>
+                                    </div>
+                                    <h6 class="card-title">Flood Mitigation</h6>
+                                    <div class="progress mb-2" style="height: 6px;">
+                                        <div class="progress-bar bg-info" style="width: 45%"></div>
+                                    </div>
+                                    <small class="text-muted">45% Complete</small>
+                                    <div class="mt-3">
+                                        <button class="btn btn-outline-primary btn-sm">Start</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="badge bg-success p-2 w-100">5 Badges</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="badge bg-info p-2 w-100">3 Completed Modules</div>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-outline-primary btn-sm w-100">Continue Learning</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-4">
+            <!-- Recent Notifications -->
+            <div class="card shadow-custom mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">
+                        <i class="fas fa-bell me-2"></i>Recent Notifications
+                    </h6>
+                    <span class="badge bg-primary">{{ recent_notifications|length }}</span>
+                </div>
+                <div class="card-body p-0">
+                    {% for notification in recent_notifications %}
+                    <div class="notification-item {% if notification.type == 'alert' %}alert{% elif notification.type == 'warning' %}warning{% else %}info{% endif %}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-600">{{ notification.title }}</h6>
+                                <p class="mb-1 small">{{ notification.message }}</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ notification.created_at.strftime('%H:%M') if notification.created_at else 'Just now' }}
+                                </small>
+                            </div>
+                            <div class="ms-2">
+                                {% if notification.type == 'alert' %}
+                                    <i class="fas fa-exclamation-triangle text-danger"></i>
+                                {% elif notification.type == 'warning' %}
+                                    <i class="fas fa-exclamation-circle text-warning"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle text-info"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    {% if not recent_notifications %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">No recent notifications</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card shadow-custom">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('create_incident') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-plus-circle me-2"></i>Report Incident
+                        </a>
+                        <a href="{{ url_for('drills') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-clipboard-list me-2"></i>View Drills
+                        </a>
+                        <a href="{{ url_for('emergency_contacts') }}" class="btn btn-outline-success">
+                            <i class="fas fa-phone me-2"></i>Emergency Contacts
+                        </a>
+                        {% if session.user_role in ['admin', 'spoc'] %}
+                        <a href="{{ url_for('analytics') }}" class="btn btn-outline-info">
+                            <i class="fas fa-chart-bar me-2"></i>View Analytics
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Incidents -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-custom">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Recent Incidents
+                    </h5>
+                    <a href="{{ url_for('incidents') }}" class="btn btn-outline-primary btn-sm">
+                        View All <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if recent_incidents %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>Severity</th>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for incident in recent_incidents %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            {% if incident.type == 'fire' %}
+                                                <i class="fas fa-fire me-1"></i>Fire
+                                            {% elif incident.type == 'flood' %}
+                                                <i class="fas fa-water me-1"></i>Flood
+                                            {% elif incident.type == 'earthquake' %}
+                                                <i class="fas fa-mountain me-1"></i>Earthquake
+                                            {% else %}
+                                                <i class="fas fa-exclamation me-1"></i>{{ incident.type.title() }}
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ incident.location }}</td>
+                                    <td>
+                                        <span class="incident-status status-{{ incident.status }}">
+                                            {{ incident.status.replace('_', ' ').title() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="severity-indicator severity-{{ incident.severity }}"></span>
+                                        {{ incident.severity.title() }}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            {{ incident.created_at.strftime('%H:%M') if incident.created_at else 'Unknown' }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('incident_detail', id=incident.id) }}" 
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                        <h6 class="text-muted">No recent incidents</h6>
+                        <p class="text-muted mb-0">All systems are running smoothly</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Test Alert Modal -->
+<div class="modal fade" id="testAlertModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">
+                    <i class="fas fa-volume-up me-2"></i>Test Emergency Alert
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>This is a test alert.</strong> In a real emergency, this notification would be sent to all registered users and emergency contacts.
+                </div>
+                <p>Test alert features:</p>
+                <ul>
+                    <li>SMS notifications to emergency contacts</li>
+                    <li>Email alerts to administrators</li>
+                    <li>Push notifications to mobile devices</li>
+                    <li>Audio alarms in buildings</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-warning" onclick="sendTestAlert()">Send Test Alert</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function sendTestAlert() {
+    showAlert('Test alert sent successfully!', 'success');
+    bootstrap.Modal.getInstance(document.getElementById('testAlertModal')).hide();
+}
+
+// Update timestamp every minute
+setInterval(function() {
+    document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+}, 60000);
+</script>
+{% endblock %}

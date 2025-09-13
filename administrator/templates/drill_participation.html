@@ -1,0 +1,394 @@
+{% extends "base_new.html" %}
+
+{% block title %}Drill Participation Tracker - Emergency Management System{% endblock %}
+
+{% block page_title %}Drill Participation Tracker{% endblock %}
+
+{% block content %}
+<div class="dashboard-content">
+    <div class="page-header">
+        <h1>Drill Participation Tracker</h1>
+        <p>Track student participation in emergency drills and record attendance</p>
+    </div>
+
+    <!-- Drill Selection -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="info-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-clipboard-check me-2"></i>
+                        Select Emergency Drill
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <select class="form-select" id="drillSelect" onchange="loadDrillParticipation()">
+                                <option value="">Select a drill to track participation</option>
+                                {% for drill in drills %}
+                                <option value="{{ drill.id }}" 
+                                        data-title="{{ drill.title }}" 
+                                        data-type="{{ drill.drill_type }}"
+                                        data-expected="{{ drill.total_expected }}">
+                                    {{ drill.title }} - {{ drill.drill_type.title() }} ({{ drill.created_at.strftime('%m/%d/%Y') }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success" onclick="markAllPresent()" id="markAllBtn" disabled>
+                                <i class="fas fa-check-double me-1"></i>Mark All Present
+                            </button>
+                            <button class="btn btn-primary" onclick="saveParticipation()" id="saveBtn" disabled>
+                                <i class="fas fa-save me-1"></i>Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drill Info -->
+    <div class="row mb-4" id="drillInfoSection" style="display: none;">
+        <div class="col-md-4">
+            <div class="info-card bg-primary text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Drill Information</h6>
+                    <div id="drillInfo">
+                        <div><strong>Title:</strong> <span id="drillTitle">-</span></div>
+                        <div><strong>Type:</strong> <span id="drillType">-</span></div>
+                        <div><strong>Expected:</strong> <span id="drillExpected">-</span> students</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card bg-success text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Participation Stats</h6>
+                    <div id="participationStats">
+                        <div><strong>Present:</strong> <span id="presentCount">0</span></div>
+                        <div><strong>Absent:</strong> <span id="absentCount">0</span></div>
+                        <div><strong>Rate:</strong> <span id="participationRate">0%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card bg-info text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Quick Actions</h6>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-light btn-sm" onclick="filterByClass()">
+                            <i class="fas fa-filter me-1"></i>Filter by Class
+                        </button>
+                        <button class="btn btn-light btn-sm" onclick="exportParticipation()">
+                            <i class="fas fa-download me-1"></i>Export Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Participation Table -->
+    <div class="row" id="participationTableSection" style="display: none;">
+        <div class="col-12">
+            <div class="info-card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-users me-2"></i>
+                            Student Participation
+                        </h5>
+                        <div>
+                            <select class="form-select form-select-sm" id="classFilter" onchange="filterStudents()">
+                                <option value="">All Classes</option>
+                                <option value="Grade 6">Grade 6</option>
+                                <option value="Grade 7">Grade 7</option>
+                                <option value="Grade 8">Grade 8</option>
+                                <option value="Grade 9">Grade 9</option>
+                                <option value="Grade 10">Grade 10</option>
+                                <option value="Grade 11">Grade 11</option>
+                                <option value="Grade 12">Grade 12</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="participationTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th width="50">
+                                        <input type="checkbox" id="selectAllParticipation" onchange="toggleAllParticipation()">
+                                    </th>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th>Participation Status</th>
+                                    <th>Score</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="participationTableBody">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedDrillId = null;
+let students = [];
+let participationData = {};
+
+async function loadDrillParticipation() {
+    const drillSelect = document.getElementById('drillSelect');
+    const selectedOption = drillSelect.options[drillSelect.selectedIndex];
+    
+    if (!selectedOption.value) {
+        document.getElementById('drillInfoSection').style.display = 'none';
+        document.getElementById('participationTableSection').style.display = 'none';
+        document.getElementById('markAllBtn').disabled = true;
+        document.getElementById('saveBtn').disabled = true;
+        return;
+    }
+    
+    selectedDrillId = selectedOption.value;
+    
+    // Update drill info
+    document.getElementById('drillTitle').textContent = selectedOption.dataset.title;
+    document.getElementById('drillType').textContent = selectedOption.dataset.type;
+    document.getElementById('drillExpected').textContent = selectedOption.dataset.expected;
+    
+    // Show sections
+    document.getElementById('drillInfoSection').style.display = 'block';
+    document.getElementById('participationTableSection').style.display = 'block';
+    document.getElementById('markAllBtn').disabled = false;
+    document.getElementById('saveBtn').disabled = false;
+    
+    try {
+        // Load students data
+        const response = await fetch('/api/students');
+        students = await response.json();
+        
+        // Load existing participation data
+        const participationResponse = await fetch(`/api/drill/${selectedDrillId}/participation`);
+        if (participationResponse.ok) {
+            participationData = await participationResponse.json();
+        } else {
+            participationData = {};
+        }
+        
+        renderParticipationTable();
+        updateParticipationStats();
+        
+    } catch (error) {
+        console.error('Error loading data:', error);
+        alert('Error loading drill participation data');
+    }
+}
+
+function renderParticipationTable() {
+    const tbody = document.getElementById('participationTableBody');
+    tbody.innerHTML = '';
+    
+    students.forEach(student => {
+        const participation = participationData[student.id] || { participated: false, score: '', notes: '' };
+        
+        const row = document.createElement('tr');
+        row.dataset.class = student.class;
+        row.innerHTML = `
+            <td>
+                <input type="checkbox" class="participation-checkbox" 
+                       data-student-id="${student.id}" 
+                       ${participation.participated ? 'checked' : ''}
+                       onchange="updateParticipationStatus(${student.id}, this.checked)">
+            </td>
+            <td>
+                <span class="badge bg-secondary">${student.student_id}</span>
+            </td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <div class="avatar-circle me-2">${student.name[0]}</div>
+                    <strong>${student.name}</strong>
+                </div>
+            </td>
+            <td>
+                <span class="badge bg-info">${student.class}</span>
+            </td>
+            <td>
+                <span class="badge ${participation.participated ? 'bg-success' : 'bg-warning'}" 
+                      id="status-${student.id}">
+                    ${participation.participated ? 'Present' : 'Absent'}
+                </span>
+            </td>
+            <td>
+                <input type="number" class="form-control form-control-sm" 
+                       style="width: 80px;" 
+                       min="0" max="100" 
+                       value="${participation.score}"
+                       placeholder="Score"
+                       onchange="updateScore(${student.id}, this.value)">
+            </td>
+            <td>
+                <input type="text" class="form-control form-control-sm" 
+                       value="${participation.notes}"
+                       placeholder="Notes"
+                       onchange="updateNotes(${student.id}, this.value)">
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function updateParticipationStatus(studentId, participated) {
+    if (!participationData[studentId]) {
+        participationData[studentId] = {};
+    }
+    participationData[studentId].participated = participated;
+    
+    // Update status badge
+    const statusBadge = document.getElementById(`status-${studentId}`);
+    statusBadge.textContent = participated ? 'Present' : 'Absent';
+    statusBadge.className = `badge ${participated ? 'bg-success' : 'bg-warning'}`;
+    
+    updateParticipationStats();
+}
+
+function updateScore(studentId, score) {
+    if (!participationData[studentId]) {
+        participationData[studentId] = {};
+    }
+    participationData[studentId].score = score;
+}
+
+function updateNotes(studentId, notes) {
+    if (!participationData[studentId]) {
+        participationData[studentId] = {};
+    }
+    participationData[studentId].notes = notes;
+}
+
+function updateParticipationStats() {
+    const totalStudents = students.length;
+    const presentCount = Object.values(participationData).filter(p => p.participated).length;
+    const absentCount = totalStudents - presentCount;
+    const participationRate = totalStudents > 0 ? Math.round((presentCount / totalStudents) * 100) : 0;
+    
+    document.getElementById('presentCount').textContent = presentCount;
+    document.getElementById('absentCount').textContent = absentCount;
+    document.getElementById('participationRate').textContent = participationRate + '%';
+}
+
+function toggleAllParticipation() {
+    const selectAll = document.getElementById('selectAllParticipation');
+    const checkboxes = document.querySelectorAll('.participation-checkbox');
+    
+    checkboxes.forEach(checkbox => {
+        const studentId = parseInt(checkbox.dataset.studentId);
+        checkbox.checked = selectAll.checked;
+        updateParticipationStatus(studentId, selectAll.checked);
+    });
+}
+
+function markAllPresent() {
+    document.getElementById('selectAllParticipation').checked = true;
+    toggleAllParticipation();
+}
+
+function filterStudents() {
+    const classFilter = document.getElementById('classFilter').value;
+    const rows = document.querySelectorAll('#participationTable tbody tr');
+    
+    rows.forEach(row => {
+        const studentClass = row.dataset.class;
+        if (!classFilter || studentClass === classFilter) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+async function saveParticipation() {
+    if (!selectedDrillId) {
+        alert('Please select a drill first');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/drill/${selectedDrillId}/save_participation`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                participation_data: participationData
+            })
+        });
+        
+        if (response.ok) {
+            alert('Participation data saved successfully!');
+        } else {
+            throw new Error('Failed to save participation data');
+        }
+    } catch (error) {
+        console.error('Error saving participation:', error);
+        alert('Error saving participation data');
+    }
+}
+
+function exportParticipation() {
+    if (!selectedDrillId) {
+        alert('Please select a drill first');
+        return;
+    }
+    
+    let csv = 'Student ID,Name,Class,Participation Status,Score,Notes\n';
+    
+    students.forEach(student => {
+        const participation = participationData[student.id] || { participated: false, score: '', notes: '' };
+        csv += `"${student.student_id}","${student.name}","${student.class}","${participation.participated ? 'Present' : 'Absent'}","${participation.score}","${participation.notes}"\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `drill_participation_${selectedDrillId}_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+</script>
+
+<style>
+.avatar-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.form-control-sm {
+    padding: 0.25rem 0.5rem;
+}
+</style>
+{% endblock %}

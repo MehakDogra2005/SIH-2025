@@ -1,0 +1,397 @@
+{% extends "base.html" %}
+
+{% block title %}Emergency Drills - Emergency Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6 fw-bold text-primary">
+                        <i class="fas fa-clipboard-list me-3"></i>Emergency Drills & Training
+                    </h1>
+                    <p class="text-muted mb-0">Monitor preparedness training and drill participation</p>
+                </div>
+                <div>
+                    {% if session.user_role in ['admin', 'spoc'] %}
+                    <a href="{{ url_for('create_drill') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus-circle me-2"></i>Schedule Drill
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card dashboard-card bg-success text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="display-5 fw-bold">{{ drills|length }}</div>
+                        <div class="card-title mb-0">Total Drills</div>
+                        <small class="opacity-75">Conducted this year</small>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-clipboard-check fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card dashboard-card bg-info text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="display-5 fw-bold">85%</div>
+                        <div class="card-title mb-0">Avg Participation</div>
+                        <small class="opacity-75">Last 30 days</small>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-users fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card dashboard-card bg-warning text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="display-5 fw-bold">92</div>
+                        <div class="card-title mb-0">Preparedness Score</div>
+                        <small class="opacity-75">Current rating</small>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-trophy fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card dashboard-card bg-danger text-white h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="display-5 fw-bold">3</div>
+                        <div class="card-title mb-0">Upcoming Drills</div>
+                        <small class="opacity-75">This month</small>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-calendar-alt fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drill Performance Chart -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+            <div class="card chart-container">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Drill Participation Trends
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="drillChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card chart-container">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>Drill Types
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="drillTypeChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drills List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-custom">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>Emergency Drills
+                    </h5>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary active" onclick="filterDrills('all')">All</button>
+                        <button class="btn btn-outline-primary" onclick="filterDrills('fire')">Fire</button>
+                        <button class="btn btn-outline-primary" onclick="filterDrills('earthquake')">Earthquake</button>
+                        <button class="btn btn-outline-primary" onclick="filterDrills('evacuation')">Evacuation</button>
+                        <button class="btn btn-outline-primary" onclick="filterDrills('medical')">Medical</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if drills %}
+                    <div class="row g-0">
+                        {% for drill in drills %}
+                        <div class="col-lg-6 drill-item" data-type="{{ drill.drill_type }}">
+                            <div class="card border-0 border-bottom">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div class="flex-grow-1">
+                                            <h6 class="fw-bold mb-1">{{ drill.title }}</h6>
+                                            <p class="text-muted mb-2">{{ drill.description or 'No description provided' }}</p>
+                                        </div>
+                                        <span class="badge bg-secondary ms-2">
+                                            {% if drill.drill_type == 'fire' %}
+                                                <i class="fas fa-fire me-1"></i>Fire
+                                            {% elif drill.drill_type == 'earthquake' %}
+                                                <i class="fas fa-mountain me-1"></i>Earthquake
+                                            {% elif drill.drill_type == 'evacuation' %}
+                                                <i class="fas fa-running me-1"></i>Evacuation
+                                            {% elif drill.drill_type == 'medical' %}
+                                                <i class="fas fa-ambulance me-1"></i>Medical
+                                            {% else %}
+                                                <i class="fas fa-clipboard me-1"></i>{{ drill.drill_type.title() }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-6">
+                                            <div class="text-center">
+                                                <div class="fw-bold text-success">{{ drill.participation_count }}</div>
+                                                <small class="text-muted">Participated</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="text-center">
+                                                <div class="fw-bold text-info">{{ drill.score }}%</div>
+                                                <small class="text-muted">Score</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Progress Bar -->
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <small class="text-muted">Participation Rate</small>
+                                            <small class="fw-600">{{ ((drill.participation_count / drill.total_expected) * 100) | round(1) if drill.total_expected > 0 else 0 }}%</small>
+                                        </div>
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar 
+                                                {% if (drill.participation_count / drill.total_expected * 100) >= 80 %}bg-success
+                                                {% elif (drill.participation_count / drill.total_expected * 100) >= 60 %}bg-warning
+                                                {% else %}bg-danger{% endif %}" 
+                                                style="width: {{ ((drill.participation_count / drill.total_expected) * 100) if drill.total_expected > 0 else 0 }}%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="small text-muted">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            {{ drill.created_at.strftime('%Y-%m-%d') if drill.created_at else 'Unknown date' }}
+                                            <br>
+                                            <i class="fas fa-user me-1"></i>
+                                            by {{ drill.conductor.name if drill.conductor else 'System' }}
+                                        </div>
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-outline-primary" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            {% if session.user_role in ['admin', 'spoc'] %}
+                                            <button class="btn btn-outline-warning" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-outline-success" title="Download Report">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    {% if drill.file_url %}
+                                    <div class="mt-3 pt-3 border-top">
+                                        <small class="text-muted">
+                                            <i class="fas fa-paperclip me-1"></i>
+                                            <a href="{{ url_for('static', filename=drill.file_url) }}" class="text-decoration-none" target="_blank">
+                                                View attached files
+                                            </a>
+                                        </small>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-clipboard-list fa-4x text-muted mb-3"></i>
+                        <h5 class="text-muted">No drills scheduled</h5>
+                        <p class="text-muted mb-4">No emergency drills have been conducted yet</p>
+                        {% if session.user_role in ['admin', 'spoc'] %}
+                        <a href="{{ url_for('create_drill') }}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle me-2"></i>Schedule First Drill
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Drills -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-custom">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-check me-2"></i>Upcoming Scheduled Drills
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card border-warning">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-fire fa-2x text-danger mb-2"></i>
+                                    <h6 class="fw-bold">Fire Safety Drill</h6>
+                                    <p class="text-muted small mb-2">Quarterly fire evacuation drill</p>
+                                    <div class="badge bg-warning text-dark">
+                                        <i class="fas fa-calendar me-1"></i>Sept 20, 2025
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-outline-warning btn-sm">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-info">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-mountain fa-2x text-warning mb-2"></i>
+                                    <h6 class="fw-bold">Earthquake Drill</h6>
+                                    <p class="text-muted small mb-2">Drop, cover, and hold practice</p>
+                                    <div class="badge bg-info">
+                                        <i class="fas fa-calendar me-1"></i>Sept 25, 2025
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-outline-info btn-sm">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-ambulance fa-2x text-success mb-2"></i>
+                                    <h6 class="fw-bold">Medical Emergency</h6>
+                                    <p class="text-muted small mb-2">First aid response training</p>
+                                    <div class="badge bg-success">
+                                        <i class="fas fa-calendar me-1"></i>Oct 2, 2025
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-outline-success btn-sm">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize charts
+document.addEventListener('DOMContentLoaded', function() {
+    // Drill participation chart
+    const drillCtx = document.getElementById('drillChart');
+    if (drillCtx) {
+        new Chart(drillCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                datasets: [{
+                    label: 'Participation Rate (%)',
+                    data: [78, 82, 85, 88, 92, 89, 91, 87, 85],
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    // Drill types chart
+    const drillTypeCtx = document.getElementById('drillTypeChart');
+    if (drillTypeCtx) {
+        new Chart(drillTypeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Fire', 'Earthquake', 'Evacuation', 'Medical'],
+                datasets: [{
+                    data: [35, 25, 25, 15],
+                    backgroundColor: [
+                        '#dc3545',
+                        '#ffc107',
+                        '#17a2b8',
+                        '#28a745'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+});
+
+// Filter drills by type
+function filterDrills(type) {
+    const drillItems = document.querySelectorAll('.drill-item');
+    const filterButtons = document.querySelectorAll('.btn-group .btn');
+    
+    // Update active button
+    filterButtons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Show/hide drill items
+    drillItems.forEach(item => {
+        if (type === 'all' || item.dataset.type === type) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}
