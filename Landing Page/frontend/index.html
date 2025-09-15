@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ResQ - Disaster Preparedness & Response</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,9 +16,9 @@
 
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="nav-container">
-            <div class="nav-logo">
+            <div class="nav-logo" aria-hidden="true">
                 <i class="fas fa-life-ring"></i>
                 <span>ResQ</span>
             </div>
@@ -33,7 +33,7 @@
                     <a href="signup.html" class="btn-signup">Sign Up</a>
                 </div>
             </div>
-            <div class="hamburger">
+            <div class="hamburger" aria-hidden="true">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -42,42 +42,75 @@
     </nav>
 
     <!-- Hero Slider Section -->
-    <section class="hero-slider">
+    <section class="hero-slider" aria-label="Hero Slider">
         <div class="slider-container">
+            <!--1-->
             <div class="slide active">
                 <div class="slide-content">
-                    <h1>Be Prepared, Not Scared</h1>
-                    <p>Empowering educational institutions with disaster preparedness tools</p>
-                    <a href="signup.html" class="cta-button">Get Started</a>
+                    <div class="slide-inner">
+                        <h1>Be Prepared, Not Scared</h1>
+                        <p>Empowering educational institutions with disaster preparedness.</p>
+                        <a href="signup.html" class="cta-button">Join Now</a>
+                    </div>
                 </div>
             </div>
+            <!--2-->
             <div class="slide">
                 <div class="slide-content">
-                    <h1>Real-Time Alerts</h1>
-                    <p>Receive instant notifications about disasters in your area</p>
-                    <a href="signup.html" class="cta-button">Stay Protected</a>
+                    <div class="slide-inner">
+                        <h1>Practice Today, Survive Tomorrow</h1>
+                        <p>Regular mock drills to build confidence and reduce panic during emergencies</p>
+                        <a href="signup.html" class="cta-button">Join Now</a>
+                    </div>
                 </div>
             </div>
+            <!--3-->
             <div class="slide">
                 <div class="slide-content">
-                    <h1>Interactive Learning</h1>
-                    <p>Engage students with gamified disaster education modules</p>
-                    <a href="signup.html" class="cta-button">Explore Features</a>
+                    <div class="slide-inner">
+                        <h1>Mock Drills in Action</h1>
+                        <p>Empowering schools and colleges with life-saving disaster response drills.</p>
+                        <a href="signup.html" class="cta-button">Join Now</a>
+                    </div>
                 </div>
             </div>
+            <!--4-->
             <div class="slide">
                 <div class="slide-content">
-                    <h1>Save Lives Together</h1>
-                    <p>Community-driven approach to disaster response</p>
-                    <a href="signup.html" class="cta-button">Join Now</a>
+                    <div class="slide-inner">
+                        <h1>Real-Time Alerts</h1>
+                        <p>Receive instant notifications about disasters in your area</p>
+                        <a href="signup.html" class="cta-button">Join Now</a>
+                    </div>
+                </div>
+            </div>
+            <!--5-->
+            <div class="slide">
+                <div class="slide-content">
+                    <div class="slide-inner">
+                        <h1>Medical Relief on Time</h1>
+                        <p>Providing essential medicines and first-aid to save lives in emergencies.</p>
+                        <a href="signup.html" class="cta-button">Join Now</a>
+                    </div>
+                </div>
+            </div>
+            <!--6-->
+            <div class="slide">
+                <div class="slide-content">
+                    <div class="slide-inner">
+                        <h1>Hope Beyond the Crisis</h1>
+                        <p>Connecting survivors with timely relief and recovery resources</p>
+                        <a href="signup.html" class="cta-button">Join Now</a>
+                    </div>
                 </div>
             </div>
         </div>
+
         <div class="slider-nav">
-            <button class="slider-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
-            <button class="slider-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            <button class="slider-btn prev-btn" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-btn next-btn" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
         </div>
-        <div class="slider-dots"></div>
+        <div class="slider-dots" aria-hidden="true"></div>
     </section>
 
     <!-- Features Section -->
@@ -86,44 +119,32 @@
             <h2 class="section-title">Key Features</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-vr-cardboard"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-vr-cardboard"></i></div>
                     <h3>Interactive Modules</h3>
-                    <p>AR/VR enabled disaster education for different age groups with multi-language support</p>
+                    <p>Disaster education modules for different age groups with multi-language support</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Chatbot</h3>
+                    <p>AI-powered virtual assistant providing real-time disaster guidance and multi-language support</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-gamepad"></i></div>
                     <h3>Gamified Learning</h3>
                     <p>Disasterpoly games, quizzes, and achievement badges to enhance engagement</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bell"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-bell"></i></div>
                     <h3>Real-Time Alerts</h3>
                     <p>Region-specific disaster warnings and notifications through API integration</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-map-marked-alt"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
                     <h3>Smart Evacuation</h3>
                     <p>AI-powered route suggestions and crowd-sourced safe zones during disasters</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-                    <h3>Virtual Psychologist</h3>
-                    <p>AI chatbot for mental health support during and after disasters</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
                     <h3>Admin Dashboard</h3>
                     <p>Track preparedness scores, drill participation, and institutional rankings</p>
                 </div>
@@ -135,41 +156,54 @@
     <section id="how-it-works" class="how-it-works">
         <div class="container">
             <h2 class="section-title">How It Works</h2>
-            <div class="timeline">
-                <div class="timeline-item">
+            <div class="timeline-vertical">
+                <div class="timeline-item right">
                     <div class="timeline-content">
-                        <div class="timeline-icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <h3>Sign Up</h3>
-                        <p>Register as a student or faculty member from your educational institution</p>
+                        <div class="timeline-icon"><i class="fas fa-user-plus"></i></div>
+                        <h3>Account Registration</h3>
+                        <p>Create your personalized educational institution profile securely</p>
                     </div>
                 </div>
-                <div class="timeline-item">
+                <div class="timeline-item left">
                     <div class="timeline-content">
-                        <div class="timeline-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <h3>Learn</h3>
-                        <p>Access interactive modules and training materials based on your education level</p>
+                        <div class="timeline-icon"><i class="fas fa-layer-group"></i></div>
+                        <h3>Level Selection</h3>
+                        <p>Choose appropriate learning materials based on educational level</p>
                     </div>
                 </div>
-                <div class="timeline-item">
+                <div class="timeline-item right">
                     <div class="timeline-content">
-                        <div class="timeline-icon">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <h3>Get Alerts</h3>
-                        <p>Receive real-time notifications about disasters in your region</p>
+                        <div class="timeline-icon"><i class="fas fa-vr-cardboard"></i></div>
+                        <h3>Interactive Learning</h3>
+                        <p>Engage with immersive AR/VR disaster preparedness modules</p>
                     </div>
                 </div>
-                <div class="timeline-item">
+                <div class="timeline-item left">
                     <div class="timeline-content">
-                        <div class="timeline-icon">
-                            <i class="fas fa-people-arrows"></i>
-                        </div>
-                        <h3>Respond</h3>
-                        <p>Follow guided evacuation routes and check in during emergencies</p>
+                        <div class="timeline-icon"><i class="fas fa-gamepad"></i></div>
+                        <h3>Practical Simulation</h3>
+                        <p>Practice emergency response through virtual sandbox environment</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-bell"></i></div>
+                        <h3>Real-time Monitoring</h3>
+                        <p>Receive instant critical disaster alerts and notifications</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <h3>Emergency Response</h3>
+                        <p>Initiate immediate assistance with single-touch alert system</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>Progress Tracking</h3>
+                        <p>Monitor your safety training achievements and advancements</p>
                     </div>
                 </div>
             </div>
@@ -182,40 +216,25 @@
             <h2 class="section-title">Who Benefits From ResQ?</h2>
             <div class="stakeholders-grid">
                 <div class="stakeholder-card">
-                    <div class="stakeholder-img">
-                        <i class="fas fa-user-graduate"></i>
-                    </div>
+                    <div class="stakeholder-img"><i class="fas fa-user-graduate"></i></div>
                     <h3>Students</h3>
                     <p>Interactive learning and safety during disasters</p>
                 </div>
                 <div class="stakeholder-card">
-                    <div class="stakeholder-img">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                    </div>
+                    <div class="stakeholder-img"><i class="fas fa-chalkboard-teacher"></i></div>
                     <h3>Teachers & Staff</h3>
                     <p>Tools to manage emergencies and protect students</p>
                 </div>
                 <div class="stakeholder-card">
-                    <div class="stakeholder-img">
-                        <i class="fas fa-house-user"></i>
-                    </div>
+                    <div class="stakeholder-img"><i class="fas fa-house-user"></i></div>
                     <h3>Parents</h3>
                     <p>Peace of mind knowing their children are protected</p>
                 </div>
                 <div class="stakeholder-card">
-                    <div class="stakeholder-img">
-                        <i class="fas fa-building"></i>
-                    </div>
+                    <div class="stakeholder-img"><i class="fas fa-building"></i></div>
                     <h3>Institutions</h3>
                     <p>Compliance with safety regulations and improved rankings</p>
                 </div>
-                <!-- <div class="stakeholder-card">
-                    <div class="stakeholder-img">
-                        <i class="fas fa-hands-helping"></i>
-                    </div>
-                    <h3>Government Agencies</h3>
-                    <p>Better coordinated disaster response efforts</p>
-                </div> -->
             </div>
         </div>
     </section>
@@ -235,11 +254,6 @@
                     <h3>Expert Designed</h3>
                     <p>Created with input from disaster management professionals</p>
                 </div>
-                <!-- <div class="trust-item">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>Offline Functionality</h3>
-                    <p>Critical features work even without internet connection</p>
-                </div> -->
                 <div class="trust-item">
                     <i class="fas fa-lock"></i>
                     <h3>Secure & Private</h3>
@@ -256,7 +270,7 @@
             <p>Join thousands of educational institutions already using ResQ to protect their communities</p>
             <div class="cta-buttons">
                 <a href="signup.html" class="cta-btn">Get Started Now</a>
-                <a href="#contact" class="cta-btn secondary">Request a Demo</a>
+                <!-- <a href="#contact" class="cta-btn secondary">Request a Demo</a> -->
             </div>
         </div>
     </section>

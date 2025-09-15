@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Redirect based on user type
                 if (userType === 'student') {
-                    // window.location.href = 'student-dashboard.html';
+                    window.location.href = '/student/dashboard-student.html';
                 } else {
-                    // window.location.href = 'admin-dashboard.html';
+                    // window.location.href = '/administrator';
                 }
             } else {
                 alert(data.message || 'Login failed');

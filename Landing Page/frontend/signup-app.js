@@ -53,11 +53,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 localStorage.setItem('resq_token', data.token);
                 localStorage.setItem('resq_user', JSON.stringify(data.user));
 
-                alert('Account created successfully! Redirecting to dashboard...');
+                alert('Account created successfully! Please login to access your dashboard :D');
 
                 // Redirect based on user type
                 if (userType === 'student') {
-                    // window.location.href = 'student-dashboard.html';
+                    window.location.href = 'login.html';
                 } else {
                     // window.location.href = 'admin-dashboard.html';
                 }
