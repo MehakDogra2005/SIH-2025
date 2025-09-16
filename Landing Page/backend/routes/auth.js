@@ -40,9 +40,11 @@ router.post('/signup', async (req, res) => {
                 lastName: newUser.lastName,
                 email: newUser.email,
                 userType: newUser.userType,
-                institution: newUser.institution
+                institution: newUser.institution,
+                points: newUser.points   // <-- this is added : D
             }
         });
+
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
@@ -86,7 +88,8 @@ router.post('/login', async (req, res) => {
                 lastName: user.lastName,
                 email: user.email,
                 userType: user.userType,
-                institution: user.institution
+                institution: user.institution,
+                points: user.points // fetches the current points
             }
         });
     } catch (error) {

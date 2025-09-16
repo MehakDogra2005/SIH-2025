@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     institution: { type: String, required: true },
     userType: { type: String, enum: ['student', 'admin'], required: true },
+    points: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now }
 });
 
