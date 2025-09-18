@@ -5,133 +5,184 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gamified Learning - DisasterSafe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #1a73e8;
+            /* original blue navbar */
+            --primary-dark: #0d47a1;
             --secondary: #34a853;
             --accent: #f25c54;
             --warning: #f9a825;
-            --safe: #4285f4;
-            --light: #f8f9fa;
-            --dark: #202124;
             --card-bg: #ffffff;
-            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            /* user palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--gradient-bg);
+            background: var(--light-bg);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
             min-height: 100vh;
-            color: var(--dark);
         }
 
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 15px 0;
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
             position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
+            width: 240px;
+            height: 100%;
+            overflow-y: auto;
             box-shadow: var(--shadow);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
         }
 
         .logo i {
-            margin-right: 10px;
-            color: var(--secondary);
+            font-size: 22px;
+            color: var(--p6)
         }
 
-        .nav-menu {
+        .logo h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px
+        }
+
+        .menu-items {
+            margin-top: 18px;
             display: flex;
-            list-style: none;
-            gap: 30px;
+            flex-direction: column;
+            gap: 8px
         }
 
-        .nav-menu a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
             transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95)
         }
 
-        .nav-menu a:hover {
-            color: var(--primary);
+        .menu-item i {
+            width: 20px;
+            text-align: center
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06)
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08)
+        }
+
+        /* Main content */
+        .main-content {
+            grid-column: 2;
+            padding: 20px;
+            min-height: 100vh
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 100px 20px 40px;
+            padding: 20px;
         }
 
         .header-section {
             text-align: center;
             margin-bottom: 50px;
+            color: var(--text-dark);
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
         }
 
         .header-section h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
             font-weight: 700;
         }
 
         .header-section p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
             opacity: 0.9;
         }
 
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
+            gap: 20px;
             margin-bottom: 50px;
         }
 
         .game-card {
-            background: white;
-            border-radius: 20px;
+            background: var(--card-bg);
+            border-radius: 14px;
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
             position: relative;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
 
         .game-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-6px);
         }
 
         .game-header {
-            height: 200px;
+            height: 160px;
             position: relative;
-            background: linear-gradient(135deg, var(--primary), var(--safe));
+            background: linear-gradient(90deg, var(--p6), var(--p1));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -139,7 +190,7 @@
         }
 
         .game-icon {
-            font-size: 4rem;
+            font-size: 3rem;
             margin-bottom: 10px;
         }
 
@@ -147,34 +198,34 @@
             position: absolute;
             top: 15px;
             right: 15px;
-            background: var(--accent);
+            background: linear-gradient(90deg, var(--p3), var(--accent));
             color: white;
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: 15px;
             font-size: 0.8rem;
             font-weight: 600;
         }
 
         .game-content {
-            padding: 30px;
+            padding: 24px;
         }
 
         .game-content h3 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--text-dark);
         }
 
         .game-content p {
-            color: #666;
-            margin-bottom: 20px;
+            color: #6c757d;
+            margin-bottom: 18px;
             line-height: 1.6;
         }
 
         .game-stats {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             padding: 15px;
             background: rgba(26, 115, 232, 0.05);
             border-radius: 12px;
@@ -185,21 +236,21 @@
         }
 
         .stat-number {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--primary);
         }
 
         .stat-label {
             font-size: 0.8rem;
-            color: #666;
+            color: #6c757d;
         }
 
         .game-features {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .feature-tag {
@@ -213,94 +264,99 @@
 
         .game-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .btn-primary {
             flex: 1;
-            padding: 15px 20px;
-            background: var(--primary);
+            padding: 12px 18px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         .btn-primary:hover {
-            background: var(--safe);
             transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(26, 115, 232, 0.3);
         }
 
         .btn-secondary {
-            padding: 15px 20px;
+            padding: 12px 18px;
             background: transparent;
             color: var(--primary);
             border: 2px solid var(--primary);
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
         .btn-secondary:hover {
             background: var(--primary);
             color: white;
+            transform: translateY(-2px);
         }
 
         /* DisasterPoly Game Board */
         .disasterpoly-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 50px;
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 30px;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
 
         .game-board {
-            width: 600px;
-            height: 600px;
+            width: 500px;
+            height: 500px;
             margin: 0 auto;
             position: relative;
-            background: #f0f0f0;
+            background: rgba(26, 115, 232, 0.05);
             border: 3px solid var(--primary);
-            border-radius: 20px;
+            border-radius: 14px;
         }
 
         .board-square {
             position: absolute;
-            width: 80px;
-            height: 80px;
-            border: 2px solid #333;
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-align: center;
-            background: white;
+            background: var(--card-bg);
             cursor: pointer;
             transition: var(--transition);
+            border-radius: 8px;
         }
 
         .board-square:hover {
             background: rgba(26, 115, 232, 0.1);
+            transform: scale(1.05);
         }
 
         .board-square.corner {
-            background: linear-gradient(135deg, var(--primary), var(--safe));
+            background: linear-gradient(90deg, var(--p1), var(--primary));
             color: white;
             font-weight: 600;
         }
 
         .board-square.disaster {
-            background: linear-gradient(135deg, var(--accent), #e53935);
+            background: linear-gradient(90deg, var(--p3), var(--accent));
             color: white;
         }
 
         .board-square.safe {
-            background: linear-gradient(135deg, var(--secondary), #2e7d32);
+            background: linear-gradient(90deg, var(--secondary), var(--p2));
             color: white;
         }
 
@@ -309,9 +365,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(135deg, var(--primary), var(--safe));
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(90deg, var(--p6), var(--p1));
             border-radius: 50%;
             display: flex;
             flex-direction: column;
@@ -319,39 +375,41 @@
             justify-content: center;
             color: white;
             text-align: center;
+            box-shadow: var(--shadow);
         }
 
         .board-center h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
         }
 
         .board-center p {
-            font-size: 1rem;
+            font-size: 0.9rem;
             opacity: 0.9;
         }
 
         .game-controls {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+            gap: 18px;
+            margin-top: 25px;
         }
 
         .dice {
-            width: 60px;
-            height: 60px;
-            background: white;
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
             border: 3px solid var(--primary);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: var(--primary);
             cursor: pointer;
             transition: var(--transition);
+            box-shadow: var(--shadow);
         }
 
         .dice:hover {
@@ -363,117 +421,123 @@
         .player-info {
             display: flex;
             justify-content: space-around;
-            margin-top: 30px;
-            gap: 20px;
+            margin-top: 25px;
+            gap: 18px;
         }
 
         .player-card {
             background: rgba(26, 115, 232, 0.05);
-            padding: 20px;
-            border-radius: 15px;
+            padding: 18px;
+            border-radius: 12px;
             text-align: center;
             flex: 1;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
 
         .player-card h4 {
             color: var(--primary);
             margin-bottom: 10px;
+            font-weight: 600;
         }
 
         .player-stats {
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
+            font-size: 0.9rem;
         }
 
         /* Quiz Section */
         .quiz-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 50px;
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 30px;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
 
         .quiz-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .quiz-progress {
             width: 100%;
-            height: 10px;
-            background: #e0e0e0;
-            border-radius: 5px;
-            margin-bottom: 30px;
+            height: 8px;
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 4px;
+            margin-bottom: 25px;
             overflow: hidden;
         }
 
         .quiz-progress-fill {
             height: 100%;
-            background: linear-gradient(to right, var(--secondary), #4caf50);
+            background: linear-gradient(to right, var(--p1), var(--secondary));
             width: 0%;
             transition: width 0.3s ease;
         }
 
         .question-card {
             background: rgba(26, 115, 232, 0.05);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
 
         .question-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .question-number {
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
             font-weight: 600;
         }
 
         .question-points {
-            background: var(--secondary);
+            background: linear-gradient(90deg, var(--secondary), var(--p2));
             color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
             font-weight: 600;
         }
 
         .question-text {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            color: var(--dark);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
             line-height: 1.4;
         }
 
         .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            gap: 12px;
         }
 
         .option-button {
-            padding: 15px 20px;
-            border: 2px solid #ddd;
-            background: white;
-            border-radius: 12px;
+            padding: 12px 16px;
+            border: 2px solid rgba(26, 115, 232, 0.2);
+            background: var(--card-bg);
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
             text-align: left;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         .option-button:hover {
             border-color: var(--primary);
             background: rgba(26, 115, 232, 0.05);
+            transform: translateY(-2px);
         }
 
         .option-button.selected {
@@ -492,32 +556,44 @@
         }
 
         .quiz-results {
-            background: linear-gradient(135deg, var(--secondary), #2e7d32);
+            background: linear-gradient(90deg, var(--p1), var(--secondary));
             color: white;
-            border-radius: 15px;
-            padding: 30px;
+            border-radius: 12px;
+            padding: 25px;
             text-align: center;
-            margin-top: 30px;
+            margin-top: 25px;
+            box-shadow: var(--shadow);
         }
 
         .score-display {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .achievement-badge {
             display: inline-block;
             background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            margin: 10px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 8px;
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto
+            }
+
+            .main-content {
+                padding: 18px
             }
 
             .header-section h1 {
@@ -536,14 +612,14 @@
             }
 
             .board-square {
-                width: 60px;
-                height: 60px;
-                font-size: 0.6rem;
+                width: 50px;
+                height: 50px;
+                font-size: 0.55rem;
             }
 
             .board-center {
-                width: 200px;
-                height: 200px;
+                width: 180px;
+                height: 180px;
             }
 
             .board-center h2 {
@@ -553,22 +629,29 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
             <div class="logo">
-                <i class="fas fa-gamepad"></i>
-                Gamified Learning
+                <i class="fas fa-shield-alt"></i>
+                <h1>ResQ</h1>
             </div>
-            <ul class="nav-menu">
-                <li><a href="dashboard-student.html">Dashboard</a></li>
-                <li><a href="education-modules.html">Education</a></li>
-                <li><a href="sandbox-simulator.html">Simulator</a></li>
-                <li><a href="profile-badges.html">Profile</a></li>
-            </ul>
-        </div>
-    </nav>
+            <div class="menu-items">
+                <div class="menu-item"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
+                <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item active"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div>
+                <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+        </aside>
 
-    <div class="container">
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
         <div class="header-section">
             <h1>Gamified Disaster Learning</h1>
             <p>Learn disaster management through engaging games and challenges</p>
@@ -738,10 +821,58 @@
                 <div id="badgesEarned"></div>
                 <button class="btn-primary" onclick="restartQuiz()" style="margin-top: 20px;">Play Again</button>
             </div>
+            </div>
         </div>
+        </main>
     </div>
 
     <script>
+        // Menu Navigation
+        function initializeMenuNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            const pageMapping = {
+                'Dashboard': 'dashboard-student.html',
+                'Education Modules': 'education-modules.html',
+                'Sandbox Simulator': 'sandbox-simulator.html',
+                'Emergency Contacts': 'dashboard-student.html#emergency-contacts',
+                'Disaster Map': '../advanced-map.html',
+                'AI Helper': 'chatbot.html',
+                'Gamified Learning': 'gamified-learning.html',
+                'Profile & Badges': 'profile-badges.html',
+                'Settings': 'settings.html'
+            };
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const menuText = this.querySelector('span').textContent.trim();
+                    const targetPage = pageMapping[menuText];
+
+                    if (targetPage && !targetPage.includes('gamified-learning')) {
+                        window.location.href = targetPage;
+                    }
+                });
+
+                item.addEventListener('mouseenter', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                    }
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        }
+
+        // Initialize menu navigation when page loads
+        document.addEventListener('DOMContentLoaded', initializeMenuNavigation);
+
         // Game state variables
         let currentGame = null;
         let quizData = [];

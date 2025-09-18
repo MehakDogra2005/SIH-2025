@@ -988,9 +988,6 @@
             // Initialize the app
             renderChatHistory();
             
-            // Add click event to user profile
-            document.querySelector('.user-profile').addEventListener('click', updateUserName);
-            
             // Check if opened from consultation page
             if (document.referrer.includes('consultation.html') || window.opener) {
                 setTimeout(async () => {
@@ -1788,22 +1785,92 @@
             }
         }
         
-        // User profile functionality
-        function initializeUserProfile() {
-            const userName = localStorage.getItem('userName') || 'User';
-            const userAvatar = document.getElementById('userAvatar');
+        // Load User Information from MongoDB database
+        async function loadUserInfo() {
+            try {
+                // First try to get user data from session/localStorage
+                let userData = null;
+                
+                // Check localStorage for stored user data
+                const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
+                if (localData) {
+                    userData = JSON.parse(localData);
+                }
+                
+                // If no local data or token exists, try to fetch from backend
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
+                if (!userData && token) {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/current', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            userData = await response.json();
+                            // Save to localStorage for future use
+                            localStorage.setItem('resq_user', JSON.stringify(userData));
+                        } else {
+                            console.log('Failed to fetch user from backend:', response.status);
+                        }
+                    } catch (fetchError) {
+                        console.log('Could not fetch user from backend:', fetchError.message);
+                    }
+                }
+                
+                if (userData) {
+                    const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
+                    const lastName = userData.lastName || '';
+                    const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+                    
+                    // Update sidebar user profile
+                    const userNameElement = document.getElementById('userName');
+                    const userAvatarElement = document.getElementById('userAvatar');
+                    
+                    if (userNameElement) userNameElement.textContent = fullName;
+                    if (userAvatarElement) userAvatarElement.textContent = firstName.charAt(0).toUpperCase();
+                    
+                    console.log('User loaded:', fullName);
+                } else {
+                    // Fallback to default values
+                    console.log('No user data found');
+                    setDefaultUser();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                setDefaultUser();
+            }
+        }
+
+        function setDefaultUser() {
             const userNameElement = document.getElementById('userName');
+            const userAvatarElement = document.getElementById('userAvatar');
             
-            userNameElement.textContent = userName;
-            userAvatar.textContent = userName.charAt(0).toUpperCase();
+            if (userNameElement) userNameElement.textContent = 'Guest User';
+            if (userAvatarElement) userAvatarElement.textContent = 'G';
         }
         
-        function updateUserName() {
-            const newName = prompt('Enter your name:', localStorage.getItem('userName') || 'User');
-            if (newName && newName.trim()) {
-                localStorage.setItem('userName', newName.trim());
-                initializeUserProfile();
+        // User profile functionality
+        function initializeUserProfile() {
+            loadUserInfo();
+            
+            // Add hover effect for user profile section (no click redirect)
+            const userProfile = document.querySelector('.user-profile');
+            if (userProfile) {
+                userProfile.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                });
+                
+                userProfile.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = 'transparent';
+                });
             }
+            
+            // Refresh user data every 5 minutes
+            setInterval(loadUserInfo, 5 * 60 * 1000);
         }
         
         // Handle window resize for mobile

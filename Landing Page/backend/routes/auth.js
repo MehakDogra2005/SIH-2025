@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const auth = require('../middleware/auth');
 const router = express.Router();
 
 // Signup API
@@ -91,6 +92,25 @@ router.post('/login', async (req, res) => {
                 institution: user.institution,
                 points: user.points // fetches the current points
             }
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+// Get current user API (requires authentication)
+router.get('/current', auth, async (req, res) => {
+    try {
+        const user = req.user;
+        
+        res.json({
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            userType: user.userType,
+            institution: user.institution,
+            points: user.points
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

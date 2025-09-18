@@ -1256,13 +1256,80 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // FETCHING POINTS 
-        window.addEventListener('DOMContentLoaded', () => {
-            const user = JSON.parse(localStorage.getItem('resq_user')); // ya sessionStorage
-            if (user) {
-                document.getElementById('userName').innerText = `${user.firstName} ${user.lastName}`;
-                document.getElementById('userPoints').innerText = user.points || 0;
+        // Load User Information from MongoDB database
+        async function loadUserInfo() {
+            try {
+                // First try to get user data from session/localStorage
+                let userData = null;
+                
+                // Check localStorage for stored user data
+                const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
+                if (localData) {
+                    userData = JSON.parse(localData);
+                }
+                
+                // If no local data or token exists, try to fetch from backend
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
+                if (!userData && token) {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/current', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            userData = await response.json();
+                            // Save to localStorage for future use
+                            localStorage.setItem('resq_user', JSON.stringify(userData));
+                        } else {
+                            console.log('Failed to fetch user from backend:', response.status);
+                        }
+                    } catch (fetchError) {
+                        console.log('Could not fetch user from backend:', fetchError.message);
+                    }
+                }
+                
+                if (userData) {
+                    const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
+                    const lastName = userData.lastName || '';
+                    const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+                    
+                    // Update header user profile
+                    const userNameElement = document.getElementById('userName');
+                    const userPointsElement = document.getElementById('userPoints');
+                    
+                    if (userNameElement) userNameElement.textContent = fullName;
+                    if (userPointsElement) userPointsElement.textContent = userData.points || 0;
+                    
+                    console.log('User loaded:', fullName);
+                } else {
+                    // Fallback to default values
+                    console.log('No user data found');
+                    setDefaultUser();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                setDefaultUser();
             }
+        }
+
+        function setDefaultUser() {
+            const userNameElement = document.getElementById('userName');
+            const userPointsElement = document.getElementById('userPoints');
+            
+            if (userNameElement) userNameElement.textContent = 'Guest User';
+            if (userPointsElement) userPointsElement.textContent = '0';
+        }
+
+        // FETCHING POINTS AND USER DATA FROM DATABASE
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+            
+            // Refresh user data every 5 minutes
+            setInterval(loadUserInfo, 5 * 60 * 1000);
         });
 
         /**********************

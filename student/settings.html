@@ -941,48 +941,78 @@
          * User Profile Management
          **********************/
         
-        // Load user profile from localStorage or API
-        function loadUserProfile() {
-            // Try to get user data from localStorage (from login)
-            const userData = JSON.parse(localStorage.getItem('resq_user') || '{}');
-            
-            // Default field configuration
-            const fieldConfig = {
-                firstName: { label: 'First Name', type: 'text', required: true, readonly: true },
-                lastName: { label: 'Last Name', type: 'text', required: true, readonly: true },
-                email: { label: 'Email Address', type: 'email', required: true, readonly: true },
-                address: { label: 'Address', type: 'text', required: false, readonly: true },
-                phone: { label: 'Phone Number', type: 'tel', required: false, readonly: false },
-                emergencyContact: { label: 'Emergency Contact', type: 'tel', required: false, readonly: false },
-                bloodGroup: { label: 'Blood Group', type: 'text', required: false, readonly: false },
-                medicalInfo: { label: 'Medical Information', type: 'textarea', required: false, readonly: false },
-                bio: { label: 'Bio', type: 'textarea', required: false, readonly: false }
-            };
-
-            const profileForm = document.getElementById('profileForm');
-            profileForm.innerHTML = '';
-
-            // Create fields based on available user data
-            Object.keys(userData).forEach(key => {
-                if (fieldConfig[key] && userData[key]) {
-                    createProfileField(key, fieldConfig[key], userData[key]);
+        // Load user profile from MongoDB database
+        async function loadUserProfile() {
+            try {
+                // First try to get user data from session/localStorage
+                let userData = null;
+                
+                // Check localStorage for stored user data
+                const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
+                if (localData) {
+                    userData = JSON.parse(localData);
                 }
-            });
-
-            // Always show required fields even if not in userData
-            ['firstName', 'lastName', 'email'].forEach(requiredField => {
-                if (!userData[requiredField]) {
-                    createProfileField(requiredField, fieldConfig[requiredField], '');
+                
+                // If no local data or token exists, try to fetch from backend
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
+                if (!userData && token) {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/current', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            userData = await response.json();
+                            // Save to localStorage for future use
+                            localStorage.setItem('resq_user', JSON.stringify(userData));
+                        } else {
+                            console.log('Failed to fetch user from backend:', response.status);
+                        }
+                    } catch (fetchError) {
+                        console.log('Could not fetch user from backend:', fetchError.message);
+                    }
                 }
-            });
+                
+                if (!userData || Object.keys(userData).length === 0) {
+                    console.log('No user data found');
+                    userData = { firstName: 'Guest', lastName: 'User', email: 'guest@example.com' };
+                }
+                
+                // Default field configuration
+                const fieldConfig = {
+                    firstName: { label: 'First Name', type: 'text', required: true, readonly: true },
+                    lastName: { label: 'Last Name', type: 'text', required: true, readonly: true },
+                    email: { label: 'Email Address', type: 'email', required: true, readonly: true },
+                    address: { label: 'Address', type: 'text', required: false, readonly: true },
+                    phone: { label: 'Phone Number', type: 'tel', required: false, readonly: false },
+                    emergencyContact: { label: 'Emergency Contact', type: 'tel', required: false, readonly: false },
+                    bloodGroup: { label: 'Blood Group', type: 'text', required: false, readonly: false },
+                    medicalInfo: { label: 'Medical Information', type: 'textarea', required: false, readonly: false },
+                    bio: { label: 'Bio', type: 'textarea', required: false, readonly: false }
+                };
 
-            // Show address if it exists
-            if (userData.address) {
-                createProfileField('address', fieldConfig['address'], userData.address);
+                const profileForm = document.getElementById('profileForm');
+                profileForm.innerHTML = '';
+
+                // Create fields based on available user data
+                Object.keys(userData).forEach(key => {
+                    if (fieldConfig[key] && userData[key]) {
+                        createProfileField(key, fieldConfig[key], userData[key]);
+                    }
+                });
+                
+                console.log('User profile loaded:', userData.firstName, userData.lastName);
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+                // Fallback to basic profile
+                const userData = { firstName: 'Guest', lastName: 'User', email: 'guest@example.com' };
+                const profileForm = document.getElementById('profileForm');
+                profileForm.innerHTML = '<p>Error loading profile. Please try again later.</p>';
             }
-
-            // Update the dropdown to hide already added fields and readonly fields
-            updateAddFieldDropdown();
         }
 
         // Create a profile field

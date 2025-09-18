@@ -14,6 +14,9 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 
+// For backwards compatibility, also expose user routes under /api/user
+app.use('/api/user', authRoutes);
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
