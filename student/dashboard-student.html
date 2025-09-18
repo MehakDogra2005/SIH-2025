@@ -1,1073 +1,1094 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DisasterSafe - Comprehensive Disaster Management Platform</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DisasterSafe - Student Dashboard (Improved UI)</title>
+
+    <!-- Font Awesome and Leaflet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             --primary: #1a73e8;
+            /* original blue navbar */
+            --primary-dark: #0d47a1;
             --secondary: #34a853;
             --accent: #f25c54;
             --warning: #f9a825;
-            --safe: #4285f4;
-            --light: #f8f9fa;
-            --dark: #202124;
             --card-bg: #ffffff;
-            --sidebar-bg: #1a73e8;
-            --header-bg: #1a73e8;
-            --text-light: #f8f9fa;
             --text-dark: #202124;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --light-bg: #f5f7fb;
+
+            /* user palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
         }
 
         body {
-            background-color: #f5f7fb;
+            background: var(--light-bg);
             color: var(--text-dark);
-            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
         }
 
+        /* Layout */
         .dashboard-container {
             display: grid;
             grid-template-columns: 240px 1fr;
             min-height: 100vh;
         }
 
-        /* Sidebar Styles */
         .sidebar {
-            background: linear-gradient(to bottom, var(--sidebar-bg), #0d47a1);
-            color: var(--text-light);
-            padding: 20px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
             position: fixed;
             width: 240px;
             height: 100%;
             overflow-y: auto;
             box-shadow: var(--shadow);
-            z-index: 100;
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
         }
 
         .logo i {
-            font-size: 24px;
-            margin-right: 10px;
-            color: var(--secondary);
+            font-size: 22px;
+            color: var(--p6)
         }
 
         .logo h1 {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px
+        }
+
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-radius: 8px;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
-        }
-
-        .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .menu-item.active {
-            background-color: var(--primary);
+            color: rgba(255, 255, 255, 0.95)
         }
 
         .menu-item i {
-            margin-right: 12px;
-            font-size: 18px;
+            width: 20px;
+            text-align: center
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06)
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08)
         }
 
         .new-badge {
             background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: auto;
-            animation: pulse-badge 2s infinite;
-            box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #fff;
+            margin-left: auto
         }
 
-        @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        /* Main Content Styles */
+        /* Main content */
         .main-content {
             grid-column: 2;
             padding: 20px;
+            min-height: 100vh
         }
 
+        /* padding-left accounts for fixed sidebar */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background-color: var(--header-bg);
-            color: var(--text-light);
+            padding: 14px;
             border-radius: 12px;
-            margin-bottom: 25px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
             box-shadow: var(--shadow);
+            gap: 12px;
+            flex-wrap: wrap
         }
 
         .search-bar {
             display: flex;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.15);
-            padding: 8px 15px;
-            border-radius: 20px;
-            width: 40%;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 8px 12px;
+            border-radius: 999px;
+            width: 42%;
+            min-width: 220px;
+            gap: 10px
         }
 
         .search-bar input {
             background: transparent;
             border: none;
-            color: var(--text-light);
-            padding: 5px 10px;
-            width: 100%;
+            color: white;
             outline: none;
+            width: 100%
         }
 
-        .search-bar input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+        .search-bar .search-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px
         }
 
         .user-profile {
             display: flex;
             align-items: center;
+            gap: 10px
         }
 
         .user-profile img {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             object-fit: cover;
-            margin-right: 10px;
-            border: 2px solid var(--secondary);
+            border: 2px solid rgba(255, 255, 255, 0.15)
         }
 
-        /* Dashboard Grid */
+        .user-profile h4 {
+            font-size: 16px;
+            margin-bottom: 2px
+        }
+
+        .user-profile p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85)
+        }
+
+        /* language selector aligned right and won't overlap due to header spacing */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+
+
+        .language-selector select {
+            padding: 10px 12px;
+            border-radius: 9px;
+            border: none;
+            background: var(--glass);
+            outline: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Dashboard grid and cards */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin: 20px 0 28px
         }
 
         .card {
-            background-color: var(--card-bg);
+            background: var(--card-bg);
             border-radius: 12px;
-            padding: 20px;
+            padding: 18px;
             box-shadow: var(--shadow);
             transition: var(--transition);
+            border: 1px solid rgba(16, 24, 32, 0.03)
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-6px)
         }
 
         .stat-card {
             display: flex;
             align-items: center;
+            gap: 15px
         }
 
         .stat-icon {
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            font-size: 24px;
-        }
-
-        .emergency .stat-icon {
-            background-color: rgba(242, 92, 84, 0.15);
-            color: var(--accent);
-        }
-
-        .alerts .stat-icon {
-            background-color: rgba(249, 168, 37, 0.15);
-            color: var(--warning);
-        }
-
-        .preparedness .stat-icon {
-            background-color: rgba(52, 168, 83, 0.15);
-            color: var(--secondary);
-        }
-
-        .resources .stat-icon {
-            background-color: rgba(26, 115, 232, 0.15);
-            color: var(--primary);
+            font-size: 22px
         }
 
         .stat-info h3 {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 20px;
+            margin-bottom: 4px
         }
 
         .stat-info p {
-            color: #6c757d;
-            font-size: 14px;
+            font-size: 13px;
+            color: #6c757d
         }
 
-        /* Emergency Button */
+        /* Emergency button - kept large but improved */
         .emergency-button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(to right, var(--accent), #e53935);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: linear-gradient(90deg, var(--p3), var(--accent));
             color: white;
             border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 10px 30px rgba(226, 26, 47, 0.12);
+            transition: transform .12s ease;
+            width: 100%;
+            max-width: 500px;
         }
 
         .emergency-button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 14px rgba(229, 57, 53, 0.4);
+            transform: scale(1.02)
         }
 
-        /* Section Titles */
+        .emergency-button i {
+            font-size: 18px
+        }
+
+        /* Alerts */
+        .alerts-section {
+            margin-top: 18px
+        }
+
         .section-title {
-            font-size: 20px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(26, 115, 232, 0.2);
-            color: var(--primary);
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        /* Map Container */
-        .map-container {
-            height: 400px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-        }
-
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-
-        /* Real-time Alerts Section */
-        .alerts-section {
-            margin-bottom: 40px;
+            font-size: 19px;
+            color: var(--primary);
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.08);
+            margin-bottom: 12px
         }
 
         .alert-badge {
-            background: var(--accent);
+            background: var(--p2);
             color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 10px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 700
         }
 
         .alerts-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+            max-height: 420px;
+            overflow: auto;
+            padding-right: 6px
         }
 
         .alert-item {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: var(--shadow);
             display: flex;
-            align-items: center;
-            gap: 20px;
-            border-left: 5px solid;
-            transition: var(--transition);
+            align-items: flex-start;
+            gap: 16px;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #fff, #fbfdff);
+            border-left: 5px solid #ddd;
+            box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
+            transition: transform .15s ease, opacity .15s ease
         }
 
         .alert-item:hover {
-            transform: translateX(5px);
-        }
-
-        .alert-item.severe {
-            border-left-color: var(--accent);
-        }
-
-        .alert-item.warning {
-            border-left-color: var(--warning);
-        }
-
-        .alert-item.info {
-            border-left-color: var(--primary);
+            transform: translateX(6px)
         }
 
         .alert-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
             color: white;
+            font-size: 18px
         }
 
         .alert-item.severe .alert-icon {
-            background: var(--accent);
+            background: linear-gradient(90deg, var(--p1), var(--accent))
         }
 
         .alert-item.warning .alert-icon {
-            background: var(--warning);
+            background: linear-gradient(90deg, var(--p2), #ffb95c)
         }
 
         .alert-item.info .alert-icon {
-            background: var(--primary);
-        }
-
-        .alert-content {
-            flex: 1;
+            background: linear-gradient(90deg, var(--p6), var(--p1))
         }
 
         .alert-content h4 {
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-            color: var(--dark);
+            font-size: 16px;
+            margin-bottom: 6px
         }
 
         .alert-content p {
+            font-size: 14px;
             color: #666;
-            margin-bottom: 10px;
-            line-height: 1.4;
+            margin-bottom: 8px
         }
 
         .alert-meta {
             display: flex;
-            gap: 20px;
-            font-size: 0.8rem;
-            color: #999;
+            gap: 14px;
+            font-size: 12px;
+            color: #9aa0a6
         }
 
         .alert-actions {
             display: flex;
             flex-direction: column;
             gap: 8px;
+            margin-left: auto
         }
 
         .alert-btn {
-            padding: 8px 16px;
+            padding: 8px 12px;
+            border-radius: 8px;
             border: 1px solid #ddd;
             background: white;
-            color: #666;
-            border-radius: 6px;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 0.85rem;
+            font-weight: 600
         }
 
         .alert-btn.primary {
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
-            border-color: var(--primary);
+            border: none
         }
 
-        .alert-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+        .alert-btn:disabled {
+            opacity: 0.55;
+            cursor: default
         }
 
-        /* Disaster Attendance System */
+        /* Attendance */
         .attendance-section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #fff, #fbfdff);
             box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 14px
         }
 
         .attendance-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 30px;
-        }
-
-        .attendance-status {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            gap: 20px;
+            flex-wrap: wrap
         }
 
         .status-indicator {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.2rem;
-            font-weight: 600;
+            gap: 10px;
+            font-weight: 700
         }
 
         .status-indicator.safe {
-            color: var(--secondary);
+            color: var(--secondary)
         }
 
         .status-indicator.help {
-            color: var(--accent);
-        }
-
-        .last-checkin {
-            color: #666;
-            font-size: 0.9rem;
+            color: var(--accent)
         }
 
         .attendance-actions {
             display: flex;
-            gap: 15px;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .btn-safe,
+        .btn-help,
+        .btn-location {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700
         }
 
         .btn-safe {
-            padding: 12px 20px;
-            background: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
+            color: white
         }
 
         .btn-help {
-            padding: 12px 20px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
+            background: linear-gradient(90deg, var(--p3), #ea6f7b);
+            color: white
         }
 
         .btn-location {
-            padding: 12px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
+            background: linear-gradient(90deg, var(--p1), #2f8fc1);
+            color: white
         }
 
-        .btn-safe:hover, .btn-help:hover, .btn-location:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Emergency Contacts Section */
-        .emergency-contacts-section {
-            margin-bottom: 40px;
-        }
-
+        /* Contacts grid */
         .contacts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 12px
         }
 
         .contact-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .contact-card:hover {
-            transform: translateY(-5px);
+            border-radius: 14px;
+            padding: 16px;
+            background: linear-gradient(180deg, #fff, #f7fbff);
+            box-shadow: var(--shadow)
         }
 
         .contact-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(26, 115, 232, 0.1);
-        }
-
-        .contact-header h4 {
-            font-size: 1.3rem;
-            color: var(--primary);
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.06);
+            margin-bottom: 10px
         }
 
         .region-status {
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 12px
         }
 
         .region-status.active {
-            background: rgba(52, 168, 83, 0.1);
-            color: var(--secondary);
+            background: rgba(52, 168, 83, 0.12);
+            color: var(--secondary)
         }
 
         .contact-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            background: rgba(26, 115, 232, 0.05);
+            gap: 12px;
+            padding: 10px;
             border-radius: 10px;
-            transition: var(--transition);
-        }
-
-        .contact-item:hover {
-            background: rgba(26, 115, 232, 0.1);
-        }
-
-        .contact-item i {
-            margin-right: 10px;
-            color: var(--primary);
-            width: 20px;
+            background: rgba(26, 115, 232, 0.03);
+            justify-content: space-between;
         }
 
         .quick-call {
-            padding: 6px 12px;
-            background: var(--primary);
-            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
             border: none;
-            border-radius: 15px;
+            background: linear-gradient(90deg, var(--p1), #2f8fc1);
+            color: white;
+            font-weight: 700;
             cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.8rem;
         }
 
-        .quick-call:hover {
-            background: var(--safe);
-            transform: scale(1.05);
-        }
-
-        /* Resources Grid */
+        /* Resources grid (flashcards) - clean and soft */
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 12px
         }
 
         .resource-card {
-            background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .resource-card:hover {
-            transform: translateY(-5px);
+            transition: transform .18s ease;
+            border: 1px solid rgba(16, 24, 40, 0.03)
         }
 
         .resource-header {
-            height: 120px;
-            position: relative;
-            background: linear-gradient(to right, var(--primary), var(--safe));
+            height: 96px;
+            background: linear-gradient(90deg, var(--p6), var(--p1));
+            position: relative
         }
 
-        .resource-header .resource-icon {
+        .resource-icon {
             position: absolute;
-            bottom: -20px;
-            left: 20px;
+            bottom: -22px;
+            left: 18px;
             width: 60px;
             height: 60px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
+            background: linear-gradient(90deg, var(--p2), #f2b25e);
             color: white;
-            background: linear-gradient(to right, var(--secondary), #2e7d32);
+            box-shadow: 0 10px 18px rgba(16, 24, 40, 0.06)
         }
 
         .resource-content {
-            padding: 30px 20px 20px;
+            padding: 34px 18px 20px;
+            background: linear-gradient(180deg, #fff, #fff)
         }
 
         .resource-content h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
+            margin-bottom: 8px
         }
 
         .resource-content p {
             color: #6c757d;
-            font-size: 14px;
-            margin-bottom: 15px;
+            margin-bottom: 12px
         }
 
         .resource-button {
             display: inline-block;
-            padding: 8px 16px;
-            background-color: var(--primary);
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--p1), #2f8fc1);
             color: white;
-            border-radius: 20px;
             text-decoration: none;
-            font-size: 14px;
-            transition: var(--transition);
+            font-weight: 700
         }
 
-        .resource-button:hover {
-            background-color: var(--safe);
-        }
-
-        /* Chatbot Container */
+        /* Chatbot */
         .chatbot-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 350px;
-            height: 450px;
-            background-color: white;
+            right: 18px;
+            bottom: 18px;
+            width: 360px;
+            height: 460px;
+            background: white;
             border-radius: 12px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 36px rgba(16, 24, 40, 0.12);
             display: flex;
             flex-direction: column;
-            z-index: 1000;
             overflow: hidden;
+            z-index: 900
         }
 
         .chatbot-header {
-            background: linear-gradient(to right, var(--primary), var(--safe));
-            color: white;
-            padding: 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 12px 14px;
+            background: linear-gradient(90deg, var(--p1), var(--primary));
+            color: white
         }
 
-        .chatbot-header h3 {
-            font-size: 16px;
+        .chat-action {
+            width: 28px;
+            /* equal size */
+            height: 28px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            /* keep transparent to match header */
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            /* ensures icons scale the same */
+            padding: 0;
         }
 
-        .chatbot-header h3 i {
-            margin-right: 10px;
+        .chat-action:hover {
+            background: rgba(255, 255, 255, 0.15);
+            /* subtle hover effect */
+        }
+
+        .chat-minimize i {
+            transform: translateY(-4px);
         }
 
         .chatbot-messages {
             flex: 1;
-            padding: 15px;
-            overflow-y: auto;
+            padding: 12px;
+            overflow: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            background: linear-gradient(180deg, #fbfdff, #ffffff)
         }
 
         .message {
             max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 18px;
+            padding: 10px 12px;
+            border-radius: 14px;
             line-height: 1.4;
-            font-size: 14px;
+            font-size: 14px
         }
 
         .user-message {
             align-self: flex-end;
-            background-color: var(--primary);
-            color: white;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white
         }
 
         .bot-message {
             align-self: flex-start;
-            background-color: #e8eaf6;
-            color: var(--dark);
+            background: #eef2ff;
+            color: var(--text-dark)
         }
 
         .chatbot-input {
             display: flex;
             padding: 10px;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #eee;
+            gap: 8px
         }
 
         .chatbot-input input {
             flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            outline: none;
+            padding: 10px;
+            border-radius: 999px;
+            border: 1px solid #eee;
+            outline: none
         }
 
         .chatbot-input button {
-            background-color: var(--primary);
-            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
             border: none;
-            width: 40px;
-            height: 40px;
+            background: linear-gradient(90deg, var(--p1), #2f8fc1);
+            color: white;
+            cursor: pointer
+        }
+
+        /* Added chatbot button :D*/
+        .chat-toggle {
+            display: flex;
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            margin-left: 10px;
+            border: none;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 22px;
             cursor: pointer;
+            display: none;
+            /* by default hidden, jab close hoga tab dikhega */
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 901;
         }
 
-        /* Language Selector */
-        .language-selector {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        /* Modals (emergency / details) */
+        .modal-overlay {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(6, 12, 30, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1200
         }
 
-        .language-selector select {
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            outline: none;
-            background-color: white;
+        .modal {
+            background: linear-gradient(180deg, #fff, #fbfdff);
+            border-radius: 14px;
+            width: 92%;
+            max-width: 720px;
+            max-height: 86vh;
+            overflow: auto;
+            box-shadow: 0 18px 50px rgba(8, 12, 32, 0.25);
+            position: relative;
+            border: 1px solid rgba(16, 24, 40, 0.04)
         }
 
-        /* Responsive Design */
-        @media (max-width: 992px) {
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(16, 24, 40, 0.04);
+            cursor: grab
+        }
+
+        .modal-body {
+            padding: 18px;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer
+        }
+
+        .modal .disaster-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px
+        }
+
+        /* draggable cursor while dragging */
+        .dragging {
+            cursor: grabbing !important
+        }
+
+        /* small responsive */
+        @media(max-width:992px) {
             .dashboard-container {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr
             }
-            
+
             .sidebar {
-                width: 100%;
-                height: auto;
                 position: relative;
-                padding: 15px;
+                width: 100%;
+                height: auto
             }
-            
+
             .main-content {
-                grid-column: 1;
-            }
-            
-            .menu-items {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-            
-            .menu-item {
-                margin-bottom: 0;
+                padding-left: 18px
             }
 
             .chatbot-container {
-                width: 300px;
-                height: 400px;
+                display: none;
+                right: 12px;
+                width: 320px
+            }
+
+            .emergency-button {
+                width: 100%
             }
         }
 
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .search-bar {
-                width: 100%;
-            }
-            
-            .dashboard-grid {
-                grid-template-columns: 1fr;
+        /* custom scrollbars */
+        .alerts-container::-webkit-scrollbar,
+        .chatbot-messages::-webkit-scrollbar,
+        .modal::-webkit-scrollbar {
+            height: 10px;
+            width: 10px
+        }
+
+        .alerts-container::-webkit-scrollbar-thumb,
+        .chatbot-messages::-webkit-scrollbar-thumb,
+        .modal::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--p6), var(--p1));
+            border-radius: 999px
+        }
+
+        .alerts-container::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        /* highlight animation */
+        @keyframes highlightPulse {
+            0% {
+                box-shadow: 0 0 0 rgba(48, 154, 212, 0.0)
             }
 
-            .chatbot-container {
-                width: 100%;
-                right: 0;
-                bottom: 0;
-                border-radius: 12px 12px 0 0;
+            50% {
+                box-shadow: 0 8px 30px rgba(48, 154, 212, 0.08)
             }
+
+            100% {
+                box-shadow: 0 0 0 rgba(48, 154, 212, 0.0)
+            }
+        }
+
+        .highlight {
+            animation: highlightPulse 1100ms ease both;
+            border-radius: 12px;
+            transform: translateY(-2px)
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
-        <div class="sidebar">
+        <aside class="sidebar">
             <div class="logo">
                 <i class="fas fa-shield-alt"></i>
-                <h1>DisasterSafe</h1>
+                <h1>ResQ</h1>
             </div>
             <div class="menu-items">
-                <div class="menu-item active">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-book"></i>
-                    <span>Education Modules</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-gamepad"></i>
-                    <span>Sandbox Simulator</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>Emergency Contacts</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <span>Disaster Map</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-brain"></i>
-                    <span>Psychological Help</span>
-                    <span class="new-badge">NEW</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>Gamified Learning</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-user"></i>
-                    <span>Profile & Badges</span>
-                </div>
+                <div class="menu-item active"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
+                <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item"><i class="fas fa-brain"></i><span>Psychological Help</span><span
+                        class="new-badge">NEW</span></div>
+                <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div>
             </div>
-        </div>
+        </aside>
 
         <!-- Main Content -->
-        <div class="main-content">
+        <main class="main-content">
             <div class="header">
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search for resources, alerts...">
+                <div class="header-right">
+                    <div class="user-profile" title="Account">
+                        <i class="fas fa-user-circle" style="font-size:40px;color:#fff;"></i>
+                        <div>
+                            <h4 id="userName">User</h4>
+                            <p><span id="userPoints">0</span></p>
+                        </div>
+                    </div>
+                    <div class="language-selector">
+                        <select aria-label="Select language">
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी</option>
+                            <option value="bn">বাংলা</option>
+                            <option value="te">తెలుగు</option>
+                            <option value="mr">मराठी</option>
+                            <option value="ta">தமிழ்</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="user-profile">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80" alt="User Profile">
+
+                <div class="header-right">
                     <div>
-                        <h4>Alex Johnson</h4>
-                        <p>Safety Score: 845</p>
+                        <button class="emergency-button" id="emergencyBtn"><i class="fas fa-exclamation-triangle"></i>
+                            REPORT DISASTER EMERGENCY</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Emergency Button -->
-            <button class="emergency-button" onclick="openEmergencyModal()">
-                <i class="fas fa-exclamation-triangle"></i> REPORT DISASTER EMERGENCY
-            </button>
-
             <!-- Real-time Alerts Section -->
-            <div class="alerts-section">
-                <h2 class="section-title">Real-time Disaster Alerts <span id="alertsCount" class="alert-badge">3</span></h2>
+            <section class="alerts-section" id="alertsSection" aria-labelledby="alertsTitle">
+                <h1 class="section-title" id="alertsTitle">Real-time Disaster Alerts <span id="alertsCount"
+                        class="alert-badge">3</span></h1>
                 <div class="alerts-container" id="alertsContainer">
                     <div class="alert-item severe">
-                        <div class="alert-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
+                        <div class="alert-icon"><i class="fas fa-bolt"></i></div>
                         <div class="alert-content">
                             <h4>Severe Thunderstorm Warning</h4>
                             <p>Your area is under severe thunderstorm warning. Strong winds and hail expected.</p>
-                            <div class="alert-meta">
-                                <span class="alert-time">2 minutes ago</span>
-                                <span class="alert-region">Delhi NCR</span>
-                            </div>
+                            <div class="alert-meta"><span class="alert-time">2 minutes ago</span><span
+                                    class="alert-region">Delhi NCR</span></div>
                         </div>
                         <div class="alert-actions">
-                            <button class="alert-btn primary">Details</button>
-                            <button class="alert-btn" onclick="markAsRead(this)">Mark Read</button>
+                            <button class="alert-btn primary details-btn">Details</button>
+                            <button class="alert-btn mark-read">Mark Read</button>
                         </div>
                     </div>
 
                     <div class="alert-item warning">
-                        <div class="alert-icon">
-                            <i class="fas fa-water"></i>
-                        </div>
+                        <div class="alert-icon"><i class="fas fa-water"></i></div>
                         <div class="alert-content">
                             <h4>Flood Alert - Level 2</h4>
                             <p>Heavy rainfall may cause waterlogging in low-lying areas. Avoid travel if possible.</p>
-                            <div class="alert-meta">
-                                <span class="alert-time">15 minutes ago</span>
-                                <span class="alert-region">Mumbai</span>
-                            </div>
+                            <div class="alert-meta"><span class="alert-time">15 minutes ago</span><span
+                                    class="alert-region">Mumbai</span></div>
                         </div>
                         <div class="alert-actions">
-                            <button class="alert-btn primary">Details</button>
-                            <button class="alert-btn" onclick="markAsRead(this)">Mark Read</button>
+                            <button class="alert-btn primary details-btn">Details</button>
+                            <button class="alert-btn mark-read">Mark Read</button>
                         </div>
                     </div>
 
                     <div class="alert-item info">
-                        <div class="alert-icon">
-                            <i class="fas fa-thermometer-three-quarters"></i>
-                        </div>
+                        <div class="alert-icon"><i class="fas fa-thermometer-three-quarters"></i></div>
                         <div class="alert-content">
                             <h4>Heat Wave Advisory</h4>
                             <p>Temperature expected to reach 42°C. Stay hydrated and avoid outdoor activities.</p>
-                            <div class="alert-meta">
-                                <span class="alert-time">1 hour ago</span>
-                                <span class="alert-region">Rajasthan</span>
-                            </div>
+                            <div class="alert-meta"><span class="alert-time">1 hour ago</span><span
+                                    class="alert-region">Rajasthan</span></div>
                         </div>
                         <div class="alert-actions">
-                            <button class="alert-btn primary">Details</button>
-                            <button class="alert-btn" onclick="markAsRead(this)">Mark Read</button>
+                            <button class="alert-btn primary details-btn">Details</button>
+                            <button class="alert-btn mark-read">Mark Read</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Disaster Attendance System -->
-            <div class="attendance-section">
+            <!-- Attendance -->
+            <section class="attendance-section">
                 <h2 class="section-title">Disaster Attendance System</h2>
                 <div class="attendance-container">
-                    <div class="attendance-status">
-                        <div class="status-indicator safe">
-                            <i class="fas fa-check-circle"></i>
-                            <span>You are marked SAFE</span>
-                        </div>
-                        <div class="last-checkin">
-                            Last check-in: Today, 2:30 PM
+                    <div>
+                        <div class="status-indicator safe"><i class="fas fa-check-circle"></i><span>You are marked
+                                SAFE</span></div>
+                        <br>
+                        <div class="last-checkin" style="margin-top:8px;color:#6c757d">Last check-in: Today, 2:30 PM
                         </div>
                     </div>
                     <div class="attendance-actions">
-                        <button class="btn-safe" onclick="markSafe()">
-                            <i class="fas fa-check"></i> I'm Safe
+                        <button class="btn-safe" id="btnSafe" onclick="markSafe()">
+                            <i class="fas fa-check"></i>
+                            I'm Safe
                         </button>
-                        <button class="btn-help" onclick="requestHelp()">
-                            <i class="fas fa-hand-paper"></i> Need Help
+                        <button class="btn-help" id="btnHelp" onclick="requestHelp()">
+                            <i class="fas fa-hand-paper"></i>
+                            Need Help
                         </button>
-                        <button class="btn-location" onclick="shareLocation()">
-                            <i class="fas fa-map-marker-alt"></i> Share Location
+                        <button class="btn-location" id="btnLocation" onclick="shareLocation()">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Share Location
                         </button>
                     </div>
                 </div>
-            </div>
+            </section>
+            <br>
 
-            <!-- Emergency Contacts by Region -->
-            <div class="emergency-contacts-section">
-                <h2 class="section-title">Emergency Contacts by Region</h2>
+            <!-- Contacts -->
+            <section class="emergency-contacts-section">
+                <h1 class="section-title">Emergency Contacts by Region</h1>
                 <div class="contacts-grid">
                     <div class="contact-card">
                         <div class="contact-header">
-                            <h4>Delhi NCR</h4>
-                            <span class="region-status active">Active</span>
+                            <h4>Delhi NCR</h4><span class="region-status active">Active</span>
                         </div>
                         <div class="contact-list">
                             <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <span>Emergency: 112</span>
-                                <button class="quick-call" onclick="makeCall('112')">Call</button>
+                                <div style="display:flex;align-items:center;gap:8px"><i
+                                        class="fas fa-phone"></i><span>Emergency: 112</span></div><button
+                                    class="quick-call" data-number="112">Call</button>
                             </div>
                             <div class="contact-item">
-                                <i class="fas fa-fire"></i>
-                                <span>Fire: 101</span>
-                                <button class="quick-call" onclick="makeCall('101')">Call</button>
+                                <div style="display:flex;align-items:center;gap:8px"><i
+                                        class="fas fa-fire"></i><span>Fire: 101</span></div><button class="quick-call"
+                                    data-number="101">Call</button>
                             </div>
                             <div class="contact-item">
-                                <i class="fas fa-user-md"></i>
-                                <span>Medical: 108</span>
-                                <button class="quick-call" onclick="makeCall('108')">Call</button>
+                                <div style="display:flex;align-items:center;gap:8px"><i
+                                        class="fas fa-user-md"></i><span>Medical: 108</span></div><button
+                                    class="quick-call" data-number="108">Call</button>
                             </div>
                             <div class="contact-item">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>NDRF: +91-11-26701729</span>
-                                <button class="quick-call" onclick="makeCall('+91-11-26701729')">Call</button>
+                                <div style="display:flex;align-items:center;gap:8px"><i
+                                        class="fas fa-shield-alt"></i><span>NDRF: +91-11-26701729</span></div><button
+                                    class="quick-call" data-number="+91-11-26701729">Call</button>
                             </div>
                         </div>
                     </div>
 
                     <div class="contact-card">
                         <div class="contact-header">
-                            <h4>Mumbai</h4>
-                            <span class="region-status active">Active</span>
+                            <h4>Mumbai</h4><span class="region-status active">Active</span>
                         </div>
                         <div class="contact-list">
                             <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <span>Emergency: 112</span>
-                                <button class="quick-call" onclick="makeCall('112')">Call</button>
+                                <div style="display:flex;align-items:center;gap:8px"><i
+                                        class="fas fa-phone"></i><span>Emergency: 112</span></div><button
+                                    class="quick-call" data-number="112">Call</button>
                             </div>
                             <div class="contact-item">
-                                <i class="fas fa-water"></i>
-                                <span>Flood Control: 1916</span>
-                                <button class="quick-call" onclick="makeCall('1916')">Call</button>
+                                <div style="display:flex;align-items:center;gap:8px"><i
+                                        class="fas fa-water"></i><span>Flood Control: 1916</span></div><button
+                                    class="quick-call" data-number="1916">Call</button>
                             </div>
                             <div class="contact-item">
-                                <i class="fas fa-ambulance"></i>
-                                <span>Ambulance: 102</span>
-                                <button class="quick-call" onclick="makeCall('102')">Call</button>
+                                <div style="display:flex;align-items:center;gap:8px"><i
+                                        class="fas fa-ambulance"></i><span>Ambulance: 102</span></div><button
+                                    class="quick-call" data-number="102">Call</button>
                             </div>
                             <div class="contact-item">
-                                <i class="fas fa-life-ring"></i>
-                                <span>Coast Guard: 1554</span>
-                                <button class="quick-call" onclick="makeCall('1554')">Call</button>
+                                <div style="display:flex;align-items:center;gap:8px"><i
+                                        class="fas fa-life-ring"></i><span>Coast Guard: 1554</span></div><button
+                                    class="quick-call" data-number="1554">Call</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Stats Overview -->
-            <div class="dashboard-grid">
+            <!-- Stats -->
+            <div class="dashboard-grid" style="margin-top:18px">
                 <div class="card stat-card emergency">
-                    <div class="stat-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
+                    <div class="stat-icon" style="background:linear-gradient(90deg,var(--p3),#f56b77);color:white"><i
+                            class="fas fa-phone-alt"></i></div>
                     <div class="stat-info">
                         <h3>15</h3>
                         <p>Emergency Contacts</p>
                     </div>
                 </div>
-
                 <div class="card stat-card alerts">
-                    <div class="stat-icon">
-                        <i class="fas fa-bell"></i>
-                    </div>
+                    <div class="stat-icon" style="background:linear-gradient(90deg,var(--p1),#2f8fc1);color:white"><i
+                            class="fas fa-bell"></i></div>
                     <div class="stat-info">
-                        <h3>3</h3>
+                        <h3 id="activeAlerts">3</h3>
                         <p>Active Alerts</p>
                     </div>
                 </div>
-
                 <div class="card stat-card preparedness">
-                    <div class="stat-icon">
-                        <i class="fas fa-first-aid"></i>
-                    </div>
+                    <div class="stat-icon" style="background:linear-gradient(90deg,var(--p2),#f1a85b);color:white"><i
+                            class="fas fa-first-aid"></i></div>
                     <div class="stat-info">
                         <h3>7/10</h3>
                         <p>Preparedness Level</p>
                     </div>
                 </div>
-
                 <div class="card stat-card resources">
-                    <div class="stat-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
+                    <div class="stat-icon" style="background:linear-gradient(90deg,var(--p6),#8fbfe6);color:white"><i
+                            class="fas fa-book"></i></div>
                     <div class="stat-info">
                         <h3>24</h3>
                         <p>Learning Resources</p>
@@ -1075,439 +1096,170 @@
                 </div>
             </div>
 
-            <!-- Map Section -->
-            <h2 class="section-title">Disaster Map & Evacuation Routes</h2>
-            <div class="map-container">
-                <div id="map"></div>
+            <!-- Map -->
+            <h1 class="section-title">Disaster Map & Evacuation Routes</h1>
+            <div class="card map-container" style="height:420px;padding:0;overflow:hidden">
+                <div id="map" style="height:100%;width:100%"></div>
             </div>
 
-            <!-- Resources Section -->
-            <h2 class="section-title">Emergency Resources</h2>
-            <div class="resources-grid">
+            <!-- Resources -->
+            <h2 class="section-title" style="margin-top:18px">Emergency Resources</h2>
+            <div class="resources-grid" id="resourcesGrid">
                 <div class="resource-card">
                     <div class="resource-header"></div>
                     <div class="resource-content">
-                        <div class="resource-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
+                        <div class="resource-icon"><i class="fas fa-book"></i></div>
                         <h3>Disaster Education</h3>
                         <p>Interactive learning modules for all age groups</p>
-                        <a href="#" class="resource-button">Explore</a>
+                        <a href="/student/education-modules.html" class="resource-button">Explore</a>
                     </div>
                 </div>
 
                 <div class="resource-card">
-                    <div class="resource-header"></div>
+                    <div class="resource-header" style="background:linear-gradient(90deg,var(--p2),#f1a85b)"></div>
                     <div class="resource-content">
-                        <div class="resource-icon">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
+                        <div class="resource-icon"><i class="fas fa-gamepad"></i></div>
                         <h3>Training Games</h3>
                         <p>Learn disaster management through games</p>
-                        <a href="#" class="resource-button">Play Now</a>
+                        <a href="/student/gamified-learning.html" class="resource-button">Play Now</a>
                     </div>
                 </div>
 
                 <div class="resource-card">
-                    <div class="resource-header"></div>
+                    <div class="resource-header" style="background:linear-gradient(90deg,var(--p3),#f78b97)"></div>
                     <div class="resource-content">
-                        <div class="resource-icon">
-                            <i class="fas fa-first-aid"></i>
-                        </div>
+                        <div class="resource-icon"><i class="fas fa-first-aid"></i></div>
                         <h3>First Aid Guide</h3>
                         <p>Step-by-step emergency medical instructions</p>
-                        <a href="#" class="resource-button">Learn More</a>
+                        <a href="https://www.futurelearn.com/info/blog/fist-aid-basics" class="resource-button"
+                            target="_blank">Learn
+                            More</a>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
-    <!-- Chatbot Container -->
-    <div class="chatbot-container">
-        <div class="chatbot-header">
-            <h3><i class="fas fa-robot"></i> Disaster Support Chatbot</h3>
-            <i class="fas fa-times"></i>
+    <!-- Chatbot -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-header" id="chatbotHeader"
+            style="background:linear-gradient(90deg, var(--primary), var(--primary-dark));">
+            <h3 style="display:flex;align-items:center;gap:10px">
+                <i class="fas fa-robot"></i>
+                Disaster Support
+            </h3>
+            <div style="display:flex;gap:8px;align-items:center">
+                <button class="chat-action chat-minimize" title="Minimize">
+                    <i class="fas fa-window-minimize"></i>
+                </button>
+                <button class="chat-action chat-close" title="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
-        <div class="chatbot-messages">
-            <div class="message bot-message">
-                Hello! I'm here to help with disaster-related information and support. How can I assist you today?
-            </div>
-            <div class="message user-message">
-                I'm experiencing heavy flooding in my area. What should I do?
-            </div>
-            <div class="message bot-message">
-                During flooding, move to higher ground immediately. Avoid walking through moving water. Do not attempt to drive through flooded areas.
-            </div>
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="message bot-message">Hello! I'm here to help with disaster-related information and support. How
+                can I assist you today?</div>
         </div>
         <div class="chatbot-input">
-            <input type="text" placeholder="Type your message here...">
-            <button><i class="fas fa-paper-plane"></i></button>
+            <input id="chatInput" type="text" placeholder="Type your message here..." />
+            <button id="chatSend" style="background: linear-gradient(90deg, var(--primary), var(--primary-dark));"><i
+                    class="fas fa-paper-plane"></i></button>
         </div>
     </div>
+    <!--Chatbot button :D-->
+    <button id="chatToggle" class="chat-toggle">
+        <i class="fa-solid fa-robot"></i>
+    </button>
 
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <select>
-            <option value="en">English</option>
-            <option value="hi">Hindi</option>
-            <option value="bn">Bengali</option>
-            <option value="te">Telugu</option>
-            <option value="mr">Marathi</option>
-            <option value="ta">Tamil</option>
-        </select>
-    </div>
+    <!-- Modals appended by JS: emergencyModal and detailsModal -->
 
+    <!-- Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
-        // Initialize map
+        // FETCHING POINTS 
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('resq_user')); // ya sessionStorage
+            if (user) {
+                document.getElementById('userName').innerText = `${user.firstName} ${user.lastName}`;
+                document.getElementById('userPoints').innerText = user.points || 0;
+            }
+        });
+
+        /**********************
+         * Utility: make element draggable by header
+         * Usage: makeDraggable(modalEl, headerEl)
+         **********************/
+        function makeDraggable(rootEl, handleEl) {
+            let active = false, startX = 0, startY = 0, origX = 0, origY = 0;
+            handleEl.style.cursor = 'grab';
+
+            function pointerDown(e) {
+                active = true;
+                handleEl.classList.add('dragging');
+                startX = (e.touches ? e.touches[0].clientX : e.clientX);
+                startY = (e.touches ? e.touches[0].clientY : e.clientY);
+                const rect = rootEl.getBoundingClientRect();
+                origX = rect.left;
+                origY = rect.top;
+                // set position to fixed if not already
+                rootEl.style.position = 'fixed';
+                rootEl.style.margin = '0';
+                rootEl.style.left = origX + 'px';
+                rootEl.style.top = origY + 'px';
+                rootEl.style.right = 'auto';
+                rootEl.style.bottom = 'auto';
+                document.addEventListener('mousemove', pointerMove);
+                document.addEventListener('mouseup', pointerUp);
+                document.addEventListener('touchmove', pointerMove, { passive: false });
+                document.addEventListener('touchend', pointerUp);
+            }
+
+            function pointerMove(e) {
+                if (!active) return;
+                e.preventDefault();
+                const x = (e.touches ? e.touches[0].clientX : e.clientX);
+                const y = (e.touches ? e.touches[0].clientY : e.clientY);
+                const dx = x - startX;
+                const dy = y - startY;
+                rootEl.style.left = (origX + dx) + 'px';
+                rootEl.style.top = (origY + dy) + 'px';
+            }
+
+            function pointerUp() {
+                active = false;
+                handleEl.classList.remove('dragging');
+                document.removeEventListener('mousemove', pointerMove);
+                document.removeEventListener('mouseup', pointerUp);
+                document.removeEventListener('touchmove', pointerMove);
+                document.removeEventListener('touchend', pointerUp);
+            }
+
+            handleEl.addEventListener('mousedown', pointerDown);
+            handleEl.addEventListener('touchstart', pointerDown, { passive: true });
+        }
+
+        /**********************
+         * Map Initialization
+         **********************/
         const map = L.map('map').setView([20.5937, 78.9629], 5);
-        
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
-
-        // Add some sample markers for disasters
-        L.marker([19.0760, 72.8777]).addTo(map)
-            .bindPopup('Mumbai: Flood Alert')
-            .openPopup();
-
-        L.marker([28.6139, 77.2090]).addTo(map)
-            .bindPopup('Delhi: Heat Wave Warning');
-
-        L.marker([13.0827, 80.2707]).addTo(map)
-            .bindPopup('Chennai: Cyclone Watch');
-
-        // Add evacuation route
-        const polyline = L.polyline([
-            [19.0760, 72.8777],
-            [19.1020, 72.9000],
-            [19.1500, 72.9300]
-        ], {color: 'green'}).addTo(map);
-
+        L.marker([19.0760, 72.8777]).addTo(map).bindPopup('Mumbai: Flood Alert');
+        L.marker([28.6139, 77.2090]).addTo(map).bindPopup('Delhi: Heat Wave Warning');
+        L.marker([13.0827, 80.2707]).addTo(map).bindPopup('Chennai: Cyclone Watch');
+        const polyline = L.polyline([[19.0760, 72.8777], [19.1020, 72.9000], [19.15, 72.93]], { color: 'green' }).addTo(map);
         polyline.bindPopup("Evacuation Route: Low Traffic");
 
-        // Simple chatbot functionality
-        document.querySelector('.chatbot-input button').addEventListener('click', function() {
-            const input = document.querySelector('.chatbot-input input');
-            const message = input.value.trim();
-            
-            if (message) {
-                const messagesContainer = document.querySelector('.chatbot-messages');
-                
-                // Add user message
-                const userMessage = document.createElement('div');
-                userMessage.className = 'message user-message';
-                userMessage.textContent = message;
-                messagesContainer.appendChild(userMessage);
-                
-                // Clear input
-                input.value = '';
-                
-                // Simulate bot response
-                setTimeout(() => {
-                    const botMessage = document.createElement('div');
-                    botMessage.className = 'message bot-message';
-                    
-                    if (message.toLowerCase().includes('flood')) {
-                        botMessage.textContent = "During flooding, avoid electrical equipment, move to higher ground, and do not walk through moving water. Turn off utilities if safe to do so.";
-                    } else if (message.toLowerCase().includes('earthquake')) {
-                        botMessage.textContent = "During an earthquake, drop to the ground, take cover under sturdy furniture, and hold on until shaking stops. Stay away from windows.";
-                    } else if (message.toLowerCase().includes('stress') || message.toLowerCase().includes('anxiety')) {
-                        botMessage.textContent = "It's normal to feel stressed during disasters. Practice deep breathing, focus on what you can control, and reach out to support services if needed.";
-                    } else {
-                        botMessage.textContent = "I understand you're concerned. Please provide more details about your situation so I can offer specific guidance.";
-                    }
-                    
-                    messagesContainer.appendChild(botMessage);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }, 1000);
-                
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-        });
+        /**********************
+        * Menu Navigation
+        *********************/
 
-        // Allow pressing Enter to send message
-        document.querySelector('.chatbot-input input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.querySelector('.chatbot-input button').click();
-            }
-        });
-
-        // Enhanced Emergency System and Real-time Features
-        
-        // Emergency Modal HTML
-        const emergencyModalHTML = `
-            <div id="emergencyModal" class="modal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);">
-                <div class="modal-content" style="background: white; margin: 10% auto; padding: 30px; border-radius: 20px; width: 90%; max-width: 500px;">
-                    <div style="text-align: center; margin-bottom: 25px;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
-                        <h2>Emergency Alert System</h2>
-                        <p>Select the type of disaster you're experiencing</p>
-                    </div>
-                    
-                    <div class="disaster-types" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px;">
-                        <button class="disaster-btn" data-type="flood" style="padding: 15px; border: 2px solid #2196f3; background: rgba(33, 150, 243, 0.1); border-radius: 12px; cursor: pointer;">
-                            <i class="fas fa-water" style="font-size: 1.5rem; color: #2196f3; margin-bottom: 8px;"></i>
-                            <div>Flood</div>
-                        </button>
-                        <button class="disaster-btn" data-type="earthquake" style="padding: 15px; border: 2px solid #795548; background: rgba(121, 85, 72, 0.1); border-radius: 12px; cursor: pointer;">
-                            <i class="fas fa-mountain" style="font-size: 1.5rem; color: #795548; margin-bottom: 8px;"></i>
-                            <div>Earthquake</div>
-                        </button>
-                        <button class="disaster-btn" data-type="fire" style="padding: 15px; border: 2px solid #f44336; background: rgba(244, 67, 54, 0.1); border-radius: 12px; cursor: pointer;">
-                            <i class="fas fa-fire" style="font-size: 1.5rem; color: #f44336; margin-bottom: 8px;"></i>
-                            <div>Fire</div>
-                        </button>
-                        <button class="disaster-btn" data-type="medical" style="padding: 15px; border: 2px solid #4caf50; background: rgba(76, 175, 80, 0.1); border-radius: 12px; cursor: pointer;">
-                            <i class="fas fa-heart" style="font-size: 1.5rem; color: #4caf50; margin-bottom: 8px;"></i>
-                            <div>Medical</div>
-                        </button>
-                        <button class="disaster-btn" data-type="storm" style="padding: 15px; border: 2px solid #9c27b0; background: rgba(156, 39, 176, 0.1); border-radius: 12px; cursor: pointer;">
-                            <i class="fas fa-bolt" style="font-size: 1.5rem; color: #9c27b0; margin-bottom: 8px;"></i>
-                            <div>Storm</div>
-                        </button>
-                        <button class="disaster-btn" data-type="other" style="padding: 15px; border: 2px solid #ff9800; background: rgba(255, 152, 0, 0.1); border-radius: 12px; cursor: pointer;">
-                            <i class="fas fa-exclamation" style="font-size: 1.5rem; color: #ff9800; margin-bottom: 8px;"></i>
-                            <div>Other</div>
-                        </button>
-                    </div>
-                    
-                    <div style="display: flex; gap: 10px;">
-                        <button id="confirmEmergency" class="btn-primary" style="flex: 1; padding: 15px; background: var(--accent); border: none; color: white; border-radius: 12px; font-size: 1.1rem; font-weight: 600;">
-                            <i class="fas fa-phone"></i> Send Emergency Alert
-                        </button>
-                        <button onclick="closeEmergencyModal()" class="btn-secondary" style="padding: 15px 20px; background: transparent; border: 2px solid #ccc; color: #666; border-radius: 12px;">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // Add modal to body
-        document.body.insertAdjacentHTML('beforeend', emergencyModalHTML);
-
-        let selectedDisasterType = null;
-        let checkInInterval = null;
-        let isEmergencyActive = false;
-
-        // Open emergency modal
-        function openEmergencyModal() {
-            document.getElementById('emergencyModal').style.display = 'block';
-            
-            // Add click handlers for disaster type selection
-            document.querySelectorAll('.disaster-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.disaster-btn').forEach(b => b.style.borderWidth = '2px');
-                    this.style.borderWidth = '4px';
-                    selectedDisasterType = this.dataset.type;
-                });
-            });
-
-            // Confirm emergency handler
-            document.getElementById('confirmEmergency').addEventListener('click', function() {
-                if (selectedDisasterType) {
-                    sendEmergencyAlert(selectedDisasterType);
-                    closeEmergencyModal();
-                } else {
-                    alert('Please select a disaster type');
-                }
-            });
-        }
-
-        function closeEmergencyModal() {
-            document.getElementById('emergencyModal').style.display = 'none';
-            selectedDisasterType = null;
-        }
-
-        function sendEmergencyAlert(disasterType) {
-            isEmergencyActive = true;
-            
-            // Show confirmation
-            alert(`🚨 EMERGENCY ALERT SENT!\n\nDisaster Type: ${disasterType.toUpperCase()}\n\n✅ Universities notified\n✅ NDRF contacted\n✅ State government alerted\n✅ Emergency services dispatched\n\nHelp is on the way! Stay safe and follow emergency protocols.`);
-            
-            // Update UI to show emergency status
-            updateEmergencyStatus(disasterType);
-            
-            // Start 30-minute check-in system
-            startCheckInSystem();
-            
-            // Simulate authority response
-            setTimeout(() => {
-                addNewAlert('emergency', 'Emergency Response Activated', 
-                    'Your emergency alert has been received. Response teams are being dispatched to your location.', 'now');
-            }, 3000);
-        }
-
-        function updateEmergencyStatus(disasterType) {
-            const statusIndicator = document.querySelector('.status-indicator');
-            statusIndicator.className = 'status-indicator help';
-            statusIndicator.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>EMERGENCY ACTIVE - ' + disasterType.toUpperCase() + '</span>';
-        }
-
-        function startCheckInSystem() {
-            let checkInCount = 0;
-            checkInInterval = setInterval(() => {
-                checkInCount++;
-                
-                const response = confirm(`Emergency Check-in #${checkInCount}\n\nAre you safe? Click OK if you're safe, Cancel if you need help.`);
-                
-                if (response) {
-                    markSafe();
-                    addNewAlert('info', 'Check-in Successful', 
-                        'Thank you for confirming your safety. Next check-in in 30 minutes.', 'now');
-                } else {
-                    requestHelp();
-                }
-                
-                // Stop after 6 hours (12 check-ins)
-                if (checkInCount >= 12) {
-                    clearInterval(checkInInterval);
-                    isEmergencyActive = false;
-                    alert('Emergency monitoring period completed. Stay safe!');
-                }
-            }, 30 * 60 * 1000); // 30 minutes
-        }
-
-        function markSafe() {
-            const statusIndicator = document.querySelector('.status-indicator');
-            statusIndicator.className = 'status-indicator safe';
-            statusIndicator.innerHTML = '<i class="fas fa-check-circle"></i><span>You are marked SAFE</span>';
-            
-            const lastCheckin = document.querySelector('.last-checkin');
-            lastCheckin.textContent = 'Last check-in: ' + new Date().toLocaleString();
-            
-            // Notify authorities if emergency is active
-            if (isEmergencyActive) {
-                addNewAlert('info', 'Safety Status Updated', 
-                    'Your safety status has been reported to emergency authorities.', 'now');
-            }
-        }
-
-        function requestHelp() {
-            const statusIndicator = document.querySelector('.status-indicator');
-            statusIndicator.className = 'status-indicator help';
-            statusIndicator.innerHTML = '<i class="fas fa-hand-paper"></i><span>HELP REQUESTED</span>';
-            
-            alert('🆘 HELP REQUEST SENT!\n\nYour request for help has been sent to:\n• Emergency Services\n• NDRF\n• Local Authorities\n• Medical Teams\n\nImmediate assistance is being dispatched to your location.');
-            
-            addNewAlert('emergency', 'Help Request Prioritized', 
-                'Your help request has been marked as high priority. Rescue teams are being dispatched immediately.', 'now');
-        }
-
-        function shareLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    
-                    alert(`📍 LOCATION SHARED\n\nLatitude: ${lat.toFixed(6)}\nLongitude: ${lon.toFixed(6)}\n\nYour location has been shared with emergency services and authorities.`);
-                    
-                    addNewAlert('info', 'Location Shared Successfully', 
-                        'Your GPS coordinates have been sent to emergency response teams.', 'now');
-                }, function(error) {
-                    alert('Unable to get your location. Please ensure location services are enabled.');
-                });
-            } else {
-                alert('Geolocation is not supported by this browser.');
-            }
-        }
-
-        function makeCall(number) {
-            if (confirm(`Do you want to call ${number}?`)) {
-                // In a real app, this would initiate a call
-                window.open(`tel:${number}`);
-                
-                addNewAlert('info', 'Emergency Call Initiated', 
-                    `Connecting to ${number}. Call log recorded for emergency records.`, 'now');
-            }
-        }
-
-        function markAsRead(button) {
-            const alertItem = button.closest('.alert-item');
-            alertItem.style.opacity = '0.6';
-            alertItem.style.transform = 'scale(0.98)';
-            button.textContent = 'Read';
-            button.disabled = true;
-            
-            // Update alert count
-            const alertCount = document.getElementById('alertsCount');
-            const currentCount = parseInt(alertCount.textContent);
-            if (currentCount > 0) {
-                alertCount.textContent = currentCount - 1;
-            }
-        }
-
-        function addNewAlert(type, title, message, time) {
-            const alertsContainer = document.getElementById('alertsContainer');
-            const alertHTML = `
-                <div class="alert-item ${type}">
-                    <div class="alert-icon">
-                        <i class="fas ${getAlertIcon(type)}"></i>
-                    </div>
-                    <div class="alert-content">
-                        <h4>${title}</h4>
-                        <p>${message}</p>
-                        <div class="alert-meta">
-                            <span class="alert-time">${time}</span>
-                            <span class="alert-region">Your Area</span>
-                        </div>
-                    </div>
-                    <div class="alert-actions">
-                        <button class="alert-btn primary">Details</button>
-                        <button class="alert-btn" onclick="markAsRead(this)">Mark Read</button>
-                    </div>
-                </div>
-            `;
-            
-            alertsContainer.insertAdjacentHTML('afterbegin', alertHTML);
-            
-            // Update alert count
-            const alertCount = document.getElementById('alertsCount');
-            alertCount.textContent = parseInt(alertCount.textContent) + 1;
-        }
-
-        function getAlertIcon(type) {
-            const icons = {
-                emergency: 'fa-exclamation-triangle',
-                severe: 'fa-bolt',
-                warning: 'fa-water',
-                info: 'fa-info-circle'
-            };
-            return icons[type] || 'fa-bell';
-        }
-
-        // Simulate real-time alerts
-        function startRealTimeAlerts() {
-            setInterval(() => {
-                if (Math.random() > 0.8) { // 20% chance every 30 seconds
-                    const alertTypes = ['info', 'warning'];
-                    const randomType = alertTypes[Math.floor(Math.random() * alertTypes.length)];
-                    const alerts = {
-                        info: {
-                            title: 'Weather Update',
-                            message: 'Clear skies expected for the next 6 hours. Good conditions for outdoor activities.'
-                        },
-                        warning: {
-                            title: 'Traffic Alert',
-                            message: 'Heavy traffic reported on major routes due to ongoing construction work.'
-                        }
-                    };
-                    
-                    const alert = alerts[randomType];
-                    addNewAlert(randomType, alert.title, alert.message, 'just now');
-                }
-            }, 30000); // Check every 30 seconds
-        }
-
-        // Start real-time alerts when page loads
-        startRealTimeAlerts();
-
-        // Menu item navigation and interactivity
         function initializeMenuNavigation() {
             const menuItems = document.querySelectorAll('.menu-item');
-            
+
             // Define page mappings for each menu item
             const pageMapping = {
                 'Dashboard': 'dashboard-student.html',
@@ -1519,17 +1271,17 @@
                 'Gamified Learning': 'gamified-learning.html',
                 'Profile & Badges': 'profile-badges.html'
             };
-            
+
             menuItems.forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     // Update active state
                     menuItems.forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     // Get the menu item text
                     const menuText = this.querySelector('span').textContent.trim();
                     const targetPage = pageMapping[menuText];
-                    
+
                     if (targetPage) {
                         if (targetPage.startsWith('#')) {
                             // Handle anchor links (scroll to section)
@@ -1544,30 +1296,30 @@
                         }
                     }
                 });
-                
+
                 // Add hover effect
-                item.addEventListener('mouseenter', function() {
+                item.addEventListener('mouseenter', function () {
                     if (!this.classList.contains('active')) {
                         this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
                     }
                 });
-                
-                item.addEventListener('mouseleave', function() {
+
+                item.addEventListener('mouseleave', function () {
                     if (!this.classList.contains('active')) {
                         this.style.backgroundColor = '';
                     }
                 });
             });
         }
-        
+
         function navigateToPage(targetPage, menuText) {
             // Show loading indicator
             showLoadingIndicator();
-            
+
             // Add smooth transition
             document.body.style.opacity = '0.8';
             document.body.style.transition = 'opacity 0.3s ease';
-            
+
             setTimeout(() => {
                 try {
                     window.location.href = targetPage;
@@ -1579,7 +1331,7 @@
                 }
             }, 300);
         }
-        
+
         function showLoadingIndicator() {
             // Create loading overlay if it doesn't exist
             if (!document.getElementById('loadingOverlay')) {
@@ -1621,26 +1373,26 @@
             }
             document.getElementById('loadingOverlay').style.display = 'flex';
         }
-        
+
         function hideLoadingIndicator() {
             const overlay = document.getElementById('loadingOverlay');
             if (overlay) {
                 overlay.style.display = 'none';
             }
         }
-        
+
         function showNavigationError(menuText) {
             alert(`⚠️ Navigation Error\n\nSorry, the ${menuText} page is currently unavailable.\n\nThis might be because:\n• The page is still being developed\n• The file path has changed\n• There's a temporary server issue\n\nPlease try again later or contact support.`);
         }
-        
+
         // Add keyboard navigation
         function initializeKeyboardNavigation() {
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.altKey) {
                     const menuItems = document.querySelectorAll('.menu-item');
                     const currentActive = document.querySelector('.menu-item.active');
                     let currentIndex = Array.from(menuItems).indexOf(currentActive);
-                    
+
                     if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
                         e.preventDefault();
                         currentIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
@@ -1653,10 +1405,541 @@
                 }
             });
         }
-        
-        // Initialize navigation when page loads
+
+
+        /**********************
+         * Emergency Modal HTML
+         **********************/
+        const emergencyModalHTML = `
+            <div class="modal-overlay" id="emergencyOverlay" style="display:none;">
+              <div class="modal" id="emergencyModal" role="dialog" aria-modal="true">
+                <div class="modal-header" id="emergencyHeader">
+                  <strong style="display:flex;align-items:center;gap:12px"><i class="fas fa-exclamation-triangle" style="color:var(--accent)"></i> Emergency Alert System</strong>
+                  <div>
+                    <button class="modal-close" id="closeEmergency"><i class="fas fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="modal-body" style="padding-bottom:30px;">
+                  <p style="color:#444">Select the type of disaster you're experiencing and send an emergency alert.</p>
+                  <br>
+                  <div class="disaster-types" style="margin-top:12px;">
+                    <button class="disaster-btn" data-type="flood" style="padding:12px;border-radius:12px;border:2px solid var(--p1);background:linear-gradient(180deg,rgba(48,154,212,0.08),transparent);cursor:pointer">
+                      <i class="fas fa-water" style="font-size:18px;color:var(--p1)"></i><div style="margin-top:6px;font-weight:700">Flood</div>
+                    </button>
+                    <button class="disaster-btn" data-type="earthquake" style="padding:12px;border-radius:12px;border:2px solid #a37b60;background:linear-gradient(180deg,rgba(163,123,96,0.06),transparent);cursor:pointer">
+                      <i class="fas fa-mountain" style="font-size:18px;color:#795548"></i><div style="margin-top:6px;font-weight:700">Earthquake</div>
+                    </button>
+                    <button class="disaster-btn" data-type="fire" style="padding:12px;border-radius:12px;border:2px solid #f44336;background:linear-gradient(180deg,rgba(244,67,54,0.06),transparent);cursor:pointer">
+                      <i class="fas fa-fire" style="font-size:18px;color:#f44336"></i><div style="margin-top:6px;font-weight:700">Fire</div>
+                    </button>
+                    <button class="disaster-btn" data-type="medical" style="padding:12px;border-radius:12px;border:2px solid #4caf50;background:linear-gradient(180deg,rgba(76,175,80,0.06),transparent);cursor:pointer">
+                      <i class="fas fa-heart" style="font-size:18px;color:#4caf50"></i><div style="margin-top:6px;font-weight:700">Medical</div>
+                    </button>
+                    <button class="disaster-btn" data-type="storm" style="padding:12px;border-radius:12px;border:2px solid #9c27b0;background:linear-gradient(180deg,rgba(156,39,176,0.06),transparent);cursor:pointer">
+                      <i class="fas fa-bolt" style="font-size:18px;color:#9c27b0"></i><div style="margin-top:6px;font-weight:700">Storm</div>
+                    </button>
+                    <button class="disaster-btn" data-type="other" style="padding:12px;border-radius:12px;border:2px solid #ff9800;background:linear-gradient(180deg,rgba(255,152,0,0.06),transparent);cursor:pointer">
+                      <i class="fas fa-exclamation" style="font-size:18px;color:#ff9800"></i><div style="margin-top:6px;font-weight:700">Other</div>
+                    </button>
+                  </div>
+
+                  <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+                    <button id="confirmEmergency" class="alert-btn primary" style="flex:1;padding:12px 16px"> <i class="fas fa-phone"></i> Send Emergency Alert</button>
+                    <button id="cancelEmergency" class="alert-btn" style="padding:12px 16px">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', emergencyModalHTML);
+
+        /**********************
+         * Details modal (for alert "Details")
+         **********************/
+        const detailsModalHTML = `
+            <div class="modal-overlay" id="detailsOverlay" style="display:none;">
+              <div class="modal" id="detailsModal" role="dialog" aria-modal="true">
+                <div class="modal-header" id="detailsHeader">
+                  <strong id="detailsTitle">Alert Details</strong>
+                  <div>
+                    <button class="modal-close" id="closeDetails"><i class="fas fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="modal-body" id="detailsBody">
+                  <!-- populated dynamically -->
+                </div>
+              </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', detailsModalHTML);
+
+        /**********************
+         * Wire up emergency modal interactions
+         **********************/
+        const emergencyOverlay = document.getElementById('emergencyOverlay');
+        const emergencyModal = document.getElementById('emergencyModal');
+        const emergencyHeader = document.getElementById('emergencyHeader');
+        const emergencyBtn = document.getElementById('emergencyBtn');
+        const closeEmergency = document.getElementById('closeEmergency');
+        const confirmEmergency = document.getElementById('confirmEmergency');
+        const cancelEmergency = document.getElementById('cancelEmergency');
+        let selectedDisasterType = null;
+
+        // open modal
+        emergencyBtn.addEventListener('click', () => {
+            emergencyOverlay.style.display = 'flex';
+            // reset selection
+            selectedDisasterType = null;
+            document.querySelectorAll('#emergencyModal .disaster-btn').forEach(b => b.style.borderWidth = '2px');
+            // attach listeners to buttons
+            document.querySelectorAll('#emergencyModal .disaster-btn').forEach(btn => {
+                btn.onclick = () => {
+                    selectedDisasterType = btn.dataset.type;
+                    document.querySelectorAll('#emergencyModal .disaster-btn').forEach(b => b.style.borderWidth = '2px');
+                    btn.style.borderWidth = '4px';
+                };
+            });
+        });
+
+        closeEmergency.addEventListener('click', () => emergencyOverlay.style.display = 'none');
+        cancelEmergency.addEventListener('click', () => emergencyOverlay.style.display = 'none');
+
+        confirmEmergency.addEventListener('click', () => {
+            if (!selectedDisasterType) {
+                alert('Please select a disaster type');
+                return;
+            }
+            // simulate send and add alert
+            addNewAlert('emergency', selectedDisasterType.toUpperCase() + ' Alert', 'You reported an emergency. Response teams notified.', 'just now');
+            emergencyOverlay.style.display = 'none';
+            // update attendance status
+            document.querySelector('.status-indicator').className = 'status-indicator help';
+            document.querySelector('.status-indicator').innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>EMERGENCY ACTIVE - ' + selectedDisasterType.toUpperCase() + '</span>';
+            // start a simple check-in simulation (non-blocking)
+            // in demo we won't use confirm() intervals; that's intrusive in UI.
+        });
+
+        // make emergency modal draggable
+        makeDraggable(emergencyModal, emergencyHeader);
+
+        /**********************
+         * Details modal interactions
+         **********************/
+        const detailsOverlay = document.getElementById('detailsOverlay');
+        const detailsModal = document.getElementById('detailsModal');
+        const detailsHeader = document.getElementById('detailsHeader');
+        const detailsTitle = document.getElementById('detailsTitle');
+        const detailsBody = document.getElementById('detailsBody');
+        const closeDetails = document.getElementById('closeDetails');
+
+        closeDetails.addEventListener('click', () => detailsOverlay.style.display = 'none');
+        makeDraggable(detailsModal, detailsHeader);
+
+        // wire "Details" buttons
+        function wireDetailsButtons() {
+            document.querySelectorAll('.details-btn').forEach(btn => {
+                btn.onclick = function () {
+                    const alertItem = btn.closest('.alert-item');
+                    const title = alertItem.querySelector('h4').innerText;
+                    const message = alertItem.querySelector('p').innerText;
+                    const meta = alertItem.querySelector('.alert-meta').innerText;
+                    detailsTitle.innerText = title;
+                    detailsBody.innerHTML = `
+                        <p style="color:#444">${message}</p>
+                        <div style="margin-top:12px;font-size:13px;color:#777"><strong>Meta:</strong> ${meta}</div>
+                        <div style="margin-top:18px;display:flex;gap:8px">
+                          <button class="alert-btn primary" id="ackNow">Acknowledge</button>
+                          <button class="alert-btn" id="escalate">Escalate</button>
+                        </div>
+                    `;
+                    detailsOverlay.style.display = 'flex';
+                    // make sure container scrolls to top
+                    detailsBody.scrollTop = 0;
+
+                    // add handlers
+                    document.getElementById('ackNow').onclick = () => {
+                        alert('Acknowledged. Authorities notified for follow-up.');
+                        detailsOverlay.style.display = 'none';
+                    };
+                    document.getElementById('escalate').onclick = () => {
+                        alert('Escalation sent. Response teams prioritized this alert.');
+                        detailsOverlay.style.display = 'none';
+                    };
+                };
+            });
+        }
+        wireDetailsButtons();
+
+        /**********************
+         * Mark as read for alert items (and update counts)
+         **********************/
+        function updateAlertCounts() {
+            const count = document.querySelectorAll('#alertsContainer .alert-item').length;
+            document.getElementById('alertsCount').innerText = count;
+            document.getElementById('activeAlerts').innerText = count;
+        }
+
+        document.querySelectorAll('.mark-read').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const item = btn.closest('.alert-item');
+                item.style.opacity = '0.55';
+                btn.textContent = 'Read';
+                btn.disabled = true;
+                // reduce counts only logically (we keep item but mark as read)
+                updateAlertCounts();
+            });
+        });
+
+        /**********************
+         * Add new alert helper (used by emergency confirm + simulated updates)
+         **********************/
+        function getAlertIcon(type) {
+            const icons = { emergency: 'fa-exclamation-triangle', severe: 'fa-bolt', warning: 'fa-water', info: 'fa-info-circle' };
+            return icons[type] || 'fa-bell';
+        }
+
+        function addNewAlert(type, title, message, time) {
+            const alertsContainer = document.getElementById('alertsContainer');
+            const el = document.createElement('div');
+            el.className = 'alert-item ' + (type || 'info');
+            el.innerHTML = `
+                <div class="alert-icon"><i class="fas ${getAlertIcon(type)}"></i></div>
+                <div class="alert-content">
+                  <h4>${title}</h4>
+                  <p>${message}</p>
+                  <div class="alert-meta"><span class="alert-time">${time}</span><span class="alert-region">Your Area</span></div>
+                </div>
+                <div class="alert-actions">
+                  <button class="alert-btn primary details-btn">Details</button>
+                  <button class="alert-btn mark-read">Mark Read</button>
+                </div>
+            `;
+            alertsContainer.insertAdjacentElement('afterbegin', el);
+            // wire buttons
+            el.querySelector('.mark-read').addEventListener('click', function () {
+                this.textContent = 'Read'; this.disabled = true; el.style.opacity = '0.55';
+                updateAlertCounts();
+            });
+            el.querySelector('.details-btn').addEventListener('click', function () {
+                wireDetailsButtons(); // ensure handler up to date then trigger click
+                this.click();
+            });
+            // update badges
+            updateAlertCounts();
+            // bounce highlight
+            el.classList.add('highlight');
+            setTimeout(() => el.classList.remove('highlight'), 1200);
+        }
+
+        /**********************
+         * Simulate real-time alerts occasionally
+         **********************/
+        function startRealTimeAlerts() {
+            setInterval(() => {
+                if (Math.random() > 0.78) {
+                    const types = ['info', 'warning'];
+                    const type = types[Math.floor(Math.random() * types.length)];
+                    const pool = {
+                        info: { title: 'Weather Update', message: 'Clear skies expected for the next 6 hours. Good conditions for outdoor activities.' },
+                        warning: { title: 'Traffic Alert', message: 'Heavy traffic reported on major routes due to ongoing construction work.' }
+                    };
+                    const chosen = pool[type];
+                    addNewAlert(type, chosen.title, chosen.message, 'just now');
+                }
+            }, 30000);
+        }
+        startRealTimeAlerts();
+
+        /********************
+         * DISASTER ATTENDANCE SYSTEM
+         ********************/
+
+        function markSafe() {
+            const statusIndicator = document.querySelector('.status-indicator');
+            statusIndicator.className = 'status-indicator safe';
+            statusIndicator.innerHTML = '<i class="fas fa-check-circle"></i><span>You are marked SAFE</span>';
+
+            const lastCheckin = document.querySelector('.last-checkin');
+            lastCheckin.textContent = 'Last check-in: ' + new Date().toLocaleString();
+
+            // Notify authorities if emergency is active
+            if (isEmergencyActive) {
+                addNewAlert('info', 'Safety Status Updated',
+                    'Your safety status has been reported to emergency authorities.', 'now');
+            }
+        }
+
+        function requestHelp() {
+            const statusIndicator = document.querySelector('.status-indicator');
+            statusIndicator.className = 'status-indicator help';
+            statusIndicator.innerHTML = '<i class="fas fa-hand-paper"></i><span>HELP REQUESTED</span>';
+
+            alert('🆘 HELP REQUEST SENT!\n\nYour request for help has been sent to:\n• Emergency Services\n• NDRF\n• Local Authorities\n• Medical Teams\n\nImmediate assistance is being dispatched to your location.');
+
+            addNewAlert('emergency', 'Help Request Prioritized',
+                'Your help request has been marked as high priority. Rescue teams are being dispatched immediately.', 'now');
+        }
+
+        function shareLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    alert(`📍 LOCATION SHARED\n\nLatitude: ${lat.toFixed(6)}\nLongitude: ${lon.toFixed(6)}\n\nYour location has been shared with emergency services and authorities.`);
+
+                    addNewAlert('info', 'Location Shared Successfully',
+                        'Your GPS coordinates have been sent to emergency response teams.', 'now');
+                }, function (error) {
+                    alert('Unable to get your location. Please ensure location services are enabled.');
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        /**********************
+         * Search functionality - finds matches across alerts, resources, contacts & stats; moves matched element to top and highlights
+         **********************/
+        // const searchInput = document.getElementById('searchInput');
+        // const searchBtn = document.getElementById('searchBtn');
+        // const clearSearch = document.getElementById('clearSearch');
+
+        // function doSearch() {
+        //     const q = searchInput.value.trim().toLowerCase();
+        //     document.querySelectorAll('.highlight').forEach(h => h.classList.remove('highlight'));
+        //     if (!q) {
+        //         clearSearch.style.display = 'none';
+        //         return;
+        //     }
+        //     clearSearch.style.display = 'inline-block';
+        //     // search alerts by title and content
+        //     let found = false;
+        //     document.querySelectorAll('#alertsContainer .alert-item').forEach(item => {
+        //         const title = item.querySelector('h4').innerText.toLowerCase();
+        //         const body = item.querySelector('p').innerText.toLowerCase();
+        //         if (title.includes(q) || body.includes(q)) {
+        //             // move to top of alerts container
+        //             const parent = document.getElementById('alertsContainer');
+        //             parent.insertBefore(item, parent.firstChild);
+        //             item.classList.add('highlight');
+        //             item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        //             found = true;
+        //         }
+        //     });
+        //     // search resources
+        //     document.querySelectorAll('#resourcesGrid .resource-card').forEach(card => {
+        //         const title = card.querySelector('h3').innerText.toLowerCase();
+        //         const body = card.querySelector('p').innerText.toLowerCase();
+        //         if (title.includes(q) || body.includes(q)) {
+        //             document.getElementById('resourcesGrid').insertBefore(card, document.getElementById('resourcesGrid').firstChild);
+        //             card.classList.add('highlight');
+        //             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        //             found = true;
+        //         }
+        //     });
+        //     // search contacts
+        //     document.querySelectorAll('.contact-card').forEach(card => {
+        //         const region = card.querySelector('.contact-header h4').innerText.toLowerCase();
+        //         if (region.includes(q)) {
+        //             document.querySelector('.contacts-grid').insertBefore(card, document.querySelector('.contacts-grid').firstChild);
+        //             card.classList.add('highlight');
+        //             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        //             found = true;
+        //         }
+        //     });
+        //     // search stats
+        //     document.querySelectorAll('.stat-info h3').forEach(h => {
+        //         const parentCard = h.closest('.card');
+        //         if (h.innerText.toLowerCase().includes(q)) {
+        //             parentCard.parentNode.insertBefore(parentCard, parentCard.parentNode.firstChild);
+        //             parentCard.classList.add('highlight');
+        //             parentCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        //             found = true;
+        //         }
+        //     });
+
+        //     if (!found) {
+        //         // subtle feedback
+        //         searchInput.style.boxShadow = '0 6px 18px rgba(226,26,47,0.08)';
+        //         setTimeout(() => searchInput.style.boxShadow = '', 800);
+        //     } else {
+        //         // small success feedback (clear after)
+        //         setTimeout(() => document.querySelectorAll('.highlight').forEach(h => h.classList.remove('highlight')), 2500);
+        //     }
+        // }
+
+        // searchBtn.addEventListener('click', doSearch);
+        // searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') doSearch(); });
+        // clearSearch.addEventListener('click', () => { searchInput.value = ''; clearSearch.style.display = 'none'; });
+
+        /**********************
+         * Chatbot basic functionality
+         **********************/
+        // DOM elements
+        const chatSend = document.getElementById('chatSend');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatbot = document.getElementById('chatbot');
+        const chatToggle = document.getElementById('chatToggle');
+        const chatClose = document.querySelector('.chat-close');
+        const chatMinimize = document.querySelector('.chat-minimize');
+
+        // INITIAL STATE
+        chatbot.style.display = 'none';       // hide chatbot initially
+        chatToggle.style.display = 'flex';    // show toggle button
+
+        // OPEN chatbot on toggle click
+        chatToggle.addEventListener('click', () => {
+            chatbot.style.display = 'flex';   // show chatbot
+            chatToggle.style.display = 'none'; // hide toggle button
+        });
+
+        // CLOSE chatbot
+        chatClose.addEventListener('click', () => {
+            chatbot.style.display = 'none';    // hide chatbot
+            chatToggle.style.display = 'flex'; // show toggle button
+        });
+
+        // MINIMIZE / MAXIMIZE chatbot
+        chatMinimize.addEventListener('click', () => {
+            const body = chatbot.querySelector('.chatbot-messages');
+            if (body.style.display === 'none') {
+                // Maximize
+                body.style.display = 'flex';
+                chatbot.style.height = '460px';
+            } else {
+                // Minimize
+                body.style.display = 'none';
+                chatbot.style.height = '70px';
+            }
+        });
+
+        // SEND message function
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'message user-message';
+            userDiv.textContent = message;
+            chatMessages.appendChild(userDiv);
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Bot response
+            setTimeout(() => {
+                const botDiv = document.createElement('div');
+                botDiv.className = 'message bot-message';
+                const m = message.toLowerCase();
+
+                if (m.includes('flood'))
+                    botDiv.textContent = 'During flooding, avoid electrical equipment, move to higher ground, and do not walk through moving water. Turn off utilities if safe.';
+                else if (m.includes('earthquake'))
+                    botDiv.textContent = 'During earthquake: drop, cover, and hold. Stay away from windows. Evacuate only when safe.';
+                else if (m.includes('help') || m.includes('need'))
+                    botDiv.textContent = 'If you need urgent help, press REPORT DISASTER EMERGENCY and share location. For non-urgent support, describe your problem.';
+                else
+                    botDiv.textContent = "I understand. Please share more details or try keywords like 'flood', 'earthquake', 'help'.";
+
+                chatMessages.appendChild(botDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 800);
+        }
+
+        // Send button click
+        chatSend.addEventListener('click', sendChatMessage);
+
+        // Enter key to send
+        chatInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        /**********************
+         * Quick-call buttons
+         **********************/
+        document.querySelectorAll('.quick-call').forEach(b => {
+            b.addEventListener('click', () => {
+                const number = b.dataset.number;
+                if (confirm(`Call ${number}?`)) {
+                    window.open(`tel:${number}`);
+                }
+            });
+        });
+
+        /**********************
+         * Make sure details buttons and mark-read buttons are wired for initial DOM
+         **********************/
+        document.querySelectorAll('.details-btn').forEach(btn => btn.addEventListener('click', function () {
+            // handled by wireDetailsButtons but double-ensure
+            wireDetailsButtons();
+            this.click();
+        }));
+
+        document.querySelectorAll('.mark-read').forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.textContent = 'Read'; this.disabled = true; this.closest('.alert-item').style.opacity = '0.55';
+                updateAlertCounts();
+            });
+        });
+
+        // initial counts
+        updateAlertCounts();
+
+        /**********************
+         * Accessibility / keyboard navigation for menu
+         **********************/
+        document.querySelectorAll('.menu-item').forEach((mi, idx, arr) => {
+            mi.addEventListener('click', () => {
+                arr.forEach(i => i.classList.remove('active'));
+                mi.classList.add('active');
+                // scroll to section links
+                const text = mi.querySelector('span').innerText.trim();
+                if (text === 'Emergency Contacts') document.querySelector('.emergency-contacts-section').scrollIntoView({ behavior: 'smooth' });
+                if (text === 'Disaster Map') document.querySelector('#map').scrollIntoView({ behavior: 'smooth' });
+            });
+            mi.tabIndex = 0;
+        });
+
+        /**********************
+         * Make sure draggable modals can be closed by ESC
+         **********************/
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('emergencyOverlay').style.display = 'none';
+                document.getElementById('detailsOverlay').style.display = 'none';
+            }
+        });
+
+        /**********************
+         * Ensure modal focus trap is minimal (demo)
+         **********************/
+
+        /**********************
+         * Finally: ensure modals are draggable initially
+         **********************/
+        // already applied emergency & details via makeDraggable above
+
+        /**********************
+         * Minor improvements: clicking on an alert-details button fills details modal
+         * (we re-wire to make sure it works after dynamic adds)
+         **********************/
+        // re-wire whenever new alerts are added
+        const observer = new MutationObserver(() => {
+            wireDetailsButtons();
+            document.querySelectorAll('.mark-read').forEach(btn => {
+                if (!btn.hasAttribute('data-wired')) {
+                    btn.setAttribute('data-wired', '1');
+                    btn.addEventListener('click', function () { this.textContent = 'Read'; this.disabled = true; this.closest('.alert-item').style.opacity = '0.55'; updateAlertCounts(); });
+                }
+            });
+        });
+        observer.observe(document.getElementById('alertsContainer'), { childList: true, subtree: true });
+
         initializeMenuNavigation();
         initializeKeyboardNavigation();
     </script>
 </body>
+
 </html>

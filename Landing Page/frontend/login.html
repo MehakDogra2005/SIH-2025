@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ResQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login-style.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <div class="login-content">
+                <h1>Welcome Back to ResQ</h1>
+                <p>Sign in to access your disaster preparedness dashboard and continue your safety journey.</p>
+                <div class="login-features">
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure Login</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-bell"></i>
+                        <span>Real-time Alerts</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-book"></i>
+                        <span>Learning Modules</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="login-right">
+            <div class="login-form-container">
+                <div class="login-logo">
+                    <i class="fas fa-life-ring"></i>
+                    <span>ResQ</span>
+                </div>
+                <h2>Sign In to Your Account</h2>
+                <br>
+                <!-- <p class="login-subtitle">Enter your credentials to access your dashboard</p> -->
+
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    <div class="user-type">
+                        <p>I am a:</p>
+                        <div class="type-options">
+                            <label class="radio-container">Student
+                                <input type="radio" name="userType" value="student" checked>
+                                <span class="radio-checkmark"></span>
+                            </label>
+                            <label class="radio-container">Faculty/Admin
+                                <input type="radio" name="userType" value="admin">
+                                <span class="radio-checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="login-btn">Sign In</button>
+                </form>
+
+                <br><br>
+
+                <!-- <div class="login-divider">
+                    <span>Or continue with</span>
+                </div> -->
+
+                <!-- <div class="social-login">
+                    <button class="social-btn google-btn" id="googleLoginBtn">
+                        <i class="fab fa-google"></i> Login with Google
+                    </button>
+                </div> -->
+
+                <p class="signup-link">Don't have an account? <a href="signup.html">Sign up now</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="login-app.js"></script>
+</body>
+
+</html>
