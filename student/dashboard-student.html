@@ -693,11 +693,81 @@
             color: var(--text-dark)
         }
 
+        .message .file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .message .file-info i {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .typing-indicator {
+            font-style: italic;
+            opacity: 0.8;
+            animation: fadeInOut 1.5s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Hide Leaflet attribution */
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+
+        .leaflet-bottom {
+            display: none !important;
+        }
+
         .chatbot-input {
             display: flex;
             padding: 10px;
             border-top: 1px solid #eee;
-            gap: 8px
+            gap: 8px;
+            align-items: center;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .chat-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chat-action-btn:hover {
+            background: #f5f5f5;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .chat-action-btn.recording {
+            background: #ff4444;
+            color: white;
+            border-color: #ff4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         .chatbot-input input {
@@ -882,10 +952,10 @@
                 <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
                 <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
                 <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
-                <div class="menu-item"><i class="fas fa-brain"></i><span>Psychological Help</span><span
-                        class="new-badge">NEW</span></div>
+                <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
                 <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
                 <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div>
+                <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
         </aside>
 
@@ -1149,8 +1219,8 @@
                 Disaster Support
             </h3>
             <div style="display:flex;gap:8px;align-items:center">
-                <button class="chat-action chat-minimize" title="Minimize">
-                    <i class="fas fa-window-minimize"></i>
+                <button class="chat-action chat-extend" title="Open Full Chatbot">
+                    <i class="fas fa-expand-arrows-alt"></i>
                 </button>
                 <button class="chat-action chat-close" title="Close">
                     <i class="fas fa-times"></i>
@@ -1158,11 +1228,19 @@
             </div>
         </div>
         <div class="chatbot-messages" id="chatMessages">
-            <div class="message bot-message">Hello! I'm here to help with disaster-related information and support. How
-                can I assist you today?</div>
+            <div class="message bot-message">Hi, what's new today??</div>
         </div>
         <div class="chatbot-input">
+            <div class="input-actions">
+                <button id="chatAttach" class="chat-action-btn" title="Attach File">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <button id="chatMic" class="chat-action-btn" title="Voice Input">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
             <input id="chatInput" type="text" placeholder="Type your message here..." />
+            <input id="chatFileInput" type="file" accept="image/*,video/*,.pdf,.txt,.doc,.docx" style="display: none;" />
             <button id="chatSend" style="background: linear-gradient(90deg, var(--primary), var(--primary-dark));"><i
                     class="fas fa-paper-plane"></i></button>
         </div>
@@ -1243,9 +1321,11 @@
         /**********************
          * Map Initialization
          **********************/
-        const map = L.map('map').setView([20.5937, 78.9629], 5);
+        const map = L.map('map', {
+            attributionControl: false
+        }).setView([20.5937, 78.9629], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+            attribution: ''
         }).addTo(map);
         L.marker([19.0760, 72.8777]).addTo(map).bindPopup('Mumbai: Flood Alert');
         L.marker([28.6139, 77.2090]).addTo(map).bindPopup('Delhi: Heat Wave Warning');
@@ -1267,9 +1347,10 @@
                 'Sandbox Simulator': 'sandbox-simulator.html',
                 'Emergency Contacts': '#emergency-contacts', // Scroll to emergency contacts section
                 'Disaster Map': '../advanced-map.html',
-                'Psychological Help': 'consultation.html',
+                'AI Helper': 'chatbot.html',
                 'Gamified Learning': 'gamified-learning.html',
-                'Profile & Badges': 'profile-badges.html'
+                'Profile & Badges': 'profile-badges.html',
+                'Settings': 'settings.html'
             };
 
             menuItems.forEach(item => {
@@ -1774,6 +1855,78 @@
         // clearSearch.addEventListener('click', () => { searchInput.value = ''; clearSearch.style.display = 'none'; });
 
         /**********************
+         * Chat History Management
+         **********************/
+        
+        // Chat session tracking
+        let currentChatId = null;
+        let chatStartTime = null;
+        let sessionMessages = [];
+
+        // Initialize or get existing chat session
+        function initializeChatSession() {
+            if (!currentChatId) {
+                currentChatId = generateChatId();
+                chatStartTime = new Date();
+                sessionMessages = [
+                    {
+                        type: 'bot',
+                        content: "Hi, what's new today??",
+                        timestamp: new Date()
+                    }
+                ];
+            }
+        }
+
+        // Generate unique chat ID
+        function generateChatId() {
+            return 'chat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Save chat session to localStorage
+        function saveChatSession() {
+            if (!currentChatId || sessionMessages.length <= 1) return; // Don't save empty chats
+            
+            const chatData = {
+                id: currentChatId,
+                title: generateChatTitle(),
+                startTime: chatStartTime,
+                lastUpdate: new Date(),
+                messages: sessionMessages,
+                source: 'popup' // Indicates this came from popup chatbot
+            };
+
+            // Get existing chats
+            const existingChats = JSON.parse(localStorage.getItem('disasterAI_chatHistory') || '[]');
+            
+            // Check if chat already exists and update it, or add new
+            const existingIndex = existingChats.findIndex(chat => chat.id === currentChatId);
+            if (existingIndex >= 0) {
+                existingChats[existingIndex] = chatData;
+            } else {
+                existingChats.unshift(chatData); // Add to beginning
+            }
+
+            // Keep only last 50 chats to prevent storage overflow
+            if (existingChats.length > 50) {
+                existingChats.splice(50);
+            }
+
+            localStorage.setItem('disasterAI_chatHistory', JSON.stringify(existingChats));
+        }
+
+        // Generate a descriptive title for the chat based on first user message
+        function generateChatTitle() {
+            const firstUserMessage = sessionMessages.find(msg => msg.type === 'user');
+            if (firstUserMessage) {
+                let title = firstUserMessage.content.substring(0, 40);
+                if (firstUserMessage.content.length > 40) title += '...';
+                return title;
+            }
+            return 'New Conversation';
+        }
+
+        /**********************
          * Chatbot basic functionality
          **********************/
         // DOM elements
@@ -1783,11 +1936,127 @@
         const chatbot = document.getElementById('chatbot');
         const chatToggle = document.getElementById('chatToggle');
         const chatClose = document.querySelector('.chat-close');
-        const chatMinimize = document.querySelector('.chat-minimize');
+        const chatExtend = document.querySelector('.chat-extend');
+        const chatAttach = document.getElementById('chatAttach');
+        const chatFileInput = document.getElementById('chatFileInput');
+        const chatMic = document.getElementById('chatMic');
+
+        // Speech recognition variables
+        let recognition = null;
+        let isRecording = false;
+
+        // Backend connectivity
+        let backendAvailable = false;
+        const BACKEND_URL = 'http://localhost:5000';
+
+        // Check backend availability
+        async function checkBackendAvailability() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/status`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    const status = await response.json();
+                    backendAvailable = status.status === 'ready';
+                    console.log('Backend status:', status);
+                    return status;
+                }
+            } catch (error) {
+                console.log('Backend not available:', error.message);
+                backendAvailable = false;
+            }
+            return null;
+        }
+
+        // Send message to backend API
+        async function sendToBackend(message, files = []) {
+            if (!backendAvailable) {
+                throw new Error('Backend not available');
+            }
+
+            const formData = new FormData();
+            formData.append('message', message);
+            
+            // Append files if any
+            files.forEach((file, index) => {
+                formData.append('files', file);
+            });
+
+            const response = await fetch(`${BACKEND_URL}/api/chat`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`Backend error: ${response.status}`);
+            }
+
+            const result = await response.json();
+            return result.response;
+        }
+
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                chatInput.value = transcript;
+                stopRecording();
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                stopRecording();
+            };
+
+            recognition.onend = function() {
+                stopRecording();
+            };
+        }
+
+        // Recording functions
+        function startRecording() {
+            if (!recognition) {
+                alert('Speech recognition is not supported in your browser.');
+                return;
+            }
+            
+            isRecording = true;
+            chatMic.classList.add('recording');
+            chatMic.title = 'Stop Recording';
+            recognition.start();
+        }
+
+        function stopRecording() {
+            isRecording = false;
+            chatMic.classList.remove('recording');
+            chatMic.title = 'Voice Input';
+            if (recognition) {
+                recognition.stop();
+            }
+        }
 
         // INITIAL STATE
         chatbot.style.display = 'none';       // hide chatbot initially
         chatToggle.style.display = 'flex';    // show toggle button
+
+        // Check backend availability on load
+        checkBackendAvailability().then(status => {
+            if (status) {
+                console.log('✅ Backend connected - Enhanced AI features available');
+            } else {
+                console.log('⚠️ Backend offline - Using fallback responses');
+            }
+        });
 
         // OPEN chatbot on toggle click
         chatToggle.addEventListener('click', () => {
@@ -1801,26 +2070,28 @@
             chatToggle.style.display = 'flex'; // show toggle button
         });
 
-        // MINIMIZE / MAXIMIZE chatbot
-        chatMinimize.addEventListener('click', () => {
-            const body = chatbot.querySelector('.chatbot-messages');
-            if (body.style.display === 'none') {
-                // Maximize
-                body.style.display = 'flex';
-                chatbot.style.height = '460px';
-            } else {
-                // Minimize
-                body.style.display = 'none';
-                chatbot.style.height = '70px';
-            }
+        // EXTEND chatbot - open full chatbot page
+        chatExtend.addEventListener('click', () => {
+            window.open('chatbot.html', '_blank');
         });
 
         // SEND message function
-        function sendChatMessage() {
+        async function sendChatMessage() {
             const message = chatInput.value.trim();
             if (!message) return;
 
-            // Add user message
+            // Initialize chat session if needed
+            initializeChatSession();
+
+            // Add user message to session
+            const userMessage = {
+                type: 'user',
+                content: message,
+                timestamp: new Date()
+            };
+            sessionMessages.push(userMessage);
+
+            // Add user message to UI
             const userDiv = document.createElement('div');
             userDiv.className = 'message user-message';
             userDiv.textContent = message;
@@ -1828,24 +2099,83 @@
             chatInput.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Bot response
-            setTimeout(() => {
+            // Show typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message typing-indicator';
+            typingDiv.innerHTML = '<i class="fas fa-robot"></i> AI is thinking...';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                let botResponse;
+
+                if (backendAvailable) {
+                    // Use backend API with specialized prompts
+                    botResponse = await sendToBackend(message);
+                } else {
+                    // Fallback to simple local responses
+                    botResponse = getLocalResponse(message);
+                }
+
+                // Remove typing indicator
+                chatMessages.removeChild(typingDiv);
+
+                // Add bot response to UI
                 const botDiv = document.createElement('div');
                 botDiv.className = 'message bot-message';
-                const m = message.toLowerCase();
+                botDiv.textContent = botResponse;
 
-                if (m.includes('flood'))
-                    botDiv.textContent = 'During flooding, avoid electrical equipment, move to higher ground, and do not walk through moving water. Turn off utilities if safe.';
-                else if (m.includes('earthquake'))
-                    botDiv.textContent = 'During earthquake: drop, cover, and hold. Stay away from windows. Evacuate only when safe.';
-                else if (m.includes('help') || m.includes('need'))
-                    botDiv.textContent = 'If you need urgent help, press REPORT DISASTER EMERGENCY and share location. For non-urgent support, describe your problem.';
-                else
-                    botDiv.textContent = "I understand. Please share more details or try keywords like 'flood', 'earthquake', 'help'.";
+                // Add bot message to session
+                const botMessage = {
+                    type: 'bot',
+                    content: botResponse,
+                    timestamp: new Date()
+                };
+                sessionMessages.push(botMessage);
 
                 chatMessages.appendChild(botDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 800);
+
+                // Save the updated chat session
+                saveChatSession();
+
+            } catch (error) {
+                console.error('Error getting response:', error);
+                
+                // Remove typing indicator
+                chatMessages.removeChild(typingDiv);
+
+                // Show error message or fallback response
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'message bot-message';
+                errorDiv.textContent = 'Sorry, I encountered an error. Please try again or use the full chatbot for enhanced features.';
+                chatMessages.appendChild(errorDiv);
+                
+                // Add error message to session
+                const errorMessage = {
+                    type: 'bot',
+                    content: 'Sorry, I encountered an error. Please try again or use the full chatbot for enhanced features.',
+                    timestamp: new Date()
+                };
+                sessionMessages.push(errorMessage);
+                
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                saveChatSession();
+            }
+        }
+
+        // Local response fallback function
+        function getLocalResponse(message) {
+            const m = message.toLowerCase();
+            
+            if (m.includes('flood'))
+                return 'During flooding, avoid electrical equipment, move to higher ground, and do not walk through moving water. Turn off utilities if safe.';
+            else if (m.includes('earthquake'))
+                return 'During earthquake: drop, cover, and hold. Stay away from windows. Evacuate only when safe.';
+            else if (m.includes('help') || m.includes('need'))
+                return 'If you need urgent help, press REPORT DISASTER EMERGENCY and share location. For non-urgent support, describe your problem.';
+            else
+                return "I understand. Please share more details or try keywords like 'flood', 'earthquake', 'help'. For enhanced AI responses, ensure the backend server is running.";
         }
 
         // Send button click
@@ -1855,6 +2185,145 @@
         chatInput.addEventListener('keypress', e => {
             if (e.key === 'Enter') sendChatMessage();
         });
+
+        // File attachment button
+        chatAttach.addEventListener('click', () => {
+            chatFileInput.click();
+        });
+
+        // File input change
+        chatFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileUpload(file);
+            }
+        });
+
+        // Microphone button
+        chatMic.addEventListener('click', () => {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        });
+
+        // Handle file upload
+        async function handleFileUpload(file) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (file.size > maxSize) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            // Initialize chat session if needed
+            initializeChatSession();
+
+            // Add file message to UI
+            const fileDiv = document.createElement('div');
+            fileDiv.className = 'message user-message';
+            fileDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-file"></i>
+                    <span>${file.name}</span>
+                    <span style="font-size: 11px; color: rgba(255,255,255,0.7);">(${(file.size / 1024).toFixed(1)}KB)</span>
+                </div>
+            `;
+            chatMessages.appendChild(fileDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Add file message to session
+            const fileMessage = {
+                type: 'user',
+                content: `📎 Uploaded file: ${file.name} (${(file.size / 1024).toFixed(1)}KB)`,
+                timestamp: new Date(),
+                file: {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type
+                }
+            };
+            sessionMessages.push(fileMessage);
+
+            // Show processing indicator
+            const processingDiv = document.createElement('div');
+            processingDiv.className = 'message bot-message typing-indicator';
+            processingDiv.innerHTML = '<i class="fas fa-robot"></i> Analyzing your file...';
+            chatMessages.appendChild(processingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                let response;
+
+                if (backendAvailable) {
+                    // Send file to backend for AI processing
+                    const fileAnalysisMessage = `Please analyze this ${file.type.startsWith('image/') ? 'image' : 
+                        file.type === 'application/pdf' ? 'PDF document' : 
+                        file.type.startsWith('video/') ? 'video' : 'file'} in the context of disaster management and safety.`;
+                    
+                    response = await sendToBackend(fileAnalysisMessage, [file]);
+                } else {
+                    // Fallback response when backend is not available
+                    if (file.type.startsWith('image/')) {
+                        response = "I can see you've uploaded an image. For detailed image analysis with AI, please ensure the backend server is running or use the full chatbot where enhanced processing is available.";
+                    } else if (file.type === 'application/pdf') {
+                        response = "I can see you've uploaded a PDF document. For document analysis, please ensure the backend server is running or use the full chatbot where I can read and analyze the content.";
+                    } else if (file.type.startsWith('video/')) {
+                        response = "I can see you've uploaded a video. For video analysis, please ensure the backend server is running or use the full chatbot where I can process video content.";
+                    } else {
+                        response = "I can see you've uploaded a file. For file analysis, please ensure the backend server is running or use the full chatbot where enhanced processing is available.";
+                    }
+                }
+
+                // Remove processing indicator
+                chatMessages.removeChild(processingDiv);
+
+                // Add AI response
+                const botDiv = document.createElement('div');
+                botDiv.className = 'message bot-message';
+                botDiv.textContent = response;
+
+                // Add bot response to session
+                const botMessage = {
+                    type: 'bot',
+                    content: response,
+                    timestamp: new Date()
+                };
+                sessionMessages.push(botMessage);
+
+                chatMessages.appendChild(botDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Save the updated chat session
+                saveChatSession();
+
+            } catch (error) {
+                console.error('Error processing file:', error);
+                
+                // Remove processing indicator
+                chatMessages.removeChild(processingDiv);
+
+                // Show error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'message bot-message';
+                errorDiv.textContent = 'Sorry, I encountered an error while processing your file. Please try again or use the full chatbot for enhanced features.';
+                
+                // Add error message to session
+                const errorMessage = {
+                    type: 'bot',
+                    content: 'Sorry, I encountered an error while processing your file. Please try again or use the full chatbot for enhanced features.',
+                    timestamp: new Date()
+                };
+                sessionMessages.push(errorMessage);
+                
+                chatMessages.appendChild(errorDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                saveChatSession();
+            }
+
+            // Clear file input
+            chatFileInput.value = '';
+        }
 
         /**********************
          * Quick-call buttons

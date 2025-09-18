@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Settings - EduDashboard</title>
+    <title>Student Settings - ResQ Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #f72585;
-            --success: #4cc9f0;
-            --warning: #f9c74f;
-            --light: #f8f9fa;
-            --dark: #212529;
+            --primary: #1a73e8;
+            /* original blue navbar */
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
             --card-bg: #ffffff;
-            --sidebar-bg: #3a0ca3;
-            --header-bg: #4361ee;
-            --text-light: #f8f9fa;
-            --text-dark: #212529;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            /* user palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
         }
 
         * {
@@ -31,8 +42,13 @@
         }
 
         body {
-            background-color: #f5f7fb;
+            background: var(--light-bg);
             color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
             line-height: 1.6;
         }
 
@@ -44,57 +60,68 @@
 
         /* Sidebar Styles */
         .sidebar {
-            background: linear-gradient(to bottom, var(--sidebar-bg), var(--secondary));
-            color: var(--text-light);
-            padding: 20px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
             position: fixed;
             width: 240px;
             height: 100%;
             overflow-y: auto;
             box-shadow: var(--shadow);
-            z-index: 100;
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
         }
 
         .logo i {
-            font-size: 24px;
-            margin-right: 10px;
-            color: var(--success);
+            font-size: 22px;
+            color: var(--p6)
         }
 
         .logo h1 {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px
+        }
+
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-radius: 8px;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
-        }
-
-        .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .menu-item.active {
-            background-color: var(--primary);
+            color: rgba(255, 255, 255, 0.95)
         }
 
         .menu-item i {
-            margin-right: 12px;
-            font-size: 18px;
+            width: 20px;
+            text-align: center
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06)
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08)
         }
 
         /* Main Content Styles */
@@ -107,12 +134,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background-color: var(--header-bg);
-            color: var(--text-light);
+            padding: 14px;
             border-radius: 12px;
-            margin-bottom: 25px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
             box-shadow: var(--shadow);
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
         }
 
         .user-profile {
@@ -308,6 +337,18 @@
             color: #6c757d;
         }
 
+        .readonly-field {
+            background-color: #f8f9fa !important;
+            color: #6c757d !important;
+            cursor: not-allowed !important;
+            border-color: #e9ecef !important;
+        }
+
+        .readonly-field:focus {
+            box-shadow: none !important;
+            border-color: #e9ecef !important;
+        }
+
         .security-alert {
             background-color: #fff3cd;
             border-left: 4px solid #ffc107;
@@ -372,60 +413,30 @@
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
-        <div class="sidebar">
+        <aside class="sidebar">
             <div class="logo">
-                <i class="fas fa-graduation-cap"></i>
-                <h1>EduDashboard</h1>
+                <i class="fas fa-shield-alt"></i>
+                <h1>ResQ</h1>
             </div>
             <div class="menu-items">
-                <div class="menu-item">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-book"></i>
-                    <span>Courses</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-tasks"></i>
-                    <span>Assignments</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Grades</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Schedule</span>
-                </div>
-                <div class="menu-item active">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Help</span>
-                </div>
+                <div class="menu-item"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
+                <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div>
+                <div class="menu-item active"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
-        </div>
+        </aside>
 
         <!-- Main Content -->
         <div class="main-content">
-            <div class="header">
-                <h2>Student Settings</h2>
-                <div class="user-profile">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80" alt="User Profile">
-                    <div>
-                        <h4>Alex Johnson</h4>
-                        <p>Computer Science</p>
-                    </div>
-                </div>
-            </div>
-
             <div class="settings-container">
                 <div class="settings-header">
-                    <h1>Account Settings</h1>
-                    <p>Manage your account preferences and security settings</p>
+                    <h1>Disaster Response Settings</h1>
+                    <p>Manage your emergency response preferences and safety settings</p>
                 </div>
 
                 <!-- Profile Settings -->
@@ -434,29 +445,21 @@
                         <i class="fas fa-user"></i>
                         <h2>Profile Information</h2>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" class="form-control" value="Alex">
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" class="form-control" value="Johnson">
-                        </div>
+                    <div id="profileForm">
+                        <!-- Profile fields will be dynamically populated here -->
                     </div>
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" class="form-control" value="alex.johnson@student.edu">
+                        <label for="addField">Add New Field</label>
+                        <select id="addField" class="form-control">
+                            <option value="">Select a field to add</option>
+                            <option value="phone">Phone Number</option>
+                            <option value="emergencyContact">Emergency Contact</option>
+                            <option value="bloodGroup">Blood Group</option>
+                            <option value="medicalInfo">Medical Information</option>
+                            <option value="bio">Bio</option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" class="form-control" value="+1 (555) 123-4567">
-                    </div>
-                    <div class="form-group">
-                        <label for="bio">Bio</label>
-                        <textarea id="bio" class="form-control" rows="3">Computer Science major with interest in AI and machine learning</textarea>
-                    </div>
-                    <button class="btn btn-primary">Save Changes</button>
+                    <button class="btn btn-primary" onclick="saveProfileChanges()">Save Changes</button>
                 </div>
 
                 <!-- Security Settings -->
@@ -467,22 +470,22 @@
                     </div>
                     <div class="form-group">
                         <label for="currentPassword">Current Password</label>
-                        <input type="password" id="currentPassword" class="form-control">
+                        <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password">
                     </div>
                     <div class="form-group">
                         <label for="newPassword">New Password</label>
-                        <input type="password" id="newPassword" class="form-control">
+                        <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
                     </div>
                     <div class="form-group">
                         <label for="confirmPassword">Confirm New Password</label>
-                        <input type="password" id="confirmPassword" class="form-control">
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
                     </div>
-                    <button class="btn btn-primary">Update Password</button>
+                    <button class="btn btn-primary" onclick="updatePassword()">Update Password</button>
                     
                     <div class="security-alert">
                         <i class="fas fa-shield-alt"></i>
                         <div>
-                            <h4>Last login: Today at 2:30 PM from Chrome on Windows</h4>
+                            <h4 id="lastLoginInfo">Last login: Loading...</h4>
                             <p>If this wasn't you, please change your password immediately</p>
                         </div>
                     </div>
@@ -492,13 +495,13 @@
                 <div class="settings-card">
                     <div class="settings-card-header">
                         <i class="fas fa-bell"></i>
-                        <h2>Notification Preferences</h2>
+                        <h2>Emergency Notification Preferences</h2>
                     </div>
                     
                     <div class="toggle-label">
                         <div class="toggle-text">
-                            <h4>Email Notifications</h4>
-                            <p>Receive important updates via email</p>
+                            <h4>Disaster Alerts</h4>
+                            <p>Receive immediate alerts for natural disasters and emergencies</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" checked>
@@ -508,8 +511,8 @@
                     
                     <div class="toggle-label">
                         <div class="toggle-text">
-                            <h4>Assignment Alerts</h4>
-                            <p>Get notified about new assignments and deadlines</p>
+                            <h4>Evacuation Notifications</h4>
+                            <p>Get notified about evacuation orders and safe routes</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" checked>
@@ -519,8 +522,8 @@
                     
                     <div class="toggle-label">
                         <div class="toggle-text">
-                            <h4>Course Updates</h4>
-                            <p>Notifications about course materials and announcements</p>
+                            <h4>Weather Warnings</h4>
+                            <p>Severe weather alerts and safety recommendations</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" checked>
@@ -530,8 +533,8 @@
                     
                     <div class="toggle-label">
                         <div class="toggle-text">
-                            <h4>Security Alerts</h4>
-                            <p>Important alerts about account security</p>
+                            <h4>Training Reminders</h4>
+                            <p>Notifications about emergency drills and training sessions</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" checked>
@@ -539,7 +542,7 @@
                         </label>
                     </div>
                     
-                    <button class="btn btn-primary">Save Preferences</button>
+                    <button class="btn btn-primary" onclick="saveNotificationSettings()">Save Preferences</button>
                 </div>
 
                 <!-- Privacy Settings -->
@@ -593,7 +596,7 @@
                         </label>
                     </div>
                     
-                    <button class="btn btn-primary">Save Privacy Settings</button>
+                    <button class="btn btn-primary" onclick="savePrivacySettings()">Save Privacy Settings</button>
                 </div>
 
                 <!-- Account Actions -->
@@ -610,13 +613,13 @@
                     </div>
                     
                     <div class="form-group">
-                        <button class="btn btn-outline" style="width: 100%; margin-bottom: 15px;">
+                        <button class="btn btn-outline" style="width: 100%; margin-bottom: 15px; color: var(--accent); border-color: var(--accent);" onclick="deleteAccount()">
                             <i class="fas fa-trash-alt"></i> Delete Account
                         </button>
                     </div>
                     
                     <div class="form-group">
-                        <button class="btn btn-outline" style="width: 100%; margin-bottom: 15px; color: var(--accent);">
+                        <button class="btn btn-outline" style="width: 100%; margin-bottom: 15px; color: var(--accent);" onclick="logoutAllDevices()">
                             <i class="fas fa-sign-out-alt"></i> Logout All Devices
                         </button>
                     </div>
@@ -626,6 +629,1132 @@
     </div>
 
     <script>
+        /**********************
+        * Menu Navigation
+        *********************/
+
+        function initializeMenuNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            // Define page mappings for each menu item
+            const pageMapping = {
+                'Dashboard': 'dashboard-student.html',
+                'Education Modules': 'education-modules.html',
+                'Sandbox Simulator': 'sandbox-simulator.html',
+                'Emergency Contacts': '#emergency-contacts', // Scroll to emergency contacts section
+                'Disaster Map': '../advanced-map.html',
+                'AI Helper': 'chatbot.html',
+                'Gamified Learning': 'gamified-learning.html',
+                'Profile & Badges': 'profile-badges.html',
+                'Settings': 'settings.html'
+            };
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Update active state
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Get the menu item text
+                    const menuText = this.querySelector('span').textContent.trim();
+                    const targetPage = pageMapping[menuText];
+
+                    if (targetPage) {
+                        if (targetPage.startsWith('#')) {
+                            // Handle anchor links (scroll to section)
+                            if (targetPage === '#emergency-contacts') {
+                                document.querySelector('.emergency-contacts-section').scrollIntoView({
+                                    behavior: 'smooth'
+                                });
+                            }
+                        } else if (targetPage !== 'settings.html') {
+                            // Navigate to page (don't navigate if it's the current page)
+                            navigateToPage(targetPage, menuText);
+                        }
+                    }
+                });
+
+                // Add hover effect
+                item.addEventListener('mouseenter', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                    }
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        }
+
+        function navigateToPage(targetPage, menuText) {
+            // Show loading indicator
+            showLoadingIndicator();
+
+            // Add smooth transition
+            document.body.style.opacity = '0.8';
+            document.body.style.transition = 'opacity 0.3s ease';
+
+            setTimeout(() => {
+                try {
+                    window.location.href = targetPage;
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    hideLoadingIndicator();
+                    showNavigationError(menuText);
+                    document.body.style.opacity = '1';
+                }
+            }, 300);
+        }
+
+        function showLoadingIndicator() {
+            // Create loading overlay if it doesn't exist
+            if (!document.getElementById('loadingOverlay')) {
+                const loadingHTML = `
+                    <div id="loadingOverlay" style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(26, 115, 232, 0.9);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                        color: white;
+                    ">
+                        <div style="
+                            width: 50px;
+                            height: 50px;
+                            border: 3px solid rgba(255, 255, 255, 0.3);
+                            border-top: 3px solid white;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            margin-bottom: 20px;
+                        "></div>
+                        <h3>Loading...</h3>
+                        <p>Navigating to your selected page</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+                document.body.insertAdjacentHTML('beforeend', loadingHTML);
+            }
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoadingIndicator() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+
+        function showNavigationError(menuText) {
+            alert(`⚠️ Navigation Error\n\nSorry, the ${menuText} page is currently unavailable.\n\nThis might be because:\n• The page is still being developed\n• The file path has changed\n• There's a temporary server issue\n\nPlease try again later or contact support.`);
+        }
+
+        // Add keyboard navigation
+        function initializeKeyboardNavigation() {
+            document.addEventListener('keydown', function (e) {
+                if (e.altKey) {
+                    const menuItems = document.querySelectorAll('.menu-item');
+                    const currentActive = document.querySelector('.menu-item.active');
+                    let currentIndex = Array.from(menuItems).indexOf(currentActive);
+
+                    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        currentIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+                        menuItems[currentIndex].click();
+                    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        currentIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
+                        menuItems[currentIndex].click();
+                    }
+                }
+            });
+        }
+
+        // Initialize navigation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMenuNavigation();
+            initializeKeyboardNavigation();
+            loadUserProfile();
+            loadLastLoginInfo();
+        });
+
+        /**********************
+         * Login Information Management
+         **********************/
+        
+        // Load and display last login information
+        function loadLastLoginInfo() {
+            const loginData = JSON.parse(localStorage.getItem('resq_loginHistory') || '[]');
+            const lastLoginElement = document.getElementById('lastLoginInfo');
+            
+            if (loginData.length > 0) {
+                // Get the most recent login (current session will be at index 0)
+                // If there's only one entry, it's the current session
+                // If there are multiple, the second one [1] is the previous login
+                const lastLogin = loginData.length > 1 ? loginData[1] : loginData[0];
+                
+                const loginTime = new Date(lastLogin.timestamp);
+                const browser = getBrowserInfo();
+                const os = getOSInfo();
+                
+                // Format the time
+                const timeString = formatLoginTime(loginTime);
+                
+                lastLoginElement.textContent = `Last login: ${timeString} from ${browser} on ${os}`;
+            } else {
+                // No login history found
+                lastLoginElement.textContent = 'Last login: First time login';
+            }
+        }
+
+        // Get browser information
+        function getBrowserInfo() {
+            const userAgent = navigator.userAgent;
+            let browser = 'Unknown Browser';
+            
+            if (userAgent.indexOf('Chrome') > -1 && userAgent.indexOf('Edg') === -1) {
+                browser = 'Chrome';
+            } else if (userAgent.indexOf('Firefox') > -1) {
+                browser = 'Firefox';
+            } else if (userAgent.indexOf('Safari') > -1 && userAgent.indexOf('Chrome') === -1) {
+                browser = 'Safari';
+            } else if (userAgent.indexOf('Edg') > -1) {
+                browser = 'Edge';
+            } else if (userAgent.indexOf('Opera') > -1 || userAgent.indexOf('OPR') > -1) {
+                browser = 'Opera';
+            }
+            
+            return browser;
+        }
+
+        // Get operating system information
+        function getOSInfo() {
+            const userAgent = navigator.userAgent;
+            let os = 'Unknown OS';
+            
+            if (userAgent.indexOf('Windows NT 10.0') > -1) {
+                os = 'Windows 10/11';
+            } else if (userAgent.indexOf('Windows NT') > -1) {
+                os = 'Windows';
+            } else if (userAgent.indexOf('Mac OS X') > -1) {
+                os = 'macOS';
+            } else if (userAgent.indexOf('Linux') > -1) {
+                os = 'Linux';
+            } else if (userAgent.indexOf('Android') > -1) {
+                os = 'Android';
+            } else if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPad') > -1) {
+                os = 'iOS';
+            }
+            
+            return os;
+        }
+
+        // Format login time to readable string
+        function formatLoginTime(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor(diffMs / (1000 * 60));
+
+            if (diffDays === 0) {
+                if (diffHours === 0) {
+                    if (diffMinutes < 1) {
+                        return 'Just now';
+                    } else if (diffMinutes === 1) {
+                        return '1 minute ago';
+                    } else {
+                        return `${diffMinutes} minutes ago`;
+                    }
+                } else {
+                    const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    return `Today at ${timeStr}`;
+                }
+            } else if (diffDays === 1) {
+                const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                return `Yesterday at ${timeStr}`;
+            } else if (diffDays < 7) {
+                const dayName = date.toLocaleDateString([], {weekday: 'long'});
+                const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                return `${dayName} at ${timeStr}`;
+            } else {
+                return date.toLocaleDateString([], {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+        }
+
+        // Function to record login (should be called during login process)
+        function recordLogin() {
+            const loginHistory = JSON.parse(localStorage.getItem('resq_loginHistory') || '[]');
+            
+            const loginInfo = {
+                timestamp: new Date().toISOString(),
+                browser: getBrowserInfo(),
+                os: getOSInfo(),
+                userAgent: navigator.userAgent,
+                ip: 'Unknown' // In a real app, you'd get this from the server
+            };
+
+            // Add to beginning of array (most recent first)
+            loginHistory.unshift(loginInfo);
+            
+            // Keep only last 10 logins
+            if (loginHistory.length > 10) {
+                loginHistory.splice(10);
+            }
+            
+            localStorage.setItem('resq_loginHistory', JSON.stringify(loginHistory));
+        }
+
+        // Check if this is a new session and record it
+        function checkAndRecordSession() {
+            const currentSession = sessionStorage.getItem('resq_currentSession');
+            if (!currentSession) {
+                // This is a new session, record the login
+                recordLogin();
+                sessionStorage.setItem('resq_currentSession', 'active');
+            }
+        }
+
+        // Call this when the page loads to check for new sessions
+        checkAndRecordSession();
+
+        /**********************
+         * User Profile Management
+         **********************/
+        
+        // Load user profile from localStorage or API
+        function loadUserProfile() {
+            // Try to get user data from localStorage (from login)
+            const userData = JSON.parse(localStorage.getItem('resq_user') || '{}');
+            
+            // Default field configuration
+            const fieldConfig = {
+                firstName: { label: 'First Name', type: 'text', required: true, readonly: true },
+                lastName: { label: 'Last Name', type: 'text', required: true, readonly: true },
+                email: { label: 'Email Address', type: 'email', required: true, readonly: true },
+                address: { label: 'Address', type: 'text', required: false, readonly: true },
+                phone: { label: 'Phone Number', type: 'tel', required: false, readonly: false },
+                emergencyContact: { label: 'Emergency Contact', type: 'tel', required: false, readonly: false },
+                bloodGroup: { label: 'Blood Group', type: 'text', required: false, readonly: false },
+                medicalInfo: { label: 'Medical Information', type: 'textarea', required: false, readonly: false },
+                bio: { label: 'Bio', type: 'textarea', required: false, readonly: false }
+            };
+
+            const profileForm = document.getElementById('profileForm');
+            profileForm.innerHTML = '';
+
+            // Create fields based on available user data
+            Object.keys(userData).forEach(key => {
+                if (fieldConfig[key] && userData[key]) {
+                    createProfileField(key, fieldConfig[key], userData[key]);
+                }
+            });
+
+            // Always show required fields even if not in userData
+            ['firstName', 'lastName', 'email'].forEach(requiredField => {
+                if (!userData[requiredField]) {
+                    createProfileField(requiredField, fieldConfig[requiredField], '');
+                }
+            });
+
+            // Show address if it exists
+            if (userData.address) {
+                createProfileField('address', fieldConfig['address'], userData.address);
+            }
+
+            // Update the dropdown to hide already added fields and readonly fields
+            updateAddFieldDropdown();
+        }
+
+        // Create a profile field
+        function createProfileField(fieldName, config, value) {
+            const profileForm = document.getElementById('profileForm');
+            
+            const fieldContainer = document.createElement('div');
+            fieldContainer.className = config.type === 'textarea' ? 'form-group' : 'form-row';
+            fieldContainer.setAttribute('data-field', fieldName);
+
+            let fieldHTML = '';
+            const readonlyAttr = config.readonly ? 'readonly' : '';
+            const readonlyClass = config.readonly ? 'readonly-field' : '';
+            const removeButton = (!config.required && !config.readonly) ? '<button type="button" class="btn btn-outline" style="margin-top: 8px; font-size: 12px; padding: 4px 8px;" onclick="removeField(\'' + fieldName + '\')">Remove Field</button>' : '';
+            
+            if (config.type === 'textarea') {
+                fieldHTML = `
+                    <div class="form-group">
+                        <label for="${fieldName}">${config.label} ${config.required ? '*' : ''} ${config.readonly ? '(Cannot be changed)' : ''}</label>
+                        <textarea id="${fieldName}" class="form-control ${readonlyClass}" rows="3" ${config.required ? 'required' : ''} ${readonlyAttr}>${value || ''}</textarea>
+                        ${removeButton}
+                    </div>
+                `;
+            } else {
+                fieldHTML = `
+                    <div class="form-group" style="flex: 1;">
+                        <label for="${fieldName}">${config.label} ${config.required ? '*' : ''} ${config.readonly ? '(Cannot be changed)' : ''}</label>
+                        <input type="${config.type}" id="${fieldName}" class="form-control ${readonlyClass}" value="${value || ''}" ${config.required ? 'required' : ''} ${readonlyAttr}>
+                        ${removeButton}
+                    </div>
+                `;
+            }
+
+            fieldContainer.innerHTML = fieldHTML;
+            profileForm.appendChild(fieldContainer);
+        }
+
+        // Remove a field
+        function removeField(fieldName) {
+            const fieldElement = document.querySelector(`[data-field="${fieldName}"]`);
+            if (fieldElement) {
+                fieldElement.remove();
+                updateAddFieldDropdown();
+            }
+        }
+
+        // Update the add field dropdown
+        function updateAddFieldDropdown() {
+            const addFieldSelect = document.getElementById('addField');
+            const existingFields = Array.from(document.querySelectorAll('[data-field]')).map(el => el.getAttribute('data-field'));
+            
+            // List of readonly fields that shouldn't appear in dropdown
+            const readonlyFields = ['firstName', 'lastName', 'email', 'address'];
+            
+            // Show/hide options based on existing fields and readonly status
+            Array.from(addFieldSelect.options).forEach(option => {
+                if (option.value) {
+                    const isExisting = existingFields.includes(option.value);
+                    const isReadonly = readonlyFields.includes(option.value);
+                    option.style.display = (isExisting || isReadonly) ? 'none' : 'block';
+                }
+            });
+        }
+
+        // Handle adding new field
+        document.addEventListener('change', function(e) {
+            if (e.target.id === 'addField' && e.target.value) {
+                const fieldName = e.target.value;
+                const fieldConfig = {
+                    phone: { label: 'Phone Number', type: 'tel', required: false, readonly: false },
+                    emergencyContact: { label: 'Emergency Contact', type: 'tel', required: false, readonly: false },
+                    bloodGroup: { label: 'Blood Group', type: 'text', required: false, readonly: false },
+                    medicalInfo: { label: 'Medical Information', type: 'textarea', required: false, readonly: false },
+                    bio: { label: 'Bio', type: 'textarea', required: false, readonly: false }
+                };
+
+                if (fieldConfig[fieldName]) {
+                    createProfileField(fieldName, fieldConfig[fieldName], '');
+                    updateAddFieldDropdown();
+                    e.target.value = ''; // Reset dropdown
+                }
+            }
+        });
+
+        // Save profile changes
+        async function saveProfileChanges() {
+            const formFields = document.querySelectorAll('#profileForm input, #profileForm textarea');
+            const userData = {};
+            let isValid = true;
+
+            formFields.forEach(field => {
+                const value = field.value.trim();
+                if (field.required && !value) {
+                    field.style.borderColor = '#f25c54';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '';
+                    if (value) {
+                        userData[field.id] = value;
+                    }
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Show saving state
+            const saveButton = event.target;
+            const originalText = saveButton.textContent;
+            saveButton.textContent = 'Saving...';
+            saveButton.disabled = true;
+
+            try {
+                // Save to database
+                const success = await saveToDatabase(userData, 'profile');
+                
+                if (success) {
+                    // Update localStorage only after successful database save
+                    const existingData = JSON.parse(localStorage.getItem('resq_user') || '{}');
+                    const updatedData = { ...existingData, ...userData };
+                    localStorage.setItem('resq_user', JSON.stringify(updatedData));
+
+                    // Show success
+                    saveButton.textContent = 'Saved!';
+                    saveButton.style.backgroundColor = '#34a853';
+                    
+                    setTimeout(() => {
+                        saveButton.textContent = originalText;
+                        saveButton.style.backgroundColor = '';
+                        saveButton.disabled = false;
+                    }, 1500);
+                } else {
+                    throw new Error('Failed to save profile');
+                }
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                alert('Error saving profile. Please try again.');
+                
+                // Reset button
+                saveButton.textContent = originalText;
+                saveButton.disabled = false;
+            }
+        }
+
+        // Update password function
+        async function updatePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('Please fill in all password fields.');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert('New password and confirmation do not match.');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                alert('New password must be at least 8 characters long.');
+                return;
+            }
+
+            // Password strength validation
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+            if (!passwordRegex.test(newPassword)) {
+                alert('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+                return;
+            }
+
+            // Show saving state
+            const updateButton = event.target;
+            const originalText = updateButton.textContent;
+            updateButton.textContent = 'Updating...';
+            updateButton.disabled = true;
+
+            try {
+                // Send password update to database
+                const success = await saveToDatabase({
+                    currentPassword: currentPassword,
+                    newPassword: newPassword
+                }, 'password');
+
+                if (success) {
+                    // Clear password fields
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+
+                    // Show success
+                    updateButton.textContent = 'Password Updated!';
+                    updateButton.style.backgroundColor = '#34a853';
+                    
+                    setTimeout(() => {
+                        updateButton.textContent = originalText;
+                        updateButton.style.backgroundColor = '';
+                        updateButton.disabled = false;
+                    }, 2000);
+
+                    alert('Password updated successfully! Please use your new password for future logins.');
+                } else {
+                    throw new Error('Failed to update password');
+                }
+            } catch (error) {
+                console.error('Error updating password:', error);
+                
+                if (error.message.includes('current password')) {
+                    alert('Current password is incorrect. Please try again.');
+                } else {
+                    alert('Error updating password. Please try again.');
+                }
+                
+                // Reset button
+                updateButton.textContent = originalText;
+                updateButton.disabled = false;
+            }
+        }
+
+        // Save to database (enhanced with proper API integration)
+        async function saveToDatabase(data, type = 'profile') {
+            try {
+                const user = JSON.parse(localStorage.getItem('resq_user') || '{}');
+                const authToken = localStorage.getItem('resq_authToken') || sessionStorage.getItem('resq_authToken');
+                
+                if (!authToken) {
+                    throw new Error('Authentication token not found. Please login again.');
+                }
+
+                let endpoint, requestData;
+                
+                if (type === 'password') {
+                    endpoint = '/api/user/update-password';
+                    requestData = {
+                        userId: user.id || user.email,
+                        currentPassword: data.currentPassword,
+                        newPassword: data.newPassword
+                    };
+                } else if (type === 'notifications') {
+                    endpoint = '/api/user/notification-settings';
+                    requestData = {
+                        userId: user.id || user.email,
+                        settings: data
+                    };
+                } else if (type === 'privacy') {
+                    endpoint = '/api/user/privacy-settings';
+                    requestData = {
+                        userId: user.id || user.email,
+                        settings: data
+                    };
+                } else {
+                    endpoint = '/api/user/profile';
+                    requestData = {
+                        userId: user.id || user.email,
+                        ...data
+                    };
+                }
+
+                console.log('Saving to database:', { endpoint, data: requestData });
+                
+                // Actual API call
+                const response = await fetch(`${getApiBaseUrl()}${endpoint}`, {
+                    method: type === 'password' ? 'POST' : 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    
+                    if (response.status === 401) {
+                        throw new Error('Session expired. Please login again.');
+                    } else if (response.status === 400 && type === 'password') {
+                        throw new Error('Current password is incorrect.');
+                    } else {
+                        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                    }
+                }
+                
+                const result = await response.json();
+                console.log('Database save successful:', result);
+                
+                // Update last modified timestamp
+                if (type === 'profile') {
+                    const userData = JSON.parse(localStorage.getItem('resq_user') || '{}');
+                    userData.lastModified = new Date().toISOString();
+                    localStorage.setItem('resq_user', JSON.stringify(userData));
+                }
+                
+                return true;
+                
+            } catch (error) {
+                console.error('Error saving to database:', error);
+                
+                // Handle different types of errors
+                if (error.message.includes('fetch')) {
+                    // Network error - save locally for sync later
+                    console.log('Network error - saving locally for later sync');
+                    saveForLaterSync(data, type);
+                    throw new Error('Network error. Changes saved locally and will sync when connection is restored.');
+                } else if (error.message.includes('Session expired')) {
+                    // Redirect to login
+                    alert('Your session has expired. Please login again.');
+                    window.location.href = '../Landing Page/frontend/login.html';
+                    return false;
+                } else {
+                    throw error;
+                }
+            }
+        }
+
+        // Get API base URL (configurable for different environments)
+        function getApiBaseUrl() {
+            // In production, this would be your actual API URL
+            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            if (isDevelopment) {
+                return 'http://localhost:3000'; // Local development server
+            } else {
+                return 'https://api.resq-disaster.com'; // Production API
+            }
+        }
+
+        // Save changes locally for later synchronization when network is available
+        function saveForLaterSync(data, type) {
+            const pendingChanges = JSON.parse(localStorage.getItem('resq_pendingSync') || '[]');
+            
+            pendingChanges.push({
+                id: Date.now(),
+                type: type,
+                data: data,
+                timestamp: new Date().toISOString(),
+                retryCount: 0
+            });
+            
+            localStorage.setItem('resq_pendingSync', JSON.stringify(pendingChanges));
+            
+            // Try to sync later
+            setTimeout(syncPendingChanges, 30000); // Retry after 30 seconds
+        }
+
+        // Sync pending changes when network is available
+        async function syncPendingChanges() {
+            const pendingChanges = JSON.parse(localStorage.getItem('resq_pendingSync') || '[]');
+            
+            if (pendingChanges.length === 0) return;
+            
+            const synced = [];
+            
+            for (const change of pendingChanges) {
+                try {
+                    const success = await saveToDatabase(change.data, change.type);
+                    if (success) {
+                        synced.push(change.id);
+                        console.log('Synced pending change:', change.id);
+                    }
+                } catch (error) {
+                    console.log('Failed to sync change:', change.id, error.message);
+                    change.retryCount = (change.retryCount || 0) + 1;
+                    
+                    // Remove after 5 failed attempts
+                    if (change.retryCount >= 5) {
+                        synced.push(change.id);
+                        console.log('Giving up on change after 5 attempts:', change.id);
+                    }
+                }
+            }
+            
+            // Remove synced changes
+            const remainingChanges = pendingChanges.filter(change => !synced.includes(change.id));
+            localStorage.setItem('resq_pendingSync', JSON.stringify(remainingChanges));
+            
+            // If there are still pending changes, try again later
+            if (remainingChanges.length > 0) {
+                setTimeout(syncPendingChanges, 60000); // Retry after 1 minute
+            }
+        }
+
+        // Check for pending syncs on page load
+        window.addEventListener('online', syncPendingChanges);
+        document.addEventListener('DOMContentLoaded', syncPendingChanges);
+
+        // Save notification settings
+        async function saveNotificationSettings() {
+            const notificationSettings = {};
+            const notificationCard = Array.from(document.querySelectorAll('.settings-card')).find(card => 
+                card.querySelector('h2').textContent.includes('Emergency Notification')
+            );
+            
+            if (notificationCard) {
+                const toggles = notificationCard.querySelectorAll('.toggle-switch input');
+                toggles.forEach(toggle => {
+                    const label = toggle.closest('.toggle-label').querySelector('h4').textContent;
+                    const settingKey = label.toLowerCase().replace(/\s+/g, '_');
+                    notificationSettings[settingKey] = toggle.checked;
+                });
+            }
+
+            const saveButton = event.target;
+            const originalText = saveButton.textContent;
+            saveButton.textContent = 'Saving...';
+            saveButton.disabled = true;
+
+            try {
+                const success = await saveToDatabase(notificationSettings, 'notifications');
+                
+                if (success) {
+                    // Update localStorage
+                    const userData = JSON.parse(localStorage.getItem('resq_user') || '{}');
+                    userData.notificationSettings = notificationSettings;
+                    localStorage.setItem('resq_user', JSON.stringify(userData));
+
+                    // Show success
+                    saveButton.textContent = 'Saved!';
+                    saveButton.style.backgroundColor = '#34a853';
+                    
+                    setTimeout(() => {
+                        saveButton.textContent = originalText;
+                        saveButton.style.backgroundColor = '';
+                        saveButton.disabled = false;
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('Error saving notification settings:', error);
+                alert('Error saving notification settings. Please try again.');
+                
+                saveButton.textContent = originalText;
+                saveButton.disabled = false;
+            }
+        }
+
+        // Save privacy settings
+        async function savePrivacySettings() {
+            const privacySettings = {};
+            const privacyCard = Array.from(document.querySelectorAll('.settings-card')).find(card => 
+                card.querySelector('h2').textContent.includes('Privacy')
+            );
+            
+            if (privacyCard) {
+                const toggles = privacyCard.querySelectorAll('.toggle-switch input');
+                toggles.forEach(toggle => {
+                    const label = toggle.closest('.toggle-label').querySelector('h4').textContent;
+                    const settingKey = label.toLowerCase().replace(/\s+/g, '_');
+                    privacySettings[settingKey] = toggle.checked;
+                });
+            }
+
+            const saveButton = event.target;
+            const originalText = saveButton.textContent;
+            saveButton.textContent = 'Saving...';
+            saveButton.disabled = true;
+
+            try {
+                const success = await saveToDatabase(privacySettings, 'privacy');
+                
+                if (success) {
+                    // Update localStorage
+                    const userData = JSON.parse(localStorage.getItem('resq_user') || '{}');
+                    userData.privacySettings = privacySettings;
+                    localStorage.setItem('resq_user', JSON.stringify(userData));
+
+                    // Show success
+                    saveButton.textContent = 'Saved!';
+                    saveButton.style.backgroundColor = '#34a853';
+                    
+                    setTimeout(() => {
+                        saveButton.textContent = originalText;
+                        saveButton.style.backgroundColor = '';
+                        saveButton.disabled = false;
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('Error saving privacy settings:', error);
+                alert('Error saving privacy settings. Please try again.');
+                
+                saveButton.textContent = originalText;
+                saveButton.disabled = false;
+            }
+        }
+
+        // Delete Account Function
+        async function deleteAccount() {
+            // First confirmation
+            const firstConfirm = confirm(
+                "⚠️ WARNING: Account Deletion\n\n" +
+                "This action will permanently delete your ResQ account and all associated data including:\n" +
+                "• Profile information\n" +
+                "• Emergency contacts\n" +
+                "• Training progress\n" +
+                "• Settings and preferences\n" +
+                "• Login history\n\n" +
+                "This action CANNOT be undone!\n\n" +
+                "Are you sure you want to continue?"
+            );
+
+            if (!firstConfirm) return;
+
+            // Second confirmation with password
+            const password = prompt(
+                "🔒 Security Verification\n\n" +
+                "To confirm account deletion, please enter your current password:\n\n" +
+                "Note: This is your final chance to cancel this action."
+            );
+
+            if (!password) {
+                alert("Account deletion cancelled.");
+                return;
+            }
+
+            // Third and final confirmation
+            const finalConfirm = confirm(
+                "🚨 FINAL CONFIRMATION\n\n" +
+                "You are about to PERMANENTLY DELETE your ResQ account.\n\n" +
+                "After clicking OK:\n" +
+                "• Your account will be deleted from our database\n" +
+                "• All your data will be permanently removed\n" +
+                "• You will be logged out and redirected to the landing page\n" +
+                "• This action is IRREVERSIBLE\n\n" +
+                "Click OK to PERMANENTLY DELETE your account, or Cancel to keep your account."
+            );
+
+            if (!finalConfirm) {
+                alert("Account deletion cancelled. Your account is safe.");
+                return;
+            }
+
+            // Show deletion in progress
+            const deleteButton = event.target;
+            const originalText = deleteButton.innerHTML;
+            deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting Account...';
+            deleteButton.disabled = true;
+            deleteButton.style.backgroundColor = '#dc3545';
+            deleteButton.style.color = 'white';
+
+            try {
+                // Call API to delete account
+                const success = await deleteAccountFromDatabase(password);
+                
+                if (success) {
+                    // Clear all local storage and session storage
+                    clearAllUserData();
+                    
+                    // Show success message
+                    alert(
+                        "✅ Account Deleted Successfully\n\n" +
+                        "Your ResQ account has been permanently deleted.\n" +
+                        "All your data has been removed from our systems.\n\n" +
+                        "Thank you for using ResQ. Stay safe!"
+                    );
+                    
+                    // Redirect to landing page
+                    window.location.href = '../Landing Page/frontend/index.html';
+                } else {
+                    throw new Error('Failed to delete account from database');
+                }
+            } catch (error) {
+                console.error('Error deleting account:', error);
+                
+                // Reset button
+                deleteButton.innerHTML = originalText;
+                deleteButton.disabled = false;
+                deleteButton.style.backgroundColor = '';
+                deleteButton.style.color = '';
+                
+                if (error.message.includes('password')) {
+                    alert('❌ Incorrect Password\n\nAccount deletion failed. The password you entered is incorrect.\n\nPlease try again with the correct password.');
+                } else if (error.message.includes('network') || error.message.includes('fetch')) {
+                    alert('❌ Network Error\n\nUnable to delete account due to network issues.\n\nPlease check your internet connection and try again.');
+                } else {
+                    alert('❌ Deletion Failed\n\nThere was an error deleting your account.\n\nPlease try again later or contact support if the problem persists.');
+                }
+            }
+        }
+
+        // Delete account from database
+        async function deleteAccountFromDatabase(password) {
+            try {
+                const user = JSON.parse(localStorage.getItem('resq_user') || '{}');
+                const authToken = localStorage.getItem('resq_authToken') || sessionStorage.getItem('resq_authToken');
+                
+                if (!authToken) {
+                    throw new Error('Authentication token not found. Please login again.');
+                }
+
+                const requestData = {
+                    userId: user.id || user.email,
+                    password: password,
+                    confirmDeletion: true,
+                    timestamp: new Date().toISOString()
+                };
+
+                console.log('Deleting account from database for user:', user.email);
+                
+                // API call to delete account
+                const response = await fetch(`${getApiBaseUrl()}/api/user/delete-account`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    
+                    if (response.status === 401) {
+                        throw new Error('Session expired. Please login again.');
+                    } else if (response.status === 403) {
+                        throw new Error('Incorrect password provided.');
+                    } else if (response.status === 404) {
+                        throw new Error('Account not found.');
+                    } else {
+                        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                    }
+                }
+                
+                const result = await response.json();
+                console.log('Account deletion successful:', result);
+                
+                return true;
+                
+            } catch (error) {
+                console.error('Error deleting account from database:', error);
+                throw error;
+            }
+        }
+
+        // Clear all user data from local storage
+        function clearAllUserData() {
+            // List of all ResQ-related localStorage keys
+            const resqKeys = [
+                'resq_user',
+                'resq_authToken', 
+                'resq_loginHistory',
+                'resq_pendingSync',
+                'resq_settings',
+                'resq_emergencyContacts',
+                'resq_trainingProgress',
+                'resq_chatHistory',
+                'disasterAI_chatHistory'
+            ];
+
+            // Clear specific ResQ data
+            resqKeys.forEach(key => {
+                localStorage.removeItem(key);
+            });
+
+            // Clear all sessionStorage
+            sessionStorage.clear();
+
+            // Clear any cookies related to ResQ (if any)
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+
+            console.log('All user data cleared from local storage');
+        }
+
+        // Logout from all devices function
+        async function logoutAllDevices() {
+            // Show confirmation dialog
+            const confirmed = confirm(
+                "🚪 Logout from All Devices\n\n" +
+                "This will:\n" +
+                "• Log you out from all devices and browsers\n" +
+                "• Clear all session data\n" +
+                "• Invalidate all authentication tokens\n" +
+                "• Redirect you to the landing page\n\n" +
+                "You will need to login again to access your account.\n\n" +
+                "Do you want to continue?"
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            // Show logout in progress
+            const logoutButton = event.target;
+            const originalText = logoutButton.innerHTML;
+            logoutButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+            logoutButton.disabled = true;
+            logoutButton.style.backgroundColor = '#f25c54';
+            logoutButton.style.color = 'white';
+
+            try {
+                // Call API to invalidate all sessions
+                const user = JSON.parse(localStorage.getItem('resq_user') || '{}');
+                const authToken = localStorage.getItem('resq_authToken') || sessionStorage.getItem('resq_authToken');
+                
+                if (authToken) {
+                    try {
+                        // Attempt to call logout API to invalidate server-side sessions
+                        const response = await fetch(`${getApiBaseUrl()}/api/auth/logout-all-devices`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${authToken}`,
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            body: JSON.stringify({
+                                userId: user.id || user.email,
+                                logoutAll: true,
+                                timestamp: new Date().toISOString()
+                            })
+                        });
+
+                        if (response.ok) {
+                            console.log('Successfully logged out from all devices on server');
+                        } else {
+                            console.warn('Server logout failed, but proceeding with client-side logout');
+                        }
+                    } catch (apiError) {
+                        console.warn('API logout failed:', apiError.message, 'Proceeding with client-side logout');
+                    }
+                }
+
+                // Clear all local data regardless of API success
+                clearAllUserData();
+
+                // Show success message briefly
+                logoutButton.innerHTML = '<i class="fas fa-check"></i> Logged out successfully!';
+                logoutButton.style.backgroundColor = '#34a853';
+
+                // Add fade out effect
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '0.3';
+
+                // Redirect after a short delay
+                setTimeout(() => {
+                    // Show loading overlay
+                    showLoadingIndicator();
+                    
+                    // Update loading text
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    if (loadingOverlay) {
+                        loadingOverlay.querySelector('h3').textContent = 'Logging out...';
+                        loadingOverlay.querySelector('p').textContent = 'Redirecting to landing page';
+                    }
+
+                    // Final redirect
+                    setTimeout(() => {
+                        window.location.href = '../Landing Page/frontend/index.html';
+                    }, 1000);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error during logout:', error);
+                
+                // Still clear local data and redirect on error
+                clearAllUserData();
+                
+                // Reset button temporarily to show error
+                logoutButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error, but logging out...';
+                logoutButton.style.backgroundColor = '#f9a825';
+                
+                // Still redirect after showing error
+                setTimeout(() => {
+                    window.location.href = '../Landing Page/frontend/index.html';
+                }, 2000);
+            }
+        }
+
         // Simple interactivity for settings page
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', function() {
@@ -642,8 +1771,11 @@
             });
         });
 
-        // Form submission handling
+        // Form submission handling (for other settings cards)
         document.querySelectorAll('.btn-primary').forEach(button => {
+            // Skip the profile save button as it has its own handler
+            if (button.onclick || button.textContent.includes('Save Changes')) return;
+            
             button.addEventListener('click', function() {
                 const card = this.closest('.settings-card');
                 const cardHeader = card.querySelector('.settings-card-header h2').textContent;

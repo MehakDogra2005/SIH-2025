@@ -846,7 +846,7 @@
                         <i class="fas fa-robot"></i>
                     </div>
                     <div class="empty-title">How can I help you today?</div>
-                    <div class="empty-subtitle">Ask me about disaster preparedness, emergency situations, or if you need psychological support. You can also upload images, videos, or PDFs for analysis.</div>
+                    <div class="empty-subtitle">Ask me about disaster preparedness, emergency situations, or if you need psychological support. Upload images, videos, or PDFs for specialized analysis with enhanced AI prompts.</div>
                     
                     <div class="suggestion-chips">
                         <div class="chip" onclick="sendSuggestion('I am feeling anxious about disaster')">😰 Feeling Anxious</div>
@@ -889,8 +889,8 @@
         let recognition = null;
         let currentMessage = '';
         
-        // Initialize chat history from localStorage
-        let chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+        // Initialize chat history from localStorage (shared with popup chatbot)
+        let chatHistory = JSON.parse(localStorage.getItem('disasterAI_chatHistory') || '[]');
         
         // Initialize speech recognition
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -952,9 +952,29 @@
         
         // Configuration for API handling
         let geminiApiKey = ''; // Will be set later
+        const BACKEND_URL = 'http://localhost:5000'; // Backend server URL
+        let backendAvailable = false;
+        
+        // Check backend availability on load
+        async function checkBackendStatus() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/status`);
+                const data = await response.json();
+                backendAvailable = data.backend_available;
+                console.log('Backend status:', data);
+                return data;
+            } catch (error) {
+                console.error('Backend not available:', error);
+                backendAvailable = false;
+                return null;
+            }
+        }
+        
         const isGeminiAvailable = () => geminiApiKey && geminiApiKey.trim() !== '';
         
         document.addEventListener('DOMContentLoaded', function() {
+            // Check backend availability
+            checkBackendStatus();
             // Initialize user profile
             initializeUserProfile();
             
@@ -973,8 +993,27 @@
             
             // Check if opened from consultation page
             if (document.referrer.includes('consultation.html') || window.opener) {
-                setTimeout(() => {
-                    addMessage("🚀 Welcome to Enhanced DisasterAI! You've accessed our improved chat interface with:\n\n✨ Better design and animations\n🆘 Advanced emergency protocols\n📁 Enhanced file upload support\n⌨️ Voice input capabilities\n🧠 Smarter AI responses\n\nHow can I assist you today?", 'ai');
+                setTimeout(async () => {
+                    const backendStatus = await checkBackendStatus();
+                    let welcomeMessage = "🚀 Welcome to Enhanced DisasterAI! You've accessed our improved chat interface with:\n\n✨ Better design and animations\n🆘 Advanced emergency protocols\n📁 Enhanced file upload support\n⌨️ Voice input capabilities\n🧠 Smarter AI responses\n\n";
+                    
+                    if (backendStatus && backendStatus.backend_available) {
+                        welcomeMessage += "🔧 **Backend Status**: Connected ✅\n";
+                        welcomeMessage += `📊 **Gemini API**: ${backendStatus.gemini_available ? 'Ready ✅' : 'Not configured ⚠️'}\n`;
+                        welcomeMessage += `📁 **File Support**: ${backendStatus.supported_files.join(', ')}\n`;
+                        welcomeMessage += `📏 **Max File Size**: ${backendStatus.max_file_size_mb}MB\n\n`;
+                        
+                        if (!backendStatus.gemini_available) {
+                            welcomeMessage += "💡 **Tip**: Set your Gemini API key using setGeminiApiKey('your-key') in console for enhanced AI features.\n\n";
+                        }
+                    } else {
+                        welcomeMessage += "⚠️ **Backend Status**: Offline (using local responses)\n\n";
+                        welcomeMessage += "💡 **Tip**: Start the Python backend server for enhanced AI features with specialized prompts.\n\n";
+                    }
+                    
+                    welcomeMessage += "How can I assist you today?";
+                    
+                    addMessage(welcomeMessage, 'ai');
                     emptyState.style.display = 'none';
                 }, 500);
             }
@@ -1121,12 +1160,56 @@
         }
         
         function processFile(file) {
-            if (isGeminiAvailable()) {
-                // Process with Gemini API
+            if (backendAvailable) {
+                // Process with backend API (which will use specialized prompts + Gemini)
+                processWithBackend(file);
+            } else if (isGeminiAvailable()) {
+                // Fallback to direct Gemini API
                 processWithGemini(file);
             } else {
                 // Fallback to local processing
                 processLocally(file);
+            }
+        }
+        
+        async function processWithBackend(file, userMessage = '') {
+            showTypingIndicator();
+            
+            try {
+                const formData = new FormData();
+                formData.append('message', userMessage || `[File: ${file.name}] Please analyze this file and provide disaster management guidance.`);
+                formData.append('files', file);
+                
+                const response = await fetch(`${BACKEND_URL}/api/chat`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    hideTypingIndicator();
+                    addMessage(data.response, 'ai');
+                    updateChatHistory(`[File: ${file.name}]`, data.response);
+                } else {
+                    throw new Error(data.error || 'Backend processing failed');
+                }
+                
+            } catch (error) {
+                console.error('Backend processing error:', error);
+                hideTypingIndicator();
+                
+                // Fallback to direct Gemini API if backend fails
+                if (isGeminiAvailable()) {
+                    addMessage('⚠️ Backend temporarily unavailable. Falling back to direct Gemini API...', 'ai');
+                    setTimeout(() => processWithGemini(file), 1000);
+                } else {
+                    addMessage('⚠️ Sorry, I encountered an error processing your file. Please ensure the backend server is running or provide a Gemini API key.', 'ai');
+                }
             }
         }
         
@@ -1224,6 +1307,31 @@
         function setGeminiApiKey(apiKey) {
             geminiApiKey = apiKey;
             console.log('Gemini API key configured');
+            
+            // Also configure backend if available
+            if (backendAvailable) {
+                configureBackendApiKey(apiKey);
+            }
+        }
+        
+        async function configureBackendApiKey(apiKey) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/config`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        api_key: apiKey
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('Backend API key configuration:', data);
+                
+            } catch (error) {
+                console.error('Failed to configure backend API key:', error);
+            }
         }
         
         // Make it globally accessible
@@ -1254,13 +1362,56 @@
             // Show typing indicator
             showTypingIndicator();
             
-            // Simulate AI response
-            setTimeout(() => {
+            // Process message with backend or fallback
+            if (backendAvailable) {
+                processMessageWithBackend(message);
+            } else {
+                // Fallback to local SLM responses
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = generateAIResponse(message);
+                    addMessage(response, 'ai');
+                    updateChatHistory(message, response);
+                }, 1500 + Math.random() * 1000);
+            }
+        }
+        
+        async function processMessageWithBackend(message) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
                 hideTypingIndicator();
+                
+                if (data.success) {
+                    addMessage(data.response, 'ai');
+                    updateChatHistory(message, data.response);
+                } else {
+                    throw new Error(data.error || 'Backend processing failed');
+                }
+                
+            } catch (error) {
+                console.error('Backend message processing error:', error);
+                hideTypingIndicator();
+                
+                // Fallback to local processing
                 const response = generateAIResponse(message);
-                addMessage(response, 'ai');
+                addMessage('⚠️ Backend temporarily unavailable. Using local responses.\n\n' + response, 'ai');
                 updateChatHistory(message, response);
-            }, 1500 + Math.random() * 1000);
+            }
         }
         
         function sendSuggestion(message) {
@@ -1383,7 +1534,7 @@
                         <i class="fas fa-robot"></i>
                     </div>
                     <div class="empty-title">How can I help you today?</div>
-                    <div class="empty-subtitle">Ask me about disaster preparedness, emergency situations, or if you need psychological support. You can also upload images, videos, or PDFs for analysis.</div>
+                    <div class="empty-subtitle">Ask me about disaster preparedness, emergency situations, or if you need psychological support. Upload images, videos, or PDFs for specialized analysis with enhanced AI prompts.</div>
                     
                     <div class="suggestion-chips">
                         <div class="chip" onclick="sendSuggestion('I am feeling anxious about disaster')">😰 Feeling Anxious</div>
@@ -1429,7 +1580,7 @@
             }
             
             // Save to localStorage
-            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+            localStorage.setItem('disasterAI_chatHistory', JSON.stringify(chatHistory));
             
             // Re-render history
             renderChatHistory();
@@ -1448,17 +1599,32 @@
             }
             
             historyContainer.innerHTML = chatHistory.map(chat => {
-                const date = new Date(chat.timestamp);
+                // Handle both old and new chat format
+                const date = new Date(chat.lastUpdate || chat.timestamp || chat.startTime);
                 const timeString = date.toLocaleDateString() === new Date().toLocaleDateString() 
                     ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     : date.toLocaleDateString();
                 
-                const preview = chat.messages[0]?.content.substring(0, 60) + (chat.messages[0]?.content.length > 60 ? '...' : '') || 'New conversation';
+                // Get preview from first user message
+                let preview = '';
+                if (chat.messages && chat.messages.length > 0) {
+                    const firstUserMsg = chat.messages.find(msg => msg.type === 'user' || msg.role === 'user');
+                    if (firstUserMsg) {
+                        preview = firstUserMsg.content.substring(0, 60) + (firstUserMsg.content.length > 60 ? '...' : '');
+                    } else {
+                        preview = chat.messages[0].content.substring(0, 60) + (chat.messages[0].content.length > 60 ? '...' : '');
+                    }
+                } else {
+                    preview = 'New conversation';
+                }
+                
+                // Add source indicator for popup chats
+                const sourceIndicator = chat.source === 'popup' ? ' <span style="color: var(--primary); font-size: 11px;">📱 Popup</span>' : '';
                 
                 return `
                     <div class="history-item ${chat.id === currentChatId ? 'active' : ''}" onclick="loadChat('${chat.id}')">
                         <div class="history-content">
-                            <div class="history-title" id="title-${chat.id}">${chat.title}</div>
+                            <div class="history-title" id="title-${chat.id}">${chat.title}${sourceIndicator}</div>
                             <div class="history-preview">${preview}</div>
                             <div class="history-time">${timeString}</div>
                         </div>
@@ -1484,10 +1650,22 @@
             const messagesContainer = document.getElementById('messagesContainer');
             messagesContainer.innerHTML = '';
             
-            // Load messages
-            chat.messages.forEach(message => {
-                addMessage(message.content, message.type);
-            });
+            // Load messages - handle both old and new format
+            if (chat.messages && chat.messages.length > 0) {
+                chat.messages.forEach(message => {
+                    // Handle popup chatbot format (type) vs full chatbot format (role)
+                    const messageType = message.type || message.role;
+                    // Convert 'bot' to 'ai' for consistency
+                    const displayType = messageType === 'bot' ? 'ai' : messageType;
+                    addMessage(message.content, displayType);
+                });
+            }
+            
+            // Hide empty state
+            const emptyState = document.getElementById('emptyState');
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
             
             // Update active state in history
             renderChatHistory();
@@ -1574,7 +1752,7 @@
                 chat.title = newName.trim();
                 
                 // Update localStorage
-                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                localStorage.setItem('disasterAI_chatHistory', JSON.stringify(chatHistory));
                 
                 // Update the current chat title if this is the active chat
                 if (currentChatId === chatId) {
@@ -1598,7 +1776,7 @@
                 chatHistory = chatHistory.filter(chat => chat.id !== chatId);
                 
                 // Update localStorage
-                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                localStorage.setItem('disasterAI_chatHistory', JSON.stringify(chatHistory));
                 
                 // If the deleted chat was the current one, start a new chat
                 if (currentChatId === chatId) {
