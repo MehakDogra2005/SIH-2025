@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Disaster Education Modules - DisasterSafe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #1a73e8;
@@ -65,8 +68,6 @@
             box-shadow: var(--shadow);
             z-index: 200;
             border-right: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
         }
 
         .logo {
@@ -588,8 +589,15 @@
         }
 
         @keyframes modalSlideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .close {
@@ -621,6 +629,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -630,8 +639,8 @@
                 <h1>ResQ</h1>
             </div>
             <div class="menu-items">
-                <div class="menu-item"><i class="fas fa-home"></i><span>Dashboard</span></div>
-                <div class="menu-item active"><i class="fas fa-book"></i><span>Education Modules</span></div>
+                <div class="menu-item active"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
                 <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
                 <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
                 <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
@@ -640,7 +649,7 @@
                 <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div>
                 <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
-            
+
             <!-- User Profile at Bottom -->
             <div class="sidebar-user-profile">
                 <div class="user-avatar" id="userAvatar">U</div>
@@ -656,229 +665,244 @@
             <div class="container">
                 <div class="page-header">
                     <h1 data-translate="title">Interactive Disaster Education</h1>
-                    <p data-translate="subtitle">Learn disaster management through immersive AR/VR experiences and interactive modules</p>
+                    <p data-translate="subtitle">Learn disaster management through immersive AR/VR experiences and
+                        interactive modules</p>
                 </div>
 
-        <div class="filters-section">
-            <h2 class="filters-title" data-translate="filters">Choose Your Learning Path</h2>
-            <div class="filter-groups">
-                <div class="filter-group">
-                    <h3 data-translate="ageGroup">Age Group</h3>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="age" data-value="all">All Ages</button>
-                        <button class="filter-btn" data-filter="age" data-value="1-5">1-5 Years</button>
-                        <button class="filter-btn" data-filter="age" data-value="5-8">5-8 Years</button>
-                        <button class="filter-btn" data-filter="age" data-value="8-12">8-12 Years</button>
-                        <button class="filter-btn" data-filter="age" data-value="12+">12+ Years</button>
+                <div class="filters-section">
+                    <h2 class="filters-title" data-translate="filters">Choose Your Learning Path</h2>
+                    <div class="filter-groups">
+                        <div class="filter-group">
+                            <h3 data-translate="ageGroup">Age Group</h3>
+                            <div class="filter-buttons">
+                                <button class="filter-btn active" data-filter="age" data-value="all">All Ages</button>
+                                <button class="filter-btn" data-filter="age" data-value="1-5">1-5 Years</button>
+                                <button class="filter-btn" data-filter="age" data-value="5-8">5-8 Years</button>
+                                <button class="filter-btn" data-filter="age" data-value="8-12">8-12 Years</button>
+                                <button class="filter-btn" data-filter="age" data-value="12+">12+ Years</button>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <h3 data-translate="topics">Topics</h3>
+                            <div class="filter-buttons">
+                                <button class="filter-btn active" data-filter="topic" data-value="all">All
+                                    Topics</button>
+                                <button class="filter-btn" data-filter="topic"
+                                    data-value="mitigation">Mitigation</button>
+                                <button class="filter-btn" data-filter="topic"
+                                    data-value="preparedness">Preparedness</button>
+                                <button class="filter-btn" data-filter="topic" data-value="first-aid">First Aid</button>
+                                <button class="filter-btn" data-filter="topic" data-value="response">Response</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="filter-group">
-                    <h3 data-translate="topics">Topics</h3>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="topic" data-value="all">All Topics</button>
-                        <button class="filter-btn" data-filter="topic" data-value="mitigation">Mitigation</button>
-                        <button class="filter-btn" data-filter="topic" data-value="preparedness">Preparedness</button>
-                        <button class="filter-btn" data-filter="topic" data-value="first-aid">First Aid</button>
-                        <button class="filter-btn" data-filter="topic" data-value="response">Response</button>
+
+                <div class="modules-grid" id="modulesGrid">
+                    <!-- Mitigation Modules -->
+                    <div class="module-card" data-age="1-5,5-8" data-topic="mitigation">
+                        <div class="ar-vr-indicator">AR Ready</div>
+                        <div class="module-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="age-tag">Ages 1-8</div>
+                        <h3>Flood Prevention Basics</h3>
+                        <p>Learn how to protect your home and family from floods through fun interactive activities and
+                            AR visualization.</p>
+                        <div class="module-features">
+                            <span class="feature-tag">AR Experience</span>
+                            <span class="feature-tag">Interactive</span>
+                            <span class="feature-tag">Beginner</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-primary" onclick="openModule('flood-prevention')">Start Learning</button>
+                            <button class="btn-secondary" onclick="previewAR('flood-ar')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="module-card" data-age="8-12,12+" data-topic="mitigation">
+                        <div class="ar-vr-indicator">VR Ready</div>
+                        <div class="module-icon">
+                            <i class="fas fa-mountain"></i>
+                        </div>
+                        <div class="age-tag">Ages 8+</div>
+                        <h3>Earthquake Safety Engineering</h3>
+                        <p>Understand building design and earthquake-resistant construction through immersive VR
+                            simulations.</p>
+                        <div class="module-features">
+                            <span class="feature-tag">VR Experience</span>
+                            <span class="feature-tag">Advanced</span>
+                            <span class="feature-tag">Engineering</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-primary" onclick="openModule('earthquake-engineering')">Start
+                                Learning</button>
+                            <button class="btn-secondary" onclick="previewAR('earthquake-vr')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preparedness Modules -->
+                    <div class="module-card" data-age="5-8,8-12" data-topic="preparedness">
+                        <div class="ar-vr-indicator">AR Ready</div>
+                        <div class="module-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="age-tag">Ages 5-12</div>
+                        <h3>Emergency Kit Builder</h3>
+                        <p>Create your family emergency kit using AR to visualize and organize essential supplies.</p>
+                        <div class="module-features">
+                            <span class="feature-tag">AR Experience</span>
+                            <span class="feature-tag">Practical</span>
+                            <span class="feature-tag">Family</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-primary" onclick="openModule('emergency-kit')">Start Learning</button>
+                            <button class="btn-secondary" onclick="previewAR('kit-ar')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="module-card" data-age="8-12,12+" data-topic="preparedness">
+                        <div class="module-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <div class="age-tag">Ages 8+</div>
+                        <h3>Evacuation Planning</h3>
+                        <p>Learn to create effective evacuation plans for different disaster scenarios using interactive
+                            mapping.</p>
+                        <div class="module-features">
+                            <span class="feature-tag">Interactive Map</span>
+                            <span class="feature-tag">Planning</span>
+                            <span class="feature-tag">Strategy</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-primary" onclick="openModule('evacuation-planning')">Start
+                                Learning</button>
+                            <button class="btn-secondary" onclick="previewAR('evacuation-ar')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- First Aid Modules -->
+                    <div class="module-card" data-age="5-8,8-12,12+" data-topic="first-aid">
+                        <div class="ar-vr-indicator">VR Ready</div>
+                        <div class="module-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="age-tag">Ages 5+</div>
+                        <h3>Basic Life Support</h3>
+                        <p>Master CPR and basic life support techniques through guided VR training with realistic
+                            scenarios.</p>
+                        <div class="module-features">
+                            <span class="feature-tag">VR Training</span>
+                            <span class="feature-tag">Life-saving</span>
+                            <span class="feature-tag">Certified</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-primary" onclick="openModule('basic-life-support')">Start
+                                Learning</button>
+                            <button class="btn-secondary" onclick="previewAR('cpr-vr')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="module-card" data-age="8-12,12+" data-topic="first-aid">
+                        <div class="ar-vr-indicator">AR Ready</div>
+                        <div class="module-icon">
+                            <i class="fas fa-band-aid"></i>
+                        </div>
+                        <div class="age-tag">Ages 8+</div>
+                        <h3>Wound Care & Treatment</h3>
+                        <p>Learn proper wound care and emergency treatment techniques using AR-guided tutorials.</p>
+                        <div class="module-features">
+                            <span class="feature-tag">AR Guidance</span>
+                            <span class="feature-tag">Medical</span>
+                            <span class="feature-tag">Hands-on</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-primary" onclick="openModule('wound-care')">Start Learning</button>
+                            <button class="btn-secondary" onclick="previewAR('wound-ar')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Response Modules -->
+                    <div class="module-card" data-age="1-5,5-8" data-topic="response">
+                        <div class="ar-vr-indicator">AR Ready</div>
+                        <div class="module-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="age-tag">Ages 1-8</div>
+                        <h3>What to Do When Disaster Strikes</h3>
+                        <p>Simple, age-appropriate steps for children during emergencies, taught through interactive AR
+                            stories.</p>
+                        <div class="module-features">
+                            <span class="feature-tag">AR Stories</span>
+                            <span class="feature-tag">Child-friendly</span>
+                            <span class="feature-tag">Essential</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-primary" onclick="openModule('disaster-response-kids')">Start
+                                Learning</button>
+                            <button class="btn-secondary" onclick="previewAR('response-ar')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="module-card" data-age="12+" data-topic="response">
+                        <div class="ar-vr-indicator">VR Ready</div>
+                        <div class="module-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="age-tag">Ages 12+</div>
+                        <h3>Community Response Leadership</h3>
+                        <p>Develop leadership skills for coordinating community disaster response through immersive VR
+                            scenarios.</p>
+                        <div class="module-features">
+                            <span class="feature-tag">VR Simulation</span>
+                            <span class="feature-tag">Leadership</span>
+                            <span class="feature-tag">Advanced</span>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn-primary" onclick="openModule('community-leadership')">Start
+                                Learning</button>
+                            <button class="btn-secondary" onclick="previewAR('leadership-vr')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="modules-grid" id="modulesGrid">
-            <!-- Mitigation Modules -->
-            <div class="module-card" data-age="1-5,5-8" data-topic="mitigation">
-                <div class="ar-vr-indicator">AR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-shield-alt"></i>
+                <div class="progress-section">
+                    <h2 class="progress-title" data-translate="progress">Your Learning Progress</h2>
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">7</div>
+                            <div class="stat-label">Modules Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Certificates Earned</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">15</div>
+                            <div class="stat-label">AR Experiences</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">2,340</div>
+                            <div class="stat-label">Learning Points</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="age-tag">Ages 1-8</div>
-                <h3>Flood Prevention Basics</h3>
-                <p>Learn how to protect your home and family from floods through fun interactive activities and AR visualization.</p>
-                <div class="module-features">
-                    <span class="feature-tag">AR Experience</span>
-                    <span class="feature-tag">Interactive</span>
-                    <span class="feature-tag">Beginner</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('flood-prevention')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('flood-ar')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="module-card" data-age="8-12,12+" data-topic="mitigation">
-                <div class="ar-vr-indicator">VR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-mountain"></i>
-                </div>
-                <div class="age-tag">Ages 8+</div>
-                <h3>Earthquake Safety Engineering</h3>
-                <p>Understand building design and earthquake-resistant construction through immersive VR simulations.</p>
-                <div class="module-features">
-                    <span class="feature-tag">VR Experience</span>
-                    <span class="feature-tag">Advanced</span>
-                    <span class="feature-tag">Engineering</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('earthquake-engineering')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('earthquake-vr')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Preparedness Modules -->
-            <div class="module-card" data-age="5-8,8-12" data-topic="preparedness">
-                <div class="ar-vr-indicator">AR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-box"></i>
-                </div>
-                <div class="age-tag">Ages 5-12</div>
-                <h3>Emergency Kit Builder</h3>
-                <p>Create your family emergency kit using AR to visualize and organize essential supplies.</p>
-                <div class="module-features">
-                    <span class="feature-tag">AR Experience</span>
-                    <span class="feature-tag">Practical</span>
-                    <span class="feature-tag">Family</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('emergency-kit')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('kit-ar')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="module-card" data-age="8-12,12+" data-topic="preparedness">
-                <div class="module-icon">
-                    <i class="fas fa-route"></i>
-                </div>
-                <div class="age-tag">Ages 8+</div>
-                <h3>Evacuation Planning</h3>
-                <p>Learn to create effective evacuation plans for different disaster scenarios using interactive mapping.</p>
-                <div class="module-features">
-                    <span class="feature-tag">Interactive Map</span>
-                    <span class="feature-tag">Planning</span>
-                    <span class="feature-tag">Strategy</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('evacuation-planning')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('evacuation-ar')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- First Aid Modules -->
-            <div class="module-card" data-age="5-8,8-12,12+" data-topic="first-aid">
-                <div class="ar-vr-indicator">VR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <div class="age-tag">Ages 5+</div>
-                <h3>Basic Life Support</h3>
-                <p>Master CPR and basic life support techniques through guided VR training with realistic scenarios.</p>
-                <div class="module-features">
-                    <span class="feature-tag">VR Training</span>
-                    <span class="feature-tag">Life-saving</span>
-                    <span class="feature-tag">Certified</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('basic-life-support')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('cpr-vr')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="module-card" data-age="8-12,12+" data-topic="first-aid">
-                <div class="ar-vr-indicator">AR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-band-aid"></i>
-                </div>
-                <div class="age-tag">Ages 8+</div>
-                <h3>Wound Care & Treatment</h3>
-                <p>Learn proper wound care and emergency treatment techniques using AR-guided tutorials.</p>
-                <div class="module-features">
-                    <span class="feature-tag">AR Guidance</span>
-                    <span class="feature-tag">Medical</span>
-                    <span class="feature-tag">Hands-on</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('wound-care')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('wound-ar')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Response Modules -->
-            <div class="module-card" data-age="1-5,5-8" data-topic="response">
-                <div class="ar-vr-indicator">AR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div class="age-tag">Ages 1-8</div>
-                <h3>What to Do When Disaster Strikes</h3>
-                <p>Simple, age-appropriate steps for children during emergencies, taught through interactive AR stories.</p>
-                <div class="module-features">
-                    <span class="feature-tag">AR Stories</span>
-                    <span class="feature-tag">Child-friendly</span>
-                    <span class="feature-tag">Essential</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('disaster-response-kids')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('response-ar')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="module-card" data-age="12+" data-topic="response">
-                <div class="ar-vr-indicator">VR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="age-tag">Ages 12+</div>
-                <h3>Community Response Leadership</h3>
-                <p>Develop leadership skills for coordinating community disaster response through immersive VR scenarios.</p>
-                <div class="module-features">
-                    <span class="feature-tag">VR Simulation</span>
-                    <span class="feature-tag">Leadership</span>
-                    <span class="feature-tag">Advanced</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('community-leadership')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('leadership-vr')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="progress-section">
-            <h2 class="progress-title" data-translate="progress">Your Learning Progress</h2>
-            <div class="progress-stats">
-                <div class="stat-item">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Modules Completed</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">3</div>
-                    <div class="stat-label">Certificates Earned</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">15</div>
-                    <div class="stat-label">AR Experiences</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">2,340</div>
-                    <div class="stat-label">Learning Points</div>
-                </div>
-            </div>
-        </div>
             </div>
         </main>
     </div>
@@ -896,7 +920,8 @@
                 <div style="text-align: center;">
                     <i class="fas fa-cube fa-3x" style="margin-bottom: 20px;"></i>
                     <p>AR/VR Experience Loading...</p>
-                    <p style="font-size: 0.9rem; opacity: 0.8;">Use your device's camera for AR mode or VR headset for full immersion</p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">Use your device's camera for AR mode or VR headset for
+                        full immersion</p>
                 </div>
             </div>
             <div style="text-align: center; margin-top: 20px;">
@@ -912,13 +937,13 @@
             try {
                 // First try to get user data from session/localStorage
                 let userData = null;
-                
+
                 // Check localStorage for stored user data
                 const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
                 if (localData) {
                     userData = JSON.parse(localData);
                 }
-                
+
                 // If no local data or token exists, try to fetch from backend
                 const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
                 if (!userData && token) {
@@ -930,7 +955,7 @@
                                 'Authorization': `Bearer ${token}`
                             }
                         });
-                        
+
                         if (response.ok) {
                             userData = await response.json();
                             // Save to localStorage for future use
@@ -942,19 +967,19 @@
                         console.log('Could not fetch user from backend:', fetchError.message);
                     }
                 }
-                
+
                 if (userData) {
                     const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
                     const lastName = userData.lastName || '';
                     const fullName = lastName ? `${firstName} ${lastName}` : firstName;
-                    
+
                     // Update sidebar user profile
                     const userNameElement = document.getElementById('sidebarUserName');
                     const userAvatarElement = document.getElementById('userAvatar');
-                    
+
                     if (userNameElement) userNameElement.textContent = fullName;
                     if (userAvatarElement) userAvatarElement.textContent = firstName.charAt(0).toUpperCase();
-                    
+
                     console.log('User loaded:', fullName);
                 } else {
                     // Fallback to default values
@@ -970,7 +995,7 @@
         function setDefaultUser() {
             const userNameElement = document.getElementById('sidebarUserName');
             const userAvatarElement = document.getElementById('userAvatar');
-            
+
             if (userNameElement) userNameElement.textContent = 'Guest User';
             if (userAvatarElement) userAvatarElement.textContent = 'G';
         }
@@ -991,37 +1016,37 @@
             const userProfile = document.querySelector('.sidebar-user-profile');
             if (userProfile) {
                 // Add hover effect only (no click navigation)
-                userProfile.addEventListener('mouseenter', function() {
+                userProfile.addEventListener('mouseenter', function () {
                     this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
                     this.style.borderRadius = '10px';
                     this.style.transition = 'all 0.2s ease';
                 });
-                
-                userProfile.addEventListener('mouseleave', function() {
+
+                userProfile.addEventListener('mouseleave', function () {
                     this.style.backgroundColor = 'transparent';
                 });
             }
         }
 
         // Load user info when page loads
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadUserInfo();
             initializeUserProfile();
         });
 
         // Menu Navigation
         document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function() {
+            item.addEventListener('click', function () {
                 // Remove active class from all items
                 document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
                 // Add active class to clicked item
                 this.classList.add('active');
-                
+
                 // Get the menu text
                 const menuText = this.querySelector('span').textContent.trim();
-                
+
                 // Navigate based on menu item
-                switch(menuText) {
+                switch (menuText) {
                     case 'Dashboard':
                         window.location.href = 'dashboard-student.html';
                         break;
@@ -1077,17 +1102,17 @@
         let currentFilters = { age: 'all', topic: 'all' };
 
         document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 const filterType = this.dataset.filter;
                 const value = this.dataset.value;
-                
+
                 // Update active state
                 document.querySelectorAll(`[data-filter="${filterType}"]`).forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                
+
                 // Update current filters
                 currentFilters[filterType] = value;
-                
+
                 // Apply filters
                 filterModules();
             });
@@ -1095,23 +1120,23 @@
 
         function filterModules() {
             const modules = document.querySelectorAll('.module-card');
-            
+
             modules.forEach(module => {
                 const moduleAges = module.dataset.age.split(',');
                 const moduleTopic = module.dataset.topic;
-                
+
                 let showModule = true;
-                
+
                 // Age filter
                 if (currentFilters.age !== 'all') {
                     showModule = showModule && moduleAges.includes(currentFilters.age);
                 }
-                
+
                 // Topic filter
                 if (currentFilters.topic !== 'all') {
                     showModule = showModule && moduleTopic === currentFilters.topic;
                 }
-                
+
                 module.style.display = showModule ? 'block' : 'none';
             });
         }
@@ -1127,7 +1152,7 @@
         }
 
         // Language change functionality
-        document.getElementById('languageSelect').addEventListener('change', function() {
+        document.getElementById('languageSelect').addEventListener('change', function () {
             const selectedLang = this.value;
             changeLanguage(selectedLang);
         });
@@ -1144,11 +1169,11 @@
         }
 
         // Modal functionality
-        document.querySelector('.close').addEventListener('click', function() {
+        document.querySelector('.close').addEventListener('click', function () {
             document.getElementById('arModal').style.display = 'none';
         });
 
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', function (event) {
             const modal = document.getElementById('arModal');
             if (event.target === modal) {
                 modal.style.display = 'none';
@@ -1161,9 +1186,10 @@
         }
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             filterModules();
         });
     </script>
 </body>
+
 </html>

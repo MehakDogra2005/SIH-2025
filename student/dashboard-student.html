@@ -152,7 +152,8 @@
             align-items: center;
             padding: 14px;
             border-radius: 12px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            /* background: linear-gradient(90deg, var(--primary), var(--primary-dark)); */
+            background: transparent;
             color: white;
             box-shadow: var(--shadow);
             gap: 12px;
@@ -213,8 +214,64 @@
         /* language selector aligned right and won't overlap due to header spacing */
         .header-right {
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 12px
+        }
+
+
+        /* Sidebar User Profile */
+        .sidebar-user-profile {
+            margin-top: auto;
+            padding: 12px;
+            margin: 0 -12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .sidebar-user-profile:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
         }
 
 
@@ -282,7 +339,7 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 14px 18px;
+            padding: 16px 18px;
             border-radius: 14px;
             background: linear-gradient(90deg, var(--p3), var(--accent));
             color: white;
@@ -292,7 +349,7 @@
             box-shadow: 0 10px 30px rgba(226, 26, 47, 0.12);
             transition: transform .12s ease;
             width: 100%;
-            max-width: 500px;
+            max-width: 300px;
         }
 
         .emergency-button:hover {
@@ -300,7 +357,7 @@
         }
 
         .emergency-button i {
-            font-size: 18px
+            font-size: 30px;
         }
 
         /* Alerts */
@@ -711,8 +768,15 @@
         }
 
         @keyframes fadeInOut {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* Hide Leaflet attribution */
@@ -765,9 +829,17 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .chatbot-input input {
@@ -957,37 +1029,22 @@
                 <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div>
                 <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
+
+            <!-- User Profile at Bottom -->
+            <div class="sidebar-user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h4 id="sidebarUserName">User</h4>
+                    <p>Student</p>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="header">
-                <div class="header-right">
-                    <div class="user-profile" title="Account">
-                        <i class="fas fa-user-circle" style="font-size:40px;color:#fff;"></i>
-                        <div>
-                            <h4 id="userName">User</h4>
-                            <p><span id="userPoints">0</span></p>
-                        </div>
-                    </div>
-                    <div class="language-selector">
-                        <select aria-label="Select language">
-                            <option value="en">English</option>
-                            <option value="hi">हिन्दी</option>
-                            <option value="bn">বাংলা</option>
-                            <option value="te">తెలుగు</option>
-                            <option value="mr">मराठी</option>
-                            <option value="ta">தமிழ்</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="header-right">
-                    <div>
-                        <button class="emergency-button" id="emergencyBtn"><i class="fas fa-exclamation-triangle"></i>
-                            REPORT DISASTER EMERGENCY</button>
-                    </div>
-                </div>
+            <div class="header-right">
+                <button class="emergency-button" id="emergencyBtn"><i class="fas fa-exclamation-triangle"></i>
+                    REPORT DISASTER EMERGENCY</button>
             </div>
 
             <!-- Real-time Alerts Section -->
@@ -1240,7 +1297,8 @@
                 </button>
             </div>
             <input id="chatInput" type="text" placeholder="Type your message here..." />
-            <input id="chatFileInput" type="file" accept="image/*,video/*,.pdf,.txt,.doc,.docx" style="display: none;" />
+            <input id="chatFileInput" type="file" accept="image/*,video/*,.pdf,.txt,.doc,.docx"
+                style="display: none;" />
             <button id="chatSend" style="background: linear-gradient(90deg, var(--primary), var(--primary-dark));"><i
                     class="fas fa-paper-plane"></i></button>
         </div>
@@ -1261,13 +1319,13 @@
             try {
                 // First try to get user data from session/localStorage
                 let userData = null;
-                
+
                 // Check localStorage for stored user data
                 const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
                 if (localData) {
                     userData = JSON.parse(localData);
                 }
-                
+
                 // If no local data or token exists, try to fetch from backend
                 const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
                 if (!userData && token) {
@@ -1279,7 +1337,7 @@
                                 'Authorization': `Bearer ${token}`
                             }
                         });
-                        
+
                         if (response.ok) {
                             userData = await response.json();
                             // Save to localStorage for future use
@@ -1291,19 +1349,19 @@
                         console.log('Could not fetch user from backend:', fetchError.message);
                     }
                 }
-                
+
                 if (userData) {
                     const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
                     const lastName = userData.lastName || '';
                     const fullName = lastName ? `${firstName} ${lastName}` : firstName;
-                    
-                    // Update header user profile
-                    const userNameElement = document.getElementById('userName');
-                    const userPointsElement = document.getElementById('userPoints');
-                    
+
+                    // Update sidebar user profile
+                    const userNameElement = document.getElementById('sidebarUserName');
+                    const userAvatarElement = document.getElementById('userAvatar');
+
                     if (userNameElement) userNameElement.textContent = fullName;
-                    if (userPointsElement) userPointsElement.textContent = userData.points || 0;
-                    
+                    if (userAvatarElement) userAvatarElement.textContent = firstName.charAt(0).toUpperCase();
+
                     console.log('User loaded:', fullName);
                 } else {
                     // Fallback to default values
@@ -1319,7 +1377,7 @@
         function setDefaultUser() {
             const userNameElement = document.getElementById('userName');
             const userPointsElement = document.getElementById('userPoints');
-            
+
             if (userNameElement) userNameElement.textContent = 'Guest User';
             if (userPointsElement) userPointsElement.textContent = '0';
         }
@@ -1327,7 +1385,7 @@
         // FETCHING POINTS AND USER DATA FROM DATABASE
         window.addEventListener('DOMContentLoaded', () => {
             loadUserInfo();
-            
+
             // Refresh user data every 5 minutes
             setInterval(loadUserInfo, 5 * 60 * 1000);
         });
@@ -1924,7 +1982,7 @@
         /**********************
          * Chat History Management
          **********************/
-        
+
         // Chat session tracking
         let currentChatId = null;
         let chatStartTime = null;
@@ -1953,7 +2011,7 @@
         // Save chat session to localStorage
         function saveChatSession() {
             if (!currentChatId || sessionMessages.length <= 1) return; // Don't save empty chats
-            
+
             const chatData = {
                 id: currentChatId,
                 title: generateChatTitle(),
@@ -1965,7 +2023,7 @@
 
             // Get existing chats
             const existingChats = JSON.parse(localStorage.getItem('disasterAI_chatHistory') || '[]');
-            
+
             // Check if chat already exists and update it, or add new
             const existingIndex = existingChats.findIndex(chat => chat.id === currentChatId);
             if (existingIndex >= 0) {
@@ -2025,7 +2083,7 @@
                         'Content-Type': 'application/json',
                     }
                 });
-                
+
                 if (response.ok) {
                     const status = await response.json();
                     backendAvailable = status.status === 'ready';
@@ -2047,7 +2105,7 @@
 
             const formData = new FormData();
             formData.append('message', message);
-            
+
             // Append files if any
             files.forEach((file, index) => {
                 formData.append('files', file);
@@ -2074,18 +2132,18 @@
             recognition.interimResults = false;
             recognition.lang = 'en-US';
 
-            recognition.onresult = function(event) {
+            recognition.onresult = function (event) {
                 const transcript = event.results[0][0].transcript;
                 chatInput.value = transcript;
                 stopRecording();
             };
 
-            recognition.onerror = function(event) {
+            recognition.onerror = function (event) {
                 console.error('Speech recognition error:', event.error);
                 stopRecording();
             };
 
-            recognition.onend = function() {
+            recognition.onend = function () {
                 stopRecording();
             };
         }
@@ -2096,7 +2154,7 @@
                 alert('Speech recognition is not supported in your browser.');
                 return;
             }
-            
+
             isRecording = true;
             chatMic.classList.add('recording');
             chatMic.title = 'Stop Recording';
@@ -2208,7 +2266,7 @@
 
             } catch (error) {
                 console.error('Error getting response:', error);
-                
+
                 // Remove typing indicator
                 chatMessages.removeChild(typingDiv);
 
@@ -2217,7 +2275,7 @@
                 errorDiv.className = 'message bot-message';
                 errorDiv.textContent = 'Sorry, I encountered an error. Please try again or use the full chatbot for enhanced features.';
                 chatMessages.appendChild(errorDiv);
-                
+
                 // Add error message to session
                 const errorMessage = {
                     type: 'bot',
@@ -2225,7 +2283,7 @@
                     timestamp: new Date()
                 };
                 sessionMessages.push(errorMessage);
-                
+
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 saveChatSession();
             }
@@ -2234,7 +2292,7 @@
         // Local response fallback function
         function getLocalResponse(message) {
             const m = message.toLowerCase();
-            
+
             if (m.includes('flood'))
                 return 'During flooding, avoid electrical equipment, move to higher ground, and do not walk through moving water. Turn off utilities if safe.';
             else if (m.includes('earthquake'))
@@ -2324,10 +2382,10 @@
 
                 if (backendAvailable) {
                     // Send file to backend for AI processing
-                    const fileAnalysisMessage = `Please analyze this ${file.type.startsWith('image/') ? 'image' : 
-                        file.type === 'application/pdf' ? 'PDF document' : 
-                        file.type.startsWith('video/') ? 'video' : 'file'} in the context of disaster management and safety.`;
-                    
+                    const fileAnalysisMessage = `Please analyze this ${file.type.startsWith('image/') ? 'image' :
+                        file.type === 'application/pdf' ? 'PDF document' :
+                            file.type.startsWith('video/') ? 'video' : 'file'} in the context of disaster management and safety.`;
+
                     response = await sendToBackend(fileAnalysisMessage, [file]);
                 } else {
                     // Fallback response when backend is not available
@@ -2366,7 +2424,7 @@
 
             } catch (error) {
                 console.error('Error processing file:', error);
-                
+
                 // Remove processing indicator
                 chatMessages.removeChild(processingDiv);
 
@@ -2374,7 +2432,7 @@
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'message bot-message';
                 errorDiv.textContent = 'Sorry, I encountered an error while processing your file. Please try again or use the full chatbot for enhanced features.';
-                
+
                 // Add error message to session
                 const errorMessage = {
                     type: 'bot',
@@ -2382,7 +2440,7 @@
                     timestamp: new Date()
                 };
                 sessionMessages.push(errorMessage);
-                
+
                 chatMessages.appendChild(errorDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 saveChatSession();
