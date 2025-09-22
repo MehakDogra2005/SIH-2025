@@ -359,12 +359,82 @@
                 // Save completion status to localStorage
                 // Mark module as completed if all lessons/quizzes are done
                 if ((lessonsCompleted + quizzesCompleted) === 7) {
-                    localStorage.setItem('flood-prevention-completed', 'true');
+                    // Use new progress tracking system
+                    markFloodPreventionCompleted();
+                } else {
+                    // Mark as viewed even if not completed
+                    markFloodPreventionViewed();
                 }
                 window.location.href = 'education-modules.html';
             };
         }
     });
+
+    // New progress tracking functions
+    function markFloodPreventionCompleted() {
+        try {
+            const savedProgress = localStorage.getItem('resq_user_progress');
+            let progress = savedProgress ? JSON.parse(savedProgress) : {
+                modulesCompleted: 0,
+                certificatesEarned: 0,
+                arExperiences: 0,
+                learningPoints: 0,
+                completedModules: [],
+                viewedModules: []
+            };
+            
+            // Add module to completed list if not already there
+            if (!progress.completedModules.includes('flood-prevention')) {
+                progress.completedModules.push('flood-prevention');
+                progress.modulesCompleted = progress.completedModules.length;
+                
+                // Award points and experiences
+                progress.learningPoints += 300; // 300 points per module
+                progress.arExperiences += 1; // This is an AR module
+                
+                // Award certificate every 3 completed modules
+                if (progress.modulesCompleted % 3 === 0) {
+                    progress.certificatesEarned = Math.floor(progress.modulesCompleted / 3);
+                }
+                
+                localStorage.setItem('resq_user_progress', JSON.stringify(progress));
+                
+                // Legacy support
+                localStorage.setItem('flood-prevention-completed', 'true');
+            }
+        } catch (error) {
+            console.error('Error saving completion progress:', error);
+            // Fallback to legacy system
+            localStorage.setItem('flood-prevention-completed', 'true');
+        }
+    }
+
+    function markFloodPreventionViewed() {
+        try {
+            const savedProgress = localStorage.getItem('resq_user_progress');
+            let progress = savedProgress ? JSON.parse(savedProgress) : {
+                modulesCompleted: 0,
+                certificatesEarned: 0,
+                arExperiences: 0,
+                learningPoints: 0,
+                completedModules: [],
+                viewedModules: []
+            };
+            
+            // Initialize viewedModules if it doesn't exist
+            if (!progress.viewedModules) {
+                progress.viewedModules = [];
+            }
+            
+            // Add module to viewed list if not already there
+            if (!progress.viewedModules.includes('flood-prevention')) {
+                progress.viewedModules.push('flood-prevention');
+                localStorage.setItem('resq_user_progress', JSON.stringify(progress));
+            }
+        } catch (error) {
+            console.error('Error saving view progress:', error);
+        }
+    }
     // Demo modules and quizzes data
     const modules = [
         {
@@ -662,7 +732,7 @@
             document.getElementById('final-score-display').textContent = `${points} points`;
             // Save completion status when final is reached
             if ((lessonsCompleted + quizzesCompleted) === 7) {
-                localStorage.setItem('flood-prevention-completed', 'true');
+                markFloodPreventionCompleted();
             }
         }
     }

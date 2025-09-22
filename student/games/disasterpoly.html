@@ -189,28 +189,44 @@
         }
         
         .property {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-top: 6px solid #ccc;
+            position: relative;
+        }
+        
+        .property.brown { border-top-color: #8B4513; }
+        .property.light-blue { border-top-color: #87CEEB; }
+        .property.pink { border-top-color: #FF69B4; }
+        .property.orange { border-top-color: #FFA500; }
+        .property.red { border-top-color: #FF0000; }
+        .property.yellow { border-top-color: #FFFF00; }
+        .property.green { border-top-color: #00FF00; }
+        .property.dark-blue { border-top-color: #0000FF; }
+        
+        .railroad {
             background: linear-gradient(135deg, var(--p1), #2f8fc1);
             color: white;
         }
         
-        .emergency-service {
-            background: linear-gradient(135deg, var(--secondary), #2ea044);
+        .utility {
+            background: linear-gradient(135deg, var(--p2), #f1a85b);
             color: white;
         }
         
-        .disaster-zone {
-            background: linear-gradient(135deg, var(--accent), #ea6f7b);
-            color: white;
-        }
-        
-        .safe-zone {
+        .community-chest {
             background: linear-gradient(135deg, var(--p6), var(--p1));
             color: var(--text-dark);
         }
         
-        .special {
-            background: linear-gradient(135deg, var(--p2), #f1a85b);
+        .chance {
+            background: linear-gradient(135deg, var(--accent), #f56b77);
             color: white;
+        }
+        
+        .tax {
+            background: linear-gradient(135deg, var(--p5), #d4a5c7);
+            color: var(--text-dark);
         }
         
         .player {
@@ -890,29 +906,32 @@
             
             <h2><i class="fas fa-gamepad"></i> How to Play</h2>
             <ul class="rules-list">
-                <li>Roll dice to move around the disaster preparedness board</li>
-                <li>Buy <span class="highlight">Emergency Services</span> to protect your community</li>
-                <li>Avoid <span class="highlight">Disaster Zones</span> or pay the penalty</li>
-                <li>Collect resources and improve your preparedness</li>
-                <li>Draw disaster cards and respond to emergencies</li>
-                <li>First to reach 1000 preparedness points wins!</li>
+                <li>Roll dice to move around the emergency preparedness board</li>
+                <li>Buy <span class="highlight">Properties</span> to collect rent from other players</li>
+                <li>Complete <span class="highlight">Property Groups</span> to double rent and build facilities</li>
+                <li>Draw <span class="highlight">Community Chest</span> and <span class="highlight">Chance</span> cards for events</li>
+                <li>Avoid going to the <span class="highlight">Emergency Shelter</span> (jail)</li>
+                <li>Build your emergency preparedness empire and bankrupt opponents!</li>
             </ul>
             
             <h2><i class="fas fa-map-marked-alt"></i> Space Types</h2>
             <ul class="disaster-list">
-                <li><span style="color: var(--secondary);"><i class="fas fa-hospital"></i> Emergency Services</span> - Buyable protective facilities</li>
-                <li><span style="color: var(--accent);"><i class="fas fa-exclamation-triangle"></i> Disaster Zones</span> - Pay penalty or use resources</li>
-                <li><span style="color: var(--p1);"><i class="fas fa-shield-alt"></i> Safe Zones</span> - Gain resources and safety</li>
-                <li><span style="color: var(--p2);"><i class="fas fa-question-circle"></i> Special Events</span> - Random disaster scenarios</li>
-                <li><span style="color: var(--primary);"><i class="fas fa-star"></i> Corner Spaces</span> - Major emergency events</li>
+                <li><span style="color: var(--primary);"><i class="fas fa-home"></i> Properties</span> - Buyable emergency facilities (8 color groups)</li>
+                <li><span style="color: var(--p1);"><i class="fas fa-road"></i> Evacuation Routes</span> - Emergency transportation (4 railroads)</li>
+                <li><span style="color: var(--p2);"><i class="fas fa-plug"></i> Utilities</span> - Essential services (2 utilities)</li>
+                <li><span style="color: var(--p6);"><i class="fas fa-users"></i> Community Chest</span> - Community emergency actions</li>
+                <li><span style="color: var(--accent);"><i class="fas fa-question-circle"></i> Chance</span> - Unexpected disaster scenarios</li>
+                <li><span style="color: var(--p5);"><i class="fas fa-coins"></i> Tax Spaces</span> - Emergency preparedness taxes</li>
             </ul>
             
-            <h2><i class="fas fa-box"></i> Resources</h2>
+            <h2><i class="fas fa-coins"></i> Monopoly Rules</h2>
             <ul class="rules-list">
-                <li><span class="highlight"><i class="fas fa-dollar-sign"></i> Money:</span> Buy emergency services and supplies</li>
-                <li><span class="highlight"><i class="fas fa-heart"></i> Preparedness:</span> Your disaster readiness score</li>
-                <li><span class="highlight"><i class="fas fa-first-aid"></i> Supplies:</span> Emergency kits and equipment</li>
-                <li><span class="highlight"><i class="fas fa-graduation-cap"></i> Knowledge:</span> Training and education points</li>
+                <li><span class="highlight"><i class="fas fa-home"></i> Property Groups:</span> Own all properties in a color group to double rent</li>
+                <li><span class="highlight"><i class="fas fa-road"></i> Evacuation Routes:</span> Rent increases with number owned (1-4 routes)</li>
+                <li><span class="highlight"><i class="fas fa-plug"></i> Utilities:</span> Rent = dice roll × 4 (1 owned) or × 10 (both owned)</li>
+                <li><span class="highlight"><i class="fas fa-home"></i> Emergency Shelter:</span> 3 ways out - roll doubles, pay $50, or use special card</li>
+                <li><span class="highlight"><i class="fas fa-parking"></i> Free Parking:</span> Collect all tax money accumulated</li>
+                <li><span class="highlight"><i class="fas fa-dice"></i> Doubles:</span> Roll again! But 3 doubles in a row = go to jail</li>
             </ul>
 
             <h3><i class="fas fa-cloud-bolt"></i> Disaster Events Include:</h3>
@@ -950,11 +969,14 @@
                 <button id="roll-dice" title="Roll the dice to move your player around the board">
                     <i class="fas fa-dice"></i> Roll Dice
                 </button>
-                <button id="buy-property" disabled title="Purchase this emergency service to improve your preparedness">
-                    <i class="fas fa-shopping-cart"></i> Buy Property ($200)
+                <button id="buy-property" disabled title="Purchase available properties">
+                    <i class="fas fa-shopping-cart"></i> Buy Property
                 </button>
-                <button id="use-supplies" disabled title="Use emergency supplies to avoid disaster penalty">
-                    <i class="fas fa-first-aid"></i> Use Supplies
+                <button id="pay-jail-fine" disabled title="Pay $50 to leave Emergency Shelter immediately">
+                    <i class="fas fa-dollar-sign"></i> Pay Jail Fine ($50)
+                </button>
+                <button id="use-jail-card" disabled title="Use Get Out of Jail Free card">
+                    <i class="fas fa-credit-card"></i> Use Jail Card
                 </button>
                 <button id="end-turn" disabled title="End your turn and let the next player play">
                     <i class="fas fa-forward"></i> End Turn
@@ -968,21 +990,19 @@
                 <div class="player-card active" id="player1-card">
                     <h4><i class="fas fa-user-circle" style="color: #e74c3c;"></i> Player 1</h4>
                     <div><i class="fas fa-dollar-sign"></i> Money: $<span id="p1-money">1500</span></div>
-                    <div><i class="fas fa-heart"></i> Preparedness: <span id="p1-preparedness">100</span></div>
-                    <div><i class="fas fa-first-aid"></i> Supplies: <span id="p1-supplies">3</span></div>
-                    <div><i class="fas fa-graduation-cap"></i> Knowledge: <span id="p1-knowledge">10</span></div>
-                    <div class="resource-bar">
-                        <div class="resource-fill" id="p1-resource-bar" style="width: 10%"></div>
+                    <div><i class="fas fa-home"></i> Properties: <span id="p1-properties">0</span></div>
+                    <div><i class="fas fa-credit-card"></i> Get Out of Jail Free: <span id="p1-jail-cards">0</span></div>
+                    <div id="p1-status" class="status-indicator safe">
+                        <i class="fas fa-check-circle"></i> <span>Active</span>
                     </div>
                 </div>
                 <div class="player-card" id="player2-card">
                     <h4><i class="fas fa-user-circle" style="color: #3498db;"></i> Player 2</h4>
                     <div><i class="fas fa-dollar-sign"></i> Money: $<span id="p2-money">1500</span></div>
-                    <div><i class="fas fa-heart"></i> Preparedness: <span id="p2-preparedness">100</span></div>
-                    <div><i class="fas fa-first-aid"></i> Supplies: <span id="p2-supplies">3</span></div>
-                    <div><i class="fas fa-graduation-cap"></i> Knowledge: <span id="p2-knowledge">10</span></div>
-                    <div class="resource-bar">
-                        <div class="resource-fill" id="p2-resource-bar" style="width: 10%"></div>
+                    <div><i class="fas fa-home"></i> Properties: <span id="p2-properties">0</span></div>
+                    <div><i class="fas fa-credit-card"></i> Get Out of Jail Free: <span id="p2-jail-cards">0</span></div>
+                    <div id="p2-status" class="status-indicator">
+                        <i class="fas fa-clock"></i> <span>Waiting</span>
                     </div>
                 </div>
             </div>
@@ -1045,128 +1065,147 @@
         const gameState = {
             currentPlayer: 0,
             players: [
-                { position: 0, money: 1500, preparedness: 100, supplies: 3, knowledge: 10, properties: [], color: '#e74c3c' },
-                { position: 0, money: 1500, preparedness: 100, supplies: 3, knowledge: 10, properties: [], color: '#3498db' }
+                { 
+                    position: 0, 
+                    money: 1500, 
+                    properties: [], 
+                    color: '#e74c3c',
+                    inJail: false,
+                    jailTurns: 0,
+                    getOutOfJailFreeCards: 0,
+                    bankrupt: false
+                },
+                { 
+                    position: 0, 
+                    money: 1500, 
+                    properties: [], 
+                    color: '#3498db',
+                    inJail: false,
+                    jailTurns: 0,
+                    getOutOfJailFreeCards: 0,
+                    bankrupt: false
+                }
             ],
             round: 1,
             turn: 1,
             diceRolled: false,
             lastRoll: [0, 0],
+            doublesCount: 0,
             gameBoard: null,
-            disasterCards: [],
             winner: null,
-            gameStarted: false
+            gameStarted: false,
+            freeParkingMoney: 0,
+            housesRemaining: 32,
+            hotelsRemaining: 12
         };
 
-        // Board spaces configuration
+        // Board spaces configuration - Monopoly style with disaster preparedness theme
         const boardSpaces = [
-            // Corner spaces (0, 10, 20, 30)
-            { id: 0, name: "Emergency HQ", type: "corner", emoji: "🏛️", effect: "start" },
-            { id: 10, name: "Disaster Relief", type: "corner", emoji: "🚑", effect: "relief" },
-            { id: 20, name: "FEMA Station", type: "corner", emoji: "🏢", effect: "fema" },
-            { id: 30, name: "Command Center", type: "corner", emoji: "📡", effect: "command" },
+            // Corner spaces
+            { id: 0, name: "GO", type: "corner", emoji: "�", effect: "go", description: "Collect $200 as you pass" },
+            { id: 10, name: "EMERGENCY SHELTER", type: "corner", emoji: "🏠", effect: "jail", description: "Just Visiting / In Emergency Shelter" },
+            { id: 20, name: "FREE PARKING", type: "corner", emoji: "�️", effect: "free-parking", description: "Free Parking - Safe Space" },
+            { id: 30, name: "GO TO SHELTER", type: "corner", emoji: "➡️🏠", effect: "go-to-jail", description: "Go Directly to Emergency Shelter" },
             
-            // Emergency Services (buyable properties)
-            { id: 1, name: "Fire Station", type: "emergency-service", price: 200, emoji: "🚒" },
-            { id: 3, name: "Hospital", type: "emergency-service", price: 250, emoji: "🏥" },
-            { id: 6, name: "Police Station", type: "emergency-service", price: 180, emoji: "👮" },
-            { id: 8, name: "Rescue Squad", type: "emergency-service", price: 220, emoji: "🚁" },
-            { id: 11, name: "Emergency Shelter", type: "emergency-service", price: 160, emoji: "🏠" },
-            { id: 13, name: "Food Bank", type: "emergency-service", price: 140, emoji: "🍲" },
-            { id: 16, name: "Medical Clinic", type: "emergency-service", price: 200, emoji: "⚕️" },
-            { id: 18, name: "Weather Station", type: "emergency-service", price: 300, emoji: "🌡️" },
-            { id: 21, name: "Communication Hub", type: "emergency-service", price: 280, emoji: "📻" },
-            { id: 23, name: "Water Treatment", type: "emergency-service", price: 320, emoji: "💧" },
-            { id: 26, name: "Power Plant", type: "emergency-service", price: 350, emoji: "⚡" },
-            { id: 28, name: "Supply Depot", type: "emergency-service", price: 240, emoji: "📦" },
-            { id: 31, name: "Training Center", type: "emergency-service", price: 260, emoji: "🎓" },
-            { id: 33, name: "Emergency Broadcast", type: "emergency-service", price: 300, emoji: "📺" },
-            { id: 36, name: "Evacuation Route", type: "emergency-service", price: 280, emoji: "🛣️" },
-            { id: 38, name: "Backup Generator", type: "emergency-service", price: 200, emoji: "🔋" },
+            // Property Group 1 - Brown (Emergency Response)
+            { id: 1, name: "Fire Station Alpha", type: "property", group: "brown", price: 60, rent: [2, 10, 30, 90, 160, 250], emoji: "🚒", color: "#8B4513" },
+            { id: 3, name: "Rescue Squad Base", type: "property", group: "brown", price: 60, rent: [4, 20, 60, 180, 320, 450], emoji: "🚑", color: "#8B4513" },
             
-            // Disaster Zones
-            { id: 2, name: "Tornado Alley", type: "disaster-zone", penalty: 100, emoji: "🌪️" },
-            { id: 7, name: "Flood Zone", type: "disaster-zone", penalty: 120, emoji: "🌊" },
-            { id: 12, name: "Wildfire Area", type: "disaster-zone", penalty: 150, emoji: "🔥" },
-            { id: 17, name: "Earthquake Fault", type: "disaster-zone", penalty: 180, emoji: "🌋" },
-            { id: 22, name: "Hurricane Path", type: "disaster-zone", penalty: 200, emoji: "💨" },
-            { id: 27, name: "Blizzard Zone", type: "disaster-zone", penalty: 130, emoji: "❄️" },
-            { id: 32, name: "Heat Wave Area", type: "disaster-zone", penalty: 110, emoji: "🌡️" },
-            { id: 37, name: "Storm Front", type: "disaster-zone", penalty: 140, emoji: "⛈️" },
+            // Property Group 2 - Light Blue (Medical Facilities)
+            { id: 6, name: "Community Hospital", type: "property", group: "light-blue", price: 100, rent: [6, 30, 90, 270, 400, 550], emoji: "🏥", color: "#87CEEB" },
+            { id: 8, name: "Medical Center", type: "property", group: "light-blue", price: 100, rent: [6, 30, 90, 270, 400, 550], emoji: "⚕️", color: "#87CEEB" },
+            { id: 9, name: "Emergency Clinic", type: "property", group: "light-blue", price: 120, rent: [8, 40, 100, 300, 450, 600], emoji: "�", color: "#87CEEB" },
             
-            // Safe Zones
-            { id: 4, name: "Safe Harbor", type: "safe-zone", reward: 50, emoji: "🛡️" },
-            { id: 14, name: "Evacuation Center", type: "safe-zone", reward: 60, emoji: "🏕️" },
-            { id: 24, name: "Relief Station", type: "safe-zone", reward: 70, emoji: "🎪" },
-            { id: 34, name: "Safety Zone", type: "safe-zone", reward: 80, emoji: "🛡️" },
+            // Property Group 3 - Pink (Communication)
+            { id: 11, name: "Radio Tower", type: "property", group: "pink", price: 140, rent: [10, 50, 150, 450, 625, 750], emoji: "📻", color: "#FF69B4" },
+            { id: 13, name: "TV Broadcast", type: "property", group: "pink", price: 140, rent: [10, 50, 150, 450, 625, 750], emoji: "📺", color: "#FF69B4" },
+            { id: 14, name: "Emergency Alert", type: "property", group: "pink", price: 160, rent: [12, 60, 180, 500, 700, 900], emoji: "�", color: "#FF69B4" },
             
-            // Special Events
-            { id: 5, name: "Disaster Card", type: "special", emoji: "❓" },
-            { id: 9, name: "Emergency Drill", type: "special", emoji: "🎯" },
-            { id: 15, name: "Disaster Card", type: "special", emoji: "❓" },
-            { id: 19, name: "Emergency Drill", type: "special", emoji: "🎯" },
-            { id: 25, name: "Disaster Card", type: "special", emoji: "❓" },
-            { id: 29, name: "Emergency Drill", type: "special", emoji: "🎯" },
-            { id: 35, name: "Disaster Card", type: "special", emoji: "❓" },
-            { id: 39, name: "Emergency Drill", type: "special", emoji: "🎯" }
+            // Property Group 4 - Orange (Relief Services)
+            { id: 16, name: "Food Bank", type: "property", group: "orange", price: 180, rent: [14, 70, 200, 550, 750, 950], emoji: "🍲", color: "#FFA500" },
+            { id: 18, name: "Supply Depot", type: "property", group: "orange", price: 180, rent: [14, 70, 200, 550, 750, 950], emoji: "📦", color: "#FFA500" },
+            { id: 19, name: "Relief Center", type: "property", group: "orange", price: 200, rent: [16, 80, 220, 600, 800, 1000], emoji: "�", color: "#FFA500" },
+            
+            // Property Group 5 - Red (Critical Infrastructure)
+            { id: 21, name: "Power Plant", type: "property", group: "red", price: 220, rent: [18, 90, 250, 700, 875, 1050], emoji: "⚡", color: "#FF0000" },
+            { id: 23, name: "Water Treatment", type: "property", group: "red", price: 220, rent: [18, 90, 250, 700, 875, 1050], emoji: "�", color: "#FF0000" },
+            { id: 24, name: "Command Center", type: "property", group: "red", price: 240, rent: [20, 100, 300, 750, 925, 1100], emoji: "�", color: "#FF0000" },
+            
+            // Property Group 6 - Yellow (Weather & Monitoring)
+            { id: 26, name: "Weather Station", type: "property", group: "yellow", price: 260, rent: [22, 110, 330, 800, 975, 1150], emoji: "�️", color: "#FFFF00" },
+            { id: 27, name: "Radar Center", type: "property", group: "yellow", price: 260, rent: [22, 110, 330, 800, 975, 1150], emoji: "📡", color: "#FFFF00" },
+            { id: 29, name: "Satellite Hub", type: "property", group: "yellow", price: 280, rent: [24, 120, 360, 850, 1025, 1200], emoji: "�️", color: "#FFFF00" },
+            
+            // Property Group 7 - Green (Training & Education)
+            { id: 31, name: "Training Center", type: "property", group: "green", price: 300, rent: [26, 130, 390, 900, 1100, 1275], emoji: "�", color: "#00FF00" },
+            { id: 32, name: "Simulation Lab", type: "property", group: "green", price: 300, rent: [26, 130, 390, 900, 1100, 1275], emoji: "�", color: "#00FF00" },
+            { id: 34, name: "Academy", type: "property", group: "green", price: 320, rent: [28, 150, 450, 1000, 1200, 1400], emoji: "🏫", color: "#00FF00" },
+            
+            // Property Group 8 - Dark Blue (Elite Command)
+            { id: 37, name: "FEMA Headquarters", type: "property", group: "dark-blue", price: 350, rent: [35, 175, 500, 1100, 1300, 1500], emoji: "�", color: "#0000FF" },
+            { id: 39, name: "National Command", type: "property", group: "dark-blue", price: 400, rent: [50, 200, 600, 1400, 1700, 2000], emoji: "🏛️", color: "#0000FF" },
+            
+            // Railroads (Emergency Routes)
+            { id: 5, name: "North Evacuation Route", type: "railroad", price: 200, rent: [25, 50, 100, 200], emoji: "�️", baseRent: 25 },
+            { id: 15, name: "East Evacuation Route", type: "railroad", price: 200, rent: [25, 50, 100, 200], emoji: "🛣️", baseRent: 25 },
+            { id: 25, name: "South Evacuation Route", type: "railroad", price: 200, rent: [25, 50, 100, 200], emoji: "🛣️", baseRent: 25 },
+            { id: 35, name: "West Evacuation Route", type: "railroad", price: 200, rent: [25, 50, 100, 200], emoji: "�️", baseRent: 25 },
+            
+            // Utilities (Emergency Resources)
+            { id: 12, name: "Emergency Generator", type: "utility", price: 150, emoji: "🔋" },
+            { id: 28, name: "Backup Communications", type: "utility", price: 150, emoji: "📶" },
+            
+            // Special spaces
+            { id: 2, name: "Community Chest", type: "community-chest", emoji: "❓" },
+            { id: 7, name: "Chance", type: "chance", emoji: "❓" },
+            { id: 17, name: "Community Chest", type: "community-chest", emoji: "❓" },
+            { id: 22, name: "Chance", type: "chance", emoji: "❓" },
+            { id: 33, name: "Community Chest", type: "community-chest", emoji: "❓" },
+            { id: 36, name: "Chance", type: "chance", emoji: "❓" },
+            
+            // Tax spaces
+            { id: 4, name: "Emergency Tax", type: "tax", amount: 200, emoji: "💰", description: "Pay Emergency Preparedness Tax" },
+            { id: 38, name: "Disaster Relief Tax", type: "tax", amount: 100, emoji: "💰", description: "Pay Disaster Relief Tax" }
         ];
 
-        // Disaster cards
-        const disasterCards = [
-            {
-                title: "🌪️ Tornado Warning",
-                description: "A tornado has been spotted in your area! What's your emergency response?",
-                choices: [
-                    { text: "Take shelter immediately", cost: 0, preparedness: 50, supplies: -1 },
-                    { text: "Help others evacuate", cost: 50, preparedness: 100, knowledge: 20 },
-                    { text: "Ignore the warning", cost: 200, preparedness: -50, supplies: 0 }
-                ]
-            },
-            {
-                title: "🌊 Flash Flood Alert",
-                description: "Heavy rains have caused flash flooding in your community.",
-                choices: [
-                    { text: "Move to higher ground", cost: 0, preparedness: 40, supplies: 0 },
-                    { text: "Assist in sandbagging", cost: 30, preparedness: 80, knowledge: 15 },
-                    { text: "Drive through water", cost: 300, preparedness: -100, supplies: -2 }
-                ]
-            },
-            {
-                title: "🔥 Wildfire Evacuation",
-                description: "A wildfire is approaching your neighborhood. Time to act!",
-                choices: [
-                    { text: "Follow evacuation orders", cost: 0, preparedness: 60, supplies: -1 },
-                    { text: "Help firefighters", cost: 100, preparedness: 120, knowledge: 25 },
-                    { text: "Stay and defend property", cost: 500, preparedness: -150, supplies: -3 }
-                ]
-            },
-            {
-                title: "⚡ Power Outage",
-                description: "A major storm has knocked out power to your area.",
-                choices: [
-                    { text: "Use emergency supplies", cost: 0, preparedness: 30, supplies: -1 },
-                    { text: "Check on neighbors", cost: 20, preparedness: 70, knowledge: 10 },
-                    { text: "Use candles carelessly", cost: 100, preparedness: -30, supplies: 0 }
-                ]
-            },
-            {
-                title: "🌡️ Extreme Heat Wave",
-                description: "Dangerous heat levels threaten public health.",
-                choices: [
-                    { text: "Stay hydrated and cool", cost: 0, preparedness: 40, supplies: -1 },
-                    { text: "Open cooling center", cost: 80, preparedness: 90, knowledge: 20 },
-                    { text: "Continue normal activities", cost: 150, preparedness: -40, supplies: 0 }
-                ]
-            },
-            {
-                title: "❄️ Severe Blizzard",
-                description: "A major snowstorm is isolating your community.",
-                choices: [
-                    { text: "Stay indoors with supplies", cost: 0, preparedness: 50, supplies: -2 },
-                    { text: "Help clear emergency routes", cost: 60, preparedness: 100, knowledge: 15 },
-                    { text: "Venture out unnecessarily", cost: 200, preparedness: -60, supplies: -1 }
-                ]
-            }
+        // Community Chest cards (disaster preparedness themed)
+        const communityChestCards = [
+            { title: "� Medical Volunteer Award", description: "Your volunteer work at the local hospital is recognized.", effect: "money", amount: 200 },
+            { title: "🎓 Emergency Training Complete", description: "You completed first aid certification.", effect: "money", amount: 50 },
+            { title: "🏆 Community Hero", description: "You helped during the last disaster. Collect from each player.", effect: "collect-from-players", amount: 50 },
+            { title: "🔋 Emergency Kit Donation", description: "Your emergency kit donation helps families.", effect: "money", amount: 100 },
+            { title: "📻 Public Service Announcement", description: "You helped create emergency broadcasts.", effect: "money", amount: 25 },
+            { title: "🚑 Life Saving Action", description: "Your quick thinking saved lives.", effect: "money", amount: 100 },
+            { title: "🏠 Shelter Volunteer", description: "You volunteered at emergency shelters.", effect: "money", amount: 75 },
+            { title: "🌪️ Storm Damage", description: "Your property was damaged in the last storm.", effect: "money", amount: -150 },
+            { title: "🚒 False Alarm Fine", description: "You accidentally triggered a false alarm.", effect: "money", amount: -50 },
+            { title: "🎯 Emergency Drill Award", description: "Your workplace had the best drill performance.", effect: "money", amount: 45 },
+            { title: "🔧 Equipment Maintenance", description: "Your emergency equipment needs servicing.", effect: "money", amount: -40 },
+            { title: "�️ Safety Inspector", description: "You passed the safety inspection with flying colors.", effect: "money", amount: 100 },
+            { title: "🎪 Relief Fund Contribution", description: "You contributed to the disaster relief fund.", effect: "money", amount: -100 },
+            { title: "📞 Emergency Coordinator", description: "You served as emergency coordinator.", effect: "money", amount: 25 },
+            { title: "🏃 Get Out of Jail Free", description: "This card may be kept until needed or sold.", effect: "get-out-of-jail-free" },
+            { title: "🏠 Go to Emergency Shelter", description: "Go directly to Emergency Shelter. Do not pass GO.", effect: "go-to-jail" }
+        ];
+
+        // Chance cards (disaster scenarios and opportunities)
+        const chanceCards = [
+            { title: "🚁 Advance to GO", description: "Your helicopter rescue mission is complete.", effect: "advance-to-go" },
+            { title: "🏢 Advance to FEMA Headquarters", description: "Report to FEMA Headquarters immediately.", effect: "advance-to", space: 37 },
+            { title: "🛣️ Advance to Nearest Evacuation Route", description: "Take the nearest evacuation route.", effect: "advance-to-railroad" },
+            { title: "🔋 Advance to Nearest Utility", description: "Check the nearest emergency utility.", effect: "advance-to-utility" },
+            { title: "🏦 Bank Error", description: "Emergency fund disbursement error in your favor.", effect: "money", amount: 200 },
+            { title: "�️ Building Repairs", description: "Emergency equipment on your properties needs repair.", effect: "building-repairs", house: 25, hotel: 100 },
+            { title: "⚡ Emergency Generator", description: "You donated emergency generators to the community.", effect: "money", amount: 150 },
+            { title: "🏠 Go to Emergency Shelter", description: "Go directly to Emergency Shelter. Do not pass GO.", effect: "go-to-jail" },
+            { title: "📦 Supply Distribution", description: "You organized emergency supply distribution.", effect: "pay-players", amount: 50 },
+            { title: "🏃 Get Out of Jail Free", description: "This card may be kept until needed or sold.", effect: "get-out-of-jail-free" },
+            { title: "🔙 Go Back 3 Spaces", description: "Equipment malfunction forces you to backtrack.", effect: "move-spaces", spaces: -3 },
+            { title: "🚗 Vehicle Registration", description: "Emergency vehicle registration and maintenance.", effect: "money", amount: -15 },
+            { title: "📡 Communication Upgrade", description: "You upgraded emergency communication systems.", effect: "money", amount: 50 },
+            { title: "🌊 Flood Insurance", description: "Your flood insurance policy pays out.", effect: "money", amount: 100 },
+            { title: "💰 Emergency Fund", description: "You won the emergency preparedness lottery.", effect: "money", amount: 150 },
+            { title: "🏫 School Safety Training", description: "You conducted school safety training programs.", effect: "money", amount: 100 }
         ];
 
         // Initialize the game
@@ -1275,7 +1314,12 @@
                 <div class="board-logo">
                     <i class="fas fa-shield-alt"></i>
                     <h3>DISASTER<br>POLY</h3>
-                    <p>Emergency Preparedness Board Game</p>
+                    <p>Emergency Preparedness Monopoly</p>
+                    <div style="margin-top: 15px; font-size: 12px;">
+                        <div>🏦 Free Parking: $${gameState.freeParkingMoney}</div>
+                        <div>🏠 Houses: ${gameState.housesRemaining}</div>
+                        <div>🏨 Hotels: ${gameState.hotelsRemaining}</div>
+                    </div>
                 </div>
             `;
             board.appendChild(center);
@@ -1310,19 +1354,41 @@
                 // Add type-specific styling
                 space.classList.add(spaceData.type);
                 
+                // Add property group class for properties
+                if (spaceData.type === 'property') {
+                    space.classList.add(spaceData.group);
+                }
+                
                 // Add content with better sizing
                 const isCorner = [0, 10, 20, 30].includes(i);
                 const iconSize = isCorner ? '16px' : '14px';
                 const nameSize = isCorner ? '8px' : '7px';
                 const costSize = isCorner ? '6px' : '5px';
                 
-                space.innerHTML = `
+                let contentHTML = `
                     <div class="space-content" style="padding: 2px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                         <div class="space-icon" style="font-size: ${iconSize}; margin-bottom: 2px;">${spaceData.emoji}</div>
                         <div class="space-name" style="font-size: ${nameSize}; line-height: 1.1; text-align: center; overflow: hidden; display: -webkit-box; -webkit-line-clamp: ${isCorner ? 3 : 2}; -webkit-box-orient: vertical;">${spaceData.name}</div>
-                        ${spaceData.price ? `<div class="space-cost" style="font-size: ${costSize}; color: #27ae60; font-weight: bold; margin-top: 1px;">$${spaceData.price}</div>` : ''}
-                    </div>
                 `;
+                
+                // Add price for buyable properties
+                if (spaceData.price) {
+                    contentHTML += `<div class="space-cost" style="font-size: ${costSize}; color: #27ae60; font-weight: bold; margin-top: 1px;">$${spaceData.price}</div>`;
+                }
+                
+                // Add tax amount for tax spaces
+                if (spaceData.type === 'tax') {
+                    contentHTML += `<div class="space-cost" style="font-size: ${costSize}; color: #e74c3c; font-weight: bold; margin-top: 1px;">$${spaceData.amount}</div>`;
+                }
+                
+                contentHTML += `</div>`;
+                
+                // Add property ownership indicator
+                if (spaceData.type === 'property' || spaceData.type === 'railroad' || spaceData.type === 'utility') {
+                    contentHTML += `<div class="property-owner" id="owner-${i}" style="position: absolute; bottom: 0; left: 0; right: 0; height: 8px; display: none;"></div>`;
+                }
+                
+                space.innerHTML = contentHTML;
                 
                 // Add click listener for space info
                 space.addEventListener('click', () => showSpaceInfo(spaceData));
@@ -1343,6 +1409,7 @@
             
             // Add players to starting position
             addPlayersToBoard();
+            updatePropertyOwnership();
         }
 
         // Calculate board position for space index
@@ -1486,28 +1553,79 @@
             
             // Add specific information based on space type
             switch(spaceData.type) {
-                case 'emergency-service':
+                case 'property':
                     desc += `<p><strong>Purchase Price:</strong> $${spaceData.price}</p>`;
-                    desc += `<p><strong>Effect:</strong> Provides protection against disasters (+20 preparedness when landed on by owner)</p>`;
-                    break;
-                case 'disaster-zone':
-                    desc += `<p><strong>Penalty:</strong> $${spaceData.penalty} (can be avoided with supplies)</p>`;
-                    desc += `<p><strong>Effect:</strong> Tests your emergency preparedness (-30 preparedness if no supplies)</p>`;
-                    break;
-                case 'safe-zone':
-                    desc += `<p><strong>Reward:</strong> $${spaceData.reward}</p>`;
-                    desc += `<p><strong>Effect:</strong> +30 preparedness, +1 supply</p>`;
-                    break;
-                case 'special':
-                    if (spaceData.name.includes('Disaster Card')) {
-                        desc += `<p><strong>Effect:</strong> Draw a disaster scenario card with choice-based outcomes</p>`;
-                    } else {
-                        desc += `<p><strong>Effect:</strong> Emergency training drill (+15 knowledge, +40 preparedness)</p>`;
+                    desc += `<p><strong>Property Group:</strong> ${spaceData.group.replace('-', ' ').toUpperCase()}</p>`;
+                    desc += `<p><strong>Rent:</strong> $${spaceData.rent[0]}</p>`;
+                    desc += `<p><strong>With Monopoly:</strong> $${spaceData.rent[0] * 2}</p>`;
+                    desc += `<p><strong>With 1 House:</strong> $${spaceData.rent[1]}</p>`;
+                    desc += `<p><strong>With 2 Houses:</strong> $${spaceData.rent[2]}</p>`;
+                    desc += `<p><strong>With 3 Houses:</strong> $${spaceData.rent[3]}</p>`;
+                    desc += `<p><strong>With 4 Houses:</strong> $${spaceData.rent[4]}</p>`;
+                    desc += `<p><strong>With Hotel:</strong> $${spaceData.rent[5]}</p>`;
+                    
+                    // Show owner if owned
+                    const owner = findPropertyOwner(spaceData.id);
+                    if (owner !== null) {
+                        desc += `<p><strong>Owner:</strong> Player ${owner + 1}</p>`;
                     }
                     break;
+                    
+                case 'railroad':
+                    desc += `<p><strong>Purchase Price:</strong> $${spaceData.price}</p>`;
+                    desc += `<p><strong>Rent:</strong></p>`;
+                    desc += `<ul style="margin-left: 20px;">`;
+                    desc += `<li>If 1 Route owned: $${spaceData.rent[0]}</li>`;
+                    desc += `<li>If 2 Routes owned: $${spaceData.rent[1]}</li>`;
+                    desc += `<li>If 3 Routes owned: $${spaceData.rent[2]}</li>`;
+                    desc += `<li>If 4 Routes owned: $${spaceData.rent[3]}</li>`;
+                    desc += `</ul>`;
+                    
+                    const railOwner = findPropertyOwner(spaceData.id);
+                    if (railOwner !== null) {
+                        desc += `<p><strong>Owner:</strong> Player ${railOwner + 1}</p>`;
+                    }
+                    break;
+                    
+                case 'utility':
+                    desc += `<p><strong>Purchase Price:</strong> $${spaceData.price}</p>`;
+                    desc += `<p><strong>Rent:</strong></p>`;
+                    desc += `<ul style="margin-left: 20px;">`;
+                    desc += `<li>If 1 Utility owned: 4 times dice roll</li>`;
+                    desc += `<li>If 2 Utilities owned: 10 times dice roll</li>`;
+                    desc += `</ul>`;
+                    
+                    const utilOwner = findPropertyOwner(spaceData.id);
+                    if (utilOwner !== null) {
+                        desc += `<p><strong>Owner:</strong> Player ${utilOwner + 1}</p>`;
+                    }
+                    break;
+                    
+                case 'tax':
+                    desc += `<p><strong>Tax Amount:</strong> $${spaceData.amount}</p>`;
+                    desc += `<p><strong>Effect:</strong> Pay tax to Free Parking fund</p>`;
+                    break;
+                    
+                case 'community-chest':
+                    desc += `<p><strong>Effect:</strong> Draw a Community Chest card</p>`;
+                    desc += `<p>Community Chest cards represent emergency preparedness community actions and rewards.</p>`;
+                    break;
+                    
+                case 'chance':
+                    desc += `<p><strong>Effect:</strong> Draw a Chance card</p>`;
+                    desc += `<p>Chance cards represent unexpected disaster scenarios and opportunities.</p>`;
+                    break;
+                    
                 case 'corner':
-                    desc += `<p><strong>Effect:</strong> Special corner space with major benefits</p>`;
-                    if (spaceData.effect === 'start') desc += `<p>Collect $200 and +50 preparedness when passing</p>`;
+                    if (spaceData.effect === 'go') {
+                        desc += `<p><strong>Effect:</strong> Collect $200 when passing or landing</p>`;
+                    } else if (spaceData.effect === 'jail') {
+                        desc += `<p><strong>Effect:</strong> Just visiting or in Emergency Shelter</p>`;
+                    } else if (spaceData.effect === 'free-parking') {
+                        desc += `<p><strong>Effect:</strong> Collect all tax money (currently $${gameState.freeParkingMoney})</p>`;
+                    } else if (spaceData.effect === 'go-to-jail') {
+                        desc += `<p><strong>Effect:</strong> Go directly to Emergency Shelter</p>`;
+                    }
                     break;
             }
             
@@ -1525,6 +1643,14 @@
             if (gameState.diceRolled) {
                 console.log('Dice already rolled this turn');
                 showMessage('You have already rolled this turn! Click "End Turn" to continue.');
+                return;
+            }
+            
+            const player = gameState.players[gameState.currentPlayer];
+            
+            // Check if player is in jail
+            if (player.inJail) {
+                handleJailRoll();
                 return;
             }
             
@@ -1549,36 +1675,122 @@
                 const dice1 = Math.floor(Math.random() * 6) + 1;
                 const dice2 = Math.floor(Math.random() * 6) + 1;
                 const total = dice1 + dice2;
+                const isDoubles = dice1 === dice2;
                 
-                console.log('Dice rolled:', dice1, dice2, 'Total:', total);
+                console.log('Dice rolled:', dice1, dice2, 'Total:', total, 'Doubles:', isDoubles);
                 
                 gameState.lastRoll = [dice1, dice2];
                 gameState.diceRolled = true;
+                
+                // Handle doubles
+                if (isDoubles) {
+                    gameState.doublesCount++;
+                    if (gameState.doublesCount >= 3) {
+                        // Third double in a row - go to jail
+                        showMessage(`🎲 Rolled ${dice1} + ${dice2} = ${total} (DOUBLES!) - Third doubles in a row! Go to Emergency Shelter!`);
+                        sendPlayerToJail(gameState.currentPlayer);
+                        gameState.diceRolled = false; // Allow ending turn
+                        document.getElementById('end-turn').disabled = false;
+                        return;
+                    } else {
+                        showMessage(`🎲 Rolled ${dice1} + ${dice2} = ${total} (DOUBLES!) - You get another turn!`);
+                    }
+                } else {
+                    gameState.doublesCount = 0;
+                    showMessage(`🎲 Rolled ${dice1} + ${dice2} = ${total}! Moving ${total} spaces.`);
+                }
                 
                 // Update dice display
                 const diceTotalEl = document.getElementById('dice-total');
                 
                 if (dice1El) dice1El.textContent = dice1;
                 if (dice2El) dice2El.textContent = dice2;
-                if (diceTotalEl) diceTotalEl.innerHTML = `<i class="fas fa-dice"></i> Total: ${total}`;
+                if (diceTotalEl) diceTotalEl.innerHTML = `<i class="fas fa-dice"></i> Total: ${total}${isDoubles ? ' (DOUBLES!)' : ''}`;
                 
                 // Move player
                 movePlayer(gameState.currentPlayer, total);
                 
-                // Update UI
+                // Update UI - if doubles, allow another roll
                 const rollBtn = document.getElementById('roll-dice');
                 const endBtn = document.getElementById('end-turn');
                 
-                if (rollBtn) rollBtn.disabled = true;
-                if (endBtn) endBtn.disabled = false;
-                
-                showMessage(`🎲 Rolled ${dice1} + ${dice2} = ${total}! Moving ${total} spaces.`);
+                if (isDoubles && gameState.doublesCount < 3) {
+                    // Player gets another turn - reset for another roll
+                    setTimeout(() => {
+                        gameState.diceRolled = false;
+                        rollBtn.disabled = false;
+                        endBtn.disabled = true;
+                        showMessage("🎲 You rolled doubles! Roll again!");
+                    }, 2000);
+                } else {
+                    rollBtn.disabled = true;
+                    endBtn.disabled = false;
+                }
                 
                 // Reset animations
                 dice1El.style.animation = '';
                 dice2El.style.animation = '';
                 
                 console.log('Dice roll complete');
+            }, 500);
+        }
+
+        // Handle dice roll when in jail
+        function handleJailRoll() {
+            const player = gameState.players[gameState.currentPlayer];
+            
+            // Add rolling animation
+            const dice1El = document.getElementById('dice1');
+            const dice2El = document.getElementById('dice2');
+            
+            dice1El.style.animation = 'spin 0.5s ease';
+            dice2El.style.animation = 'spin 0.5s ease';
+            
+            setTimeout(() => {
+                const dice1 = Math.floor(Math.random() * 6) + 1;
+                const dice2 = Math.floor(Math.random() * 6) + 1;
+                const total = dice1 + dice2;
+                const isDoubles = dice1 === dice2;
+                
+                gameState.lastRoll = [dice1, dice2];
+                gameState.diceRolled = true;
+                
+                // Update dice display
+                if (dice1El) dice1El.textContent = dice1;
+                if (dice2El) dice2El.textContent = dice2;
+                document.getElementById('dice-total').innerHTML = `<i class="fas fa-dice"></i> Total: ${total}${isDoubles ? ' (DOUBLES!)' : ''}`;
+                
+                if (isDoubles) {
+                    // Rolled doubles - get out of jail and move
+                    player.inJail = false;
+                    player.jailTurns = 0;
+                    gameState.doublesCount = 0;
+                    showMessage(`🎲 Rolled doubles! You're released from Emergency Shelter and move ${total} spaces!`);
+                    movePlayer(gameState.currentPlayer, total);
+                } else {
+                    // Didn't roll doubles
+                    player.jailTurns++;
+                    if (player.jailTurns >= 3) {
+                        // Must pay fine and move
+                        player.money -= 50;
+                        player.inJail = false;
+                        player.jailTurns = 0;
+                        showMessage(`🎲 Rolled ${dice1} + ${dice2} = ${total}. Paid $50 fine to leave Emergency Shelter and move ${total} spaces!`);
+                        movePlayer(gameState.currentPlayer, total);
+                    } else {
+                        showMessage(`🎲 Rolled ${dice1} + ${dice2} = ${total}. Stay in Emergency Shelter. (Turn ${player.jailTurns}/3)`);
+                    }
+                }
+                
+                // Update UI
+                document.getElementById('roll-dice').disabled = true;
+                document.getElementById('end-turn').disabled = false;
+                
+                // Reset animations
+                dice1El.style.animation = '';
+                dice2El.style.animation = '';
+                
+                updatePlayerStats();
             }, 500);
         }
 
@@ -1658,48 +1870,24 @@
             const player = gameState.players[playerIndex];
             
             switch (spaceData.type) {
-                case 'emergency-service':
-                    if (!player.properties.includes(spaceData.id)) {
-                        if (player.money >= spaceData.price) {
-                            const buyBtn = document.getElementById('buy-property');
-                            buyBtn.disabled = false;
-                            buyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Buy ${spaceData.name} ($${spaceData.price})`;
-                            buyBtn.title = `Purchase ${spaceData.name} for $${spaceData.price} to improve your preparedness`;
-                        }
-                        showMessage(`${spaceData.emoji} ${spaceData.name} available for $${spaceData.price}`);
-                    } else {
-                        player.preparedness += 20;
-                        showMessage(`${spaceData.emoji} Your ${spaceData.name} provides protection! +20 preparedness`);
-                    }
+                case 'property':
+                case 'railroad':
+                case 'utility':
+                    handlePropertyLanding(playerIndex, spaceData);
                     break;
                     
-                case 'disaster-zone':
-                    if (player.supplies > 0) {
-                        document.getElementById('use-supplies').disabled = false;
-                        showMessage(`${spaceData.emoji} ${spaceData.name}! Use supplies or pay $${spaceData.penalty}`);
-                    } else {
-                        player.money -= spaceData.penalty;
-                        player.preparedness -= 30;
-                        showMessage(`${spaceData.emoji} ${spaceData.name}! -$${spaceData.penalty} and -30 preparedness`);
-                    }
+                case 'tax':
+                    player.money -= spaceData.amount;
+                    gameState.freeParkingMoney += spaceData.amount;
+                    showMessage(`💰 ${spaceData.name}! Pay $${spaceData.amount}`);
                     break;
                     
-                case 'safe-zone':
-                    player.money += spaceData.reward;
-                    player.preparedness += 30;
-                    player.supplies += 1;
-                    showMessage(`${spaceData.emoji} ${spaceData.name}! +$${spaceData.reward}, +30 preparedness, +1 supply`);
+                case 'community-chest':
+                    drawCommunityChest();
                     break;
                     
-                case 'special':
-                    if (spaceData.name.includes('Disaster Card')) {
-                        drawDisasterCard();
-                    } else {
-                        // Emergency Drill
-                        player.knowledge += 15;
-                        player.preparedness += 40;
-                        showMessage(`${spaceData.emoji} Emergency Drill! +15 knowledge and +40 preparedness`);
-                    }
+                case 'chance':
+                    drawChance();
                     break;
                     
                 case 'corner':
@@ -1708,30 +1896,132 @@
             }
         }
 
+        // Handle property, railroad, or utility landing
+        function handlePropertyLanding(playerIndex, spaceData) {
+            const player = gameState.players[playerIndex];
+            const owner = findPropertyOwner(spaceData.id);
+            
+            if (owner === null) {
+                // Property is unowned - offer to buy
+                if (player.money >= spaceData.price) {
+                    const buyBtn = document.getElementById('buy-property');
+                    buyBtn.disabled = false;
+                    buyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Buy ${spaceData.name} ($${spaceData.price})`;
+                    buyBtn.title = `Purchase ${spaceData.name} for $${spaceData.price}`;
+                    showMessage(`${spaceData.emoji} ${spaceData.name} available for $${spaceData.price}`);
+                } else {
+                    showMessage(`${spaceData.emoji} ${spaceData.name} costs $${spaceData.price} but you only have $${player.money}`);
+                }
+            } else if (owner !== playerIndex) {
+                // Property is owned by another player - pay rent
+                const rent = calculateRent(spaceData, owner);
+                player.money -= rent;
+                gameState.players[owner].money += rent;
+                showMessage(`💸 Paid $${rent} rent to Player ${owner + 1} for ${spaceData.name}`);
+                updatePlayerStats();
+            } else {
+                // Player owns this property
+                showMessage(`🏠 You own ${spaceData.name}!`);
+            }
+        }
+
+        // Find property owner
+        function findPropertyOwner(propertyId) {
+            for (let i = 0; i < gameState.players.length; i++) {
+                if (gameState.players[i].properties.includes(propertyId)) {
+                    return i;
+                }
+            }
+            return null;
+        }
+
+        // Calculate rent for a property
+        function calculateRent(spaceData, ownerIndex) {
+            const owner = gameState.players[ownerIndex];
+            
+            if (spaceData.type === 'property') {
+                // Check for monopoly
+                const groupProperties = boardSpaces.filter(s => s.group === spaceData.group && s.type === 'property');
+                const ownedInGroup = groupProperties.filter(p => owner.properties.includes(p.id)).length;
+                const hasMonopoly = ownedInGroup === groupProperties.length;
+                
+                // Base rent or double if monopoly and no buildings
+                let rent = spaceData.rent[0];
+                if (hasMonopoly) {
+                    rent *= 2;
+                }
+                
+                return rent;
+            } else if (spaceData.type === 'railroad') {
+                // Railroad rent based on number owned
+                const railroadsOwned = boardSpaces.filter(s => s.type === 'railroad' && owner.properties.includes(s.id)).length;
+                return spaceData.rent[railroadsOwned - 1] || spaceData.baseRent;
+            } else if (spaceData.type === 'utility') {
+                // Utility rent based on dice roll and number owned
+                const utilitiesOwned = boardSpaces.filter(s => s.type === 'utility' && owner.properties.includes(s.id)).length;
+                const diceTotal = gameState.lastRoll[0] + gameState.lastRoll[1];
+                return diceTotal * (utilitiesOwned === 1 ? 4 : 10);
+            }
+            
+            return 0;
+        }
+
+        // Update property ownership display
+        function updatePropertyOwnership() {
+            // Clear all ownership indicators
+            document.querySelectorAll('.property-owner').forEach(indicator => {
+                indicator.style.display = 'none';
+            });
+            
+            // Show ownership for each player's properties
+            gameState.players.forEach((player, playerIndex) => {
+                player.properties.forEach(propertyId => {
+                    const ownerIndicator = document.getElementById(`owner-${propertyId}`);
+                    if (ownerIndicator) {
+                        ownerIndicator.style.display = 'block';
+                        ownerIndicator.style.backgroundColor = player.color;
+                        ownerIndicator.title = `Owned by Player ${playerIndex + 1}`;
+                    }
+                });
+            });
+        }
+
         // Handle corner spaces
         function handleCornerSpace(playerIndex, spaceData) {
             const player = gameState.players[playerIndex];
             
             switch (spaceData.effect) {
-                case 'start':
-                    // Already handled in movePlayer
+                case 'go':
+                    // Already handled in movePlayer when passing GO
+                    showMessage("🏁 Welcome to GO! You're helping coordinate emergency response!");
                     break;
-                case 'relief':
-                    player.supplies += 2;
-                    player.preparedness += 60;
-                    showMessage("🚑 Disaster Relief! +2 supplies and +60 preparedness");
+                case 'jail':
+                    // Just visiting - no action needed
+                    showMessage("🏠 Just visiting the Emergency Shelter. Stay prepared!");
                     break;
-                case 'fema':
-                    player.money += 100;
-                    player.knowledge += 20;
-                    showMessage("🏢 FEMA Station! +$100 and +20 knowledge");
+                case 'free-parking':
+                    // Collect free parking money
+                    player.money += gameState.freeParkingMoney;
+                    showMessage(`�️ Free Parking! Collected $${gameState.freeParkingMoney} from emergency fund!`);
+                    gameState.freeParkingMoney = 0;
+                    updateBoard();
                     break;
-                case 'command':
-                    player.preparedness += 100;
-                    player.knowledge += 30;
-                    showMessage("📡 Command Center! +100 preparedness and +30 knowledge");
+                case 'go-to-jail':
+                    // Send to jail
+                    sendPlayerToJail(playerIndex);
                     break;
             }
+        }
+
+        // Send player to jail
+        function sendPlayerToJail(playerIndex) {
+            const player = gameState.players[playerIndex];
+            player.position = 10; // Emergency Shelter (jail)
+            player.inJail = true;
+            player.jailTurns = 0;
+            gameState.doublesCount = 0; // Reset doubles count
+            showMessage("🏠 Go directly to Emergency Shelter! Do not pass GO, do not collect $200.");
+            addPlayersToBoard();
         }
 
         // Draw disaster card
@@ -1797,45 +2087,212 @@
             if (spaceData && spaceData.price && player.money >= spaceData.price) {
                 player.money -= spaceData.price;
                 player.properties.push(spaceData.id);
-                player.preparedness += 50;
                 
-                showMessage(`✅ Purchased ${spaceData.name} for $${spaceData.price}! +50 preparedness`);
+                showMessage(`✅ Purchased ${spaceData.name} for $${spaceData.price}!`);
                 updatePlayerStats();
+                updatePropertyOwnership();
                 
                 // Reset buy button
                 const buyBtn = document.getElementById('buy-property');
                 buyBtn.disabled = true;
                 buyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Buy Property`;
-                buyBtn.title = 'Purchase this emergency service to improve your preparedness';
+                buyBtn.title = 'Purchase available properties';
             }
         }
 
-        // Use supplies
-        function useSupplies() {
+        // Draw Community Chest card
+        function drawCommunityChest() {
+            const card = communityChestCards[Math.floor(Math.random() * communityChestCards.length)];
+            
+            const modal = document.getElementById('card-modal');
+            const title = document.getElementById('card-title');
+            const description = document.getElementById('card-description');
+            const choices = document.getElementById('card-choices');
+            
+            title.innerHTML = `<i class="fas fa-users"></i> Community Chest`;
+            description.innerHTML = `<h4>${card.title}</h4><p>${card.description}</p>`;
+            
+            choices.innerHTML = '';
+            const button = document.createElement('button');
+            button.textContent = 'Continue';
+            button.style.margin = '10px';
+            button.addEventListener('click', () => {
+                handleCardEffect(card);
+                modal.style.display = 'none';
+            });
+            choices.appendChild(button);
+            
+            modal.style.display = 'flex';
+        }
+
+        // Draw Chance card
+        function drawChance() {
+            const card = chanceCards[Math.floor(Math.random() * chanceCards.length)];
+            
+            const modal = document.getElementById('card-modal');
+            const title = document.getElementById('card-title');
+            const description = document.getElementById('card-description');
+            const choices = document.getElementById('card-choices');
+            
+            title.innerHTML = `<i class="fas fa-question-circle"></i> Chance`;
+            description.innerHTML = `<h4>${card.title}</h4><p>${card.description}</p>`;
+            
+            choices.innerHTML = '';
+            const button = document.createElement('button');
+            button.textContent = 'Continue';
+            button.style.margin = '10px';
+            button.addEventListener('click', () => {
+                handleCardEffect(card);
+                modal.style.display = 'none';
+            });
+            choices.appendChild(button);
+            
+            modal.style.display = 'flex';
+        }
+
+        // Handle card effects
+        function handleCardEffect(card) {
             const player = gameState.players[gameState.currentPlayer];
             
-            if (player.supplies > 0) {
-                player.supplies--;
-                player.preparedness += 40;
+            switch (card.effect) {
+                case 'money':
+                    player.money += card.amount;
+                    if (card.amount < 0) {
+                        gameState.freeParkingMoney += Math.abs(card.amount);
+                    }
+                    showMessage(`💰 ${card.amount > 0 ? 'Received' : 'Paid'} $${Math.abs(card.amount)}`);
+                    break;
+                    
+                case 'collect-from-players':
+                    let collected = 0;
+                    gameState.players.forEach((p, index) => {
+                        if (index !== gameState.currentPlayer) {
+                            const amount = Math.min(p.money, card.amount);
+                            p.money -= amount;
+                            collected += amount;
+                        }
+                    });
+                    player.money += collected;
+                    showMessage(`💰 Collected $${collected} from other players`);
+                    break;
+                    
+                case 'pay-players':
+                    const totalPaid = card.amount * (gameState.players.length - 1);
+                    player.money -= totalPaid;
+                    gameState.players.forEach((p, index) => {
+                        if (index !== gameState.currentPlayer) {
+                            p.money += card.amount;
+                        }
+                    });
+                    showMessage(`💰 Paid $${card.amount} to each player ($${totalPaid} total)`);
+                    break;
+                    
+                case 'get-out-of-jail-free':
+                    player.getOutOfJailFreeCards++;
+                    showMessage(`🃏 Received Get Out of Jail Free card!`);
+                    break;
+                    
+                case 'go-to-jail':
+                    sendPlayerToJail(gameState.currentPlayer);
+                    break;
+                    
+                case 'advance-to-go':
+                    player.position = 0;
+                    player.money += 200; // Collect GO money
+                    showMessage(`🏁 Advanced to GO! Collect $200`);
+                    addPlayersToBoard();
+                    break;
+                    
+                case 'advance-to':
+                    const oldPosition = player.position;
+                    player.position = card.space;
+                    // Check if passed GO
+                    if (player.position < oldPosition) {
+                        player.money += 200;
+                        showMessage(`🏁 Passed GO! Collect $200`);
+                    }
+                    addPlayersToBoard();
+                    // Handle landing on the space
+                    const spaceData = boardSpaces.find(s => s.id === card.space);
+                    if (spaceData) {
+                        setTimeout(() => handleSpaceLanding(gameState.currentPlayer, spaceData), 500);
+                    }
+                    break;
+                    
+                case 'advance-to-railroad':
+                    advanceToNearest(['railroad']);
+                    break;
+                    
+                case 'advance-to-utility':
+                    advanceToNearest(['utility']);
+                    break;
+                    
+                case 'move-spaces':
+                    movePlayer(gameState.currentPlayer, card.spaces);
+                    break;
+                    
+                case 'building-repairs':
+                    // Count buildings on properties (simplified for now)
+                    const repairCost = player.properties.length * card.house;
+                    player.money -= repairCost;
+                    gameState.freeParkingMoney += repairCost;
+                    showMessage(`🔧 Paid $${repairCost} for emergency equipment repairs`);
+                    break;
+            }
+            
+            updatePlayerStats();
+        }
+
+        // Advance to nearest type of space
+        function advanceToNearest(types) {
+            const player = gameState.players[gameState.currentPlayer];
+            let nearestSpace = null;
+            let nearestDistance = 40;
+            
+            for (let i = 1; i <= 40; i++) {
+                const checkPosition = (player.position + i) % 40;
+                const spaceData = boardSpaces.find(s => s.id === checkPosition);
                 
-                showMessage("Used emergency supplies! +40 preparedness, avoided disaster penalty!");
-                updatePlayerStats();
+                if (spaceData && types.includes(spaceData.type)) {
+                    nearestSpace = spaceData;
+                    nearestDistance = i;
+                    break;
+                }
+            }
+            
+            if (nearestSpace) {
+                const oldPosition = player.position;
+                player.position = nearestSpace.id;
                 
-                document.getElementById('use-supplies').disabled = true;
+                // Check if passed GO
+                if (nearestDistance > (40 - oldPosition)) {
+                    player.money += 200;
+                    showMessage(`🏁 Passed GO! Collect $200`);
+                }
+                
+                addPlayersToBoard();
+                showMessage(`🚀 Advanced to nearest ${types[0]}: ${nearestSpace.name}`);
+                
+                // Handle landing on the space
+                setTimeout(() => handleSpaceLanding(gameState.currentPlayer, nearestSpace), 500);
             }
         }
 
         // End turn
         function endTurn() {
-            // Check win condition
-            if (gameState.players[gameState.currentPlayer].preparedness >= 1000) {
+            // Check win condition (simplified - when a player has significant assets)
+            const player = gameState.players[gameState.currentPlayer];
+            const totalAssets = player.money + (player.properties.length * 100);
+            
+            if (totalAssets >= 3000 || (gameState.players.filter(p => !p.bankrupt).length === 1)) {
                 gameState.winner = gameState.currentPlayer;
-                showMessage(`🎉 Player ${gameState.currentPlayer + 1} wins with ${gameState.players[gameState.currentPlayer].preparedness} preparedness points!`);
+                showMessage(`🎉 Player ${gameState.currentPlayer + 1} wins the game!`);
                 
                 // Disable all action buttons
                 document.getElementById('roll-dice').disabled = true;
                 document.getElementById('buy-property').disabled = true;
-                document.getElementById('use-supplies').disabled = true;
+                document.getElementById('pay-jail-fine').disabled = true;
+                document.getElementById('use-jail-card').disabled = true;
                 document.getElementById('end-turn').disabled = true;
                 
                 updateGameInstructions();
@@ -1844,7 +2301,10 @@
             
             // Switch to next player
             const previousPlayer = gameState.currentPlayer;
-            gameState.currentPlayer = (gameState.currentPlayer + 1) % gameState.players.length;
+            do {
+                gameState.currentPlayer = (gameState.currentPlayer + 1) % gameState.players.length;
+            } while (gameState.players[gameState.currentPlayer].bankrupt);
+            
             gameState.turn++;
             
             if (gameState.currentPlayer === 0) {
@@ -1854,6 +2314,7 @@
             
             // Reset turn state
             gameState.diceRolled = false;
+            gameState.doublesCount = 0;
             
             // Update UI
             updateGameStatus();
@@ -1865,9 +2326,8 @@
             const buyBtn = document.getElementById('buy-property');
             buyBtn.disabled = true;
             buyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Buy Property`;
-            buyBtn.title = 'Purchase this emergency service to improve your preparedness';
+            buyBtn.title = 'Purchase available properties';
             
-            document.getElementById('use-supplies').disabled = true;
             document.getElementById('end-turn').disabled = true;
             
             // Reset dice display
@@ -1879,31 +2339,86 @@
             showMessage(`🔄 Player ${previousPlayer + 1} turn ended. Player ${gameState.currentPlayer + 1}'s turn!`);
         }
 
+        // Pay jail fine
+        function payJailFine() {
+            const player = gameState.players[gameState.currentPlayer];
+            
+            if (player.inJail && player.money >= 50) {
+                player.money -= 50;
+                player.inJail = false;
+                player.jailTurns = 0;
+                gameState.freeParkingMoney += 50;
+                
+                showMessage("💰 Paid $50 fine to leave Emergency Shelter!");
+                updatePlayerStats();
+                updateBoard();
+            }
+        }
+
+        // Use Get Out of Jail Free card
+        function useJailCard() {
+            const player = gameState.players[gameState.currentPlayer];
+            
+            if (player.inJail && player.getOutOfJailFreeCards > 0) {
+                player.getOutOfJailFreeCards--;
+                player.inJail = false;
+                player.jailTurns = 0;
+                
+                showMessage("🃏 Used Get Out of Jail Free card!");
+                updatePlayerStats();
+            }
+        }
+
+        // Update the board center display
+        function updateBoard() {
+            const center = document.querySelector('.board-center .board-logo');
+            if (center) {
+                center.innerHTML = `
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>DISASTER<br>POLY</h3>
+                    <p>Emergency Preparedness Monopoly</p>
+                    <div style="margin-top: 15px; font-size: 12px;">
+                        <div>🏦 Free Parking: $${gameState.freeParkingMoney}</div>
+                        <div>🏠 Houses: ${gameState.housesRemaining}</div>
+                        <div>🏨 Hotels: ${gameState.hotelsRemaining}</div>
+                    </div>
+                `;
+            }
+        }
+
         // Reset game
         function resetGame() {
             gameState.currentPlayer = 0;
             gameState.round = 1;
             gameState.turn = 1;
             gameState.diceRolled = false;
+            gameState.doublesCount = 0;
             gameState.winner = null;
+            gameState.freeParkingMoney = 0;
+            gameState.housesRemaining = 32;
+            gameState.hotelsRemaining = 12;
             
             gameState.players.forEach(player => {
                 player.position = 0;
                 player.money = 1500;
-                player.preparedness = 100;
-                player.supplies = 3;
-                player.knowledge = 10;
                 player.properties = [];
+                player.inJail = false;
+                player.jailTurns = 0;
+                player.getOutOfJailFreeCards = 0;
+                player.bankrupt = false;
                 // Keep the color - don't reset it
             });
             
             addPlayersToBoard();
             updatePlayerStats();
             updateGameStatus();
+            updateBoard();
+            updatePropertyOwnership();
             
             document.getElementById('roll-dice').disabled = false;
             document.getElementById('buy-property').disabled = true;
-            document.getElementById('use-supplies').disabled = true;
+            document.getElementById('pay-jail-fine').disabled = true;
+            document.getElementById('use-jail-card').disabled = true;
             document.getElementById('end-turn').disabled = true;
         }
 
@@ -1927,18 +2442,55 @@
                 
                 // Update stats
                 document.getElementById(`p${index + 1}-money`).textContent = player.money;
-                document.getElementById(`p${index + 1}-preparedness`).textContent = player.preparedness;
-                document.getElementById(`p${index + 1}-supplies`).textContent = player.supplies;
-                document.getElementById(`p${index + 1}-knowledge`).textContent = player.knowledge;
+                document.getElementById(`p${index + 1}-properties`).textContent = player.properties.length;
+                document.getElementById(`p${index + 1}-jail-cards`).textContent = player.getOutOfJailFreeCards;
                 
-                // Update resource bar (based on preparedness)
-                const resourceBar = document.getElementById(`p${index + 1}-resource-bar`);
-                const percentage = Math.min(100, (player.preparedness / 1000) * 100);
-                resourceBar.style.width = percentage + '%';
+                // Update status
+                const statusEl = document.getElementById(`p${index + 1}-status`);
+                const statusIcon = statusEl.querySelector('i');
+                const statusText = statusEl.querySelector('span');
                 
-                // Update resource bar color to match player color
-                resourceBar.style.background = `linear-gradient(90deg, ${player.color}, ${darkenColor(player.color, 20)})`;
+                if (player.bankrupt) {
+                    statusEl.className = 'status-indicator help';
+                    statusIcon.className = 'fas fa-times-circle';
+                    statusText.textContent = 'Bankrupt';
+                } else if (player.inJail) {
+                    statusEl.className = 'status-indicator help';
+                    statusIcon.className = 'fas fa-home';
+                    statusText.textContent = `In Shelter (${player.jailTurns}/3)`;
+                } else if (index === gameState.currentPlayer) {
+                    statusEl.className = 'status-indicator safe';
+                    statusIcon.className = 'fas fa-check-circle';
+                    statusText.textContent = 'Active';
+                } else {
+                    statusEl.className = 'status-indicator';
+                    statusIcon.className = 'fas fa-clock';
+                    statusText.textContent = 'Waiting';
+                }
             });
+            
+            // Update jail buttons visibility
+            updateJailButtons();
+        }
+
+        // Update jail button visibility
+        function updateJailButtons() {
+            const player = gameState.players[gameState.currentPlayer];
+            const payJailBtn = document.getElementById('pay-jail-fine');
+            const useJailCardBtn = document.getElementById('use-jail-card');
+            
+            if (player.inJail && !gameState.diceRolled) {
+                // Show jail options before rolling
+                payJailBtn.style.display = 'inline-block';
+                payJailBtn.disabled = player.money < 50;
+                
+                useJailCardBtn.style.display = 'inline-block';
+                useJailCardBtn.disabled = player.getOutOfJailFreeCards === 0;
+            } else {
+                // Hide jail options
+                payJailBtn.style.display = 'none';
+                useJailCardBtn.style.display = 'none';
+            }
         }
 
         // Update game status
@@ -2059,7 +2611,8 @@
             
             const rollDiceBtn = document.getElementById('roll-dice');
             const buyPropertyBtn = document.getElementById('buy-property');
-            const useSuppliesBtn = document.getElementById('use-supplies');
+            const payJailFineBtn = document.getElementById('pay-jail-fine');
+            const useJailCardBtn = document.getElementById('use-jail-card');
             const endTurnBtn = document.getElementById('end-turn');
             const newGameBtn = document.getElementById('new-game');
             const cardCloseBtn = document.getElementById('card-close');
@@ -2075,8 +2628,12 @@
                 buyPropertyBtn.addEventListener('click', buyProperty);
             }
             
-            if (useSuppliesBtn) {
-                useSuppliesBtn.addEventListener('click', useSupplies);
+            if (payJailFineBtn) {
+                payJailFineBtn.addEventListener('click', payJailFine);
+            }
+            
+            if (useJailCardBtn) {
+                useJailCardBtn.addEventListener('click', useJailCard);
             }
             
             if (endTurnBtn) {

@@ -1025,6 +1025,32 @@
                 features: ['Mystery', 'Fact Checking', 'Investigation', 'Education'],
                 disasterType: 'Multiple',
                 category: 'quiz'
+            },
+            {
+                id: 'disasterpoly',
+                title: 'DisasterPoly',
+                description: 'Monopoly-style board game with disaster management twist. Buy properties, manage resources, and survive various disasters while building community resilience.',
+                icon: 'fas fa-dice',
+                badge: 'Board Game',
+                players: '2-6',
+                duration: '60-120',
+                rating: '★ 4.8',
+                features: ['Board Game', 'Resource Management', 'Property Development', 'Community Building'],
+                disasterType: 'Multiple',
+                category: 'strategy'
+            },
+            {
+                id: 'knowledgequiz',
+                title: 'Knowledge Quiz',
+                description: 'Case study-based quiz featuring real disaster scenarios. Answer challenging questions based on actual emergency situations and expert analysis.',
+                icon: 'fas fa-graduation-cap',
+                badge: 'Case Study',
+                players: '1',
+                duration: '20-35',
+                rating: '★ 4.6',
+                features: ['Case Studies', 'Real Scenarios', 'Expert Analysis', 'Knowledge Testing'],
+                disasterType: 'Multiple',
+                category: 'quiz'
             }
         ];
 
@@ -1510,25 +1536,31 @@
 
         // Play game function
         function playGame(gameId) {
-            // Create a simple game launcher
+            // Create a comprehensive game launcher with all available games
             const gameUrls = {
+                'simcity-disaster': 'games/simCity.html',
+                'tsunamiescape': 'games/tsunamiEscape.html',
+                'hurricanehero': 'games/hurricaneHero.html',
+                'wildfirewatch': 'games/WildfireWatch.html',
+                'quakeresponse': 'games/quackResponse.html',
+                'floodplainproject': 'games/floodPain.html',
+                'stopdisasters': 'games/StopDisasters.html',
+                'disasterresponse': 'games/disasterResponseGame.html',
+                'roadtosafety': 'games/roadtosafety.html',
+                'disastermind': 'games/disasterMind.html',
+                'floodquest': 'games/floodQuest.html',
                 'disasterquest': 'games/disasterQuest.html',
                 'survivalkit': 'games/survivalKit.html',
                 'rescuemission': 'games/rescueMission.html',
                 'disastertrivia': 'games/disasterTrivia.html',
                 'virtualdrill': 'games/virtualDrill.html',
                 'factVsMyth': 'games/factVsMyth.html',
-                'tsunamiescape': 'games/tsunamiEscape.html',
-                'hurricanehero': 'games/hurricaneHero.html',
-                'wildfirewatch': 'games/WildfireWatch.html',
-                'quakeresponse': 'games/quackResponse.html',
-                'floodquest': 'games/floodQuest.html',
-                'roadtosafety': 'games/roadtosafety.html',
-                'stopdisasters': 'games/StopDisasters.html'
+                'disasterpoly': 'games/disasterpoly.html',
+                'knowledgequiz': 'games/quiz.html'
             };
             
             if (gameUrls[gameId]) {
-                window.open(gameUrls[gameId], '_blank');
+                window.location.href = gameUrls[gameId];
             } else {
                 alert(`${gameId} will be available soon! This is a demo version.`);
             }
