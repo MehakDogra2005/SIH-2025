@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Floodplain Project 💧</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #3498db, #2c3e50);
+            color: #ecf0f1;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #34495e;
+            padding: 10px;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            margin: 5px;
+            background: #2c3e50;
+            border-radius: 5px;
+            min-width: 120px;
+        }
+        
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+        
+        .map-container {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .map {
+            flex: 1;
+            min-width: 300px;
+            height: 250px;
+            background: #34495e;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+        
+        .river {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: #3498db;
+        }
+        
+        .levee {
+            position: absolute;
+            bottom: 30%;
+            width: 80%;
+            height: 15px;
+            background: #7f8c8d;
+            left: 10%;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .neighborhood {
+            position: absolute;
+            bottom: 45%;
+            width: 70%;
+            height: 40%;
+            background: #2ecc71;
+            left: 15%;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .sandbags {
+            position: absolute;
+            bottom: 30%;
+            width: 20%;
+            height: 20px;
+            background: #f39c12;
+            left: 40%;
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .danger {
+            background: #e74c3c;
+        }
+        
+        .success {
+            background: #2ecc71;
+        }
+        
+        .warning {
+            background: #f39c12;
+        }
+        
+        .community {
+            background: #9b59b6;
+        }
+        
+        .log {
+            background: #2c3e50;
+            height: 150px;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .success-text {
+            color: #2ecc71;
+        }
+        
+        .danger-text {
+            color: #e74c3c;
+        }
+        
+        .warning-text {
+            color: #f39c12;
+        }
+        
+        .info-text {
+            color: #3498db;
+        }
+        
+        .community-text {
+            color: #9b59b6;
+        }
+        
+        .upgrades {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .upgrade {
+            flex: 1;
+            min-width: 200px;
+            background: #34495e;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .upgrade-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        
+        .upgrade-desc {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #2c3e50;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #2ecc71;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .actions {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .map-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>💧 The Floodplain Project</h1>
+        <p>Work together as a community to mitigate flood risks and build resilience</p>
+    </header>
+    
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-item">
+                <div>Community Trust</div>
+                <div class="status-value" id="trust">75%</div>
+            </div>
+            <div class="status-item">
+                <div>Flood Protection</div>
+                <div class="status-value" id="protection">45%</div>
+            </div>
+            <div class="status-item">
+                <div>Preparedness</div>
+                <div class="status-value" id="preparedness">30%</div>
+            </div>
+            <div class="status-item">
+                <div>Resources</div>
+                <div class="status-value" id="resources">$15,000</div>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <div class="map">
+                <div class="river"></div>
+                <div class="levee"></div>
+                <div class="neighborhood">Community</div>
+                <div class="sandbags"></div>
+            </div>
+            
+            <div class="upgrades">
+                <div class="upgrade">
+                    <div class="upgrade-title">🌊 Levee System</div>
+                    <div class="upgrade-desc">Reinforce levees to protect against moderate flooding</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="levee-progress" style="width: 50%"></div>
+                    </div>
+                    <button onclick="upgrade('levee')">Upgrade ($5,000)</button>
+                </div>
+                
+                <div class="upgrade">
+                    <div class="upgrade-title">🏠 Elevated Structures</div>
+                    <div class="upgrade-desc">Raise homes and critical infrastructure above flood level</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="elevation-progress" style="width: 20%"></div>
+                    </div>
+                    <button onclick="upgrade('elevation')">Upgrade ($8,000)</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="community" onclick="takeAction('meeting')">📊 Community Meeting</button>
+            <button class="success" onclick="takeAction('drill')">🚨 Organize Drill</button>
+            <button class="warning" onclick="takeAction('warning')">⚠️ Issue Warning</button>
+            <button onclick="takeAction('evacuate')">🚸 Plan Evacuation</button>
+            <button onclick="takeAction('drainage')">🔄 Improve Drainage</button>
+            <button class="success" onclick="takeAction('green')">🌿 Green Infrastructure</button>
+        </div>
+        
+        <div class="log" id="log">
+            <div class="log-entry info-text">Welcome to The Floodplain Project! Your community is at risk of flooding.</div>
+            <div class="log-entry warning-text">Heavy rainfall predicted for next week. Prepare your defenses!</div>
+            <div class="log-entry">Community members are looking to you for leadership in flood preparedness.</div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            trust: 75,
+            protection: 45,
+            preparedness: 30,
+            resources: 15000,
+            leveeLevel: 50,
+            elevationLevel: 20,
+            week: 1,
+            floodRisk: 60,
+            gameOver: false
+        };
+        
+        // Update the game display
+        function updateDisplay() {
+            document.getElementById('trust').textContent = `${gameState.trust}%`;
+            document.getElementById('protection').textContent = `${gameState.protection}%`;
+            document.getElementById('preparedness').textContent = `${gameState.preparedness}%`;
+            document.getElementById('resources').textContent = `$${gameState.resources.toLocaleString()}`;
+            
+            document.getElementById('levee-progress').style.width = `${gameState.leveeLevel}%`;
+            document.getElementById('elevation-progress').style.width = `${gameState.elevationLevel}%`;
+        }
+        
+        // Add a message to the log
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}-text`;
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Process player actions
+        function takeAction(action) {
+            if (gameState.gameOver) return;
+            
+            // Advance time with each action
+            gameState.week++;
+            
+            switch(action) {
+                case 'meeting':
+                    gameState.trust += 5;
+                    gameState.preparedness += 3;
+                    addLog('Community meeting held. Trust and preparedness increased.', 'community');
+                    break;
+                    
+                case 'drill':
+                    if (gameState.trust > 50) {
+                        gameState.preparedness += 10;
+                        addLog('Successful evacuation drill! Community preparedness improved.', 'success');
+                    } else {
+                        addLog('Not enough community trust to organize an effective drill.', 'warning');
+                    }
+                    break;
+                    
+                case 'warning':
+                    gameState.preparedness += 5;
+                    gameState.trust -= 2;
+                    addLog('Flood warning issued. Community is preparing.', 'warning');
+                    break;
+                    
+                case 'evacuate':
+                    gameState.preparedness += 8;
+                    addLog('Evacuation routes planned and marked.', 'info');
+                    break;
+                    
+                case 'drainage':
+                    gameState.protection += 7;
+                    gameState.resources -= 2000;
+                    addLog('Drainage systems improved. Flood protection increased.', 'success');
+                    break;
+                    
+                case 'green':
+                    gameState.protection += 5;
+                    gameState.trust += 3;
+                    gameState.resources -= 3000;
+                    addLog('Green infrastructure installed. Helps with absorption and community morale.', 'success');
+                    break;
+            }
+            
+            // Update protection based on infrastructure
+            gameState.protection = Math.min(100, Math.max(0, 
+                (gameState.leveeLevel * 0.6) + (gameState.elevationLevel * 0.4)
+            ));
+            
+            // Random event chance
+            if (Math.random() > 0.6) {
+                const events = [
+                    {msg: 'Heavy rainfall! Flood risk increased.', risk: +15, type: 'danger'},
+                    {msg: 'Government grant received!', resources: +5000, type: 'success'},
+                    {msg: 'Community volunteers organized a cleanup day!', trust: +5, preparedness: +3, type: 'community'},
+                    {msg: 'Aging infrastructure failed!', protection: -5, type: 'warning'},
+                    {msg: 'Local business donated supplies!', resources: +3000, type: 'success'},
+                    {msg: 'Public skepticism growing about flood risks.', trust: -5, type: 'warning'}
+                ];
+                
+                const event = events[Math.floor(Math.random() * events.length)];
+                addLog(event.msg, event.type);
+                
+                if (event.risk) gameState.floodRisk += event.risk;
+                if (event.resources) gameState.resources += event.resources;
+                if (event.trust) gameState.trust += event.trust;
+                if (event.protection) gameState.protection += event.protection;
+                if (event.preparedness) gameState.preparedness += event.preparedness;
+            }
+            
+            // Check flood event
+            if (gameState.week % 4 === 0) {
+                const floodSeverity = Math.max(0, gameState.floodRisk - gameState.protection);
+                
+                if (floodSeverity > 30) {
+                    const damage = Math.floor(floodSeverity * 100);
+                    addLog(`FLOOD EVENT! ${floodSeverity}% severity. $${damage} in damages.`, 'danger');
+                    gameState.resources -= damage;
+                    gameState.trust -= 10;
+                    
+                    if (gameState.resources < 0) {
+                        addLog('Community bankrupt! Game over.', 'danger');
+                        gameState.gameOver = true;
+                    }
+                } else {
+                    addLog('Flood threat mitigated! Your defenses held.', 'success');
+                    gameState.trust += 5;
+                }
+                
+                // Reset for next season
+                gameState.floodRisk = 40 + Math.floor(Math.random() * 30);
+            }
+            
+            // Ensure values stay within bounds
+            gameState.trust = Math.min(100, Math.max(0, gameState.trust));
+            gameState.protection = Math.min(100, Math.max(0, gameState.protection));
+            gameState.preparedness = Math.min(100, Math.max(0, gameState.preparedness));
+            
+            updateDisplay();
+        }
+        
+        // Upgrade infrastructure
+        function upgrade(type) {
+            if (gameState.gameOver) return;
+            
+            let cost, increase;
+            
+            switch(type) {
+                case 'levee':
+                    cost = 5000;
+                    increase = 10;
+                    if (gameState.resources >= cost && gameState.leveeLevel < 100) {
+                        gameState.resources -= cost;
+                        gameState.leveeLevel += increase;
+                        addLog('Levee system upgraded!', 'success');
+                    } else if (gameState.leveeLevel >= 100) {
+                        addLog('Levee system already at maximum level.', 'info');
+                    } else {
+                        addLog('Not enough resources for levee upgrade.', 'warning');
+                    }
+                    break;
+                    
+                case 'elevation':
+                    cost = 8000;
+                    increase = 8;
+                    if (gameState.resources >= cost && gameState.elevationLevel < 100) {
+                        gameState.resources -= cost;
+                        gameState.elevationLevel += increase;
+                        addLog('Structures elevated!', 'success');
+                    } else if (gameState.elevationLevel >= 100) {
+                        addLog('Structures already at maximum elevation.', 'info');
+                    } else {
+                        addLog('Not enough resources for elevation project.', 'warning');
+                    }
+                    break;
+            }
+            
+            updateDisplay();
+        }
+        
+        // Initialize the game
+        updateDisplay();
+    </script>
+</body>
+</html>

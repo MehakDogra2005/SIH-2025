@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wildfire Watch 🔥</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-panel {
+            flex: 1;
+            padding: 30px;
+            border-right: 2px solid #ff5722;
+            background: #fef5e7;
+        }
+        
+        .game-area {
+            flex: 2;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 700px;
+            background: #fff8e1;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        h1 {
+            color: #ff5722;
+            margin-left: 15px;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: #e65100;
+            margin: 20px 0 15px;
+            border-bottom: 2px solid #ff5722;
+            padding-bottom: 8px;
+            font-size: 22px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .score-board {
+            background: #ffebee;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border: 2px solid #ff5722;
+        }
+        
+        .current-score {
+            font-size: 24px;
+            text-align: center;
+            margin: 15px 0;
+            color: #2c3e50;
+        }
+        
+        .max-score {
+            font-size: 22px;
+            text-align: center;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #ff5722;
+        }
+        
+        .game-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff5722;
+            font-size: 28px;
+        }
+        
+        .game-description {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .game-ui {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #ffebee;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 300px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ff5722;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terrain {
+            position: absolute;
+            border: 1px solid #795548;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .forest {
+            background: #4caf50;
+        }
+        
+        .grassland {
+            background: #cddc39;
+        }
+        
+        .mountain {
+            background: #795548;
+        }
+        
+        .water {
+            background: #2196f3;
+        }
+        
+        .fire {
+            position: absolute;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23ff5722" d="M50 10C30 30 20 50 20 70a30 30 0 0060 0C80 50 70 30 50 10z"/></svg>');
+            background-size: cover;
+            width: 20px;
+            height: 20px;
+            animation: flicker 0.5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .firefighter {
+            position: absolute;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%233496DB"/><path fill="white" d="M30 40h40v20H30z"/></svg>');
+            background-size: cover;
+            width: 24px;
+            height: 24px;
+            z-index: 10;
+            transition: all 0.5s ease;
+        }
+        
+        .resources-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .resource {
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ff5722;
+        }
+        
+        .resource-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d32f2f;
+            margin: 5px 0;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: #e64a19;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .action-btn {
+            background: #4caf50;
+        }
+        
+        .action-btn:hover {
+            background: #388e3c;
+        }
+        
+        .weather-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #4caf50;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            border-left: 4px solid #ff5722;
+            display: none;
+        }
+        
+        .results h3 {
+            color: #ff5722;
+            margin-bottom: 10px;
+        }
+        
+        .results p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        
+        .command-center {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .command-btn {
+            padding: 12px;
+            background: #ffccbc;
+            border: 1px solid #ff5722;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .command-btn:hover {
+            background: #ffab91;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .info-panel {
+                border-right: none;
+                border-bottom: 2px solid #ff5722;
+            }
+            
+            .resources-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .command-center {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-panel">
+            <div class="header">
+                <i class="fas fa-fire fa-3x" style="color: #ff5722;"></i>
+                <h1>Wildfire Watch 🔥</h1>
+            </div>
+            
+            <h2>Rules</h2>
+            <ul class="rules-list">
+                <li>Command firefighting teams to contain growing wildfires</li>
+                <li>Manage limited resources effectively</li>
+                <li>Assess terrain and weather conditions</li>
+                <li>Adapt to changing fire behavior</li>
+                <li>Protect structures and natural resources</li>
+            </ul>
+            
+            <h2>Important Points</h2>
+            <ul class="points-list">
+                <li>Different terrain types burn at different rates</li>
+                <li>Weather conditions greatly affect fire spread</li>
+                <li>Resources are limited - use them wisely</li>
+                <li>Create firebreaks to contain the spread</li>
+                <li>Evacuate areas when necessary for safety</li>
+            </ul>
+            
+            <div class="score-board">
+                <h2>Your Scores</h2>
+                <div class="current-score">Current Score: <span id="current-score">0</span> points</div>
+                <div class="max-score">High Score: <span id="max-score">0</span> points</div>
+                <div class="current-score">Containment: <span id="containment">0</span>%</div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-container">
+                <h2 class="game-title">Wildfire Watch 🔥</h2>
+                <p class="game-description">Command firefighting teams to contain growing wildfires</p>
+                
+                <div class="game-ui">
+                    <div>Resources: $<span id="money">5000</span></div>
+                    <div>Fire Intensity: <span id="fire-intensity">Medium</span></div>
+                    <div>Teams Available: <span id="teams-available">3</span></div>
+                </div>
+                
+                <div class="weather-container">
+                    <div>Wind: <span id="wind-speed">10</span> mph</div>
+                    <div>Direction: <span id="wind-direction">NE</span></div>
+                    <div>Humidity: <span id="humidity">35</span>%</div>
+                </div>
+                
+                <div class="map-container" id="map-container">
+                    <!-- Terrain elements will be added here -->
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="containment-progress"></div>
+                </div>
+                
+                <div class="resources-container">
+                    <div class="resource">
+                        <h3>Firefighters</h3>
+                        <div class="resource-value" id="firefighters-value">5</div>
+                        <button class="action-btn" onclick="hireFirefighters()">
+                            <i class="fas fa-user-plus"></i> Hire ($500)
+                        </button>
+                    </div>
+                    <div class="resource">
+                        <h3>Water Units</h3>
+                        <div class="resource-value" id="water-units-value">3</div>
+                        <button class="action-btn" onclick="buyWaterUnits()">
+                            <i class="fas fa-tint"></i> Add ($300)
+                        </button>
+                    </div>
+                    <div class="resource">
+                        <h3>Air Support</h3>
+                        <div class="resource-value" id="air-support-value">1</div>
+                        <button class="action-btn" onclick="addAirSupport()">
+                            <i class="fas fa-helicopter"></i> Add ($1000)
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="command-center">
+                    <div class="command-btn" onclick="deployTeam()">
+                        <i class="fas fa-users"></i> Deploy Team
+                    </div>
+                    <div class="command-btn" onclick="createFirebreak()">
+                        <i class="fas fa-grip-lines"></i> Create Firebreak
+                    </div>
+                    <div class="command-btn" onclick="waterDrop()">
+                        <i class="fas fa-tint"></i> Water Drop
+                    </div>
+                    <div class="command-btn" onclick="evacuateArea()">
+                        <i class="fas fa-car"></i> Evacuate Area
+                    </div>
+                </div>
+                
+                <div class="results" id="results">
+                    <h3 id="result-title">Fire Report</h3>
+                    <p id="result-message">The fire is spreading rapidly due to high winds.</p>
+                </div>
+                
+                <div class="controls">
+                    <button onclick="advanceTime()">
+                        <i class="fas fa-forward"></i> Advance Time (1 hour)
+                    </button>
+                    <button class="action-btn" onclick="startGame()">
+                        <i class="fas fa-play"></i> Start Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data and state
+        const gameData = {
+            currentScore: 0,
+            maxScore: parseInt(localStorage.getItem('wildfireWatchMaxScore')) || 0,
+            money: 5000,
+            firefighters: 5,
+            waterUnits: 3,
+            airSupport: 1,
+            teamsAvailable: 3,
+            containment: 0,
+            fireIntensity: 2, // 1-5 scale
+            gameActive: false,
+            timeElapsed: 0,
+            weather: {
+                windSpeed: 10,
+                windDirection: 'NE',
+                humidity: 35
+            },
+            fires: [],
+            terrain: []
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load max score from storage
+            document.getElementById('max-score').textContent = gameData.maxScore;
+            
+            // Initialize the game map
+            initMap();
+            
+            // Update UI
+            updateUI();
+        });
+
+        // Initialize the game map
+        function initMap() {
+            const mapContainer = document.getElementById('map-container');
+            mapContainer.innerHTML = '';
+            
+            // Create different terrain types
+            const terrainTypes = [
+                { type: 'forest', width: 120, height: 100, left: 50, top: 50, label: 'Pine Forest' },
+                { type: 'grassland', width: 100, height: 80, left: 200, top: 70, label: 'Grassland' },
+                { type: 'mountain', width: 80, height: 120, left: 350, top: 40, label: 'Mountain' },
+                { type: 'water', width: 90, height: 60, left: 480, top: 80, label: 'Lake' },
+                { type: 'forest', width: 110, height: 90, left: 150, top: 180, label: 'Oak Forest' }
+            ];
+            
+            terrainTypes.forEach(terrain => {
+                const terrainEl = document.createElement('div');
+                terrainEl.className = `terrain ${terrain.type}`;
+                terrainEl.style.width = `${terrain.width}px`;
+                terrainEl.style.height = `${terrain.height}px`;
+                terrainEl.style.left = `${terrain.left}px`;
+                terrainEl.style.top = `${terrain.top}px`;
+                terrainEl.innerHTML = terrain.label;
+                
+                // Add click event to start fires
+                terrainEl.addEventListener('click', function() {
+                    if (gameData.gameActive) {
+                        startFire(terrain.left + terrain.width/2, terrain.top + terrain.height/2, terrain.type);
+                    }
+                });
+                
+                mapContainer.appendChild(terrainEl);
+                gameData.terrain.push({
+                    element: terrainEl,
+                    type: terrain.type,
+                    x: terrain.left,
+                    y: terrain.top,
+                    width: terrain.width,
+                    height: terrain.height,
+                    burned: false
+                });
+            });
+        }
+
+        // Start a fire at specified coordinates
+        function startFire(x, y, type) {
+            if (!gameData.gameActive) return;
+            
+            const fire = document.createElement('div');
+            fire.className = 'fire';
+            fire.style.left = `${x - 10}px`;
+            fire.style.top = `${y - 10}px`;
+            
+            document.getElementById('map-container').appendChild(fire);
+            
+            gameData.fires.push({
+                element: fire,
+                x: x,
+                y: y,
+                type: type,
+                intensity: 1,
+                size: 20
+            });
+            
+            // Update fire intensity display
+            updateFireIntensity();
+            
+            // Show notification
+            showResult('New Fire Started', `A fire has started in the ${type} area!`);
+        }
+
+        // Start the game
+        function startGame() {
+            gameData.gameActive = true;
+            gameData.currentScore = 0;
+            gameData.money = 5000;
+            gameData.firefighters = 5;
+            gameData.waterUnits = 3;
+            gameData.airSupport = 1;
+            gameData.teamsAvailable = 3;
+            gameData.containment = 0;
+            gameData.fireIntensity = 2;
+            gameData.timeElapsed = 0;
+            gameData.fires = [];
+            
+            // Clear existing fires
+            document.querySelectorAll('.fire').forEach(fire => fire.remove());
+            
+            // Start with one fire
+            startFire(100, 100, 'forest');
+            
+            // Update UI
+            updateUI();
+            document.getElementById('results').style.display = 'none';
+            
+            // Start random fire events
+            const fireTimer = setInterval(function() {
+                if (gameData.gameActive) {
+                    // Random chance of new fire starting
+                    if (Math.random() < 0.2) {
+                        const randomTerrain = gameData.terrain[Math.floor(Math.random() * gameData.terrain.length)];
+                        startFire(
+                            randomTerrain.x + Math.random() * randomTerrain.width,
+                            randomTerrain.y + Math.random() * randomTerrain.height,
+                            randomTerrain.type
+                        );
+                    }
+                    
+                    // Spread existing fires
+                    spreadFires();
+                    
+                    // Change weather randomly
+                    if (Math.random() < 0.3) {
+                        changeWeather();
+                    }
+                } else {
+                    clearInterval(fireTimer);
+                }
+            }, 5000);
+        }
+
+        // Spread existing fires
+        function spreadFires() {
+            gameData.fires.forEach(fire => {
+                // Increase fire size based on intensity and weather
+                const spreadRate = gameData.fireIntensity * (gameData.weather.windSpeed / 10);
+                fire.size += spreadRate;
+                
+                // Update fire visual size
+                fire.element.style.width = `${fire.size}px`;
+                fire.element.style.height = `${fire.size}px`;
+                fire.element.style.left = `${fire.x - fire.size/2}px`;
+                fire.element.style.top = `${fire.y - fire.size/2}px`;
+                
+                // Check if fire reaches terrain
+                gameData.terrain.forEach(terrain => {
+                    if (!terrain.burned) {
+                        const fireRect = {
+                            left: fire.x - fire.size/2,
+                            right: fire.x + fire.size/2,
+                            top: fire.y - fire.size/2,
+                            bottom: fire.y + fire.size/2
+                        };
+                        
+                        const terrainRect = {
+                            left: terrain.x,
+                            right: terrain.x + terrain.width,
+                            top: terrain.y,
+                            bottom: terrain.y + terrain.height
+                        };
+                        
+                        // Check for collision
+                        if (fireRect.left < terrainRect.right &&
+                            fireRect.right > terrainRect.left &&
+                            fireRect.top < terrainRect.bottom &&
+                            fireRect.bottom > terrainRect.top) {
+                            
+                            // Terrain is now burned
+                            terrain.burned = true;
+                            terrain.element.style.backgroundColor = '#5d4037';
+                            terrain.element.style.opacity = '0.7';
+                            
+                            // Increase fire intensity based on terrain type
+                            if (terrain.type === 'forest') fire.intensity += 0.5;
+                            if (terrain.type === 'grassland') fire.intensity += 0.3;
+                            
+                            // Update score
+                            gameData.currentScore -= 50;
+                            updateUI();
+                        }
+                    }
+                });
+            });
+            
+            // Update fire intensity display
+            updateFireIntensity();
+        }
+
+        // Change weather conditions
+        function changeWeather() {
+            // Randomly adjust wind speed
+            gameData.weather.windSpeed = Math.max(5, Math.min(30, gameData.weather.windSpeed + (Math.random() * 10 - 5)));
+            
+            // Randomly change wind direction
+            const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+            gameData.weather.windDirection = directions[Math.floor(Math.random() * directions.length)];
+            
+            // Randomly adjust humidity
+            gameData.weather.humidity = Math.max(10, Math.min(80, gameData.weather.humidity + (Math.random() * 20 - 10)));
+            
+            // Update fire intensity based on weather
+            if (gameData.weather.humidity < 40 && gameData.weather.windSpeed > 15) {
+                gameData.fireIntensity = Math.min(5, gameData.fireIntensity + 1);
+            } else if (gameData.weather.humidity > 60 && gameData.weather.windSpeed < 10) {
+                gameData.fireIntensity = Math.max(1, gameData.fireIntensity - 1);
+            }
+            
+            // Update UI
+            document.getElementById('wind-speed').textContent = gameData.weather.windSpeed;
+            document.getElementById('wind-direction').textContent = gameData.weather.windDirection;
+            document.getElementById('humidity').textContent = gameData.weather.humidity;
+            updateFireIntensity();
+            
+            // Show notification
+            showResult('Weather Change', `Wind is now ${gameData.weather.windSpeed} mph from the ${gameData.weather.windDirection}, humidity ${gameData.weather.humidity}%`);
+        }
+
+        // Update fire intensity display
+        function updateFireIntensity() {
+            let intensityText = "Low";
+            if (gameData.fireIntensity >= 4) intensityText = "High";
+            else if (gameData.fireIntensity >= 2) intensityText = "Medium";
+            
+            document.getElementById('fire-intensity').textContent = intensityText;
+        }
+
+        // Hire more firefighters
+        function hireFirefighters() {
+            if (!gameData.gameActive) return;
+            
+            if (gameData.money >= 500) {
+                gameData.money -= 500;
+                gameData.firefighters += 1;
+                gameData.currentScore += 10;
+                updateUI();
+                showResult('Recruitment', 'Hired additional firefighters');
+            } else {
+                showResult('Budget Issue', 'Not enough funds to hire firefighters');
+            }
+        }
+
+        // Buy water units
+        function buyWaterUnits() {
+            if (!gameData.gameActive) return;
+            
+            if (gameData.money >= 300) {
+                gameData.money -= 300;
+                gameData.waterUnits += 1;
+                gameData.currentScore += 5;
+                updateUI();
+                showResult('Resources', 'Added water unit');
+            } else {
+                showResult('Budget Issue', 'Not enough funds for water units');
+            }
+        }
+
+        // Add air support
+        function addAirSupport() {
+            if (!gameData.gameActive) return;
+            
+            if (gameData.money >= 1000) {
+                gameData.money -= 1000;
+                gameData.airSupport += 1;
+                gameData.currentScore += 20;
+                updateUI();
+                showResult('Air Support', 'Added aerial firefighting capability');
+            } else {
+                showResult('Budget Issue', 'Not enough funds for air support');
+            }
+        }
+
+        // Deploy a firefighting team
+        function deployTeam() {
+            if (!gameData.gameActive) return;
+            
+            if (gameData.teamsAvailable > 0 && gameData.fires.length > 0) {
+                gameData.teamsAvailable -= 1;
+                
+                // Reduce fire intensity
+                const fireIndex = Math.floor(Math.random() * gameData.fires.length);
+                gameData.fires[fireIndex].intensity = Math.max(0.5, gameData.fires[fireIndex].intensity - 0.5);
+                
+                // Increase containment
+                gameData.containment = Math.min(100, gameData.containment + 5);
+                
+                // Add points
+                gameData.currentScore += 25;
+                
+                updateUI();
+                showResult('Team Deployed', 'Firefighting team deployed to contain fire');
+            } else if (gameData.teamsAvailable <= 0) {
+                showResult('No Teams Available', 'All teams are currently deployed');
+            } else {
+                showResult('No Fires', 'There are no active fires to fight');
+            }
+        }
+
+        // Create a firebreak
+        function createFirebreak() {
+            if (!gameData.gameActive) return;
+            
+            if (gameData.money >= 200) {
+                gameData.money -= 200;
+                
+                // Increase containment
+                gameData.containment = Math.min(100, gameData.containment + 10);
+                
+                // Add points
+                gameData.currentScore += 30;
+                
+                updateUI();
+                showResult('Firebreak Created', 'Created a defensive line to stop fire spread');
+            } else {
+                showResult('Budget Issue', 'Not enough funds to create firebreak');
+            }
+        }
+
+        // Perform water drop
+        function waterDrop() {
+            if (!gameData.gameActive) return;
+            
+            if (gameData.waterUnits > 0 && gameData.fires.length > 0) {
+                gameData.waterUnits -= 1;
+                
+                // Reduce fire intensity
+                gameData.fires.forEach(fire => {
+                    fire.intensity = Math.max(0.5, fire.intensity - 0.3);
+                    fire.size = Math.max(10, fire.size - 5);
+                    
+                    // Update fire visual size
+                    fire.element.style.width = `${fire.size}px`;
+                    fire.element.style.height = `${fire.size}px`;
+                });
+                
+                // Increase containment
+                gameData.containment = Math.min(100, gameData.containment + 3);
+                
+                // Add points
+                gameData.currentScore += 15;
+                
+                updateUI();
+                showResult('Water Drop', 'Water drop performed on active fires');
+            } else if (gameData.waterUnits <= 0) {
+                showResult('No Water', 'No water units available');
+            } else {
+                showResult('No Fires', 'There are no active fires to fight');
+            }
+        }
+
+        // Evacuate an area
+        function evacuateArea() {
+            if (!gameData.gameActive) return;
+            
+            // Increase score for protecting lives
+            gameData.currentScore += 50;
+            
+            updateUI();
+            showResult('Evacuation', 'Area evacuated successfully - residents are safe');
+        }
+
+        // Advance time
+        function advanceTime() {
+            if (!gameData.gameActive) {
+                alert("Please start the game first!");
+                return;
+            }
+            
+            gameData.timeElapsed += 1;
+            
+            // Random event chance
+            if (Math.random() < 0.4) {
+                // Random event occurs
+                const events = [
+                    { message: "Volunteers have joined the effort!", effect: () => { gameData.teamsAvailable += 1; } },
+                    { message: "Unexpected rainfall helped containment efforts!", effect: () => { gameData.containment += 5; } },
+                    { message: "Wind shift is spreading the fire faster!", effect: () => { gameData.fireIntensity = Math.min(5, gameData.fireIntensity + 1); } }
+                ];
+                
+                const event = events[Math.floor(Math.random() * events.length)];
+                event.effect();
+                
+                // Show event message
+                showResult('Event Occurred', event.message);
+            }
+            
+            // Teams become available again over time
+            gameData.teamsAvailable = Math.min(5, gameData.teamsAvailable + 1);
+            
+            // Water units replenish
+            gameData.waterUnits = Math.min(5, gameData.waterUnits + 1);
+            
+            // Add points for time advancement
+            gameData.currentScore += 10;
+            
+            // Check if fire is contained
+            if (gameData.containment >= 100) {
+                endGame(true);
+            }
+            
+            // Check if fire is out of control
+            if (gameData.fireIntensity >= 5 && gameData.containment < 30) {
+                endGame(false);
+            }
+            
+            updateUI();
+        }
+
+        // Show result message
+        function showResult(title, message) {
+            document.getElementById('result-title').textContent = title;
+            document.getElementById('result-message').textContent = message;
+            document.getElementById('results').style.display = 'block';
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                document.getElementById('results').style.display = 'none';
+            }, 3000);
+        }
+
+        // Update UI elements
+        function updateUI() {
+            document.getElementById('current-score').textContent = gameData.currentScore;
+            document.getElementById('money').textContent = gameData.money;
+            document.getElementById('firefighters-value').textContent = gameData.firefighters;
+            document.getElementById('water-units-value').textContent = gameData.waterUnits;
+            document.getElementById('air-support-value').textContent = gameData.airSupport;
+            document.getElementById('teams-available').textContent = gameData.teamsAvailable;
+            document.getElementById('containment').textContent = gameData.containment;
+            
+            // Update progress bar
+            document.getElementById('containment-progress').style.width = gameData.containment + '%';
+            
+            // Update high score if needed
+            if (gameData.currentScore > gameData.maxScore) {
+                gameData.maxScore = gameData.currentScore;
+                localStorage.setItem('wildfireWatchMaxScore', gameData.maxScore);
+                document.getElementById('max-score').textContent = gameData.maxScore;
+            }
+        }
+
+        // End the game
+        function endGame(success = false) {
+            gameData.gameActive = false;
+            const results = document.getElementById('results');
+            
+            if (success) {
+                document.getElementById('result-title').textContent = 'Fire Contained!';
+                document.getElementById('result-title').style.color = '#4caf50';
+                document.getElementById('result-message').textContent = `You successfully contained the wildfire in ${gameData.timeElapsed} hours. Final score: ${gameData.currentScore}`;
+            } else {
+                document.getElementById('result-title').textContent = 'Fire Out of Control';
+                document.getElementById('result-title').style.color = '#d32f2f';
+                document.getElementById('result-message').textContent = 'The wildfire spread beyond containment capabilities. Final score: ' + gameData.currentScore;
+            }
+            
+            results.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

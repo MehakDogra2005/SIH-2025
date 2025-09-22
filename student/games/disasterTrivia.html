@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Trivia Battle 🏆</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .rules-panel {
+            flex: 1;
+            padding: 25px;
+            background: linear-gradient(to bottom, #2c3e50, #3498db);
+            color: white;
+        }
+        
+        .game-panel {
+            flex: 2;
+            padding: 25px;
+            background: #ecf0f1;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f1c40f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            margin: 15px 0 10px;
+            color: #f1c40f;
+            border-bottom: 2px solid #f1c40f;
+            padding-bottom: 5px;
+        }
+        
+        h3 {
+            margin: 15px 0 10px;
+            color: #3498db;
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .info-box {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            margin: 0 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-color: #f1c40f;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .lifelines {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .lifeline {
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .lifeline.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .lifeline.used {
+            background: #bdc3c7;
+            color: #7f8c8d;
+            cursor: not-allowed;
+        }
+        
+        .timer {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #start-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        #start-btn:hover {
+            background: #27ae60;
+        }
+        
+        #next-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        #next-btn:hover {
+            background: #2980b9;
+        }
+        
+        #restart-btn {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        #restart-btn:hover {
+            background: #8e44ad;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+        
+        .result {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .high-score {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .powerup-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .powerup {
+            padding: 10px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .powerup.active {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .powerup.used {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .powerup-time {
+            background: #f1c40f;
+            color: white;
+        }
+        
+        .powerup-double {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        .powerup-eliminate {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .rules-panel, .game-panel {
+                width: 100%;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="rules-panel">
+            <h1>Disaster Trivia Battle 🏆</h1>
+            
+            <h2>Game Rules</h2>
+            <ul>
+                <li>Answer rapid-fire questions about disaster preparedness</li>
+                <li>Each correct answer earns points based on difficulty</li>
+                <li>Use power-ups and lifelines to help you</li>
+                <li>Answer before time runs out for bonus points</li>
+                <li>Compete for the highest score</li>
+            </ul>
+            
+            <h2>Power-ups & Lifelines</h2>
+            <ul>
+                <li><strong>Time Freeze:</strong> Add extra time to the clock</li>
+                <li><strong>Double Points:</strong> Next correct answer worth double</li>
+                <li><strong>Eliminate Option:</strong> Remove one wrong answer</li>
+                <li><strong>50:50:</strong> Eliminate two wrong answers</li>
+                <li><strong>Ask Expert:</strong> Get help from our disaster expert</li>
+            </ul>
+            
+            <h2>Scoring System</h2>
+            <ul>
+                <li><strong>Easy Question:</strong> 10 points</li>
+                <li><strong>Medium Question:</strong> 20 points</li>
+                <li><strong>Hard Question:</strong> 30 points</li>
+                <li><strong>Time Bonus:</strong> +1 point per second remaining</li>
+                <li><strong>Perfect Round:</strong> 50 bonus points</li>
+            </ul>
+            
+            <div class="high-score">
+                <h2>Your High Score</h2>
+                <p id="high-score">0 points</p>
+            </div>
+        </div>
+        
+        <div class="game-panel">
+            <h2>Disaster Preparedness Quiz</h2>
+            
+            <div class="game-info">
+                <div class="info-box">
+                    <h3>Question</h3>
+                    <p id="question-number">0/10</p>
+                </div>
+                <div class="info-box">
+                    <h3>Difficulty</h3>
+                    <p id="difficulty">-</p>
+                </div>
+                <div class="info-box">
+                    <h3>Score</h3>
+                    <p id="score">0</p>
+                </div>
+            </div>
+            
+            <div class="question-container" id="question">
+                Press Start to begin the quiz!
+            </div>
+            
+            <div class="timer" id="timer">
+                Time: 15 seconds
+            </div>
+            
+            <div class="options-grid" id="options">
+                <!-- Options will be generated here -->
+            </div>
+            
+            <div class="powerup-container">
+                <div class="powerup powerup-time" title="Time Freeze">⏰</div>
+                <div class="powerup powerup-double" title="Double Points">2️⃣</div>
+                <div class="powerup powerup-eliminate" title="Eliminate Option">❌</div>
+            </div>
+            
+            <div class="lifelines">
+                <div class="lifeline active" id="lifeline-5050">50:50</div>
+                <div class="lifeline active" id="lifeline-expert">Ask Expert</div>
+            </div>
+            
+            <div class="controls">
+                <button id="start-btn">Start Quiz</button>
+                <button id="next-btn" disabled>Next Question</button>
+                <button id="restart-btn">Restart Quiz</button>
+            </div>
+            
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz questions database
+        const questions = [
+            {
+                question: "What is the most important item to have in an emergency kit?",
+                options: ["Bottled water", "Smartphone", "Jewelry", "Books"],
+                answer: 0,
+                difficulty: "easy"
+            },
+            {
+                question: "During an earthquake, what should you do if you're indoors?",
+                options: ["Run outside immediately", "Hide under a sturdy table", "Stand in a doorway", "Go to the top floor"],
+                answer: 1,
+                difficulty: "easy"
+            },
+            {
+                question: "How much water should you store per person for a 3-day emergency?",
+                options: ["1 gallon", "3 gallons", "5 gallons", "10 gallons"],
+                answer: 1,
+                difficulty: "medium"
+            },
+            {
+                question: "What should you do if you're caught in a wildfire?",
+                options: ["Try to outrun the fire", "Hide in a body of water", "Look for a clear area with little vegetation", "Climb a tall tree"],
+                answer: 2,
+                difficulty: "medium"
+            },
+            {
+                question: "Which of these is NOT recommended during a thunderstorm?",
+                options: ["Staying indoors", "Using corded phones", "Keeping away from windows", "Unplugging electronics"],
+                answer: 1,
+                difficulty: "medium"
+            },
+            {
+                question: "What is the recommended way to purify water in an emergency?",
+                options: ["Adding a pinch of salt", "Boiling for 1 minute", "Straining through cloth", "Adding a few drops of bleach per gallon"],
+                answer: 3,
+                difficulty: "hard"
+            },
+            {
+                question: "When evacuating during a hurricane, what should you do?",
+                options: ["Take all valuable possessions", "Turn off utilities if instructed", "Leave pets behind", "Wait until the last minute to decide"],
+                answer: 1,
+                difficulty: "hard"
+            },
+            {
+                question: "What does the term 'shelter in place' mean?",
+                options: ["Go to a community shelter", "Find immediate shelter wherever you are", "Build a temporary shelter", "Evacuate to a safer location"],
+                answer: 1,
+                difficulty: "medium"
+            },
+            {
+                question: "How can you strengthen your home against earthquakes?",
+                options: ["Install hurricane shutters", "Bolt heavy furniture to walls", "Add sandbags around foundation", "Install a sump pump"],
+                answer: 1,
+                difficulty: "hard"
+            },
+            {
+                question: "What is the most common mistake during flood evacuation?",
+                options: ["Driving through floodwaters", "Waiting too long to evacuate", "Not bringing enough supplies", "Going to the wrong shelter"],
+                answer: 0,
+                difficulty: "hard"
+            },
+            {
+                question: "Which item should NOT be in your emergency kit?",
+                options: ["Manual can opener", "Battery-powered radio", "Perishable foods", "First aid kit"],
+                answer: 2,
+                difficulty: "easy"
+            },
+            {
+                question: "What should you do if a tornado is approaching and you're in a car?",
+                options: ["Try to outdrive the tornado", "Get out and lie in a ditch", "Park under a highway overpass", "Keep driving to find better shelter"],
+                answer: 1,
+                difficulty: "medium"
+            },
+            {
+                question: "How often should you update your emergency plan?",
+                options: ["Every month", "Every 6 months", "Every year", "Only when you move"],
+                answer: 2,
+                difficulty: "easy"
+            }
+        ];
+
+        // Game state
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let highScore = parseInt(localStorage.getItem('disasterTriviaHighScore')) || 0;
+        let timeLeft = 15;
+        let timerInterval = null;
+        let gameActive = false;
+        let questionsAnswered = 0;
+        let doublePointsActive = false;
+        let lifelines = {
+            fiftyFifty: true,
+            expert: true
+        };
+
+        // DOM elements
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const timerElement = document.getElementById('timer');
+        const scoreElement = document.getElementById('score');
+        const questionNumberElement = document.getElementById('question-number');
+        const difficultyElement = document.getElementById('difficulty');
+        const highScoreElement = document.getElementById('high-score');
+        const resultElement = document.getElementById('result');
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const lifeline5050 = document.getElementById('lifeline-5050');
+        const lifelineExpert = document.getElementById('lifeline-expert');
+        const powerups = document.querySelectorAll('.powerup');
+
+        // Initialize the game
+        function initGame() {
+            // Reset game state
+            score = 0;
+            currentQuestionIndex = 0;
+            questionsAnswered = 0;
+            timeLeft = 15;
+            doublePointsActive = false;
+            lifelines = {
+                fiftyFifty: true,
+                expert: true
+            };
+            
+            // Update UI
+            scoreElement.textContent = score;
+            questionNumberElement.textContent = "0/10";
+            difficultyElement.textContent = "-";
+            timerElement.textContent = `Time: ${timeLeft} seconds`;
+            resultElement.className = 'result';
+            highScoreElement.textContent = `${highScore} points`;
+            
+            // Reset lifelines
+            lifeline5050.className = 'lifeline active';
+            lifelineExpert.className = 'lifeline active';
+            
+            // Reset powerups
+            powerups.forEach(powerup => {
+                powerup.className = powerup.className.replace(' used', '').replace(' active', '');
+            });
+            
+            // Clear options
+            optionsElement.innerHTML = '';
+            questionElement.textContent = "Press Start to begin the quiz!";
+            
+            // Update buttons
+            startBtn.disabled = false;
+            nextBtn.disabled = true;
+        }
+
+        // Start the game
+        function startGame() {
+            gameActive = true;
+            startBtn.disabled = true;
+            nextBtn.disabled = false;
+            questionsAnswered = 0;
+            
+            // Load first question
+            loadQuestion();
+        }
+
+        // Load a question
+        function loadQuestion() {
+            if (currentQuestionIndex >= 10) {
+                endGame();
+                return;
+            }
+            
+            // Reset timer
+            timeLeft = 15;
+            timerElement.textContent = `Time: ${timeLeft} seconds`;
+            
+            // Clear previous timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // Select a random question
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            const question = questions[randomIndex];
+            
+            // Update UI
+            questionElement.textContent = question.question;
+            difficultyElement.textContent = question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1);
+            questionNumberElement.textContent = `${currentQuestionIndex + 1}/10`;
+            
+            // Generate options
+            optionsElement.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.dataset.index = index;
+                
+                optionElement.addEventListener('click', () => {
+                    checkAnswer(index, question.answer, optionElement);
+                });
+                
+                optionsElement.appendChild(optionElement);
+            });
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = `Time: ${timeLeft} seconds`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeUp();
+                }
+            }, 1000);
+            
+            currentQuestionIndex++;
+        }
+
+        // Check if answer is correct
+        function checkAnswer(selectedIndex, correctIndex, optionElement) {
+            if (!gameActive) return;
+            
+            clearInterval(timerInterval);
+            gameActive = false;
+            
+            // Disable all options
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Highlight correct and incorrect answers
+            allOptions[correctIndex].classList.add('correct');
+            if (selectedIndex !== correctIndex) {
+                optionElement.classList.add('incorrect');
+            }
+            
+            // Calculate points
+            let points = 0;
+            if (selectedIndex === correctIndex) {
+                // Base points based on difficulty
+                const difficulty = questions.find(q => q.answer === correctIndex).difficulty;
+                if (difficulty === 'easy') points = 10;
+                else if (difficulty === 'medium') points = 20;
+                else points = 30;
+                
+                // Time bonus
+                points += timeLeft;
+                
+                // Double points power-up
+                if (doublePointsActive) {
+                    points *= 2;
+                    doublePointsActive = false;
+                    document.querySelector('.powerup-double').classList.add('used');
+                }
+                
+                score += points;
+                scoreElement.textContent = score;
+                
+                resultElement.textContent = `Correct! +${points} points`;
+                resultElement.className = 'result success';
+            } else {
+                resultElement.textContent = 'Incorrect! The right answer is highlighted.';
+                resultElement.className = 'result fail';
+            }
+            
+            questionsAnswered++;
+        }
+
+        // Handle time up
+        function handleTimeUp() {
+            gameActive = false;
+            
+            // Disable all options
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(option => {
+                option.style.pointerEvents = 'none';
+                
+                // Highlight correct answer
+                if (parseInt(option.dataset.index) === questions.find(q => q.question === questionElement.textContent).answer) {
+                    option.classList.add('correct');
+                }
+            });
+            
+            resultElement.textContent = 'Time\'s up! The correct answer is highlighted.';
+            resultElement.className = 'result fail';
+        }
+
+        // Use 50:50 lifeline
+        lifeline5050.addEventListener('click', () => {
+            if (!lifelines.fiftyFifty || !gameActive) return;
+            
+            const currentQuestion = questions.find(q => q.question === questionElement.textContent);
+            const options = document.querySelectorAll('.option');
+            let eliminated = 0;
+            
+            // Eliminate two wrong options
+            options.forEach(option => {
+                if (eliminated < 2 && parseInt(option.dataset.index) !== currentQuestion.answer && !option.classList.contains('incorrect')) {
+                    option.classList.add('incorrect');
+                    option.style.pointerEvents = 'none';
+                    eliminated++;
+                }
+            });
+            
+            lifelines.fiftyFifty = false;
+            lifeline5050.classList.remove('active');
+            lifeline5050.classList.add('used');
+        });
+
+        // Use expert lifeline
+        lifelineExpert.addEventListener('click', () => {
+            if (!lifelines.expert || !gameActive) return;
+            
+            const currentQuestion = questions.find(q => q.question === questionElement.textContent);
+            const correctIndex = currentQuestion.answer;
+            
+            resultElement.textContent = `Expert suggestion: I'm ${Math.random() > 0.2 ? 'leaning towards' : 'not sure but maybe'} option ${correctIndex + 1}`;
+            resultElement.className = 'result success';
+            
+            setTimeout(() => {
+                resultElement.textContent = '';
+                resultElement.className = 'result';
+            }, 3000);
+            
+            lifelines.expert = false;
+            lifelineExpert.classList.remove('active');
+            lifelineExpert.classList.add('used');
+        });
+
+        // Power-up handlers
+        powerups.forEach(powerup => {
+            powerup.addEventListener('click', () => {
+                if (powerup.classList.contains('used') || !gameActive) return;
+                
+                if (powerup.classList.contains('powerup-time')) {
+                    timeLeft += 10;
+                    timerElement.textContent = `Time: ${timeLeft} seconds`;
+                    powerup.classList.add('used');
+                    
+                    resultElement.textContent = '+10 seconds added!';
+                    resultElement.className = 'result success';
+                    
+                    setTimeout(() => {
+                        resultElement.textContent = '';
+                        resultElement.className = 'result';
+                    }, 2000);
+                }
+                else if (powerup.classList.contains('powerup-double')) {
+                    doublePointsActive = true;
+                    powerup.classList.add('active');
+                    
+                    resultElement.textContent = 'Double points activated for next question!';
+                    resultElement.className = 'result success';
+                    
+                    setTimeout(() => {
+                        resultElement.textContent = '';
+                        resultElement.className = 'result';
+                    }, 2000);
+                }
+                else if (powerup.classList.contains('powerup-eliminate')) {
+                    const currentQuestion = questions.find(q => q.question === questionElement.textContent);
+                    const options = document.querySelectorAll('.option');
+                    let eliminated = 0;
+                    
+                    // Eliminate one wrong option
+                    options.forEach(option => {
+                        if (eliminated < 1 && parseInt(option.dataset.index) !== currentQuestion.answer && !option.classList.contains('incorrect')) {
+                            option.classList.add('incorrect');
+                            option.style.pointerEvents = 'none';
+                            eliminated++;
+                        }
+                    });
+                    
+                    powerup.classList.add('used');
+                }
+            });
+        });
+
+        // End the game
+        function endGame() {
+            gameActive = false;
+            nextBtn.disabled = true;
+            restartBtn.disabled = false;
+            
+            // Calculate final score
+            if (questionsAnswered === 10) {
+                score += 50; // Perfect round bonus
+                resultElement.textContent = `Perfect round! +50 bonus points! Final score: ${score}`;
+                resultElement.className = 'result success';
+            } else {
+                resultElement.textContent = `Game over! Final score: ${score}`;
+                resultElement.className = 'result fail';
+            }
+            
+            // Update high score
+            if (score > highScore) {
+                highScore = score;
+                highScoreElement.textContent = `${highScore} points`;
+                localStorage.setItem('disasterTriviaHighScore', highScore);
+                
+                resultElement.textContent += " - New High Score!";
+            }
+            
+            scoreElement.textContent = score;
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        nextBtn.addEventListener('click', () => {
+            resultElement.textContent = '';
+            resultElement.className = 'result';
+            loadQuestion();
+            gameActive = true;
+        });
+        restartBtn.addEventListener('click', initGame);
+
+        // Initialize the game on load
+        window.addEventListener('load', () => {
+            highScoreElement.textContent = `${highScore} points`;
+            initGame();
+        });
+    </script>
+</body>
+</html>

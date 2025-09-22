@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Poly - Emergency Preparedness Board Game</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            /* User palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background: var(--light-bg);
+            color: var(--text-dark);
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            min-height: 90vh;
+            border: 1px solid rgba(16, 24, 32, 0.03);
+        }
+        
+        .info-panel {
+            flex: 1;
+            padding: 24px;
+            border-right: 1px solid rgba(16, 24, 32, 0.06);
+            background: linear-gradient(180deg, #fff, #fbfdff);
+            overflow-y: auto;
+        }
+        
+        .game-area {
+            flex: 2.5;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--light-bg);
+        }
+        
+        .game-board {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            background: linear-gradient(135deg, var(--card-bg), #fbfdff);
+            border: 3px solid var(--primary);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .board-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--p6), var(--p7));
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .board-logo h3 {
+            font-size: 28px;
+            font-weight: 900;
+            margin: 10px 0;
+            color: var(--primary);
+            line-height: 1.1;
+        }
+
+        .board-logo p {
+            font-size: 12px;
+            color: var(--p1);
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .board-logo i {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .board-space {
+            position: absolute;
+            border: 2px solid rgba(26, 115, 232, 0.15);
+            background: var(--card-bg);
+            color: var(--text-dark);
+            font-size: 10px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(18, 38, 63, 0.04);
+        }
+        
+        .board-space:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+        
+        .board-space.corner {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-weight: 700;
+        }
+        
+        .board-space.side {
+            width: 60px;
+            height: 90px;
+        }
+        
+        .board-space.top, .board-space.bottom {
+            width: 90px;
+            height: 60px;
+        }
+        
+        .property {
+            background: linear-gradient(135deg, var(--p1), #2f8fc1);
+            color: white;
+        }
+        
+        .emergency-service {
+            background: linear-gradient(135deg, var(--secondary), #2ea044);
+            color: white;
+        }
+        
+        .disaster-zone {
+            background: linear-gradient(135deg, var(--accent), #ea6f7b);
+            color: white;
+        }
+        
+        .safe-zone {
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            color: var(--text-dark);
+        }
+        
+        .special {
+            background: linear-gradient(135deg, var(--p2), #f1a85b);
+            color: white;
+        }
+        
+        .player {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            z-index: 5;
+            transition: all 0.5s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .player1 { background: linear-gradient(135deg, var(--accent), #f56b77); }
+        .player2 { background: linear-gradient(135deg, var(--p1), #2f8fc1); }
+        .player3 { background: linear-gradient(135deg, var(--secondary), #2ea044); }
+        .player4 { background: linear-gradient(135deg, var(--p2), #f1a85b); }
+        
+        .dice-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .dice {
+            width: 64px;
+            height: 64px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .dice:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(18, 38, 63, 0.12);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            font-family: "Ubuntu", sans-serif;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(18, 38, 63, 0.15);
+        }
+        
+        button:disabled {
+            background: linear-gradient(90deg, #7f8c8d, #95a5a6);
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.6;
+        }
+        
+        .game-status {
+            background: var(--card-bg);
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid var(--p6);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .player-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #ddd;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .player-card.active {
+            border-left-color: var(--primary);
+            background: linear-gradient(180deg, rgba(26, 115, 232, 0.02), var(--card-bg));
+            transform: scale(1.02);
+        }
+        
+        .card-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(6, 12, 30, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .card-content {
+            background: var(--card-bg);
+            padding: 32px;
+            border-radius: 16px;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid rgba(16, 24, 32, 0.04);
+            box-shadow: 0 18px 50px rgba(8, 12, 32, 0.25);
+        }
+        
+        .resource-bar {
+            width: 100%;
+            height: 20px;
+            background: var(--light-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+            border: 1px solid rgba(16, 24, 32, 0.06);
+        }
+        
+        .resource-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--p1));
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 24px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: none;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin: 20px 0 12px;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.08);
+            padding-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin: 12px 0;
+            font-weight: 600;
+        }
+        
+        .rules-list, .disaster-list {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+            color: var(--text-dark);
+        }
+        
+        .highlight {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        /* Emergency button styling to match dashboard */
+        #buy-property {
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
+        }
+        
+        #buy-property:hover {
+            background: linear-gradient(90deg, #2ea044, var(--secondary));
+        }
+        
+        #use-supplies {
+            background: linear-gradient(90deg, var(--p2), #f1a85b);
+        }
+        
+        #use-supplies:hover {
+            background: linear-gradient(90deg, #f1a85b, var(--p2));
+        }
+        
+        #end-turn {
+            background: linear-gradient(90deg, var(--accent), #f56b77);
+        }
+        
+        #end-turn:hover {
+            background: linear-gradient(90deg, #f56b77, var(--accent));
+        }
+        
+        #new-game {
+            background: linear-gradient(90deg, var(--p5), #d4a5c7);
+        }
+        
+        #new-game:hover {
+            background: linear-gradient(90deg, #d4a5c7, var(--p5));
+        }
+        
+        /* Card modal buttons */
+        #card-close {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            margin-top: 20px;
+        }
+        
+        /* Responsive design matching dashboard */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .info-panel {
+                border-right: none;
+                border-bottom: 1px solid rgba(16, 24, 32, 0.06);
+            }
+            
+            .game-board {
+                width: 500px;
+                height: 500px;
+            }
+            
+            .board-space.corner {
+                width: 75px;
+                height: 75px;
+            }
+            
+            .board-space.side {
+                width: 50px;
+                height: 75px;
+            }
+            
+            .board-space.top, .board-space.bottom {
+                width: 75px;
+                height: 50px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            
+            .container {
+                border-radius: 12px;
+            }
+            
+            .game-board {
+                width: 400px;
+                height: 400px;
+            }
+            
+            .board-space.corner {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .board-space.side {
+                width: 40px;
+                height: 60px;
+            }
+            
+            .board-space.top, .board-space.bottom {
+                width: 60px;
+                height: 40px;
+            }
+            
+            .player {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .player-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Add some nice animations matching dashboard style */
+        @keyframes highlightPulse {
+            0% {
+                box-shadow: 0 0 0 rgba(26, 115, 232, 0.0)
+            }
+            50% {
+                box-shadow: 0 8px 30px rgba(26, 115, 232, 0.12)
+            }
+            100% {
+                box-shadow: 0 0 0 rgba(26, 115, 232, 0.0)
+            }
+        }
+        
+        .pulse {
+            animation: highlightPulse 1100ms ease both;
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .status-indicator.safe {
+            color: var(--secondary);
+        }
+        
+        .status-indicator.help {
+            color: var(--accent);
+        }
+        
+        /* Custom scrollbar */
+        .info-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .info-panel::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--p6), var(--p1));
+            border-radius: 10px;
+        }
+        
+        .info-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-panel">
+            <h1><i class="fas fa-shield-alt"></i> Disaster Poly</h1>
+            
+            <h2><i class="fas fa-gamepad"></i> How to Play</h2>
+            <ul class="rules-list">
+                <li>Roll dice to move around the disaster preparedness board</li>
+                <li>Buy <span class="highlight">Emergency Services</span> to protect your community</li>
+                <li>Avoid <span class="highlight">Disaster Zones</span> or pay the penalty</li>
+                <li>Collect resources and improve your preparedness</li>
+                <li>Draw disaster cards and respond to emergencies</li>
+                <li>First to reach 1000 preparedness points wins!</li>
+            </ul>
+            
+            <h2><i class="fas fa-map-marked-alt"></i> Space Types</h2>
+            <ul class="disaster-list">
+                <li><span style="color: var(--secondary);"><i class="fas fa-hospital"></i> Emergency Services</span> - Buyable protective facilities</li>
+                <li><span style="color: var(--accent);"><i class="fas fa-exclamation-triangle"></i> Disaster Zones</span> - Pay penalty or use resources</li>
+                <li><span style="color: var(--p1);"><i class="fas fa-shield-alt"></i> Safe Zones</span> - Gain resources and safety</li>
+                <li><span style="color: var(--p2);"><i class="fas fa-question-circle"></i> Special Events</span> - Random disaster scenarios</li>
+                <li><span style="color: var(--primary);"><i class="fas fa-star"></i> Corner Spaces</span> - Major emergency events</li>
+            </ul>
+            
+            <h2><i class="fas fa-box"></i> Resources</h2>
+            <ul class="rules-list">
+                <li><span class="highlight"><i class="fas fa-dollar-sign"></i> Money:</span> Buy emergency services and supplies</li>
+                <li><span class="highlight"><i class="fas fa-heart"></i> Preparedness:</span> Your disaster readiness score</li>
+                <li><span class="highlight"><i class="fas fa-first-aid"></i> Supplies:</span> Emergency kits and equipment</li>
+                <li><span class="highlight"><i class="fas fa-graduation-cap"></i> Knowledge:</span> Training and education points</li>
+            </ul>
+
+            <h3><i class="fas fa-cloud-bolt"></i> Disaster Events Include:</h3>
+            <ul class="disaster-list">
+                <li><i class="fas fa-tornado" style="color: var(--p3);"></i> Tornado Warning</li>
+                <li><i class="fas fa-water" style="color: var(--p1);"></i> Flood Alert</li>
+                <li><i class="fas fa-fire" style="color: var(--accent);"></i> Wildfire</li>
+                <li><i class="fas fa-bolt" style="color: var(--p2);"></i> Power Outage</li>
+                <li><i class="fas fa-thermometer-full" style="color: var(--accent);"></i> Heat Wave</li>
+                <li><i class="fas fa-snowflake" style="color: var(--p6);"></i> Blizzard</li>
+                <li><i class="fas fa-hurricane" style="color: var(--p3);"></i> Hurricane</li>
+                <li><i class="fas fa-cloud-rain" style="color: var(--p1);"></i> Severe Storm</li>
+            </ul>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-status">
+                <h3><i class="fas fa-user-circle"></i> Current Turn: <span id="current-player">Player 1</span></h3>
+                <p><i class="fas fa-calendar-alt"></i> Round: <span id="round-counter">1</span> | <i class="fas fa-clock"></i> Turn: <span id="turn-counter">1</span></p>
+            </div>
+
+            <div class="game-board" id="game-board">
+                <!-- Board spaces will be generated by JavaScript -->
+            </div>
+
+            <div class="dice-container">
+                <div class="dice" id="dice1">🎲</div>
+                <div class="dice" id="dice2">🎲</div>
+                <div id="dice-total" style="margin-left: 20px; font-size: 20px; font-weight: bold; color: var(--primary);">
+                    <i class="fas fa-dice"></i> Total: 0
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="roll-dice"><i class="fas fa-dice"></i> Roll Dice</button>
+                <button id="buy-property" disabled><i class="fas fa-shopping-cart"></i> Buy Property ($200)</button>
+                <button id="use-supplies" disabled><i class="fas fa-first-aid"></i> Use Supplies</button>
+                <button id="end-turn" disabled><i class="fas fa-forward"></i> End Turn</button>
+                <button id="new-game"><i class="fas fa-redo"></i> New Game</button>
+            </div>
+
+            <div class="player-stats">
+                <div class="player-card active" id="player1-card">
+                    <h4><i class="fas fa-user-circle" style="color: var(--accent);"></i> Player 1</h4>
+                    <div><i class="fas fa-dollar-sign"></i> Money: $<span id="p1-money">1500</span></div>
+                    <div><i class="fas fa-heart"></i> Preparedness: <span id="p1-preparedness">100</span></div>
+                    <div><i class="fas fa-first-aid"></i> Supplies: <span id="p1-supplies">3</span></div>
+                    <div><i class="fas fa-graduation-cap"></i> Knowledge: <span id="p1-knowledge">10</span></div>
+                    <div class="resource-bar">
+                        <div class="resource-fill" id="p1-resource-bar" style="width: 10%"></div>
+                    </div>
+                </div>
+                <div class="player-card" id="player2-card">
+                    <h4><i class="fas fa-user-circle" style="color: var(--p1);"></i> Player 2</h4>
+                    <div><i class="fas fa-dollar-sign"></i> Money: $<span id="p2-money">1500</span></div>
+                    <div><i class="fas fa-heart"></i> Preparedness: <span id="p2-preparedness">100</span></div>
+                    <div><i class="fas fa-first-aid"></i> Supplies: <span id="p2-supplies">3</span></div>
+                    <div><i class="fas fa-graduation-cap"></i> Knowledge: <span id="p2-knowledge">10</span></div>
+                    <div class="resource-bar">
+                        <div class="resource-fill" id="p2-resource-bar" style="width: 10%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for disaster cards -->
+    <div class="card-modal" id="card-modal">
+        <div class="card-content">
+            <h3 id="card-title"><i class="fas fa-exclamation-triangle"></i> Disaster Event</h3>
+            <p id="card-description">A disaster has occurred!</p>
+            <div id="card-choices"></div>
+            <button id="card-close"><i class="fas fa-times"></i> Continue</button>
+        </div>
+    </div>
+
+    <script>
+        // Disaster Poly Game - Emergency Preparedness Board Game
+        
+        // Game state
+        const gameState = {
+            currentPlayer: 0,
+            players: [
+                { position: 0, money: 1500, preparedness: 100, supplies: 3, knowledge: 10, properties: [] },
+                { position: 0, money: 1500, preparedness: 100, supplies: 3, knowledge: 10, properties: [] }
+            ],
+            round: 1,
+            turn: 1,
+            diceRolled: false,
+            lastRoll: [0, 0],
+            gameBoard: null,
+            disasterCards: [],
+            winner: null
+        };
+
+        // Board spaces configuration
+        const boardSpaces = [
+            // Corner spaces (0, 10, 20, 30)
+            { id: 0, name: "Emergency HQ", type: "corner", emoji: "🏛️", effect: "start" },
+            { id: 10, name: "Disaster Relief", type: "corner", emoji: "🚑", effect: "relief" },
+            { id: 20, name: "FEMA Station", type: "corner", emoji: "🏢", effect: "fema" },
+            { id: 30, name: "Command Center", type: "corner", emoji: "📡", effect: "command" },
+            
+            // Emergency Services (buyable properties)
+            { id: 1, name: "Fire Station", type: "emergency-service", price: 200, emoji: "🚒" },
+            { id: 3, name: "Hospital", type: "emergency-service", price: 250, emoji: "🏥" },
+            { id: 6, name: "Police Station", type: "emergency-service", price: 180, emoji: "👮" },
+            { id: 8, name: "Rescue Squad", type: "emergency-service", price: 220, emoji: "🚁" },
+            { id: 11, name: "Emergency Shelter", type: "emergency-service", price: 160, emoji: "🏠" },
+            { id: 13, name: "Food Bank", type: "emergency-service", price: 140, emoji: "🍲" },
+            { id: 16, name: "Medical Clinic", type: "emergency-service", price: 200, emoji: "⚕️" },
+            { id: 18, name: "Weather Station", type: "emergency-service", price: 300, emoji: "🌡️" },
+            { id: 21, name: "Communication Hub", type: "emergency-service", price: 280, emoji: "📻" },
+            { id: 23, name: "Water Treatment", type: "emergency-service", price: 320, emoji: "💧" },
+            { id: 26, name: "Power Plant", type: "emergency-service", price: 350, emoji: "⚡" },
+            { id: 28, name: "Supply Depot", type: "emergency-service", price: 240, emoji: "📦" },
+            { id: 31, name: "Training Center", type: "emergency-service", price: 260, emoji: "🎓" },
+            { id: 33, name: "Emergency Broadcast", type: "emergency-service", price: 300, emoji: "📺" },
+            { id: 36, name: "Evacuation Route", type: "emergency-service", price: 280, emoji: "🛣️" },
+            { id: 38, name: "Backup Generator", type: "emergency-service", price: 200, emoji: "🔋" },
+            
+            // Disaster Zones
+            { id: 2, name: "Tornado Alley", type: "disaster-zone", penalty: 100, emoji: "🌪️" },
+            { id: 7, name: "Flood Zone", type: "disaster-zone", penalty: 120, emoji: "🌊" },
+            { id: 12, name: "Wildfire Area", type: "disaster-zone", penalty: 150, emoji: "🔥" },
+            { id: 17, name: "Earthquake Fault", type: "disaster-zone", penalty: 180, emoji: "🌋" },
+            { id: 22, name: "Hurricane Path", type: "disaster-zone", penalty: 200, emoji: "💨" },
+            { id: 27, name: "Blizzard Zone", type: "disaster-zone", penalty: 130, emoji: "❄️" },
+            { id: 32, name: "Heat Wave Area", type: "disaster-zone", penalty: 110, emoji: "🌡️" },
+            { id: 37, name: "Storm Front", type: "disaster-zone", penalty: 140, emoji: "⛈️" },
+            
+            // Safe Zones
+            { id: 4, name: "Safe Harbor", type: "safe-zone", reward: 50, emoji: "🛡️" },
+            { id: 14, name: "Evacuation Center", type: "safe-zone", reward: 60, emoji: "🏕️" },
+            { id: 24, name: "Relief Station", type: "safe-zone", reward: 70, emoji: "🎪" },
+            { id: 34, name: "Safety Zone", type: "safe-zone", reward: 80, emoji: "🛡️" },
+            
+            // Special Events
+            { id: 5, name: "Disaster Card", type: "special", emoji: "❓" },
+            { id: 9, name: "Emergency Drill", type: "special", emoji: "🎯" },
+            { id: 15, name: "Disaster Card", type: "special", emoji: "❓" },
+            { id: 19, name: "Emergency Drill", type: "special", emoji: "🎯" },
+            { id: 25, name: "Disaster Card", type: "special", emoji: "❓" },
+            { id: 29, name: "Emergency Drill", type: "special", emoji: "🎯" },
+            { id: 35, name: "Disaster Card", type: "special", emoji: "❓" },
+            { id: 39, name: "Emergency Drill", type: "special", emoji: "🎯" }
+        ];
+
+        // Disaster cards
+        const disasterCards = [
+            {
+                title: "🌪️ Tornado Warning",
+                description: "A tornado has been spotted in your area! What's your emergency response?",
+                choices: [
+                    { text: "Take shelter immediately", cost: 0, preparedness: 50, supplies: -1 },
+                    { text: "Help others evacuate", cost: 50, preparedness: 100, knowledge: 20 },
+                    { text: "Ignore the warning", cost: 200, preparedness: -50, supplies: 0 }
+                ]
+            },
+            {
+                title: "🌊 Flash Flood Alert",
+                description: "Heavy rains have caused flash flooding in your community.",
+                choices: [
+                    { text: "Move to higher ground", cost: 0, preparedness: 40, supplies: 0 },
+                    { text: "Assist in sandbagging", cost: 30, preparedness: 80, knowledge: 15 },
+                    { text: "Drive through water", cost: 300, preparedness: -100, supplies: -2 }
+                ]
+            },
+            {
+                title: "🔥 Wildfire Evacuation",
+                description: "A wildfire is approaching your neighborhood. Time to act!",
+                choices: [
+                    { text: "Follow evacuation orders", cost: 0, preparedness: 60, supplies: -1 },
+                    { text: "Help firefighters", cost: 100, preparedness: 120, knowledge: 25 },
+                    { text: "Stay and defend property", cost: 500, preparedness: -150, supplies: -3 }
+                ]
+            },
+            {
+                title: "⚡ Power Outage",
+                description: "A major storm has knocked out power to your area.",
+                choices: [
+                    { text: "Use emergency supplies", cost: 0, preparedness: 30, supplies: -1 },
+                    { text: "Check on neighbors", cost: 20, preparedness: 70, knowledge: 10 },
+                    { text: "Use candles carelessly", cost: 100, preparedness: -30, supplies: 0 }
+                ]
+            },
+            {
+                title: "🌡️ Extreme Heat Wave",
+                description: "Dangerous heat levels threaten public health.",
+                choices: [
+                    { text: "Stay hydrated and cool", cost: 0, preparedness: 40, supplies: -1 },
+                    { text: "Open cooling center", cost: 80, preparedness: 90, knowledge: 20 },
+                    { text: "Continue normal activities", cost: 150, preparedness: -40, supplies: 0 }
+                ]
+            },
+            {
+                title: "❄️ Severe Blizzard",
+                description: "A major snowstorm is isolating your community.",
+                choices: [
+                    { text: "Stay indoors with supplies", cost: 0, preparedness: 50, supplies: -2 },
+                    { text: "Help clear emergency routes", cost: 60, preparedness: 100, knowledge: 15 },
+                    { text: "Venture out unnecessarily", cost: 200, preparedness: -60, supplies: -1 }
+                ]
+            }
+        ];
+
+        // Initialize the game
+        function initGame() {
+            console.log('Initializing game...');
+            console.log('Creating board...');
+            createBoard();
+            console.log('Resetting game state...');
+            resetGame();
+            console.log('Updating player stats...');
+            updatePlayerStats();
+            console.log('Updating game status...');
+            updateGameStatus();
+            console.log('Adding event listeners...');
+            addEventListeners();
+            showMessage('Welcome to Disaster Poly! Click "Roll Dice" to start your turn.');
+            console.log('Game initialization complete!');
+        }
+
+        // Create game board
+        function createBoard() {
+            const board = document.getElementById('game-board');
+            board.innerHTML = '';
+            
+            // Create center area
+            const center = document.createElement('div');
+            center.className = 'board-center';
+            center.innerHTML = `
+                <div class="board-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>DISASTER<br>POLY</h3>
+                    <p>Emergency Preparedness Board Game</p>
+                </div>
+            `;
+            board.appendChild(center);
+            
+            // Create all 40 spaces
+            for (let i = 0; i < 40; i++) {
+                const space = document.createElement('div');
+                space.className = 'board-space';
+                space.id = `space-${i}`;
+                
+                // Find space data
+                const spaceData = boardSpaces.find(s => s.id === i) || { 
+                    id: i, name: `Space ${i}`, type: 'empty', emoji: '⬜' 
+                };
+                
+                // Position the space on the board
+                const position = getBoardPosition(i);
+                space.style.left = position.x + 'px';
+                space.style.top = position.y + 'px';
+                space.style.position = 'absolute';
+                space.style.width = '60px';
+                space.style.height = '60px';
+                
+                // Add appropriate classes
+                if ([0, 10, 20, 30].includes(i)) {
+                    space.classList.add('corner-space');
+                    space.style.width = '90px';
+                    space.style.height = '90px';
+                }
+                
+                // Add type-specific styling
+                space.classList.add(spaceData.type);
+                
+                // Add content
+                space.innerHTML = `
+                    <div class="space-content">
+                        <div class="space-icon" style="font-size: 16px;">${spaceData.emoji}</div>
+                        <div class="space-name" style="font-size: 8px; line-height: 1.1;">${spaceData.name}</div>
+                        ${spaceData.price ? `<div class="space-cost" style="font-size: 7px; color: #27ae60;">$${spaceData.price}</div>` : ''}
+                    </div>
+                `;
+                
+                // Add click listener
+                space.addEventListener('click', () => showSpaceInfo(spaceData));
+                
+                board.appendChild(space);
+            }
+            
+            // Add players to starting position
+            addPlayersToBoard();
+        }
+
+        // Calculate board position for space index
+        function getBoardPosition(index) {
+            const boardSize = 600;
+            const spaceSize = 60;
+            const cornerSize = 90;
+            
+            // Bottom row (spaces 0-10)
+            if (index >= 0 && index <= 10) {
+                const x = boardSize - cornerSize - (index * spaceSize);
+                return { x: Math.max(0, x), y: boardSize - cornerSize };
+            }
+            
+            // Left side (spaces 11-19)
+            if (index >= 11 && index <= 19) {
+                const relativeIndex = index - 11;
+                const y = boardSize - cornerSize - spaceSize - (relativeIndex * spaceSize);
+                return { x: 0, y: Math.max(0, y) };
+            }
+            
+            // Top row (spaces 20-30)
+            if (index >= 20 && index <= 30) {
+                const relativeIndex = index - 20;
+                const x = cornerSize + (relativeIndex * spaceSize);
+                return { x: Math.min(boardSize - spaceSize, x), y: 0 };
+            }
+            
+            // Right side (spaces 31-39)
+            if (index >= 31 && index <= 39) {
+                const relativeIndex = index - 31;
+                const y = cornerSize + (relativeIndex * spaceSize);
+                return { x: boardSize - cornerSize, y: Math.min(boardSize - spaceSize, y) };
+            }
+            
+            return { x: 0, y: 0 };
+        }
+
+        // Add player pieces to the board
+        function addPlayersToBoard() {
+            // Remove existing player pieces
+            document.querySelectorAll('.player').forEach(p => p.remove());
+            
+            gameState.players.forEach((player, index) => {
+                const playerElement = document.createElement('div');
+                playerElement.className = `player player${index + 1}`;
+                playerElement.id = `player-${index + 1}`;
+                
+                const position = getBoardPosition(player.position);
+                const offset = index * 25; // Offset multiple players on same space
+                playerElement.style.left = (position.x + 35 + offset) + 'px';
+                playerElement.style.top = (position.y + 35 + offset) + 'px';
+                
+                document.getElementById('game-board').appendChild(playerElement);
+            });
+        }
+
+        // Show space information
+        function showSpaceInfo(spaceData) {
+            const modal = document.getElementById('card-modal');
+            const title = document.getElementById('card-title');
+            const description = document.getElementById('card-description');
+            const choices = document.getElementById('card-choices');
+            
+            title.textContent = `${spaceData.emoji} ${spaceData.name}`;
+            
+            let desc = `Type: ${spaceData.type.replace('-', ' ').toUpperCase()}`;
+            if (spaceData.price) desc += `\nPrice: $${spaceData.price}`;
+            if (spaceData.penalty) desc += `\nPenalty: $${spaceData.penalty}`;
+            if (spaceData.reward) desc += `\nReward: $${spaceData.reward}`;
+            
+            description.textContent = desc;
+            choices.innerHTML = '';
+            
+            modal.style.display = 'flex';
+        }
+
+        // Roll dice
+        function rollDice() {
+            console.log('Roll dice clicked!', gameState.diceRolled);
+            
+            if (gameState.diceRolled) {
+                console.log('Dice already rolled this turn');
+                return;
+            }
+            
+            const dice1 = Math.floor(Math.random() * 6) + 1;
+            const dice2 = Math.floor(Math.random() * 6) + 1;
+            const total = dice1 + dice2;
+            
+            console.log('Dice rolled:', dice1, dice2, 'Total:', total);
+            
+            gameState.lastRoll = [dice1, dice2];
+            gameState.diceRolled = true;
+            
+            // Update dice display
+            const dice1El = document.getElementById('dice1');
+            const dice2El = document.getElementById('dice2');
+            const diceTotalEl = document.getElementById('dice-total');
+            
+            if (dice1El) dice1El.textContent = dice1;
+            if (dice2El) dice2El.textContent = dice2;
+            if (diceTotalEl) diceTotalEl.textContent = `Total: ${total}`;
+            
+            // Move player
+            movePlayer(gameState.currentPlayer, total);
+            
+            // Update UI
+            const rollBtn = document.getElementById('roll-dice');
+            const endBtn = document.getElementById('end-turn');
+            
+            if (rollBtn) rollBtn.disabled = true;
+            if (endBtn) endBtn.disabled = false;
+            
+            console.log('Dice roll complete');
+        }
+
+        // Move player
+        function movePlayer(playerIndex, spaces) {
+            const player = gameState.players[playerIndex];
+            const oldPosition = player.position;
+            
+            // Calculate new position
+            player.position = (player.position + spaces) % 40;
+            
+            // Check if passed start (gained money and preparedness)
+            if (player.position < oldPosition) {
+                player.money += 200;
+                player.preparedness += 50;
+                showMessage("🏛️ Passed Emergency HQ! +$200 and +50 preparedness!");
+            }
+            
+            // Update visual position
+            addPlayersToBoard();
+            
+            // Handle space landing
+            const spaceData = boardSpaces.find(s => s.id === player.position);
+            if (spaceData) {
+                handleSpaceLanding(playerIndex, spaceData);
+            }
+            
+            updatePlayerStats();
+        }
+
+        // Handle landing on a space
+        function handleSpaceLanding(playerIndex, spaceData) {
+            const player = gameState.players[playerIndex];
+            
+            switch (spaceData.type) {
+                case 'emergency-service':
+                    if (!player.properties.includes(spaceData.id)) {
+                        if (player.money >= spaceData.price) {
+                            document.getElementById('buy-property').disabled = false;
+                        }
+                        showMessage(`${spaceData.emoji} ${spaceData.name} available for $${spaceData.price}`);
+                    } else {
+                        player.preparedness += 20;
+                        showMessage(`${spaceData.emoji} Your ${spaceData.name} provides protection! +20 preparedness`);
+                    }
+                    break;
+                    
+                case 'disaster-zone':
+                    if (player.supplies > 0) {
+                        document.getElementById('use-supplies').disabled = false;
+                        showMessage(`${spaceData.emoji} ${spaceData.name}! Use supplies or pay $${spaceData.penalty}`);
+                    } else {
+                        player.money -= spaceData.penalty;
+                        player.preparedness -= 30;
+                        showMessage(`${spaceData.emoji} ${spaceData.name}! -$${spaceData.penalty} and -30 preparedness`);
+                    }
+                    break;
+                    
+                case 'safe-zone':
+                    player.money += spaceData.reward;
+                    player.preparedness += 30;
+                    player.supplies += 1;
+                    showMessage(`${spaceData.emoji} ${spaceData.name}! +$${spaceData.reward}, +30 preparedness, +1 supply`);
+                    break;
+                    
+                case 'special':
+                    if (spaceData.name.includes('Disaster Card')) {
+                        drawDisasterCard();
+                    } else {
+                        // Emergency Drill
+                        player.knowledge += 15;
+                        player.preparedness += 40;
+                        showMessage(`${spaceData.emoji} Emergency Drill! +15 knowledge and +40 preparedness`);
+                    }
+                    break;
+                    
+                case 'corner':
+                    handleCornerSpace(playerIndex, spaceData);
+                    break;
+            }
+        }
+
+        // Handle corner spaces
+        function handleCornerSpace(playerIndex, spaceData) {
+            const player = gameState.players[playerIndex];
+            
+            switch (spaceData.effect) {
+                case 'start':
+                    // Already handled in movePlayer
+                    break;
+                case 'relief':
+                    player.supplies += 2;
+                    player.preparedness += 60;
+                    showMessage("🚑 Disaster Relief! +2 supplies and +60 preparedness");
+                    break;
+                case 'fema':
+                    player.money += 100;
+                    player.knowledge += 20;
+                    showMessage("🏢 FEMA Station! +$100 and +20 knowledge");
+                    break;
+                case 'command':
+                    player.preparedness += 100;
+                    player.knowledge += 30;
+                    showMessage("📡 Command Center! +100 preparedness and +30 knowledge");
+                    break;
+            }
+        }
+
+        // Draw disaster card
+        function drawDisasterCard() {
+            const card = disasterCards[Math.floor(Math.random() * disasterCards.length)];
+            
+            const modal = document.getElementById('card-modal');
+            const title = document.getElementById('card-title');
+            const description = document.getElementById('card-description');
+            const choices = document.getElementById('card-choices');
+            
+            title.textContent = card.title;
+            description.textContent = card.description;
+            
+            choices.innerHTML = '';
+            card.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.textContent = choice.text;
+                button.style.margin = '5px';
+                button.style.display = 'block';
+                button.style.width = '100%';
+                button.addEventListener('click', () => {
+                    handleDisasterChoice(choice);
+                    modal.style.display = 'none';
+                });
+                choices.appendChild(button);
+            });
+            
+            modal.style.display = 'flex';
+        }
+
+        // Handle disaster card choice
+        function handleDisasterChoice(choice) {
+            const player = gameState.players[gameState.currentPlayer];
+            
+            player.money -= choice.cost;
+            player.preparedness += choice.preparedness;
+            player.supplies += choice.supplies || 0;
+            player.knowledge += choice.knowledge || 0;
+            
+            // Ensure no negative values
+            player.money = Math.max(0, player.money);
+            player.supplies = Math.max(0, player.supplies);
+            player.knowledge = Math.max(0, player.knowledge);
+            
+            updatePlayerStats();
+            
+            let message = `Choice made! `;
+            if (choice.cost) message += `-$${choice.cost} `;
+            if (choice.preparedness > 0) message += `+${choice.preparedness} preparedness `;
+            if (choice.preparedness < 0) message += `${choice.preparedness} preparedness `;
+            if (choice.supplies) message += `${choice.supplies > 0 ? '+' : ''}${choice.supplies} supplies `;
+            if (choice.knowledge) message += `+${choice.knowledge} knowledge `;
+            
+            showMessage(message);
+        }
+
+        // Buy property
+        function buyProperty() {
+            const player = gameState.players[gameState.currentPlayer];
+            const spaceData = boardSpaces.find(s => s.id === player.position);
+            
+            if (spaceData && spaceData.price && player.money >= spaceData.price) {
+                player.money -= spaceData.price;
+                player.properties.push(spaceData.id);
+                player.preparedness += 50;
+                
+                showMessage(`Purchased ${spaceData.name} for $${spaceData.price}! +50 preparedness`);
+                updatePlayerStats();
+                
+                document.getElementById('buy-property').disabled = true;
+            }
+        }
+
+        // Use supplies
+        function useSupplies() {
+            const player = gameState.players[gameState.currentPlayer];
+            
+            if (player.supplies > 0) {
+                player.supplies--;
+                player.preparedness += 40;
+                
+                showMessage("Used emergency supplies! +40 preparedness, avoided disaster penalty!");
+                updatePlayerStats();
+                
+                document.getElementById('use-supplies').disabled = true;
+            }
+        }
+
+        // End turn
+        function endTurn() {
+            // Check win condition
+            if (gameState.players[gameState.currentPlayer].preparedness >= 1000) {
+                gameState.winner = gameState.currentPlayer;
+                showMessage(`🎉 Player ${gameState.currentPlayer + 1} wins with ${gameState.players[gameState.currentPlayer].preparedness} preparedness points!`);
+                return;
+            }
+            
+            // Switch to next player
+            gameState.currentPlayer = (gameState.currentPlayer + 1) % gameState.players.length;
+            gameState.turn++;
+            
+            if (gameState.currentPlayer === 0) {
+                gameState.round++;
+            }
+            
+            // Reset turn state
+            gameState.diceRolled = false;
+            
+            // Update UI
+            updateGameStatus();
+            updatePlayerStats();
+            
+            document.getElementById('roll-dice').disabled = false;
+            document.getElementById('buy-property').disabled = true;
+            document.getElementById('use-supplies').disabled = true;
+            document.getElementById('end-turn').disabled = true;
+            
+            document.getElementById('dice1').textContent = '🎲';
+            document.getElementById('dice2').textContent = '🎲';
+            document.getElementById('dice-total').textContent = 'Total: 0';
+        }
+
+        // Reset game
+        function resetGame() {
+            gameState.currentPlayer = 0;
+            gameState.round = 1;
+            gameState.turn = 1;
+            gameState.diceRolled = false;
+            gameState.winner = null;
+            
+            gameState.players.forEach(player => {
+                player.position = 0;
+                player.money = 1500;
+                player.preparedness = 100;
+                player.supplies = 3;
+                player.knowledge = 10;
+                player.properties = [];
+            });
+            
+            addPlayersToBoard();
+            updatePlayerStats();
+            updateGameStatus();
+            
+            document.getElementById('roll-dice').disabled = false;
+            document.getElementById('buy-property').disabled = true;
+            document.getElementById('use-supplies').disabled = true;
+            document.getElementById('end-turn').disabled = true;
+        }
+
+        // Update player statistics display
+        function updatePlayerStats() {
+            gameState.players.forEach((player, index) => {
+                const card = document.getElementById(`player${index + 1}-card`);
+                
+                // Update active player
+                if (index === gameState.currentPlayer && !gameState.winner) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+                
+                // Update stats
+                document.getElementById(`p${index + 1}-money`).textContent = player.money;
+                document.getElementById(`p${index + 1}-preparedness`).textContent = player.preparedness;
+                document.getElementById(`p${index + 1}-supplies`).textContent = player.supplies;
+                document.getElementById(`p${index + 1}-knowledge`).textContent = player.knowledge;
+                
+                // Update resource bar (based on preparedness)
+                const resourceBar = document.getElementById(`p${index + 1}-resource-bar`);
+                const percentage = Math.min(100, (player.preparedness / 1000) * 100);
+                resourceBar.style.width = percentage + '%';
+            });
+        }
+
+        // Update game status
+        function updateGameStatus() {
+            document.getElementById('current-player').textContent = `Player ${gameState.currentPlayer + 1}`;
+            document.getElementById('round-counter').textContent = gameState.round;
+            document.getElementById('turn-counter').textContent = gameState.turn;
+        }
+
+        // Show message with better styling
+        function showMessage(message) {
+            // Create a toast notification similar to dashboard style
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--card-bg);
+                color: var(--text-dark);
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: var(--shadow);
+                border-left: 4px solid var(--primary);
+                z-index: 1100;
+                max-width: 400px;
+                font-family: "Ubuntu", sans-serif;
+                font-weight: 500;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            // Add slide-in animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 4000);
+            
+            // Also log to console for debugging
+            console.log(message);
+        }
+
+        // Add event listeners
+        function addEventListeners() {
+            console.log('Adding event listeners...');
+            
+            const rollDiceBtn = document.getElementById('roll-dice');
+            const buyPropertyBtn = document.getElementById('buy-property');
+            const useSuppliesBtn = document.getElementById('use-supplies');
+            const endTurnBtn = document.getElementById('end-turn');
+            const newGameBtn = document.getElementById('new-game');
+            const cardCloseBtn = document.getElementById('card-close');
+            
+            if (rollDiceBtn) {
+                rollDiceBtn.addEventListener('click', rollDice);
+                console.log('Roll dice button listener added');
+            } else {
+                console.error('Roll dice button not found!');
+            }
+            
+            if (buyPropertyBtn) {
+                buyPropertyBtn.addEventListener('click', buyProperty);
+            }
+            
+            if (useSuppliesBtn) {
+                useSuppliesBtn.addEventListener('click', useSupplies);
+            }
+            
+            if (endTurnBtn) {
+                endTurnBtn.addEventListener('click', endTurn);
+                console.log('End turn button listener added');
+            } else {
+                console.error('End turn button not found!');
+            }
+            
+            if (newGameBtn) {
+                newGameBtn.addEventListener('click', resetGame);
+            }
+            
+            if (cardCloseBtn) {
+                cardCloseBtn.addEventListener('click', () => {
+                    document.getElementById('card-modal').style.display = 'none';
+                });
+            }
+            
+            console.log('Event listeners setup complete');
+        }
+
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>

@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disaster Management Support Chatbot</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
             --primary: #1a73e8;
             --primary-light: #4285f4;
+            --primary-dark: #0d47a1;
             --secondary: #34a853;
             --accent: #f25c54;
             --bg-primary: #ffffff;
@@ -21,6 +23,7 @@
             --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
             --radius: 8px;
             --transition: all 0.2s ease;
+            --p6: #c8e5f3;
         }
         
         * {
@@ -42,6 +45,158 @@
             height: 100vh;
         }
         
+        /* Hamburger Menu */
+        .hamburger-menu {
+            position: fixed;
+            top: 20px;
+            left: 5px;
+            z-index: 1001;
+            width: 20px;
+            height: 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .hamburger-menu:hover {
+            background: var(--bg-secondary);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
+            transform: scale(1.05);
+        }
+        
+        .hamburger-menu:active {
+            transform: scale(0.98);
+        }
+        
+        .hamburger-line {
+            width: 18px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 1px;
+            transition: var(--transition);
+        }
+        
+        .hamburger-menu.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+            background: var(--primary);
+        }
+        
+        .hamburger-menu.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger-menu.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -5px);
+            background: var(--primary);
+        }
+        
+        .hamburger-menu.active {
+            border-color: var(--primary);
+            background: var(--bg-secondary);
+        }
+
+        /* Dashboard Navigation Sidebar */
+        .dashboard-sidebar {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            transition: left 0.3s ease;
+        }
+        
+        .dashboard-sidebar.open {
+            left: 0;
+        }
+        
+        .dashboard-sidebar .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .dashboard-sidebar .logo i {
+            font-size: 22px;
+            color: var(--p6, #c8e5f3);
+        }
+        
+        .dashboard-sidebar .logo h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+        
+        .dashboard-sidebar .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .dashboard-sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95);
+            text-decoration: none;
+        }
+        
+        .dashboard-sidebar .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .dashboard-sidebar .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        
+        .dashboard-sidebar .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Overlay for dashboard sidebar */
+        .dashboard-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* Sidebar - Conversation History */
         .sidebar {
             width: 300px;
@@ -63,6 +218,7 @@
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 8px;
+            margin-left: 15px;
         }
         
         .app-subtitle {
@@ -311,7 +467,7 @@
         }
         
         .chat-header {
-            padding: 20px 24px;
+            padding: 20px 24px 20px 70px;
             border-bottom: 1px solid var(--border);
             background: var(--bg-primary);
         }
@@ -336,9 +492,9 @@
         }
         
         .message {
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             animation: slideIn 0.3s ease;
         }
         
@@ -357,13 +513,13 @@
         }
         
         .message-avatar {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             flex-shrink: 0;
         }
         
@@ -378,18 +534,128 @@
         }
         
         .message-content {
-            flex: 1;
-            max-width: calc(100% - 80px);
+            flex: 0 1 auto;
+            max-width: 65%;
+            min-width: 150px;
+            position: relative;
         }
         
         .message-text {
             background: var(--bg-primary);
-            padding: 12px 16px;
+            padding: 8px 12px;
             border-radius: var(--radius);
             border: 1px solid var(--border);
-            line-height: 1.5;
+            line-height: 1.4;
             white-space: pre-wrap;
             word-wrap: break-word;
+            position: relative;
+            font-size: 14px;
+        }
+        
+        /* Copy button styles */
+        .copy-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-secondary);
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 10;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .ai-message .message-text:hover .copy-btn {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .copy-btn.copied {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .copy-btn.copied:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        /* Enhanced styling for AI messages with markdown content */
+        .ai-message .message-text {
+            background: var(--bg-secondary);
+            border-color: var(--border);
+        }
+        
+        .ai-message .message-text h1,
+        .ai-message .message-text h2,
+        .ai-message .message-text h3 {
+            margin: 8px 0;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .ai-message .message-text h1 { font-size: 18px; }
+        .ai-message .message-text h2 { font-size: 16px; }
+        .ai-message .message-text h3 { font-size: 14px; }
+        
+        .ai-message .message-text strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .ai-message .message-text em {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .ai-message .message-text ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        
+        .ai-message .message-text li {
+            margin: 4px 0;
+            list-style-type: disc;
+        }
+        
+        .ai-message .message-text p {
+            margin: 8px 0;
+        }
+        
+        .ai-message .message-text code {
+            background: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            border: 1px solid var(--border);
+        }
+        
+        .ai-message .message-text blockquote {
+            border-left: 3px solid var(--primary);
+            margin: 8px 0;
+            padding-left: 12px;
+            color: var(--text-secondary);
+            font-style: italic;
         }
         
         .user-message .message-text {
@@ -401,6 +667,8 @@
         .ai-message .message-text {
             background: var(--bg-secondary);
             border-color: var(--border);
+            position: relative;
+            padding-bottom: 25px; /* Space for copy button */
         }
         
         .ai-message .message-time {
@@ -764,10 +1032,6 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .sidebar {
-                width: 280px;
-            }
-            
             .messages-container {
                 padding: 16px;
             }
@@ -775,28 +1039,119 @@
             .input-area {
                 padding: 16px;
             }
+            
+            .chat-header {
+                padding: 16px 16px 16px 65px;
+            }
+            
+            .hamburger-menu {
+                top: 12px;
+                left: 12px;
+                width: 34px;
+                height: 34px;
+            }
+            
+            .hamburger-line {
+                width: 16px;
+            }
+            
+            .message-content {
+                max-width: 75%;
+                min-width: 120px;
+            }
+            
+            .message-text {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+            
+            .message {
+                margin-bottom: 12px;
+                gap: 8px;
+            }
         }
         
         @media (max-width: 640px) {
-            .sidebar {
-                position: fixed;
-                left: -300px;
-                z-index: 1000;
-                transition: var(--transition);
-            }
-            
-            .sidebar.open {
-                left: 0;
-            }
-            
             .main-area {
                 width: 100%;
+            }
+            
+            .chat-header {
+                padding: 14px 14px 14px 58px;
+            }
+            
+            .hamburger-menu {
+                top: 10px;
+                left: 10px;
+                width: 32px;
+                height: 32px;
+            }
+            
+            .hamburger-line {
+                width: 14px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+                min-width: 100px;
+            }
+            
+            .message-text {
+                padding: 6px 8px;
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
+        <!-- Dashboard Sidebar Overlay -->
+        <div class="dashboard-overlay" id="dashboardOverlay" onclick="closeDashboardSidebar()"></div>
+        
+        <!-- Hamburger Menu -->
+        <div class="hamburger-menu" id="hamburgerMenu" onclick="toggleDashboardSidebar()">
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+        </div>
+        
+        <!-- Dashboard Navigation Sidebar -->
+        <aside class="dashboard-sidebar" id="dashboardSidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>ResQ</h1>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item" onclick="navigateTo('dashboard-student.html')">
+                    <i class="fas fa-home"></i><span>Dashboard</span>
+                </div>
+                <div class="menu-item" onclick="navigateTo('education-modules.html')">
+                    <i class="fas fa-book"></i><span>Education Modules</span>
+                </div>
+                <div class="menu-item" onclick="navigateTo('sandbox-simulator.html')">
+                    <i class="fas fa-gamepad"></i><span>Sandbox Simulator</span>
+                </div>
+                <div class="menu-item" onclick="navigateTo('consultation.html')">
+                    <i class="fas fa-phone-alt"></i><span>Emergency Contacts</span>
+                </div>
+                <div class="menu-item" onclick="navigateTo('../advanced-map.html')">
+                    <i class="fas fa-map-marked-alt"></i><span>Disaster Map</span>
+                </div>
+                <div class="menu-item active">
+                    <i class="fas fa-robot"></i><span>AI Helper</span>
+                </div>
+                <div class="menu-item" onclick="navigateTo('gamified-learning.html')">
+                    <i class="fas fa-graduation-cap"></i><span>Gamified Learning</span>
+                </div>
+                <div class="menu-item" onclick="navigateTo('profile-badges.html')">
+                    <i class="fas fa-user"></i><span>Profile & Badges</span>
+                </div>
+                <div class="menu-item" onclick="navigateTo('settings.html')">
+                    <i class="fas fa-cog"></i><span>Settings</span>
+                </div>
+            </div>
+        </aside>
+        
         <!-- Sidebar - Chat History -->
         <div class="sidebar">
             <div class="sidebar-header">
@@ -924,6 +1279,12 @@
                 
                 if (finalTranscript) {
                     currentMessage += finalTranscript;
+                    // Auto-send voice input when speech recognition completes
+                    setTimeout(() => {
+                        if (finalTranscript.trim()) {
+                            handleVoiceInput(finalTranscript);
+                        }
+                    }, 500); // Small delay to ensure recognition has fully completed
                 }
             };
             
@@ -955,26 +1316,104 @@
         const BACKEND_URL = 'http://localhost:5000'; // Backend server URL
         let backendAvailable = false;
         
-        // Check backend availability on load
+        // Enhanced backend status checking with retry logic
         async function checkBackendStatus() {
             try {
-                const response = await fetch(`${BACKEND_URL}/api/status`);
+                const response = await fetch(`${BACKEND_URL}/api/status`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    signal: AbortSignal.timeout(5000) // 5 second timeout for status check
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Status check failed: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 backendAvailable = data.backend_available;
-                console.log('Backend status:', data);
+                
+                console.log('Backend status:', {
+                    available: data.backend_available,
+                    geminiAvailable: data.gemini_available,
+                    supportedFiles: data.supported_files,
+                    maxFileSize: data.max_file_size_mb,
+                    timestamp: data.timestamp
+                });
+                
+                // Update UI to reflect backend status
+                updateBackendStatusUI(data);
+                
                 return data;
             } catch (error) {
-                console.error('Backend not available:', error);
+                console.error('Backend status check failed:', error);
                 backendAvailable = false;
+                updateBackendStatusUI(null);
                 return null;
             }
+        }
+        
+        // Update UI to show backend status
+        function updateBackendStatusUI(statusData) {
+            // You could add a status indicator to the UI here
+            const chatSubtitle = document.querySelector('.chat-subtitle');
+            if (chatSubtitle) {
+                if (statusData && statusData.backend_available) {
+                    chatSubtitle.innerHTML = 'AI-powered emergency guidance and support | 🟢 Backend Connected';
+                    if (!statusData.gemini_available) {
+                        chatSubtitle.innerHTML += ' | ⚠️ Gemini API not configured';
+                    }
+                } else {
+                    chatSubtitle.innerHTML = 'AI-powered emergency guidance and support | 🔴 Backend Offline (Local Mode)';
+                }
+            }
+        }
+        
+        // Periodic backend health check
+        function startBackendMonitoring() {
+            // Check backend status every 2 minutes
+            setInterval(async () => {
+                const wasAvailable = backendAvailable;
+                await checkBackendStatus();
+                
+                // Notify user if backend status changed
+                if (wasAvailable !== backendAvailable) {
+                    const statusMessage = backendAvailable 
+                        ? '🟢 Backend connection restored! Enhanced AI features are now available.'
+                        : '🔴 Backend connection lost. Switching to local mode.';
+                    
+                    // Add a subtle notification (you could make this more prominent)
+                    console.log('Backend status change:', statusMessage);
+                }
+            }, 120000); // 2 minutes
+        }
+        
+        // Enhanced error reporting
+        function reportError(errorType, errorMessage, context = {}) {
+            const errorReport = {
+                type: errorType,
+                message: errorMessage,
+                context: context,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                url: window.location.href
+            };
+            
+            console.error('Error Report:', errorReport);
+            
+            // You could send this to an analytics service or error tracking system
+            // Example: sendToAnalytics('error', errorReport);
         }
         
         const isGeminiAvailable = () => geminiApiKey && geminiApiKey.trim() !== '';
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Check backend availability
-            checkBackendStatus();
+            // Check backend availability and start monitoring
+            checkBackendStatus().then(() => {
+                startBackendMonitoring();
+            });
+            
             // Initialize user profile
             initializeUserProfile();
             
@@ -988,11 +1427,11 @@
             // Initialize the app
             renderChatHistory();
             
-            // Check if opened from consultation page
+            // Check if opened from consultation page with enhanced welcome
             if (document.referrer.includes('consultation.html') || window.opener) {
                 setTimeout(async () => {
                     const backendStatus = await checkBackendStatus();
-                    let welcomeMessage = "🚀 Welcome to Enhanced DisasterAI! You've accessed our improved chat interface with:\n\n✨ Better design and animations\n🆘 Advanced emergency protocols\n📁 Enhanced file upload support\n⌨️ Voice input capabilities\n🧠 Smarter AI responses\n\n";
+                    let welcomeMessage = "🚀 **Welcome to Enhanced DisasterAI!** You've accessed our improved chat interface with:\n\n✨ Better design and animations\n🆘 Advanced emergency protocols\n📁 Enhanced file upload support\n⌨️ Voice input capabilities\n🧠 Smarter AI responses with context awareness\n\n";
                     
                     if (backendStatus && backendStatus.backend_available) {
                         welcomeMessage += "🔧 **Backend Status**: Connected ✅\n";
@@ -1001,14 +1440,21 @@
                         welcomeMessage += `📏 **Max File Size**: ${backendStatus.max_file_size_mb}MB\n\n`;
                         
                         if (!backendStatus.gemini_available) {
-                            welcomeMessage += "💡 **Tip**: Set your Gemini API key using setGeminiApiKey('your-key') in console for enhanced AI features.\n\n";
+                            welcomeMessage += "💡 **Tip**: Set your Gemini API key using `setGeminiApiKey('your-key')` in console for enhanced AI features.\n\n";
                         }
+                        
+                        welcomeMessage += "🎯 **Enhanced Features**:\n";
+                        welcomeMessage += "• Context-aware responses\n";
+                        welcomeMessage += "• Specialized disaster management prompts\n";
+                        welcomeMessage += "• Multi-modal file analysis\n";
+                        welcomeMessage += "• Psychological support protocols\n\n";
                     } else {
                         welcomeMessage += "⚠️ **Backend Status**: Offline (using local responses)\n\n";
                         welcomeMessage += "💡 **Tip**: Start the Python backend server for enhanced AI features with specialized prompts.\n\n";
+                        welcomeMessage += "🔧 **To start backend**: Run `python chatbot_backend.py` in the student directory.\n\n";
                     }
                     
-                    welcomeMessage += "How can I assist you today?";
+                    welcomeMessage += "How can I assist you today? Feel free to ask about disaster preparedness, share images for analysis, or if you need psychological support during stressful times.";
                     
                     addMessage(welcomeMessage, 'ai');
                     emptyState.style.display = 'none';
@@ -1033,6 +1479,7 @@
             }
         }
         
+        // Enhanced voice input processing
         function toggleRecording() {
             if (!recognition) {
                 alert('Speech recognition is not supported in your browser.');
@@ -1044,6 +1491,53 @@
             } else {
                 currentMessage = messageInput.value;
                 recognition.start();
+            }
+        }
+        
+        // Enhanced voice input result handling
+        function handleVoiceInput(finalTranscript) {
+            if (!finalTranscript.trim()) return;
+            
+            const voiceInputContext = {
+                message: finalTranscript.trim(),
+                timestamp: new Date().toISOString(),
+                inputMethod: 'voice',
+                sessionId: currentChatId,
+                previousContext: getCurrentChatContext(),
+                confidence: 'voice-input' // Could be enhanced with actual confidence scores
+            };
+            
+            // Hide empty state
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+            
+            // Create new chat if needed
+            if (!currentChatId) {
+                startNewChat();
+            }
+            
+            // Add user message
+            addMessage(finalTranscript.trim(), 'user');
+            
+            // Clear input
+            messageInput.value = '';
+            currentMessage = '';
+            handleInputChange();
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Process voice input with context
+            if (backendAvailable) {
+                processMessageWithBackend(voiceInputContext);
+            } else {
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = generateAIResponse(finalTranscript.trim(), voiceInputContext);
+                    addMessage(response, 'ai');
+                    updateChatHistory(finalTranscript.trim(), response);
+                }, 1500 + Math.random() * 1000);
             }
         }
         
@@ -1156,10 +1650,25 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
         
+        // Enhanced file processing with context
         function processFile(file) {
+            const fileContext = {
+                message: `[File Upload: ${file.name}] Please analyze this file and provide disaster management guidance.`,
+                timestamp: new Date().toISOString(),
+                inputMethod: 'file',
+                sessionId: currentChatId,
+                previousContext: getCurrentChatContext(),
+                fileInfo: {
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    lastModified: file.lastModified
+                }
+            };
+            
             if (backendAvailable) {
                 // Process with backend API (which will use specialized prompts + Gemini)
-                processWithBackend(file);
+                processFileWithBackend(file, fileContext);
             } else if (isGeminiAvailable()) {
                 // Fallback to direct Gemini API
                 processWithGemini(file);
@@ -1169,21 +1678,40 @@
             }
         }
         
-        async function processWithBackend(file, userMessage = '') {
+        // Enhanced file processing with backend
+        async function processFileWithBackend(file, fileContext) {
             showTypingIndicator();
             
             try {
                 const formData = new FormData();
-                formData.append('message', userMessage || `[File: ${file.name}] Please analyze this file and provide disaster management guidance.`);
+                formData.append('message', fileContext.message);
                 formData.append('files', file);
+                
+                // Add context as JSON string
+                formData.append('context', JSON.stringify({
+                    inputMethod: fileContext.inputMethod,
+                    sessionId: fileContext.sessionId,
+                    timestamp: fileContext.timestamp,
+                    previousContext: fileContext.previousContext,
+                    fileInfo: fileContext.fileInfo
+                }));
+                
+                console.log('Sending file to backend:', {
+                    fileName: file.name,
+                    fileSize: file.size,
+                    fileType: file.type,
+                    context: fileContext
+                });
                 
                 const response = await fetch(`${BACKEND_URL}/api/chat`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    signal: AbortSignal.timeout(45000) // 45 second timeout for file uploads
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
                 }
                 
                 const data = await response.json();
@@ -1192,20 +1720,37 @@
                     hideTypingIndicator();
                     addMessage(data.response, 'ai');
                     updateChatHistory(`[File: ${file.name}]`, data.response);
+                    
+                    console.log('File processing successful:', {
+                        messageType: data.message_type,
+                        timestamp: data.timestamp
+                    });
                 } else {
-                    throw new Error(data.error || 'Backend processing failed');
+                    throw new Error(data.error || 'Backend file processing failed');
                 }
                 
             } catch (error) {
-                console.error('Backend processing error:', error);
+                console.error('Backend file processing error:', error);
                 hideTypingIndicator();
+                
+                // Enhanced error handling for file uploads
+                let errorMessage;
+                if (error.name === 'AbortError' || error.message.includes('timeout')) {
+                    errorMessage = '⏰ File upload is taking longer than expected. ';
+                } else if (error.message.includes('413') || error.message.includes('too large')) {
+                    errorMessage = '📁 File is too large for processing. ';
+                } else if (error.message.includes('415') || error.message.includes('unsupported')) {
+                    errorMessage = '📄 File type is not supported. ';
+                } else {
+                    errorMessage = '⚠️ Error processing file with backend. ';
+                }
                 
                 // Fallback to direct Gemini API if backend fails
                 if (isGeminiAvailable()) {
-                    addMessage('⚠️ Backend temporarily unavailable. Falling back to direct Gemini API...', 'ai');
+                    addMessage(errorMessage + 'Falling back to direct Gemini API...', 'ai');
                     setTimeout(() => processWithGemini(file), 1000);
                 } else {
-                    addMessage('⚠️ Sorry, I encountered an error processing your file. Please ensure the backend server is running or provide a Gemini API key.', 'ai');
+                    addMessage(errorMessage + 'Please ensure the backend server is running or provide a Gemini API key.', 'ai');
                 }
             }
         }
@@ -1331,8 +1876,74 @@
             }
         }
         
-        // Make it globally accessible
-        window.setGeminiApiKey = setGeminiApiKey;
+        // Test functions for debugging and integration testing
+        function testIntegration() {
+            console.log('=== DisasterAI Integration Test ===');
+            console.log('Backend URL:', BACKEND_URL);
+            console.log('Backend Available:', backendAvailable);
+            console.log('Current Chat ID:', currentChatId);
+            console.log('Chat History Length:', chatHistory.length);
+            
+            // Test user input context creation
+            const testContext = {
+                message: 'Test message for integration',
+                timestamp: new Date().toISOString(),
+                inputMethod: 'test',
+                sessionId: currentChatId || 'test-session',
+                previousContext: getCurrentChatContext()
+            };
+            
+            console.log('Test Context:', testContext);
+            
+            // Test backend status
+            checkBackendStatus().then(status => {
+                console.log('Backend Status Check Result:', status);
+            });
+            
+            return {
+                backendUrl: BACKEND_URL,
+                backendAvailable: backendAvailable,
+                testContext: testContext,
+                speechRecognitionSupported: !!recognition,
+                geminiConfigured: isGeminiAvailable()
+            };
+        }
+        
+        // Debug function to simulate user input
+        function simulateUserInput(message, inputType = 'text') {
+            console.log(`Simulating ${inputType} input:`, message);
+            
+            const context = {
+                message: message,
+                timestamp: new Date().toISOString(),
+                inputMethod: inputType,
+                sessionId: currentChatId || 'sim-' + Date.now(),
+                previousContext: getCurrentChatContext()
+            };
+            
+            if (!currentChatId) {
+                startNewChat();
+            }
+            
+            addMessage(message, 'user');
+            showTypingIndicator();
+            
+            if (backendAvailable) {
+                processMessageWithBackend(context);
+            } else {
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = generateAIResponse(message, context);
+                    addMessage(response, 'ai');
+                    updateChatHistory(message, response);
+                }, 1000);
+            }
+        }
+        
+        // Make test functions globally accessible
+        window.testIntegration = testIntegration;
+        window.simulateUserInput = simulateUserInput;
+        window.checkBackendStatus = checkBackendStatus;
         
         function sendMessage() {
             const message = messageInput.value.trim();
@@ -1348,7 +1959,172 @@
                 startNewChat();
             }
             
-            // Add user message
+            // Capture additional context for enhanced processing
+            const userInputContext = {
+                message: message,
+                timestamp: new Date().toISOString(),
+                inputMethod: 'text', // Can be 'text', 'voice', or 'suggestion'
+                sessionId: currentChatId,
+                previousContext: getCurrentChatContext()
+            };
+            
+            // Add user message to UI
+            addMessage(message, 'user');
+            
+            // Clear input and reset state
+            messageInput.value = '';
+            currentMessage = '';
+            handleInputChange();
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Process message with enhanced context
+            if (backendAvailable) {
+                processMessageWithBackend(userInputContext);
+            } else {
+                // Fallback to local responses with context awareness
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const response = generateAIResponse(message, userInputContext);
+                    addMessage(response, 'ai');
+                    updateChatHistory(message, response);
+                }, 1500 + Math.random() * 1000);
+            }
+        }
+        
+        // Enhanced backend communication with proper context and error handling
+        async function processMessageWithBackend(userInputContext) {
+            try {
+                // Prepare the request payload with enhanced context
+                const requestPayload = {
+                    message: userInputContext.message,
+                    context: {
+                        inputMethod: userInputContext.inputMethod,
+                        sessionId: userInputContext.sessionId,
+                        timestamp: userInputContext.timestamp,
+                        previousContext: userInputContext.previousContext,
+                        userAgent: navigator.userAgent,
+                        chatLength: userInputContext.previousContext?.messageCount || 0
+                    },
+                    // Add any user preferences or settings
+                    preferences: {
+                        responseStyle: 'supportive', // Could be configurable
+                        urgencyDetection: true,
+                        psychologicalSupport: true
+                    }
+                };
+                
+                console.log('Sending to backend:', requestPayload);
+                
+                const response = await fetch(`${BACKEND_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(requestPayload),
+                    // Add timeout to prevent hanging requests
+                    signal: AbortSignal.timeout(30000) // 30 second timeout
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                
+                hideTypingIndicator();
+                
+                if (data.success) {
+                    // Enhanced response handling with metadata
+                    const enhancedResponse = data.response;
+                    addMessage(enhancedResponse, 'ai');
+                    updateChatHistory(userInputContext.message, enhancedResponse);
+                    
+                    // Log successful interaction for analytics
+                    console.log('Backend response received:', {
+                        messageType: data.message_type,
+                        hasFiles: data.has_files,
+                        timestamp: data.timestamp,
+                        inputMethod: userInputContext.inputMethod
+                    });
+                } else {
+                    throw new Error(data.error || 'Backend processing failed');
+                }
+                
+            } catch (error) {
+                console.error('Backend communication error:', error);
+                hideTypingIndicator();
+                
+                // Enhanced error handling with specific fallback messages
+                let fallbackMessage;
+                if (error.name === 'AbortError' || error.message.includes('timeout')) {
+                    fallbackMessage = '⏰ **Server Status: Request Timeout**\n\nThe server is taking longer than expected to respond:\n\n• High server load\n• Network congestion\n• Processing complex request\n\n💡 **What you can do:**\n• Try a simpler question\n• Wait a moment and try again\n• Check your internet connection\n\n**Emergency Note:** For immediate emergencies, contact 911 directly.\n\n---\n\n**Local Response:** ';
+                } else if (error.message.includes('fetch') || error.message.includes('NetworkError')) {
+                    fallbackMessage = '🔌 **Server Status: Connection Failed**\n\nCannot connect to the backend server:\n\n• Server may be offline\n• Network connectivity issues\n• Firewall blocking connection\n\n💡 **Troubleshooting:**\n• Check if backend server is running\n• Verify network connection\n• Try refreshing the page\n\n**Emergency Note:** For urgent help, contact emergency services directly.\n\n---\n\n**Local Response:** ';
+                } else if (error.message.includes('500') || error.message.includes('Internal Server Error')) {
+                    fallbackMessage = '⚠️ **Server Status: Internal Server Error**\n\nThe server encountered an internal error:\n\n• Server-side processing issue\n• Database connection problems\n• Service configuration error\n\n💡 **Next steps:**\n• Try again in a few minutes\n• Contact technical support\n• Use local responses for now\n\n**Emergency Note:** For emergencies, call 911 immediately.\n\n---\n\n**Local Response:** ';
+                } else if (error.message.includes('503') || error.message.includes('Service Unavailable')) {
+                    fallbackMessage = '🔧 **Server Status: Service Temporarily Unavailable**\n\nThe server is temporarily down for maintenance:\n\n• Scheduled maintenance in progress\n• System updates being applied\n• Service restart required\n\n💡 **Expected resolution:**\n• Service should resume shortly\n• Check back in 10-15 minutes\n• Monitor service status\n\n**Emergency Note:** For immediate assistance, contact emergency services.\n\n---\n\n**Local Response:** ';
+                } else {
+                    fallbackMessage = '❌ **Server Status: Communication Error**\n\nAn unexpected error occurred while contacting the server:\n\n• Unknown connection issue\n• Server configuration problem\n• Service disruption\n\n💡 **Recommended actions:**\n• Refresh the page and try again\n• Check server status\n• Contact support if problem persists\n\n**Emergency Note:** For urgent situations, contact emergency services directly.\n\n---\n\n**Local Response:** ';
+                }
+                
+                // Generate enhanced local response with context
+                const localResponse = generateAIResponse(userInputContext.message, userInputContext);
+                addMessage(fallbackMessage + localResponse, 'ai');
+                updateChatHistory(userInputContext.message, fallbackMessage + localResponse);
+            }
+        }
+        
+        // Enhanced function to capture current chat context
+        function getCurrentChatContext() {
+            if (!currentChatId) return null;
+            
+            const currentChat = chatHistory.find(c => c.id === currentChatId);
+            if (!currentChat || !currentChat.messages) return null;
+            
+            // Get last few messages for context (max 5 messages or 1000 characters)
+            const recentMessages = currentChat.messages.slice(-5);
+            const contextSummary = recentMessages.map(msg => {
+                const role = msg.type || msg.role;
+                const content = msg.content.length > 200 ? msg.content.substring(0, 200) + '...' : msg.content;
+                return `${role}: ${content}`;
+            }).join('\n');
+            
+            return {
+                messageCount: currentChat.messages.length,
+                recentMessages: contextSummary,
+                chatTitle: currentChat.title
+            };
+        }
+        
+        // Enhanced suggestion sending with context
+        function sendSuggestion(message) {
+            messageInput.value = message;
+            
+            // Mark as suggestion input for context
+            const suggestionContext = {
+                message: message,
+                timestamp: new Date().toISOString(),
+                inputMethod: 'suggestion',
+                sessionId: currentChatId,
+                previousContext: getCurrentChatContext()
+            };
+            
+            // Hide empty state
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+            
+            // Create new chat if needed
+            if (!currentChatId) {
+                startNewChat();
+            }
+            
+            // Add user message to UI
             addMessage(message, 'user');
             
             // Clear input
@@ -1359,61 +2135,17 @@
             // Show typing indicator
             showTypingIndicator();
             
-            // Process message with backend or fallback
+            // Process with enhanced context
             if (backendAvailable) {
-                processMessageWithBackend(message);
+                processMessageWithBackend(suggestionContext);
             } else {
-                // Fallback to local SLM responses
                 setTimeout(() => {
                     hideTypingIndicator();
-                    const response = generateAIResponse(message);
+                    const response = generateAIResponse(message, suggestionContext);
                     addMessage(response, 'ai');
                     updateChatHistory(message, response);
                 }, 1500 + Math.random() * 1000);
             }
-        }
-        
-        async function processMessageWithBackend(message) {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: message
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                hideTypingIndicator();
-                
-                if (data.success) {
-                    addMessage(data.response, 'ai');
-                    updateChatHistory(message, data.response);
-                } else {
-                    throw new Error(data.error || 'Backend processing failed');
-                }
-                
-            } catch (error) {
-                console.error('Backend message processing error:', error);
-                hideTypingIndicator();
-                
-                // Fallback to local processing
-                const response = generateAIResponse(message);
-                addMessage('⚠️ Backend temporarily unavailable. Using local responses.\n\n' + response, 'ai');
-                updateChatHistory(message, response);
-            }
-        }
-        
-        function sendSuggestion(message) {
-            messageInput.value = message;
-            sendMessage();
         }
         
         function addMessage(content, type) {
@@ -1424,18 +2156,148 @@
             const now = new Date();
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
+            // Process content based on type
+            let processedContent = content;
+            if (type === 'ai') {
+                // For AI messages, convert markdown to HTML
+                try {
+                    // Configure marked for better formatting
+                    marked.setOptions({
+                        breaks: true,
+                        gfm: true,
+                        sanitize: false,
+                        smartLists: true,
+                        smartypants: true
+                    });
+                    processedContent = marked.parse(content);
+                } catch (error) {
+                    console.warn('Markdown parsing error:', error);
+                    // Fallback: basic markdown processing
+                    processedContent = content
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                        .replace(/\n/g, '<br>')
+                        .replace(/#{3}\s+(.*)/g, '<h3>$1</h3>')
+                        .replace(/#{2}\s+(.*)/g, '<h2>$1</h2>')
+                        .replace(/#{1}\s+(.*)/g, '<h1>$1</h1>')
+                        .replace(/- (.*)/g, '<li>$1</li>')
+                        .replace(/(\<li\>.*\<\/li\>)/g, '<ul>$1</ul>');
+                }
+            } else {
+                // For user messages, keep as plain text but handle line breaks
+                processedContent = content.replace(/\n/g, '<br>');
+            }
+            
+            // Create unique ID for copy functionality
+            const messageId = Date.now() + Math.random().toString(36).substr(2, 9);
+            
+            // Add copy button for AI messages
+            const copyButton = type === 'ai' ? `
+                <button class="copy-btn" onclick="copyMessage('${messageId}')" title="Copy message">
+                    <i class="fas fa-copy"></i>
+                </button>
+            ` : '';
+            
             messageDiv.innerHTML = `
                 <div class="message-avatar ${type}-avatar">
                     <i class="fas fa-${type === 'user' ? 'user' : 'robot'}"></i>
                 </div>
                 <div class="message-content">
-                    <div class="message-text">${content}</div>
+                    <div class="message-text" id="${messageId}">
+                        ${processedContent}
+                        ${copyButton}
+                    </div>
                     <div class="message-time">${timeString}</div>
                 </div>
             `;
             
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        // Copy message functionality
+        function copyMessage(messageId) {
+            const messageElement = document.getElementById(messageId);
+            if (!messageElement) return;
+            
+            // Get the text content, excluding the copy button
+            const copyButton = messageElement.querySelector('.copy-btn');
+            if (copyButton) {
+                copyButton.style.display = 'none';
+            }
+            
+            // Get the text content
+            let textToCopy = messageElement.innerText || messageElement.textContent;
+            
+            // Show the copy button again
+            if (copyButton) {
+                copyButton.style.display = 'flex';
+            }
+            
+            // Clean up the text (remove extra whitespace)
+            textToCopy = textToCopy.trim();
+            
+            // Copy to clipboard
+            if (navigator.clipboard && window.isSecureContext) {
+                // Modern async clipboard API
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showCopyFeedback(copyButton);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    // Fallback to execCommand
+                    fallbackCopyTextToClipboard(textToCopy, copyButton);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopyTextToClipboard(textToCopy, copyButton);
+            }
+        }
+        
+        // Fallback copy method for older browsers
+        function fallbackCopyTextToClipboard(text, button) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            
+            // Avoid scrolling to bottom
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            textArea.style.position = 'fixed';
+            textArea.style.opacity = '0';
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopyFeedback(button);
+                } else {
+                    console.error('Fallback copy failed');
+                }
+            } catch (err) {
+                console.error('Fallback copy error: ', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        // Show visual feedback when text is copied
+        function showCopyFeedback(button) {
+            if (!button) return;
+            
+            const originalIcon = button.innerHTML;
+            const originalClass = button.className;
+            
+            // Change to checkmark and green color
+            button.innerHTML = '<i class="fas fa-check"></i>';
+            button.classList.add('copied');
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                button.innerHTML = originalIcon;
+                button.className = originalClass;
+            }, 2000);
         }
         
         function showTypingIndicator() {
@@ -1466,8 +2328,26 @@
             }
         }
         
-        function generateAIResponse(userMessage) {
-            // For text-only messages, use local SLM responses
+        // Enhanced AI response generation with context awareness
+        function generateAIResponse(userMessage, userInputContext = null) {
+            // Enhanced response logic that considers context
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Check if this is a follow-up in an ongoing conversation
+            const isFollowUp = userInputContext?.previousContext?.messageCount > 0;
+            const inputMethod = userInputContext?.inputMethod || 'text';
+            
+            // Context-aware response prefix based on input method
+            let responsePrefix = '';
+            if (inputMethod === 'voice') {
+                responsePrefix = '🎤 **Voice Input Received** | ';
+            } else if (inputMethod === 'suggestion') {
+                responsePrefix = '💡 **Quick Response** | ';
+            } else if (isFollowUp) {
+                responsePrefix = '🔄 **Follow-up** | ';
+            }
+            
+            // Enhanced response categories with context awareness
             const responses = {
                 flood: [
                     "🌊 For flood safety: Move to higher ground immediately, avoid walking or driving through flood water, and listen to emergency broadcasts. Stay safe!",
@@ -1494,24 +2374,43 @@
                     "🩹 First aid basics everyone should know:\n• CPR and AED use\n• Wound care\n• Choking response\n• Shock treatment\n\nWould you like step-by-step instructions for any of these?",
                     "⚕️ Remember the first aid ABCs:\n• Airway - keep it clear\n• Breathing - check and assist\n• Circulation - control bleeding\n\nDo you need guidance for a specific injury or emergency?"
                 ],
+                followup: [
+                    "I'm here to continue helping you. What else would you like to know?",
+                    "Based on our conversation, is there anything specific you'd like me to clarify or expand on?",
+                    "How can I further assist you with your disaster preparedness or safety concerns?"
+                ]
             };
             
-            const lowerMessage = userMessage.toLowerCase();
+            let selectedResponse = '';
             
             if (lowerMessage.includes('flood') || lowerMessage.includes('water')) {
-                return responses.flood[Math.floor(Math.random() * responses.flood.length)];
+                selectedResponse = responses.flood[Math.floor(Math.random() * responses.flood.length)];
             } else if (lowerMessage.includes('anxious') || lowerMessage.includes('stress') || lowerMessage.includes('worried') || lowerMessage.includes('scared')) {
-                return responses.anxiety[Math.floor(Math.random() * responses.anxiety.length)];
+                selectedResponse = responses.anxiety[Math.floor(Math.random() * responses.anxiety.length)];
             } else if (lowerMessage.includes('emergency') || lowerMessage.includes('help') || lowerMessage.includes('immediate')) {
-                return responses.emergency[Math.floor(Math.random() * responses.emergency.length)];
+                selectedResponse = responses.emergency[Math.floor(Math.random() * responses.emergency.length)];
             } else if (lowerMessage.includes('preparedness') || lowerMessage.includes('prepare') || lowerMessage.includes('kit') || lowerMessage.includes('plan')) {
-                return responses.preparedness[Math.floor(Math.random() * responses.preparedness.length)];
+                selectedResponse = responses.preparedness[Math.floor(Math.random() * responses.preparedness.length)];
             } else if (lowerMessage.includes('first aid') || lowerMessage.includes('medical') || lowerMessage.includes('injury') || lowerMessage.includes('wound')) {
-                return responses.firstaid[Math.floor(Math.random() * responses.firstaid.length)];
+                selectedResponse = responses.firstaid[Math.floor(Math.random() * responses.firstaid.length)];
+            } else if (isFollowUp && (lowerMessage.includes('more') || lowerMessage.includes('else') || lowerMessage.length < 20)) {
+                selectedResponse = responses.followup[Math.floor(Math.random() * responses.followup.length)];
+            } else {
+                // Default enhanced response
+                selectedResponse = "I'm here to help you with disaster preparedness, emergency guidance, and psychological support. Could you tell me more about what specific assistance you need? Whether it's safety information, stress management, or emergency planning, I'm ready to help! 🤖💙\n\n💡 **Tip:** You can also upload images, videos, or PDFs for detailed analysis (requires Gemini API key).";
             }
             
-            // Default response
-            return "I'm here to help you with disaster preparedness, emergency guidance, and psychological support. Could you tell me more about what specific assistance you need? Whether it's safety information, stress management, or emergency planning, I'm ready to help! 🤖💙\n\n💡 **Tip:** You can also upload images, videos, or PDFs for detailed analysis (requires Gemini API key).";
+            // Add context-aware enhancements
+            if (userInputContext?.previousContext?.chatTitle && isFollowUp) {
+                selectedResponse += `\n\n🔗 *Continuing our discussion about: ${userInputContext.previousContext.chatTitle}*`;
+            }
+            
+            // Add input method acknowledgment for voice input
+            if (inputMethod === 'voice') {
+                selectedResponse = "🎤 I understood your voice message. " + selectedResponse;
+            }
+            
+            return responsePrefix + selectedResponse;
         }
         
         function startNewChat() {
@@ -1879,6 +2778,129 @@
             if (window.innerWidth <= 640) {
                 // Mobile specific adjustments can be added here
             }
+        });
+        
+        // Dashboard Sidebar functionality
+        function toggleDashboardSidebar() {
+            const sidebar = document.getElementById('dashboardSidebar');
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            const overlay = document.getElementById('dashboardOverlay');
+            
+            sidebar.classList.toggle('open');
+            hamburgerMenu.classList.toggle('active');
+            overlay.classList.toggle('show');
+        }
+        
+        // Close dashboard sidebar function
+        function closeDashboardSidebar() {
+            const sidebar = document.getElementById('dashboardSidebar');
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            const overlay = document.getElementById('dashboardOverlay');
+            
+            sidebar.classList.remove('open');
+            hamburgerMenu.classList.remove('active');
+            overlay.classList.remove('show');
+        }
+        
+        // Navigation function
+        function navigateTo(page) {
+            // Show loading indicator
+            showLoadingIndicator();
+            
+            // Add smooth transition
+            document.body.style.opacity = '0.8';
+            document.body.style.transition = 'opacity 0.3s ease';
+            
+            setTimeout(() => {
+                try {
+                    window.location.href = page;
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    hideLoadingIndicator();
+                    alert('⚠️ Navigation Error\n\nSorry, the page is currently unavailable.');
+                    document.body.style.opacity = '1';
+                }
+            }, 300);
+        }
+        
+        function showLoadingIndicator() {
+            // Create loading overlay if it doesn't exist
+            if (!document.getElementById('loadingOverlay')) {
+                const loadingHTML = `
+                    <div id="loadingOverlay" style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(26, 115, 232, 0.9);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                        color: white;
+                    ">
+                        <div style="
+                            width: 50px;
+                            height: 50px;
+                            border: 3px solid rgba(255, 255, 255, 0.3);
+                            border-top: 3px solid white;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            margin-bottom: 20px;
+                        "></div>
+                        <h3>Loading...</h3>
+                        <p>Navigating to your selected page</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+                document.body.insertAdjacentHTML('beforeend', loadingHTML);
+            }
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        
+        function hideLoadingIndicator() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+        
+        // Close dashboard sidebar when clicking outside of it
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('dashboardSidebar');
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            
+            // Check if the sidebar is open and the click is outside sidebar and hamburger menu
+            if (sidebar && sidebar.classList.contains('open') && 
+                !sidebar.contains(event.target) && 
+                !hamburgerMenu.contains(event.target)) {
+                closeDashboardSidebar();
+            }
+        });
+        
+        // Close dashboard sidebar with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const sidebar = document.getElementById('dashboardSidebar');
+                if (sidebar && sidebar.classList.contains('open')) {
+                    closeDashboardSidebar();
+                }
+            }
+        });
+        
+        // Initialize dashboard sidebar as closed by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('dashboardSidebar');
+            const overlay = document.getElementById('dashboardOverlay');
+            if (sidebar) sidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('show');
         });
     </script>
 </body>

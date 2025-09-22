@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hurricane Hero: Resource Dash 🌀</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-panel {
+            flex: 1;
+            padding: 30px;
+            border-right: 2px solid #3498db;
+            background: #f8f9fa;
+        }
+        
+        .game-area {
+            flex: 2;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 700px;
+            background: #eef5ff;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        h1 {
+            color: #3498db;
+            margin-left: 15px;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: #2980b9;
+            margin: 20px 0 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            font-size: 22px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .score-board {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border: 2px solid #3498db;
+        }
+        
+        .current-score {
+            font-size: 24px;
+            text-align: center;
+            margin: 15px 0;
+            color: #2c3e50;
+        }
+        
+        .max-score {
+            font-size: 22px;
+            text-align: center;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #3498db;
+        }
+        
+        .game-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-size: 28px;
+        }
+        
+        .game-description {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .game-ui {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .resources-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .resource {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #3498db;
+            text-align: center;
+        }
+        
+        .resource-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2980b9;
+            margin: 5px 0;
+        }
+        
+        .resource-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .resource-btn {
+            padding: 5px 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .resource-btn:hover {
+            background: #2980b9;
+        }
+        
+        .decision-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .decision-title {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        
+        .decision-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .decision-option {
+            padding: 12px;
+            background: #e8f4fc;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #3498db;
+        }
+        
+        .decision-option:hover {
+            background: #d4e6f1;
+            transform: translateY(-2px);
+        }
+        
+        .community-status {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .status-item {
+            background: #e8f4fc;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #3498db;
+        }
+        
+        .status-value {
+            font-weight: bold;
+            color: #2980b9;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #3498db;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-btn {
+            background: #2ecc71;
+        }
+        
+        .action-btn:hover {
+            background: #27ae60;
+        }
+        
+        .warning-btn {
+            background: #f39c12;
+        }
+        
+        .warning-btn:hover {
+            background: #e67e22;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            display: none;
+        }
+        
+        .results h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .results p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        
+        .hurricane-tracker {
+            height: 100px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            border: 1px solid #3498db;
+            overflow: hidden;
+        }
+        
+        .storm-icon {
+            position: absolute;
+            font-size: 30px;
+            color: #e74c3c;
+            top: 35px;
+            transition: left 1s ease;
+        }
+        
+        .coastline {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 30px;
+            background: #27ae60;
+        }
+        
+        .category-display {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .info-panel {
+                border-right: none;
+                border-bottom: 2px solid #3498db;
+            }
+            
+            .resources-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .community-status {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-panel">
+            <div class="header">
+                <i class="fas fa-wind fa-3x" style="color: #3498db;"></i>
+                <h1>Hurricane Hero 🌀</h1>
+            </div>
+            
+            <h2>Rules</h2>
+            <ul class="rules-list">
+                <li>Prepare your home and community for an approaching hurricane</li>
+                <li>Manage limited resources wisely</li>
+                <li>Make critical decisions about resource allocation</li>
+                <li>Balance personal safety with community support</li>
+                <li>Evacuate when necessary to ensure survival</li>
+            </ul>
+            
+            <h2>Important Points</h2>
+            <ul class="points-list">
+                <li>Hurricanes are categorized by wind speed (1-5 scale)</li>
+                <li>Storm surge is often the most deadly aspect of hurricanes</li>
+                <li>Evacuation should be completed before winds reach tropical storm force</li>
+                <li>Having supplies for at least 3 days is critical</li>
+                <li>Helping neighbors improves community resilience</li>
+            </ul>
+            
+            <div class="score-board">
+                <h2>Your Scores</h2>
+                <div class="current-score">Current Score: <span id="current-score">0</span> points</div>
+                <div class="max-score">High Score: <span id="max-score">0</span> points</div>
+                <div class="current-score">Time Until Landfall: <span id="time-left">72</span> hours</div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-container">
+                <h2 class="game-title">Hurricane Hero: Resource Dash 🌀</h2>
+                <p class="game-description">Prepare your home and community for an approaching hurricane</p>
+                
+                <div class="game-ui">
+                    <div>Resources: $<span id="money">1000</span></div>
+                    <div>Hurricane Category: <span id="hurricane-category">1</span></div>
+                    <div>Preparation Level: <span id="preparation-level">0</span>/100</div>
+                </div>
+                
+                <div class="hurricane-tracker">
+                    <div class="category-display">Category <span id="current-category">1</span></div>
+                    <div class="storm-icon" id="storm-icon">🌀</div>
+                    <div class="coastline"></div>
+                </div>
+                
+                <div class="resources-container">
+                    <div class="resource">
+                        <h3>Food & Water</h3>
+                        <div class="resource-value" id="food-value">0</div>
+                        <p>Days worth of supplies</p>
+                        <div class="resource-controls">
+                            <button class="resource-btn" onclick="buyResource('food', 1)">+1 Day ($50)</button>
+                        </div>
+                    </div>
+                    <div class="resource">
+                        <h3>Home Protection</h3>
+                        <div class="resource-value" id="protection-value">0</div>
+                        <p>Reinforcement level</p>
+                        <div class="resource-controls">
+                            <button class="resource-btn" onclick="buyResource('protection', 1)">+1 Level ($100)</button>
+                        </div>
+                    </div>
+                    <div class="resource">
+                        <h3>Emergency Kit</h3>
+                        <div class="resource-value" id="kit-value">0</div>
+                        <p>Completeness</p>
+                        <div class="resource-controls">
+                            <button class="resource-btn" onclick="buyResource('kit', 1)">+10% ($75)</button>
+                        </div>
+                    </div>
+                    <div class="resource">
+                        <h3>Community Help</h3>
+                        <div class="resource-value" id="community-value">0</div>
+                        <p>Support level</p>
+                        <div class="resource-controls">
+                            <button class="resource-btn" onclick="buyResource('community', 1)">+1 Level ($150)</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="community-status">
+                    <div class="status-item">
+                        <div>Evacuation Readiness</div>
+                        <div class="status-value" id="evacuation-value">0%</div>
+                    </div>
+                    <div class="status-item">
+                        <div>Community Safety</div>
+                        <div class="status-value" id="safety-value">0%</div>
+                    </div>
+                    <div class="status-item">
+                        <div>Storm Severity</div>
+                        <div class="status-value" id="severity-value">Low</div>
+                    </div>
+                    <div class="status-item">
+                        <div>Time Remaining</div>
+                        <div class="status-value" id="time-remaining">72 hours</div>
+                    </div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="preparation-progress"></div>
+                </div>
+                
+                <div class="decision-container">
+                    <div class="decision-title">Critical Decision:</div>
+                    <p id="decision-text">A neighbor needs help boarding up their windows but you haven't finished your own preparations. What do you do?</p>
+                    <div class="decision-options">
+                        <div class="decision-option" onclick="makeDecision(0)">Focus on your own preparations first</div>
+                        <div class="decision-option" onclick="makeDecision(1)">Help your neighbor for 2 hours</div>
+                        <div class="decision-option" onclick="makeDecision(2)">Organize a community work party</div>
+                    </div>
+                </div>
+                
+                <div class="results" id="results">
+                    <h3 id="result-title">Decision Outcome</h3>
+                    <p id="result-message">Your actions have consequences...</p>
+                </div>
+                
+                <div class="controls">
+                    <button class="action-btn" onclick="advanceTime()">
+                        <i class="fas fa-forward"></i> Advance Time (6 hours)
+                    </button>
+                    <button class="warning-btn" onclick="evacuate()">
+                        <i class="fas fa-car"></i> Evacuate Now
+                    </button>
+                    <button onclick="startGame()">
+                        <i class="fas fa-play"></i> Start Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data and state
+        const gameData = {
+            currentScore: 0,
+            maxScore: parseInt(localStorage.getItem('hurricaneHeroMaxScore')) || 0,
+            money: 1000,
+            timeLeft: 72,
+            hurricaneCategory: 1,
+            preparationLevel: 0,
+            resources: {
+                food: 0,
+                protection: 0,
+                kit: 0,
+                community: 0
+            },
+            communityStatus: {
+                evacuation: 0,
+                safety: 0
+            },
+            gameActive: false,
+            decisions: [
+                {
+                    text: "A neighbor needs help boarding up their windows but you haven't finished your own preparations. What do you do?",
+                    options: [
+                        { text: "Focus on your own preparations first", money: 0, preparation: 10, community: -5 },
+                        { text: "Help your neighbor for 2 hours", money: -50, preparation: 5, community: 10 },
+                        { text: "Organize a community work party", money: -100, preparation: 0, community: 20 }
+                    ]
+                },
+                {
+                    text: "You find extra supplies at the store. What do you do?",
+                    options: [
+                        { text: "Keep them for yourself", money: -100, preparation: 15, community: -10 },
+                        { text: "Share with immediate neighbors", money: -100, preparation: 10, community: 10 },
+                        { text: "Donate to community center", money: -100, preparation: 5, community: 15 }
+                    ]
+                },
+                {
+                    text: "An evacuation order is issued for your area. What do you do?",
+                    options: [
+                        { text: "Evacuate immediately", money: -200, preparation: 0, community: 0 },
+                        { text: "Wait to see if the storm intensifies", money: 0, preparation: 0, community: -10 },
+                        { text: "Help others evacuate first", money: -100, preparation: -10, community: 20 }
+                    ]
+                }
+            ],
+            currentDecision: 0
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load max score from storage
+            document.getElementById('max-score').textContent = gameData.maxScore;
+            
+            // Initialize UI
+            updateUI();
+        });
+
+        // Start the game
+        function startGame() {
+            gameData.gameActive = true;
+            gameData.currentScore = 0;
+            gameData.money = 1000;
+            gameData.timeLeft = 72;
+            gameData.hurricaneCategory = 1;
+            gameData.preparationLevel = 0;
+            gameData.resources = { food: 0, protection: 0, kit: 0, community: 0 };
+            gameData.communityStatus = { evacuation: 0, safety: 0 };
+            gameData.currentDecision = 0;
+            
+            updateUI();
+            document.getElementById('results').style.display = 'none';
+            
+            // Position storm icon
+            document.getElementById('storm-icon').style.left = '10%';
+            
+            // Start hurricane intensification
+            const hurricaneTimer = setInterval(function() {
+                if (gameData.gameActive) {
+                    // Random chance to intensify hurricane
+                    if (Math.random() < 0.3 && gameData.hurricaneCategory < 5) {
+                        gameData.hurricaneCategory++;
+                        document.getElementById('hurricane-category').textContent = gameData.hurricaneCategory;
+                        document.getElementById('current-category').textContent = gameData.hurricaneCategory;
+                        
+                        // Update severity display
+                        let severity = "Low";
+                        if (gameData.hurricaneCategory >= 3) severity = "Medium";
+                        if (gameData.hurricaneCategory >= 4) severity = "High";
+                        if (gameData.hurricaneCategory >= 5) severity = "EXTREME";
+                        document.getElementById('severity-value').textContent = severity;
+                    }
+                    
+                    // Move storm closer
+                    const stormIcon = document.getElementById('storm-icon');
+                    const currentLeft = parseInt(stormIcon.style.left || '10%');
+                    stormIcon.style.left = (currentLeft + 5) + '%';
+                    
+                    // Check if storm has made landfall
+                    if (currentLeft > 70) {
+                        endGame();
+                        clearInterval(hurricaneTimer);
+                    }
+                } else {
+                    clearInterval(hurricaneTimer);
+                }
+            }, 5000);
+        }
+
+        // Buy a resource
+        function buyResource(type, amount) {
+            if (!gameData.gameActive) {
+                alert("Please start the game first!");
+                return;
+            }
+            
+            const costs = {
+                'food': 50,
+                'protection': 100,
+                'kit': 75,
+                'community': 150
+            };
+            
+            const cost = costs[type] * amount;
+            
+            if (gameData.money >= cost) {
+                gameData.money -= cost;
+                gameData.resources[type] += amount;
+                
+                // Update preparation level
+                gameData.preparationLevel += 5 * amount;
+                if (gameData.preparationLevel > 100) gameData.preparationLevel = 100;
+                
+                // Update community status based on resources
+                if (type === 'community') {
+                    gameData.communityStatus.safety += 5 * amount;
+                    if (gameData.communityStatus.safety > 100) gameData.communityStatus.safety = 100;
+                }
+                
+                // Add points
+                gameData.currentScore += 10 * amount;
+                
+                updateUI();
+            } else {
+                alert("Not enough money!");
+            }
+        }
+
+        // Make a decision
+        function makeDecision(optionIndex) {
+            if (!gameData.gameActive) return;
+            
+            const decision = gameData.decisions[gameData.currentDecision];
+            const outcome = decision.options[optionIndex];
+            
+            // Apply outcome
+            gameData.money += outcome.money;
+            gameData.preparationLevel += outcome.preparation;
+            gameData.communityStatus.safety += outcome.community;
+            
+            // Ensure values stay within bounds
+            if (gameData.preparationLevel > 100) gameData.preparationLevel = 100;
+            if (gameData.communityStatus.safety > 100) gameData.communityStatus.safety = 100;
+            if (gameData.communityStatus.safety < 0) gameData.communityStatus.safety = 0;
+            
+            // Add points
+            gameData.currentScore += 20;
+            
+            // Show results
+            document.getElementById('result-title').textContent = "Decision Outcome";
+            document.getElementById('result-message').textContent = getDecisionOutcomeText(optionIndex);
+            document.getElementById('results').style.display = 'block';
+            
+            // Move to next decision
+            gameData.currentDecision = (gameData.currentDecision + 1) % gameData.decisions.length;
+            
+            // Update decision text
+            document.getElementById('decision-text').textContent = gameData.decisions[gameData.currentDecision].text;
+            
+            updateUI();
+        }
+
+        // Get decision outcome text
+        function getDecisionOutcomeText(optionIndex) {
+            const outcomes = [
+                "You focused on your own preparations. Your home is better protected but your neighbors struggled.",
+                "Helping your neighbor strengthened community bonds and improved overall safety.",
+                "Organizing a community effort took time but significantly improved neighborhood resilience."
+            ];
+            
+            return outcomes[optionIndex];
+        }
+
+        // Advance time
+        function advanceTime() {
+            if (!gameData.gameActive) {
+                alert("Please start the game first!");
+                return;
+            }
+            
+            gameData.timeLeft -= 6;
+            
+            // Random event chance
+            if (Math.random() < 0.4) {
+                // Random event occurs
+                const events = [
+                    { message: "A store restocked supplies! You were able to buy more resources.", money: 100, preparation: 5 },
+                    { message: "A community member shared resources with you!", money: 50, preparation: 10 },
+                    { message: "The hurricane intensified faster than expected!", money: 0, preparation: -5 }
+                ];
+                
+                const event = events[Math.floor(Math.random() * events.length)];
+                
+                gameData.money += event.money;
+                gameData.preparationLevel += event.preparation;
+                
+                // Show event message
+                document.getElementById('result-title').textContent = "Event Occurred";
+                document.getElementById('result-message').textContent = event.message;
+                document.getElementById('results').style.display = 'block';
+            }
+            
+            // Update evacuation readiness based on preparation
+            gameData.communityStatus.evacuation = Math.min(100, gameData.preparationLevel / 2 + gameData.resources.food * 5);
+            
+            // Add points for time advancement
+            gameData.currentScore += 5;
+            
+            // Check if time has run out
+            if (gameData.timeLeft <= 0) {
+                endGame();
+            }
+            
+            updateUI();
+        }
+
+        // Evacuate
+        function evacuate() {
+            if (!gameData.gameActive) return;
+            
+            // Score based on preparation level
+            const evacuationScore = Math.floor(gameData.preparationLevel * 10 + gameData.communityStatus.safety * 5);
+            gameData.currentScore += evacuationScore;
+            
+            // End game
+            endGame(true);
+        }
+
+        // Update UI elements
+        function updateUI() {
+            document.getElementById('current-score').textContent = gameData.currentScore;
+            document.getElementById('money').textContent = gameData.money;
+            document.getElementById('time-left').textContent = gameData.timeLeft;
+            document.getElementById('time-remaining').textContent = gameData.timeLeft + ' hours';
+            document.getElementById('preparation-level').textContent = gameData.preparationLevel;
+            document.getElementById('hurricane-category').textContent = gameData.hurricaneCategory;
+            
+            // Update resource values
+            document.getElementById('food-value').textContent = gameData.resources.food;
+            document.getElementById('protection-value').textContent = gameData.resources.protection;
+            document.getElementById('kit-value').textContent = gameData.resources.kit * 10 + '%';
+            document.getElementById('community-value').textContent = gameData.resources.community;
+            
+            // Update community status
+            document.getElementById('evacuation-value').textContent = gameData.communityStatus.evacuation + '%';
+            document.getElementById('safety-value').textContent = gameData.communityStatus.safety + '%';
+            
+            // Update progress bar
+            document.getElementById('preparation-progress').style.width = gameData.preparationLevel + '%';
+            
+            // Update severity display
+            let severity = "Low";
+            if (gameData.hurricaneCategory >= 3) severity = "Medium";
+            if (gameData.hurricaneCategory >= 4) severity = "High";
+            if (gameData.hurricaneCategory >= 5) severity = "EXTREME";
+            document.getElementById('severity-value').textContent = severity;
+        }
+
+        // End the game
+        function endGame(evacuated = false) {
+            gameData.gameActive = false;
+            const results = document.getElementById('results');
+            
+            if (evacuated) {
+                document.getElementById('result-title').textContent = 'You Evacuated Safely!';
+                document.getElementById('result-title').style.color = '#27ae60';
+                document.getElementById('result-message').textContent = 'You prepared well and evacuated in time. Your score: ' + gameData.currentScore;
+            } else if (gameData.preparationLevel >= 70) {
+                document.getElementById('result-title').textContent = 'You Survived the Hurricane!';
+                document.getElementById('result-title').style.color = '#27ae60';
+                document.getElementById('result-message').textContent = 'Your preparations paid off. You and your community weathered the storm. Score: ' + gameData.currentScore;
+            } else {
+                document.getElementById('result-title').textContent = 'Game Over';
+                document.getElementById('result-title').style.color = '#e74c3c';
+                document.getElementById('result-message').textContent = 'You were not prepared enough for the hurricane. Your score: ' + gameData.currentScore;
+            }
+            
+            results.style.display = 'block';
+            
+            // Update high score if needed
+            if (gameData.currentScore > gameData.maxScore) {
+                gameData.maxScore = gameData.currentScore;
+                localStorage.setItem('hurricaneHeroMaxScore', gameData.maxScore);
+                document.getElementById('max-score').textContent = gameData.maxScore;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -619,6 +619,165 @@
             font-size: 1.1rem;
             margin-bottom: 20px;
         }
+
+        /* Risk Assessment Styles */
+        .risk-question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .risk-question:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .risk-question label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .radio-option:hover {
+            background: rgba(26, 115, 232, 0.1);
+        }
+
+        .radio-option input[type="radio"] {
+            margin: 0;
+            width: 16px;
+            height: 16px;
+        }
+
+        .risk-gauge {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .risk-gauge-inner {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .risk-percentage {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .risk-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .disaster-module-content {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .disaster-module-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .disaster-module-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .disaster-module-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .action-item {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .action-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .action-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .recommendation-item {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .high-risk-area {
+            padding: 15px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 10px;
+            border: 1px solid rgba(244,67,54,0.2);
+            transition: var(--transition);
+        }
+
+        .high-risk-area:hover {
+            border-color: rgba(244,67,54,0.4);
+            box-shadow: 0 4px 12px rgba(244,67,54,0.1);
+        }
     </style>
 </head>
 <body>
@@ -673,186 +832,284 @@
                     </div>
                 </div>
                 <div class="filter-group">
-                    <h3 data-translate="topics">Topics</h3>
+                    <h3 data-translate="topics">Disaster Types</h3>
                     <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="topic" data-value="all">All Topics</button>
-                        <button class="filter-btn" data-filter="topic" data-value="mitigation">Mitigation</button>
-                        <button class="filter-btn" data-filter="topic" data-value="preparedness">Preparedness</button>
-                        <button class="filter-btn" data-filter="topic" data-value="first-aid">First Aid</button>
-                        <button class="filter-btn" data-filter="topic" data-value="response">Response</button>
+                        <button class="filter-btn active" data-filter="topic" data-value="all">All Disasters</button>
+                        <button class="filter-btn" data-filter="topic" data-value="earthquake">Earthquake</button>
+                        <button class="filter-btn" data-filter="topic" data-value="fire">Fire</button>
+                        <button class="filter-btn" data-filter="topic" data-value="flood">Flood</button>
+                        <button class="filter-btn" data-filter="topic" data-value="cyclone">Cyclone</button>
+                        <button class="filter-btn" data-filter="topic" data-value="chemical">Chemical</button>
+                        <button class="filter-btn" data-filter="topic" data-value="security">Security</button>
+                        <button class="filter-btn" data-filter="topic" data-value="pandemic">Pandemic</button>
+                        <button class="filter-btn" data-filter="topic" data-value="electrical">Electrical</button>
+                        <button class="filter-btn" data-filter="topic" data-value="medical">Medical</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="modules-grid" id="modulesGrid">
-            <!-- Mitigation Modules -->
-            <div class="module-card" data-age="1-5,5-8" data-topic="mitigation">
-                <div class="ar-vr-indicator">AR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <div class="age-tag">Ages 1-8</div>
-                <h3>Flood Prevention Basics</h3>
-                <p>Learn how to protect your home and family from floods through fun interactive activities and AR visualization.</p>
-                <div class="module-features">
-                    <span class="feature-tag">AR Experience</span>
-                    <span class="feature-tag">Interactive</span>
-                    <span class="feature-tag">Beginner</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('flood-prevention')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('flood-ar')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="module-card" data-age="8-12,12+" data-topic="mitigation">
+            <!-- EARTHQUAKE PREPAREDNESS MODULE -->
+            <div class="module-card" data-age="8-12,12+" data-topic="earthquake">
                 <div class="ar-vr-indicator">VR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-mountain"></i>
+                <div class="module-icon" style="background: linear-gradient(135deg, #8B4513, #A0522D);">
+                    <i class="fas fa-home"></i>
                 </div>
                 <div class="age-tag">Ages 8+</div>
-                <h3>Earthquake Safety Engineering</h3>
-                <p>Understand building design and earthquake-resistant construction through immersive VR simulations.</p>
+                <h3>🏗️ Earthquake Response & Safety</h3>
+                <p>Learn earthquake safety protocols, building vulnerabilities, and immediate response actions through immersive VR simulations.</p>
                 <div class="module-features">
-                    <span class="feature-tag">VR Experience</span>
-                    <span class="feature-tag">Advanced</span>
-                    <span class="feature-tag">Engineering</span>
+                    <span class="feature-tag">Drop, Cover, Hold</span>
+                    <span class="feature-tag">Building Safety</span>
+                    <span class="feature-tag">Institutional Risk</span>
                 </div>
                 <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('earthquake-engineering')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('earthquake-vr')">
-                        <i class="fas fa-eye"></i>
+                    <button class="btn-primary" onclick="openEarthquakeModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('earthquake')">
+                        <i class="fas fa-building"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Preparedness Modules -->
-            <div class="module-card" data-age="5-8,8-12" data-topic="preparedness">
+            <!-- FIRE SAFETY MODULE -->
+            <div class="module-card" data-age="5-8,8-12,12+" data-topic="fire">
                 <div class="ar-vr-indicator">AR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-box"></i>
-                </div>
-                <div class="age-tag">Ages 5-12</div>
-                <h3>Emergency Kit Builder</h3>
-                <p>Create your family emergency kit using AR to visualize and organize essential supplies.</p>
-                <div class="module-features">
-                    <span class="feature-tag">AR Experience</span>
-                    <span class="feature-tag">Practical</span>
-                    <span class="feature-tag">Family</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('emergency-kit')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('kit-ar')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="module-card" data-age="8-12,12+" data-topic="preparedness">
-                <div class="module-icon">
-                    <i class="fas fa-route"></i>
-                </div>
-                <div class="age-tag">Ages 8+</div>
-                <h3>Evacuation Planning</h3>
-                <p>Learn to create effective evacuation plans for different disaster scenarios using interactive mapping.</p>
-                <div class="module-features">
-                    <span class="feature-tag">Interactive Map</span>
-                    <span class="feature-tag">Planning</span>
-                    <span class="feature-tag">Strategy</span>
-                </div>
-                <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('evacuation-planning')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('evacuation-ar')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- First Aid Modules -->
-            <div class="module-card" data-age="5-8,8-12,12+" data-topic="first-aid">
-                <div class="ar-vr-indicator">VR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-heart"></i>
+                <div class="module-icon" style="background: linear-gradient(135deg, #FF4500, #DC143C);">
+                    <i class="fas fa-fire"></i>
                 </div>
                 <div class="age-tag">Ages 5+</div>
-                <h3>Basic Life Support</h3>
-                <p>Master CPR and basic life support techniques through guided VR training with realistic scenarios.</p>
+                <h3>🔥 Fire Safety & Evacuation</h3>
+                <p>Master fire prevention, evacuation procedures, and identify high-risk areas in buildings through interactive AR training.</p>
                 <div class="module-features">
-                    <span class="feature-tag">VR Training</span>
-                    <span class="feature-tag">Life-saving</span>
-                    <span class="feature-tag">Certified</span>
+                    <span class="feature-tag">Fire Prevention</span>
+                    <span class="feature-tag">Evacuation Routes</span>
+                    <span class="feature-tag">Risk Assessment</span>
                 </div>
                 <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('basic-life-support')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('cpr-vr')">
-                        <i class="fas fa-eye"></i>
+                    <button class="btn-primary" onclick="openFireModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('fire')">
+                        <i class="fas fa-building"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="module-card" data-age="8-12,12+" data-topic="first-aid">
-                <div class="ar-vr-indicator">AR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-band-aid"></i>
+            <!-- FLOOD PREPAREDNESS MODULE -->
+            <div class="module-card" data-age="8-12,12+" data-topic="flood">
+                <div class="ar-vr-indicator">VR Ready</div>
+                <div class="module-icon" style="background: linear-gradient(135deg, #1E90FF, #0000CD);">
+                    <i class="fas fa-water"></i>
                 </div>
                 <div class="age-tag">Ages 8+</div>
-                <h3>Wound Care & Treatment</h3>
-                <p>Learn proper wound care and emergency treatment techniques using AR-guided tutorials.</p>
+                <h3>🌊 Flood Response & Protection</h3>
+                <p>Understand flood risks, protective measures, and evacuation strategies. Assess your institution's flood vulnerability.</p>
                 <div class="module-features">
-                    <span class="feature-tag">AR Guidance</span>
-                    <span class="feature-tag">Medical</span>
-                    <span class="feature-tag">Hands-on</span>
+                    <span class="feature-tag">Flood Zones</span>
+                    <span class="feature-tag">Water Safety</span>
+                    <span class="feature-tag">Infrastructure Risk</span>
                 </div>
                 <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('wound-care')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('wound-ar')">
-                        <i class="fas fa-eye"></i>
+                    <button class="btn-primary" onclick="openFloodModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('flood')">
+                        <i class="fas fa-building"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Response Modules -->
-            <div class="module-card" data-age="1-5,5-8" data-topic="response">
+            <!-- CYCLONE/HURRICANE MODULE -->
+            <div class="module-card" data-age="8-12,12+" data-topic="cyclone">
                 <div class="ar-vr-indicator">AR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
+                <div class="module-icon" style="background: linear-gradient(135deg, #4682B4, #2F4F4F);">
+                    <i class="fas fa-wind"></i>
                 </div>
-                <div class="age-tag">Ages 1-8</div>
-                <h3>What to Do When Disaster Strikes</h3>
-                <p>Simple, age-appropriate steps for children during emergencies, taught through interactive AR stories.</p>
+                <div class="age-tag">Ages 8+</div>
+                <h3>🌪️ Cyclone & Storm Safety</h3>
+                <p>Learn cyclone preparedness, wind safety, and structural vulnerabilities. Identify storm-prone areas in your institution.</p>
                 <div class="module-features">
-                    <span class="feature-tag">AR Stories</span>
-                    <span class="feature-tag">Child-friendly</span>
-                    <span class="feature-tag">Essential</span>
+                    <span class="feature-tag">Storm Preparedness</span>
+                    <span class="feature-tag">Wind Safety</span>
+                    <span class="feature-tag">Structural Risk</span>
                 </div>
                 <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('disaster-response-kids')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('response-ar')">
-                        <i class="fas fa-eye"></i>
+                    <button class="btn-primary" onclick="openCycloneModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('cyclone')">
+                        <i class="fas fa-building"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="module-card" data-age="12+" data-topic="response">
+            <!-- CHEMICAL HAZARD MODULE -->
+            <div class="module-card" data-age="12+" data-topic="chemical">
                 <div class="ar-vr-indicator">VR Ready</div>
-                <div class="module-icon">
-                    <i class="fas fa-users"></i>
+                <div class="module-icon" style="background: linear-gradient(135deg, #9932CC, #8A2BE2);">
+                    <i class="fas fa-flask"></i>
                 </div>
                 <div class="age-tag">Ages 12+</div>
-                <h3>Community Response Leadership</h3>
-                <p>Develop leadership skills for coordinating community disaster response through immersive VR scenarios.</p>
+                <h3>⚗️ Chemical Emergency Response</h3>
+                <p>Handle chemical spills, gas leaks, and laboratory emergencies. Assess chemical storage risks in educational institutions.</p>
                 <div class="module-features">
-                    <span class="feature-tag">VR Simulation</span>
-                    <span class="feature-tag">Leadership</span>
-                    <span class="feature-tag">Advanced</span>
+                    <span class="feature-tag">Chemical Safety</span>
+                    <span class="feature-tag">Lab Protocols</span>
+                    <span class="feature-tag">Contamination Risk</span>
                 </div>
                 <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('community-leadership')">Start Learning</button>
-                    <button class="btn-secondary" onclick="previewAR('leadership-vr')">
-                        <i class="fas fa-eye"></i>
+                    <button class="btn-primary" onclick="openChemicalModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('chemical')">
+                        <i class="fas fa-building"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TERRORIST ATTACK MODULE -->
+            <div class="module-card" data-age="12+" data-topic="security">
+                <div class="ar-vr-indicator">AR Ready</div>
+                <div class="module-icon" style="background: linear-gradient(135deg, #B22222, #8B0000);">
+                    <i class="fas fa-shield-virus"></i>
+                </div>
+                <div class="age-tag">Ages 12+</div>
+                <h3>🛡️ Security Threat Response</h3>
+                <p>Learn lockdown procedures, threat assessment, and security protocols. Identify vulnerable areas and access points.</p>
+                <div class="module-features">
+                    <span class="feature-tag">Lockdown Procedures</span>
+                    <span class="feature-tag">Threat Assessment</span>
+                    <span class="feature-tag">Security Gaps</span>
+                </div>
+                <div class="module-actions">
+                    <button class="btn-primary" onclick="openSecurityModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('security')">
+                        <i class="fas fa-building"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PANDEMIC RESPONSE MODULE -->
+            <div class="module-card" data-age="8-12,12+" data-topic="pandemic">
+                <div class="ar-vr-indicator">VR Ready</div>
+                <div class="module-icon" style="background: linear-gradient(135deg, #32CD32, #228B22);">
+                    <i class="fas fa-virus"></i>
+                </div>
+                <div class="age-tag">Ages 8+</div>
+                <h3>🦠 Pandemic Preparedness</h3>
+                <p>Understand infection control, quarantine procedures, and health protocols. Assess institutional health risks.</p>
+                <div class="module-features">
+                    <span class="feature-tag">Health Protocols</span>
+                    <span class="feature-tag">Quarantine Procedures</span>
+                    <span class="feature-tag">Infection Control</span>
+                </div>
+                <div class="module-actions">
+                    <button class="btn-primary" onclick="openPandemicModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('pandemic')">
+                        <i class="fas fa-building"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ELECTRICAL HAZARD MODULE -->
+            <div class="module-card" data-age="8-12,12+" data-topic="electrical">
+                <div class="ar-vr-indicator">AR Ready</div>
+                <div class="module-icon" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="age-tag">Ages 8+</div>
+                <h3>⚡ Electrical Safety</h3>
+                <p>Learn electrical safety, power failure procedures, and electrocution prevention. Identify electrical hazards in buildings.</p>
+                <div class="module-features">
+                    <span class="feature-tag">Electrical Safety</span>
+                    <span class="feature-tag">Power Failure</span>
+                    <span class="feature-tag">Wiring Hazards</span>
+                </div>
+                <div class="module-actions">
+                    <button class="btn-primary" onclick="openElectricalModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('electrical')">
+                        <i class="fas fa-building"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STRUCTURAL COLLAPSE MODULE -->
+            <div class="module-card" data-age="12+" data-topic="structural">
+                <div class="ar-vr-indicator">VR Ready</div>
+                <div class="module-icon" style="background: linear-gradient(135deg, #696969, #2F4F4F);">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="age-tag">Ages 12+</div>
+                <h3>🏢 Structural Safety Assessment</h3>
+                <p>Understand building integrity, collapse risks, and structural vulnerabilities. Assess your institution's structural health.</p>
+                <div class="module-features">
+                    <span class="feature-tag">Structural Analysis</span>
+                    <span class="feature-tag">Building Codes</span>
+                    <span class="feature-tag">Safety Inspections</span>
+                </div>
+                <div class="module-actions">
+                    <button class="btn-primary" onclick="openStructuralModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('structural')">
+                        <i class="fas fa-building"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- MEDICAL EMERGENCY MODULE -->
+            <div class="module-card" data-age="5-8,8-12,12+" data-topic="medical">
+                <div class="ar-vr-indicator">AR Ready</div>
+                <div class="module-icon" style="background: linear-gradient(135deg, #FF6B6B, #FF4757);">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="age-tag">Ages 5+</div>
+                <h3>🏥 Medical Emergency Response</h3>
+                <p>Learn first aid, CPR, and medical emergency protocols. Assess medical response capabilities in your institution.</p>
+                <div class="module-features">
+                    <span class="feature-tag">First Aid</span>
+                    <span class="feature-tag">CPR Training</span>
+                    <span class="feature-tag">Medical Facilities</span>
+                </div>
+                <div class="module-actions">
+                    <button class="btn-primary" onclick="openMedicalModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('medical')">
+                        <i class="fas fa-building"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TRANSPORTATION ACCIDENT MODULE -->
+            <div class="module-card" data-age="8-12,12+" data-topic="transport">
+                <div class="ar-vr-indicator">VR Ready</div>
+                <div class="module-icon" style="background: linear-gradient(135deg, #FF8C00, #FF7F50);">
+                    <i class="fas fa-car-crash"></i>
+                </div>
+                <div class="age-tag">Ages 8+</div>
+                <h3>🚗 Transportation Safety</h3>
+                <p>Learn vehicle safety, accident response, and evacuation from transportation. Assess campus transportation risks.</p>
+                <div class="module-features">
+                    <span class="feature-tag">Vehicle Safety</span>
+                    <span class="feature-tag">Accident Response</span>
+                    <span class="feature-tag">Campus Transport</span>
+                </div>
+                <div class="module-actions">
+                    <button class="btn-primary" onclick="openTransportModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('transport')">
+                        <i class="fas fa-building"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CYBER SECURITY MODULE -->
+            <div class="module-card" data-age="12+" data-topic="cyber">
+                <div class="ar-vr-indicator">AR Ready</div>
+                <div class="module-icon" style="background: linear-gradient(135deg, #6A5ACD, #483D8B);">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="age-tag">Ages 12+</div>
+                <h3>🔒 Cyber Security & Data Protection</h3>
+                <p>Learn cyber threat response, data protection, and digital security. Assess institutional cyber vulnerabilities.</p>
+                <div class="module-features">
+                    <span class="feature-tag">Cyber Threats</span>
+                    <span class="feature-tag">Data Protection</span>
+                    <span class="feature-tag">System Security</span>
+                </div>
+                <div class="module-actions">
+                    <button class="btn-primary" onclick="openCyberModule()">Start Learning</button>
+                    <button class="btn-secondary" onclick="assessInstitutionalRisk('cyber')">
+                        <i class="fas fa-building"></i>
                     </button>
                 </div>
             </div>
@@ -1164,6 +1421,672 @@
         document.addEventListener('DOMContentLoaded', function() {
             filterModules();
         });
+
+        // Disaster-specific module functions
+        function openEarthquakeModule() {
+            showDisasterModule('earthquake', {
+                title: '🏗️ Earthquake Response & Safety',
+                whatToDo: [
+                    'DROP to hands and knees immediately',
+                    'Take COVER under a sturdy desk/table',
+                    'HOLD ON to your shelter and protect your head/neck',
+                    'Stay away from windows, mirrors, and heavy objects',
+                    'If outdoors, move away from buildings and power lines',
+                    'If in bed, stay there and cover your head with a pillow'
+                ],
+                institutionalRisks: [
+                    'Old buildings with unreinforced masonry walls',
+                    'Buildings with heavy fixtures (ceiling fans, lights)',
+                    'Multi-story structures without earthquake retrofitting',
+                    'Areas near heavy machinery or equipment',
+                    'Buildings on soft soil or near fault lines',
+                    'Structures with inadequate seismic bracing'
+                ],
+                highRiskAreas: [
+                    'Chemistry/Physics laboratories with heavy equipment',
+                    'Library areas with tall, unsecured bookcases',
+                    'Older dormitories and academic buildings',
+                    'Cafeterias with hanging lights and fixtures',
+                    'Computer labs with unsecured monitors'
+                ]
+            });
+        }
+
+        function openFireModule() {
+            showDisasterModule('fire', {
+                title: '🔥 Fire Safety & Evacuation',
+                whatToDo: [
+                    'Activate fire alarm immediately',
+                    'Evacuate using nearest safe exit route',
+                    'Stay low under smoke (crawl if necessary)',
+                    'Feel doors with back of hand before opening',
+                    'Close doors behind you to slow fire spread',
+                    'Meet at designated assembly point outside'
+                ],
+                institutionalRisks: [
+                    'Buildings with old electrical wiring',
+                    'Areas with flammable materials storage',
+                    'Kitchens and food preparation areas',
+                    'Chemistry labs with combustible chemicals',
+                    'Workshops with heating equipment',
+                    'Buildings with poor ventilation systems'
+                ],
+                highRiskAreas: [
+                    'Chemistry and science laboratories',
+                    'Cafeteria kitchens and food storage',
+                    'Maintenance rooms with electrical panels',
+                    'Dormitory rooms with heating appliances',
+                    'Art studios with solvents and materials'
+                ]
+            });
+        }
+
+        function openFloodModule() {
+            showDisasterModule('flood', {
+                title: '🌊 Flood Response & Protection',
+                whatToDo: [
+                    'Move to higher ground immediately',
+                    'Never drive through flooded roads',
+                    'Avoid walking in moving water',
+                    'Turn off electricity if water threatens electrical outlets',
+                    'Stay away from storm drains and waterways',
+                    'Listen to emergency broadcasts for updates'
+                ],
+                institutionalRisks: [
+                    'Buildings in low-lying areas or flood plains',
+                    'Basements and underground facilities',
+                    'Areas near rivers, lakes, or storm drains',
+                    'Buildings with poor drainage systems',
+                    'Facilities near construction sites',
+                    'Areas with inadequate flood barriers'
+                ],
+                highRiskAreas: [
+                    'Basement computer centers and server rooms',
+                    'Ground-floor electrical and mechanical rooms',
+                    'Parking garages and underground areas',
+                    'Buildings near campus water features',
+                    'Low-lying dormitories and academic buildings'
+                ]
+            });
+        }
+
+        function openCycloneModule() {
+            showDisasterModule('cyclone', {
+                title: '🌪️ Cyclone & Storm Safety',
+                whatToDo: [
+                    'Move to interior rooms away from windows',
+                    'Stay on lowest floor possible',
+                    'Avoid using elevators during storms',
+                    'Keep away from large roof areas',
+                    'Have emergency supplies ready',
+                    'Monitor weather updates continuously'
+                ],
+                institutionalRisks: [
+                    'Buildings with large glass windows/facades',
+                    'Temporary or prefabricated structures',
+                    'Buildings with old or damaged roofing',
+                    'Areas with many trees and power lines',
+                    'High-rise buildings susceptible to wind',
+                    'Coastal facilities prone to storm surge'
+                ],
+                highRiskAreas: [
+                    'Buildings with extensive glass facades',
+                    'Temporary classrooms and portable structures',
+                    'Areas under large trees or power lines',
+                    'Outdoor sports facilities and stadiums',
+                    'High floors of tall buildings'
+                ]
+            });
+        }
+
+        function openChemicalModule() {
+            showDisasterModule('chemical', {
+                title: '⚗️ Chemical Emergency Response',
+                whatToDo: [
+                    'Evacuate the immediate area quickly',
+                    'Move upwind and uphill from the source',
+                    'Remove contaminated clothing if safe to do so',
+                    'Flush exposed skin/eyes with clean water',
+                    'Seek immediate medical attention',
+                    'Report the incident to authorities'
+                ],
+                institutionalRisks: [
+                    'Chemistry and biology laboratories',
+                    'Maintenance areas with cleaning chemicals',
+                    'Art studios with solvents and acids',
+                    'Medical facilities with pharmaceuticals',
+                    'Research facilities with experimental chemicals',
+                    'Areas near chemical storage rooms'
+                ],
+                highRiskAreas: [
+                    'Science laboratories and prep rooms',
+                    'Maintenance and custodial storage areas',
+                    'Art and photography darkrooms',
+                    'Medical clinics and health centers',
+                    'Research laboratories and chemical storage'
+                ]
+            });
+        }
+
+        function openSecurityModule() {
+            showDisasterModule('security', {
+                title: '🛡️ Security Threat Response',
+                whatToDo: [
+                    'Follow lockdown procedures immediately',
+                    'Lock and barricade doors if possible',
+                    'Turn off lights and silence phones',
+                    'Hide away from windows and doors',
+                    'Stay quiet and follow official instructions',
+                    'Call emergency services when safe'
+                ],
+                institutionalRisks: [
+                    'Buildings with multiple unsecured entry points',
+                    'Areas with poor surveillance coverage',
+                    'Isolated buildings or remote areas',
+                    'Facilities near public access roads',
+                    'Buildings with inadequate security systems',
+                    'Areas with high-value targets or equipment'
+                ],
+                highRiskAreas: [
+                    'Main entrances and lobby areas',
+                    'Cafeterias and large gathering spaces',
+                    'Isolated buildings and remote facilities',
+                    'Parking areas and external walkways',
+                    'Computer labs and valuable equipment areas'
+                ]
+            });
+        }
+
+        function openPandemicModule() {
+            showDisasterModule('pandemic', {
+                title: '🦠 Pandemic Preparedness',
+                whatToDo: [
+                    'Follow health authority guidelines',
+                    'Maintain physical distancing protocols',
+                    'Wear appropriate personal protective equipment',
+                    'Practice good hygiene (handwashing, sanitizing)',
+                    'Monitor your health symptoms daily',
+                    'Follow quarantine procedures if exposed'
+                ],
+                institutionalRisks: [
+                    'Crowded classrooms and lecture halls',
+                    'Shared facilities (cafeterias, gyms, libraries)',
+                    'Dormitories with shared living spaces',
+                    'Buildings with poor ventilation systems',
+                    'High-traffic areas and corridors',
+                    'Facilities lacking proper sanitization'
+                ],
+                highRiskAreas: [
+                    'Cafeterias and dining facilities',
+                    'Dormitories and shared living spaces',
+                    'Large lecture halls and auditoriums',
+                    'Gymnasiums and recreational facilities',
+                    'High-traffic corridors and common areas'
+                ]
+            });
+        }
+
+        function openElectricalModule() {
+            showDisasterModule('electrical', {
+                title: '⚡ Electrical Safety',
+                whatToDo: [
+                    'Never touch electrical equipment with wet hands',
+                    'Unplug devices during storms',
+                    'Stay away from downed power lines',
+                    'Use surge protectors for valuable equipment',
+                    'Report electrical hazards immediately',
+                    'Know location of electrical shut-offs'
+                ],
+                institutionalRisks: [
+                    'Buildings with old electrical wiring',
+                    'Areas with overloaded electrical circuits',
+                    'Facilities near high-voltage power lines',
+                    'Buildings with inadequate grounding',
+                    'Areas prone to water infiltration',
+                    'Facilities with amateur electrical work'
+                ],
+                highRiskAreas: [
+                    'Computer labs with high electrical loads',
+                    'Maintenance rooms and electrical panels',
+                    'Older buildings with outdated wiring',
+                    'Wet areas near electrical equipment',
+                    'Facilities with extension cord overuse'
+                ]
+            });
+        }
+
+        function openStructuralModule() {
+            showDisasterModule('structural', {
+                title: '🏢 Structural Safety Assessment',
+                whatToDo: [
+                    'Evacuate immediately if you hear cracking sounds',
+                    'Look for cracks in walls, ceilings, or foundations',
+                    'Report any structural changes or damage',
+                    'Avoid areas with sagging ceilings or floors',
+                    'Stay away from buildings showing signs of distress',
+                    'Follow building safety protocols'
+                ],
+                institutionalRisks: [
+                    'Old buildings without recent inspections',
+                    'Structures with heavy loads on upper floors',
+                    'Buildings with visible cracks or damage',
+                    'Facilities built on unstable ground',
+                    'Structures with poor maintenance history',
+                    'Buildings exceeding designed capacity'
+                ],
+                highRiskAreas: [
+                    'Older academic and administrative buildings',
+                    'Libraries with heavy book collections',
+                    'Buildings with known structural issues',
+                    'Facilities with heavy equipment or machinery',
+                    'Structures showing signs of wear or damage'
+                ]
+            });
+        }
+
+        function openMedicalModule() {
+            showDisasterModule('medical', {
+                title: '🏥 Medical Emergency Response',
+                whatToDo: [
+                    'Call emergency services immediately (911)',
+                    'Provide basic first aid if trained',
+                    'Keep the person calm and comfortable',
+                    'Do not move someone with potential spinal injury',
+                    'Apply pressure to bleeding wounds',
+                    'Stay with the person until help arrives'
+                ],
+                institutionalRisks: [
+                    'Facilities far from medical centers',
+                    'Areas with limited first aid supplies',
+                    'Buildings without trained first responders',
+                    'Facilities with high-risk activities',
+                    'Areas with poor emergency communication',
+                    'Remote locations with delayed response times'
+                ],
+                highRiskAreas: [
+                    'Science labs with hazardous materials',
+                    'Sports and recreational facilities',
+                    'Workshops and technical training areas',
+                    'Remote buildings or isolated areas',
+                    'Facilities with elderly or disabled occupants'
+                ]
+            });
+        }
+
+        function openTransportModule() {
+            showDisasterModule('transport', {
+                title: '🚗 Transportation Safety',
+                whatToDo: [
+                    'Always wear seatbelts or use safety equipment',
+                    'Follow evacuation procedures for vehicles',
+                    'Exit vehicles quickly in emergency situations',
+                    'Move away from accident scenes safely',
+                    'Call for help and provide first aid if trained',
+                    'Follow traffic control and emergency personnel'
+                ],
+                institutionalRisks: [
+                    'Campus roads with heavy traffic',
+                    'Areas with poor visibility or lighting',
+                    'Parking areas near busy roadways',
+                    'Transportation routes through hazardous areas',
+                    'Facilities with inadequate emergency vehicle access',
+                    'Areas with mixing of pedestrian and vehicle traffic'
+                ],
+                highRiskAreas: [
+                    'Campus main roads and intersections',
+                    'Parking garages and surface lots',
+                    'Bus stops and transportation hubs',
+                    'Emergency vehicle access routes',
+                    'Areas with mixed pedestrian-vehicle traffic'
+                ]
+            });
+        }
+
+        function openCyberModule() {
+            showDisasterModule('cyber', {
+                title: '🔒 Cyber Security & Data Protection',
+                whatToDo: [
+                    'Disconnect affected systems from network',
+                    'Change all passwords immediately',
+                    'Report security incidents to IT department',
+                    'Back up important data regularly',
+                    'Do not click suspicious links or attachments',
+                    'Follow institutional cybersecurity protocols'
+                ],
+                institutionalRisks: [
+                    'Systems with outdated security software',
+                    'Networks with weak password policies',
+                    'Facilities with unsecured Wi-Fi access',
+                    'Areas with unmonitored computer access',
+                    'Systems lacking regular security updates',
+                    'Facilities with inadequate data backup'
+                ],
+                highRiskAreas: [
+                    'Computer labs and IT facilities',
+                    'Administrative offices with sensitive data',
+                    'Research facilities with valuable information',
+                    'Financial and student records departments',
+                    'Systems with external network connections'
+                ]
+            });
+        }
+
+        // Show detailed disaster module
+        function showDisasterModule(disasterType, moduleData) {
+            const modal = document.getElementById('arModal');
+            const modalContent = modal.querySelector('.modal-content');
+            
+            modalContent.innerHTML = `
+                <span class="close">&times;</span>
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2>${moduleData.title}</h2>
+                    <p style="font-size: 1.1rem; color: #666;">Comprehensive disaster preparedness and institutional risk assessment</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                    <!-- What to Do Section -->
+                    <div style="background: linear-gradient(135deg, #e3f2fd, #f0f7ff); padding: 25px; border-radius: 15px; border-left: 5px solid #2196f3;">
+                        <h3 style="color: #1976d2; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-list-check"></i> What to Do When This Disaster Occurs
+                        </h3>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            ${moduleData.whatToDo.map(action => `
+                                <li style="margin-bottom: 12px; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-check-circle" style="color: #4caf50;"></i>
+                                    <span>${action}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    
+                    <!-- Institutional Risks Section -->
+                    <div style="background: linear-gradient(135deg, #fff3e0, #fff8f0); padding: 25px; border-radius: 15px; border-left: 5px solid #ff9800;">
+                        <h3 style="color: #f57c00; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-exclamation-triangle"></i> Institutional Risk Factors
+                        </h3>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            ${moduleData.institutionalRisks.map(risk => `
+                                <li style="margin-bottom: 12px; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-exclamation-circle" style="color: #ff9800;"></i>
+                                    <span>${risk}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- High Risk Areas Section -->
+                <div style="background: linear-gradient(135deg, #ffebee, #fff5f5); padding: 25px; border-radius: 15px; border-left: 5px solid #f44336; margin-bottom: 30px;">
+                    <h3 style="color: #d32f2f; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-building"></i> High-Risk Areas in Educational Institutions
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                        ${moduleData.highRiskAreas.map(area => `
+                            <div style="padding: 15px; background: rgba(255,255,255,0.8); border-radius: 10px; border: 1px solid rgba(244,67,54,0.2);">
+                                <i class="fas fa-map-marker-alt" style="color: #f44336; margin-right: 8px;"></i>
+                                <span>${area}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn-primary" onclick="startVRExperience('${disasterType}')" style="margin-right: 15px; padding: 15px 30px;">
+                        <i class="fas fa-vr-cardboard"></i> Start VR Training
+                    </button>
+                    <button class="btn-secondary" onclick="downloadResourceKit('${disasterType}')" style="padding: 15px 30px;">
+                        <i class="fas fa-download"></i> Download Resource Kit
+                    </button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            
+            // Re-attach close event
+            modal.querySelector('.close').addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Institutional risk assessment function
+        function assessInstitutionalRisk(disasterType) {
+            const riskData = {
+                earthquake: {
+                    title: 'Earthquake Risk Assessment',
+                    icon: 'fas fa-home',
+                    color: '#8B4513',
+                    questions: [
+                        'Is your building constructed before 1980?',
+                        'Does your building have unreinforced masonry walls?',
+                        'Are there heavy objects mounted on walls or ceilings?',
+                        'Is your building located near known fault lines?',
+                        'Does your building lack seismic retrofitting?'
+                    ],
+                    recommendations: [
+                        'Secure heavy furniture and equipment to walls',
+                        'Create earthquake emergency kits',
+                        'Practice Drop, Cover, and Hold drills regularly',
+                        'Identify safe spots in each room',
+                        'Consider professional seismic retrofitting'
+                    ]
+                },
+                fire: {
+                    title: 'Fire Risk Assessment',
+                    icon: 'fas fa-fire',
+                    color: '#FF4500',
+                    questions: [
+                        'Does your building have outdated electrical wiring?',
+                        'Are there flammable materials stored improperly?',
+                        'Do all areas have working smoke detectors?',
+                        'Are evacuation routes clearly marked and unobstructed?',
+                        'Is fire safety equipment regularly maintained?'
+                    ],
+                    recommendations: [
+                        'Install and maintain smoke detectors',
+                        'Keep evacuation routes clear',
+                        'Store flammable materials safely',
+                        'Regular fire drill practice',
+                        'Upgrade electrical systems if needed'
+                    ]
+                },
+                flood: {
+                    title: 'Flood Risk Assessment',
+                    icon: 'fas fa-water',
+                    color: '#1E90FF',
+                    questions: [
+                        'Is your building in a flood-prone area?',
+                        'Are important systems located in basements?',
+                        'Does your building have adequate drainage?',
+                        'Are electrical systems elevated above potential flood levels?',
+                        'Do you have flood barriers or protection systems?'
+                    ],
+                    recommendations: [
+                        'Elevate critical equipment above flood levels',
+                        'Improve drainage systems',
+                        'Create flood emergency action plan',
+                        'Install flood barriers where appropriate',
+                        'Relocate valuable items from basements'
+                    ]
+                },
+                chemical: {
+                    title: 'Chemical Hazard Assessment',
+                    icon: 'fas fa-flask',
+                    color: '#9932CC',
+                    questions: [
+                        'Are chemicals properly labeled and stored?',
+                        'Do staff know chemical safety procedures?',
+                        'Are safety equipment and eyewash stations available?',
+                        'Is there proper ventilation in chemical storage areas?',
+                        'Are chemical spill kits readily available?'
+                    ],
+                    recommendations: [
+                        'Ensure proper chemical labeling and storage',
+                        'Train all staff in chemical safety procedures',
+                        'Install adequate ventilation systems',
+                        'Maintain emergency spill response kits',
+                        'Regular safety equipment inspections'
+                    ]
+                }
+            };
+            
+            const data = riskData[disasterType];
+            if (!data) return;
+            
+            showRiskAssessment(data);
+        }
+
+        function showRiskAssessment(data) {
+            const modal = document.getElementById('arModal');
+            const modalContent = modal.querySelector('.modal-content');
+            
+            modalContent.innerHTML = `
+                <span class="close">&times;</span>
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div style="background: ${data.color}; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2rem;">
+                        <i class="${data.icon}"></i>
+                    </div>
+                    <h2>${data.title}</h2>
+                    <p style="color: #666;">Assess your institution's vulnerability and get personalized recommendations</p>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin-bottom: 25px;">
+                    <h3 style="color: #333; margin-bottom: 20px;">
+                        <i class="fas fa-clipboard-list" style="color: ${data.color}; margin-right: 10px;"></i>
+                        Risk Assessment Questions
+                    </h3>
+                    <form id="riskAssessmentForm">
+                        ${data.questions.map((question, index) => `
+                            <div style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid ${data.color};">
+                                <label style="display: block; margin-bottom: 10px; font-weight: 500;">${question}</label>
+                                <div style="display: flex; gap: 20px;">
+                                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                                        <input type="radio" name="question${index}" value="yes" style="margin: 0;">
+                                        <span>Yes</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                                        <input type="radio" name="question${index}" value="no" style="margin: 0;">
+                                        <span>No</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                                        <input type="radio" name="question${index}" value="unsure" style="margin: 0;">
+                                        <span>Not Sure</span>
+                                    </label>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </form>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #e8f5e8, #f0f8f0); padding: 25px; border-radius: 15px; margin-bottom: 25px;">
+                    <h3 style="color: #2e7d32; margin-bottom: 20px;">
+                        <i class="fas fa-lightbulb" style="color: #4caf50; margin-right: 10px;"></i>
+                        Recommended Safety Measures
+                    </h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        ${data.recommendations.map(rec => `
+                            <li style="margin-bottom: 12px; padding: 12px; background: rgba(255,255,255,0.8); border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-check-circle" style="color: #4caf50;"></i>
+                                <span>${rec}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button class="btn-primary" onclick="calculateRiskScore()" style="margin-right: 15px; padding: 15px 30px;">
+                        <i class="fas fa-calculator"></i> Calculate Risk Score
+                    </button>
+                    <button class="btn-secondary" onclick="generateRiskReport()" style="padding: 15px 30px;">
+                        <i class="fas fa-file-pdf"></i> Generate Report
+                    </button>
+                </div>
+                
+                <div id="riskResults" style="display: none; margin-top: 25px;"></div>
+            `;
+            
+            modal.style.display = 'block';
+            
+            // Re-attach close event
+            modal.querySelector('.close').addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+        }
+
+        function calculateRiskScore() {
+            const form = document.getElementById('riskAssessmentForm');
+            const formData = new FormData(form);
+            let yesCount = 0;
+            let totalQuestions = 0;
+            
+            for (let [key, value] of formData.entries()) {
+                totalQuestions++;
+                if (value === 'yes') yesCount++;
+            }
+            
+            if (totalQuestions === 0) {
+                alert('Please answer all questions before calculating risk score.');
+                return;
+            }
+            
+            const riskPercentage = Math.round((yesCount / totalQuestions) * 100);
+            let riskLevel, riskColor, recommendations;
+            
+            if (riskPercentage >= 80) {
+                riskLevel = 'Very High Risk';
+                riskColor = '#d32f2f';
+                recommendations = 'Immediate action required. Contact emergency management professionals.';
+            } else if (riskPercentage >= 60) {
+                riskLevel = 'High Risk';
+                riskColor = '#f57c00';
+                recommendations = 'Priority improvements needed. Develop action plan within 30 days.';
+            } else if (riskPercentage >= 40) {
+                riskLevel = 'Moderate Risk';
+                riskColor = '#fbc02d';
+                recommendations = 'Some improvements recommended. Review and upgrade systems.';
+            } else if (riskPercentage >= 20) {
+                riskLevel = 'Low Risk';
+                riskColor = '#689f38';
+                recommendations = 'Good safety measures in place. Continue regular maintenance.';
+            } else {
+                riskLevel = 'Very Low Risk';
+                riskColor = '#388e3c';
+                recommendations = 'Excellent safety measures. Maintain current standards.';
+            }
+            
+            const resultsDiv = document.getElementById('riskResults');
+            resultsDiv.innerHTML = `
+                <div style="background: linear-gradient(135deg, #fff, #f8f9fa); padding: 25px; border-radius: 15px; border: 2px solid ${riskColor};">
+                    <h3 style="text-align: center; color: ${riskColor}; margin-bottom: 20px;">
+                        <i class="fas fa-chart-bar"></i> Risk Assessment Results
+                    </h3>
+                    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(${riskColor} ${riskPercentage * 3.6}deg, #e0e0e0 0deg); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <div style="width: 120px; height: 120px; border-radius: 50%; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: ${riskColor};">${riskPercentage}%</div>
+                                <div style="font-size: 0.9rem; color: #666;">Risk Score</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <h4 style="color: ${riskColor}; margin-bottom: 15px;">${riskLevel}</h4>
+                        <p style="color: #666; line-height: 1.6;">${recommendations}</p>
+                    </div>
+                </div>
+            `;
+            resultsDiv.style.display = 'block';
+        }
+
+        function generateRiskReport() {
+            alert('Generating comprehensive risk assessment report...\n\nThe report will include:\n• Detailed risk analysis\n• Specific recommendations\n• Implementation timeline\n• Contact information for experts\n\nReport will be sent to your email.');
+        }
+
+        function startVRExperience(disasterType) {
+            alert(`Launching ${disasterType.toUpperCase()} VR Training Experience...\n\nYou will experience:\n• Immersive disaster scenarios\n• Real-time decision making\n• Performance feedback\n• Skill certification\n\nMake sure your VR headset is connected!`);
+        }
+
+        function downloadResourceKit(disasterType) {
+            alert(`Downloading ${disasterType.toUpperCase()} Resource Kit...\n\nKit includes:\n• Emergency procedure guides\n• Training materials\n• Assessment checklists\n• Contact information\n• Educational videos\n\nDownload will begin shortly.`);
+        }
     </script>
 </body>
 </html>

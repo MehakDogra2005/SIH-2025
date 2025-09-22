@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quake Response 🏗️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #2c3e50, #1a2530);
+            color: #ecf0f1;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #34495e;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .status-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            margin: 0 5px;
+            background: #2c3e50;
+            border-radius: 5px;
+        }
+        
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .scene {
+            background: #34495e;
+            height: 200px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+        
+        .building {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80%;
+            background: #7f8c8d;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        
+        .crack {
+            position: absolute;
+            background: #e74c3c;
+            width: 5px;
+            height: 40%;
+            left: 30%;
+            top: 30%;
+        }
+        
+        .crack::after {
+            content: '';
+            position: absolute;
+            background: #e74c3c;
+            width: 5px;
+            height: 30%;
+            transform: rotate(30deg);
+            top: 20%;
+            left: 5px;
+        }
+        
+        .survivor {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #3498db;
+            border-radius: 50%;
+            bottom: 40px;
+            left: 45%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .danger {
+            background: #e74c3c;
+        }
+        
+        .success {
+            background: #2ecc71;
+        }
+        
+        .warning {
+            background: #f39c12;
+        }
+        
+        .log {
+            background: #2c3e50;
+            height: 150px;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .success-text {
+            color: #2ecc71;
+        }
+        
+        .danger-text {
+            color: #e74c3c;
+        }
+        
+        .warning-text {
+            color: #f39c12;
+        }
+        
+        .info-text {
+            color: #3498db;
+        }
+        
+        @media (max-width: 600px) {
+            .actions {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌋 Quake Response 🏗️</h1>
+        <p>Search and rescue survivors after a major earthquake</p>
+    </header>
+    
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-item">
+                <div>Time</div>
+                <div class="status-value" id="time">12:00</div>
+            </div>
+            <div class="status-item">
+                <div>Survivors</div>
+                <div class="status-value" id="survivors">0/5</div>
+            </div>
+            <div class="status-item">
+                <div>Structural Integrity</div>
+                <div class="status-value" id="integrity">65%</div>
+            </div>
+        </div>
+        
+        <div class="scene">
+            <div class="building">
+                <div class="crack"></div>
+                <div class="survivor">!</div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="danger" onclick="takeAction('evacuate')">🚨 Evacuate Immediately</button>
+            <button class="success" onclick="takeAction('stabilize')">🔧 Stabilize Structure</button>
+            <button class="warning" onclick="takeAction('assess')">📋 Assess Damage</button>
+            <button onclick="takeAction('rescue')">🆘 Rescue Survivor</button>
+            <button onclick="takeAction('treat')">💉 Provide First Aid</button>
+            <button class="success" onclick="takeAction('search')">🔍 Search Area</button>
+        </div>
+        
+        <div class="log" id="log">
+            <div class="log-entry info-text">Earthquake has struck! Buildings damaged, people trapped.</div>
+            <div class="log-entry warning-text">Structural integrity compromised. Proceed with caution.</div>
+            <div class="log-entry">Survivors detected in the building. Need immediate rescue.</div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            time: 1200, // 12:00 in 24h format without colon
+            survivors: 0,
+            totalSurvivors: 5,
+            integrity: 65,
+            foundSurvivors: 2,
+            gameOver: false
+        };
+        
+        // Update the game display
+        function updateDisplay() {
+            document.getElementById('time').textContent = formatTime(gameState.time);
+            document.getElementById('survivors').textContent = `${gameState.survivors}/${gameState.totalSurvivors}`;
+            document.getElementById('integrity').textContent = `${gameState.integrity}%`;
+        }
+        
+        // Format time as HH:MM
+        function formatTime(time) {
+            const timeStr = time.toString();
+            return timeStr.substring(0, timeStr.length - 2) + ':' + timeStr.substring(timeStr.length - 2);
+        }
+        
+        // Add a message to the log
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}-text`;
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Process player actions
+        function takeAction(action) {
+            if (gameState.gameOver) return;
+            
+            // Advance time with each action
+            gameState.time += 15;
+            if (gameState.time % 100 >= 60) {
+                gameState.time += 40;
+            }
+            
+            switch(action) {
+                case 'evacuate':
+                    if (gameState.integrity < 30) {
+                        addLog('Evacuated successfully! Saved all found survivors.', 'success');
+                        gameState.survivors = gameState.foundSurvivors;
+                    } else {
+                        addLog('Evacuated but structure was still stable enough to continue.', 'warning');
+                    }
+                    break;
+                    
+                case 'stabilize':
+                    if (gameState.integrity < 80) {
+                        gameState.integrity += 15;
+                        addLog('Structure stabilized. Integrity increased.', 'success');
+                    } else {
+                        addLog('Structure is already stable.', 'info');
+                    }
+                    break;
+                    
+                case 'assess':
+                    addLog(`Structural integrity: ${gameState.integrity}%. ${gameState.foundSurvivors - gameState.survivors} survivors still trapped.`, 'info');
+                    break;
+                    
+                case 'rescue':
+                    if (gameState.foundSurvivors > gameState.survivors) {
+                        gameState.survivors++;
+                        addLog('Survivor rescued!', 'success');
+                    } else {
+                        addLog('No survivors found in this area. Try searching.', 'warning');
+                    }
+                    break;
+                    
+                case 'treat':
+                    if (gameState.survivors > 0) {
+                        addLog('Provided first aid to injured survivors.', 'success');
+                    } else {
+                        addLog('No survivors rescued yet to treat.', 'warning');
+                    }
+                    break;
+                    
+                case 'search':
+                    if (gameState.foundSurvivors < gameState.totalSurvivors) {
+                        gameState.foundSurvivors++;
+                        addLog('Found a survivor! Needs rescue.', 'info');
+                    } else {
+                        addLog('No additional survivors found in this area.', 'info');
+                    }
+                    break;
+            }
+            
+            // Random event chance
+            if (Math.random() > 0.7) {
+                const events = [
+                    {msg: 'Aftershock! Structure damaged further.', integrity: -10, type: 'danger'},
+                    {msg: 'Weak structure collapsed. No one was hurt.', integrity: -5, type: 'warning'},
+                    {msg: 'Found medical supplies!', type: 'success'},
+                    {msg: 'Heard cries for help from another room.', foundSurvivors: +1, type: 'info'}
+                ];
+                
+                const event = events[Math.floor(Math.random() * events.length)];
+                addLog(event.msg, event.type);
+                
+                if (event.integrity) gameState.integrity += event.integrity;
+                if (event.foundSurvivors) gameState.foundSurvivors += event.foundSurvivors;
+            }
+            
+            // Gradually decrease structural integrity
+            gameState.integrity -= Math.floor(Math.random() * 5);
+            
+            // Check win/lose conditions
+            if (gameState.integrity <= 0) {
+                addLog('STRUCTURE COLLAPSED! MISSION FAILED.', 'danger');
+                gameState.gameOver = true;
+            } else if (gameState.integrity < 20) {
+                addLog('WARNING: Structure extremely unstable!', 'danger');
+            } else if (gameState.integrity < 50) {
+                addLog('Caution: Structure weakening.', 'warning');
+            }
+            
+            if (gameState.survivors >= gameState.totalSurvivors) {
+                addLog('ALL SURVIVORS RESCUED! MISSION ACCOMPLISHED.', 'success');
+                gameState.gameOver = true;
+            }
+            
+            updateDisplay();
+        }
+        
+        // Initialize the game
+        updateDisplay();
+    </script>
+</body>
+</html>

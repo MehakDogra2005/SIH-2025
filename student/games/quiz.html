@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Knowledge Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-panel {
+            flex: 1;
+            padding: 30px;
+            border-right: 2px solid #3498db;
+            background: #f8f9fa;
+        }
+        
+        .game-area {
+            flex: 2;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 700px;
+            background: #eef5ff;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        h1 {
+            color: #3498db;
+            margin-left: 15px;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: #2980b9;
+            margin: 20px 0 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            font-size: 22px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .score-board {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border: 2px solid #3498db;
+        }
+        
+        .current-score {
+            font-size: 24px;
+            text-align: center;
+            margin: 15px 0;
+            color: #2c3e50;
+        }
+        
+        .max-score {
+            font-size: 22px;
+            text-align: center;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #3498db;
+        }
+        
+        .game-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-size: 28px;
+        }
+        
+        .game-description {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .question-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .question {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #3498db;
+        }
+        
+        .option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            background: #d4e6f1;
+        }
+        
+        .option.selected {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .submit-btn {
+            background: #2ecc71;
+        }
+        
+        .submit-btn:hover {
+            background: #27ae60;
+        }
+        
+        .next-btn {
+            background: #f39c12;
+        }
+        
+        .next-btn:hover {
+            background: #e67e22;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            display: none;
+        }
+        
+        .results h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .results p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #3498db;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .category-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            padding: 10px 15px;
+            background: #e8f4fc;
+            border: 1px solid #3498db;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .category-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .info-panel {
+                border-right: none;
+                border-bottom: 2px solid #3498db;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-panel">
+            <div class="header">
+                <i class="fas fa-question-circle fa-3x" style="color: #3498db;"></i>
+                <h1>Disaster Knowledge Quiz</h1>
+            </div>
+            
+            <h2>Rules</h2>
+            <ul class="rules-list">
+                <li>Test your disaster preparedness knowledge with challenging questions</li>
+                <li>Select the correct answer from the multiple-choice options</li>
+                <li>Earn points for each correct answer</li>
+                <li>Complete quizzes to unlock more difficult questions</li>
+                <li>Learn important disaster preparedness information</li>
+            </ul>
+            
+            <h2>Important Points</h2>
+            <ul class="points-list">
+                <li>Each correct answer earns you 10 points</li>
+                <li>Answer quickly for bonus points</li>
+                <li>Questions are based on real disaster preparedness guidelines</li>
+                <li>Your high score is saved between sessions</li>
+                <li>Complete all categories to become a Disaster Preparedness Expert</li>
+            </ul>
+            
+            <div class="score-board">
+                <h2>Your Scores</h2>
+                <div class="current-score">Current Score: <span id="current-score">0</span> points</div>
+                <div class="max-score">High Score: <span id="max-score">0</span> points</div>
+                <div class="current-score">Questions Completed: <span id="questions-completed">0</span></div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-container">
+                <h2 class="game-title">Disaster Knowledge Quiz</h2>
+                <p class="game-description">Test your disaster preparedness knowledge with challenging questions</p>
+                
+                <div class="category-selector" id="category-selector">
+                    <div class="category-btn active" data-category="all">All Disasters</div>
+                    <div class="category-btn" data-category="earthquake">Earthquakes</div>
+                    <div class="category-btn" data-category="flood">Floods</div>
+                    <div class="category-btn" data-category="fire">Fires</div>
+                </div>
+                
+                <div class="quiz-info">
+                    <div>Question: <span id="question-number">1</span>/<span id="total-questions">10</span></div>
+                    <div>Category: <span id="question-category">All Disasters</span></div>
+                    <div>Difficulty: <span id="question-difficulty">Medium</span></div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question" id="question">What is the recommended action during an earthquake if you are indoors?</div>
+                    <div class="options-container" id="options-container">
+                        <div class="option" data-value="A">Run outside immediately</div>
+                        <div class="option" data-value="B">Stand in a doorway</div>
+                        <div class="option" data-value="C">Drop, cover, and hold on</div>
+                        <div class="option" data-value="D">Get in a bathtub</div>
+                    </div>
+                </div>
+                
+                <div class="results" id="results">
+                    <h3 id="result-title">Correct!</h3>
+                    <p id="explanation">The "Drop, Cover, and Hold On" method is recommended by safety experts worldwide for earthquake safety.</p>
+                    <p id="result-score">You earned 10 points!</p>
+                </div>
+                
+                <div class="controls">
+                    <button class="submit-btn" id="submit-btn" disabled>
+                        <i class="fas fa-paper-plane"></i> Submit Answer
+                    </button>
+                    <button class="next-btn" id="next-btn" style="display: none;">
+                        <i class="fas fa-forward"></i> Next Question
+                    </button>
+                    <button onclick="resetQuiz()">
+                        <i class="fas fa-redo"></i> Restart Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data and state
+        const gameData = {
+            currentScore: 0,
+            maxScore: parseInt(localStorage.getItem('disasterQuizMaxScore')) || 0,
+            currentQuestion: 0,
+            selectedOption: null,
+            questionsAnswered: 0,
+            selectedCategory: 'all',
+            questions: [
+                {
+                    question: "What is the recommended action during an earthquake if you are indoors?",
+                    options: ["Run outside immediately", "Stand in a doorway", "Drop, cover, and hold on", "Get in a bathtub"],
+                    answer: "C",
+                    explanation: "The 'Drop, Cover, and Hold On' method is recommended by safety experts worldwide for earthquake safety.",
+                    category: "earthquake",
+                    difficulty: "easy"
+                },
+                {
+                    question: "Which of the following is a myth about disaster preparedness?",
+                    options: ["You should have a 3-day supply of water", "Taping windows prevents breakage during hurricanes", "Evacuation routes should be planned in advance", "Important documents should be kept in a waterproof container"],
+                    answer: "B",
+                    explanation: "Taping windows does not prevent breakage during hurricanes and can actually create larger, more dangerous glass shards.",
+                    category: "general",
+                    difficulty: "medium"
+                },
+                {
+                    question: "How much water per person per day is recommended for emergency preparedness?",
+                    options: ["1 gallon", "2 gallons", "1 quart", "3 gallons"],
+                    answer: "A",
+                    explanation: "FEMA and other emergency agencies recommend storing at least 1 gallon of water per person per day for drinking and sanitation.",
+                    category: "general",
+                    difficulty: "easy"
+                },
+                {
+                    question: "What should you do if you're caught in a flash flood while driving?",
+                    options: ["Drive through quickly", "Turn around and find another route", "Stop and wait for the water to recede", "Abandon the vehicle and climb to higher ground"],
+                    answer: "B",
+                    explanation: "The safest action is to turn around and find another route. Never attempt to drive through floodwaters as just 6 inches can cause loss of control.",
+                    category: "flood",
+                    difficulty: "medium"
+                },
+                {
+                    question: "Which item should NOT be included in a basic emergency kit?",
+                    options: ["Battery-powered radio", "Candles", "First aid kit", "Non-perishable food"],
+                    answer: "B",
+                    explanation: "Candles can be a fire hazard, especially after disasters when infrastructure may be damaged. Flashlights with extra batteries are safer.",
+                    category: "general",
+                    difficulty: "medium"
+                },
+                {
+                    question: "What is the recommended distance to keep between yourself and downed power lines?",
+                    options: ["5 feet", "10 feet", "20 feet", "35 feet"],
+                    answer: "D",
+                    explanation: "Downed power lines can energize the ground around them. Always stay at least 35 feet away and report them to authorities immediately.",
+                    category: "general",
+                    difficulty: "hard"
+                },
+                {
+                    question: "During a tornado warning, where is the safest place to be in a house without a basement?",
+                    options: ["In a bathtub with a mattress over you", "In an interior room on the lowest floor", "Under a sturdy table", "In a closet near outside walls"],
+                    answer: "B",
+                    explanation: "An interior room on the lowest floor, such as a bathroom or closet, provides the best protection during a tornado.",
+                    category: "general",
+                    difficulty: "medium"
+                },
+                {
+                    question: "How often should emergency supplies be rotated or checked?",
+                    options: ["Every month", "Every 3 months", "Every 6 months", "Every year"],
+                    answer: "C",
+                    explanation: "Emergency supplies should be checked every 6 months to replace expired items and ensure everything is in working order.",
+                    category: "general",
+                    difficulty: "easy"
+                },
+                {
+                    question: "What does the term 'shelter in place' mean?",
+                    options: ["Evacuate to a shelter", "Seek immediate shelter outdoors", "Take shelter where you are and secure the location", "Move to the highest point in your home"],
+                    answer: "C",
+                    explanation: "Shelter in place means to take immediate shelter where you are, rather than evacuating. This is often used during chemical or radiological emergencies.",
+                    category: "general",
+                    difficulty: "medium"
+                },
+                {
+                    question: "Which of these is a recommended way to purify water in an emergency?",
+                    options: ["Adding a pinch of salt", "Boiling for 1 minute", "Straining through a cloth", "Adding bleach (8 drops per gallon)"],
+                    answer: "B",
+                    explanation: "Boiling water for 1 minute (or 3 minutes at high altitudes) is the most effective way to kill harmful organisms in an emergency.",
+                    category: "general",
+                    difficulty: "hard"
+                }
+            ]
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load max score from storage
+            document.getElementById('max-score').textContent = gameData.maxScore;
+            document.getElementById('questions-completed').textContent = gameData.questionsAnswered;
+            
+            // Initialize the quiz
+            initQuiz();
+            
+            // Set up category selection
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    gameData.selectedCategory = this.getAttribute('data-category');
+                    document.getElementById('question-category').textContent = this.textContent;
+                    resetQuiz();
+                });
+            });
+        });
+
+        // Initialize the quiz
+        function initQuiz() {
+            // Reset if needed
+            gameData.currentQuestion = 0;
+            gameData.currentScore = 0;
+            document.getElementById('current-score').textContent = gameData.currentScore;
+            
+            // Display first question
+            displayQuestion();
+            
+            // Set up option selection
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove previous selection
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Select this option
+                    this.classList.add('selected');
+                    gameData.selectedOption = this.getAttribute('data-value');
+                    
+                    // Enable submit button
+                    document.getElementById('submit-btn').disabled = false;
+                });
+            });
+            
+            // Set up submit button
+            document.getElementById('submit-btn').addEventListener('click', checkAnswer);
+            
+            // Set up next button
+            document.getElementById('next-btn').addEventListener('click', nextQuestion);
+        }
+
+        // Display current question
+        function displayQuestion() {
+            const question = gameData.questions[gameData.currentQuestion];
+            document.getElementById('question').textContent = question.question;
+            document.getElementById('question-number').textContent = gameData.currentQuestion + 1;
+            document.getElementById('total-questions').textContent = gameData.questions.length;
+            document.getElementById('question-difficulty').textContent = question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1);
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            const optionLetters = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.setAttribute('data-value', optionLetters[index]);
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', function() {
+                    // Remove previous selection
+                    document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Select this option
+                    this.classList.add('selected');
+                    gameData.selectedOption = optionLetters[index];
+                    
+                    // Enable submit button
+                    document.getElementById('submit-btn').disabled = false;
+                });
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset UI for new question
+            document.getElementById('submit-btn').style.display = 'block';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('results').style.display = 'none';
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+
+        // Check answer
+        function checkAnswer() {
+            const question = gameData.questions[gameData.currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const results = document.getElementById('results');
+            
+            // Mark correct and incorrect answers
+            options.forEach(option => {
+                if (option.getAttribute('data-value') === question.answer) {
+                    option.classList.add('correct');
+                } else if (option.getAttribute('data-value') === gameData.selectedOption) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Check if answer is correct
+            if (gameData.selectedOption === question.answer) {
+                results.querySelector('#result-title').textContent = 'Correct!';
+                results.querySelector('#result-title').style.color = '#28a745';
+                results.style.borderLeftColor = '#28a745';
+                
+                // Award points based on difficulty
+                const points = question.difficulty === 'easy' ? 10 : question.difficulty === 'medium' ? 15 : 20;
+                gameData.currentScore += points;
+                document.getElementById('result-score').textContent = `You earned ${points} points!`;
+            } else {
+                results.querySelector('#result-title').textContent = 'Incorrect!';
+                results.querySelector('#result-title').style.color = '#e74c3c';
+                results.style.borderLeftColor = '#e74c3c';
+                document.getElementById('result-score').textContent = `The correct answer is ${question.answer}.`;
+            }
+            
+            // Update score display
+            document.getElementById('current-score').textContent = gameData.currentScore;
+            if (gameData.currentScore > gameData.maxScore) {
+                gameData.maxScore = gameData.currentScore;
+                localStorage.setItem('disasterQuizMaxScore', gameData.maxScore);
+                document.getElementById('max-score').textContent = gameData.maxScore;
+            }
+            
+            // Show explanation
+            document.getElementById('explanation').textContent = question.explanation;
+            
+            // Show results
+            results.style.display = 'block';
+            
+            // Update questions answered
+            gameData.questionsAnswered++;
+            document.getElementById('questions-completed').textContent = gameData.questionsAnswered;
+            
+            // Show next button and hide submit button
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        // Next question
+        function nextQuestion() {
+            if (gameData.currentQuestion < gameData.questions.length - 1) {
+                gameData.currentQuestion++;
+                displayQuestion();
+            } else {
+                // Quiz completed
+                const results = document.getElementById('results');
+                results.innerHTML = `
+                    <h3 style="color: #3498db;">Quiz Completed!</h3>
+                    <p>Your final score: ${gameData.currentScore} points</p>
+                    <p>You answered ${gameData.questionsAnswered} questions</p>
+                    <p>Thank you for testing your disaster preparedness knowledge!</p>
+                `;
+                results.style.display = 'block';
+                
+                document.getElementById('submit-btn').style.display = 'none';
+                document.getElementById('next-btn').style.display = 'none';
+            }
+        }
+
+        // Reset quiz
+        function resetQuiz() {
+            gameData.currentQuestion = 0;
+            gameData.currentScore = 0;
+            gameData.selectedOption = null;
+            document.getElementById('current-score').textContent = gameData.currentScore;
+            initQuiz();
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = ((gameData.currentQuestion + 1) / gameData.questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+    </script>
+</body>
+</html>

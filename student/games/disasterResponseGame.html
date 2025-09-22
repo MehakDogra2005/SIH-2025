@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Response Game 🚨</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #2c3e50, #1a2530);
+            color: #ecf0f1;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .game-info {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .game-area {
+            flex: 2;
+            min-width: 500px;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #f39c12;
+            margin: 15px 0 10px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .stats {
+            background: #34495e;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2c3e50;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #34495e;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .status-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            margin: 0 5px;
+            background: #2c3e50;
+            border-radius: 5px;
+        }
+        
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .scenario {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .scenario-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-image {
+            width: 100%;
+            height: 200px;
+            background: #2c3e50;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .danger {
+            background: #e74c3c;
+        }
+        
+        .success {
+            background: #2ecc71;
+        }
+        
+        .warning {
+            background: #f39c12;
+        }
+        
+        .log {
+            background: #2c3e50;
+            height: 150px;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .success-text {
+            color: #2ecc71;
+        }
+        
+        .danger-text {
+            color: #e74c3c;
+        }
+        
+        .warning-text {
+            color: #f39c12;
+        }
+        
+        .info-text {
+            color: #3498db;
+        }
+        
+        .restart-btn {
+            width: 100%;
+            padding: 15px;
+            background: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .restart-btn:hover {
+            background: #8e44ad;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .game-info, .game-area {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-info">
+            <header>
+                <h1>Disaster Response Game 🚨</h1>
+                <p>Make rapid decisions with limited information</p>
+            </header>
+            
+            <h2>Game Rules</h2>
+            <ul class="rules-list">
+                <li>Respond quickly to emerging crises</li>
+                <li>Make decisions with limited information</li>
+                <li>Balance resources between different needs</li>
+                <li>Each action costs time and resources</li>
+                <li>Save as many lives as possible</li>
+                <li>Game changes every time you play</li>
+            </ul>
+            
+            <h2>Scoring System</h2>
+            <ul class="points-list">
+                <li>+100 points for each life saved</li>
+                <li>+50 points for efficient resource use</li>
+                <li>+25 points for quick response time</li>
+                <li>-50 points for each life lost</li>
+                <li>Bonus points for preventing secondary disasters</li>
+            </ul>
+            
+            <div class="stats">
+                <h2>Your Statistics</h2>
+                <div class="stat-item">
+                    <span>Highest Score:</span>
+                    <span id="high-score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Games Played:</span>
+                    <span id="games-played">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Total Lives Saved:</span>
+                    <span id="total-saved">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Best Response Time:</span>
+                    <span id="best-time">N/A</span>
+                </div>
+            </div>
+            
+            <button class="restart-btn" onclick="initGame()">🔄 New Game</button>
+        </div>
+        
+        <div class="game-area">
+            <div class="status-bar">
+                <div class="status-item">
+                    <div>Time</div>
+                    <div class="status-value" id="time">05:00</div>
+                </div>
+                <div class="status-item">
+                    <div>Resources</div>
+                    <div class="status-value" id="resources">$50,000</div>
+                </div>
+                <div class="status-item">
+                    <div>Lives Saved</div>
+                    <div class="status-value" id="saved">0/100</div>
+                </div>
+                <div class="status-item">
+                    <div>Score</div>
+                    <div class="status-value" id="score">0</div>
+                </div>
+            </div>
+            
+            <div class="scenario">
+                <div class="scenario-image" id="scenario-image">🔥</div>
+                <div class="scenario-text" id="scenario-text">
+                    A major wildfire is spreading rapidly toward a residential area. 
+                    100 people are in immediate danger. You have limited time and resources to respond.
+                </div>
+                
+                <div class="actions">
+                    <button class="danger" onclick="takeAction('evacuate')">🚁 Evacuate Civilians</button>
+                    <button class="warning" onclick="takeAction('contain')">🔥 Contain Fire</button>
+                    <button onclick="takeAction('water')">💧 Deploy Water Bombers</button>
+                    <button class="success" onclick="takeAction('shelter')">🏠 Set Up Shelter</button>
+                </div>
+            </div>
+            
+            <div class="log" id="log">
+                <div class="log-entry info-text">Wildfire emergency reported! Response needed immediately.</div>
+                <div class="log-entry warning-text">100 civilians in danger. Time is critical.</div>
+                <div class="log-entry">Resources available: $50,000 and 5 minutes.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            time: 300, // 5 minutes in seconds
+            resources: 50000,
+            saved: 0,
+            totalPeople: 100,
+            score: 0,
+            gameOver: false,
+            timer: null,
+            disasterType: '',
+            highScore: parseInt(localStorage.getItem('highScore')) || 0,
+            gamesPlayed: parseInt(localStorage.getItem('gamesPlayed')) || 0,
+            totalSaved: parseInt(localStorage.getItem('totalSaved')) || 0,
+            bestTime: localStorage.getItem('bestTime') || 'N/A'
+        };
+        
+        // Disaster scenarios
+        const scenarios = [
+            {
+                type: 'wildfire',
+                name: 'Wildfire',
+                icon: '🔥',
+                text: 'A major wildfire is spreading rapidly toward a residential area. 100 people are in immediate danger. You have limited time and resources to respond.',
+                actions: [
+                    { id: 'evacuate', label: '🚁 Evacuate Civilians', cost: 10000, time: 30, effect: 'saves' },
+                    { id: 'contain', label: '🔥 Contain Fire', cost: 15000, time: 45, effect: 'slows' },
+                    { id: 'water', label: '💧 Deploy Water Bombers', cost: 20000, time: 60, effect: 'reduces' },
+                    { id: 'shelter', label: '🏠 Set Up Shelter', cost: 8000, time: 30, effect: 'protects' }
+                ]
+            },
+            {
+                type: 'hurricane',
+                name: 'Hurricane',
+                icon: '🌀',
+                text: 'A category 4 hurricane is approaching the coastline. Flooding is expected in low-lying areas. 120 people need to be evacuated or sheltered.',
+                actions: [
+                    { id: 'evacuate', label: '🚌 Evacuate Residents', cost: 12000, time: 40, effect: 'saves' },
+                    { id: 'barriers', label: '🛡️ Deploy Flood Barriers', cost: 18000, time: 50, effect: 'protects' },
+                    { id: 'warning', label: '📢 Issue Warnings', cost: 5000, time: 15, effect: 'alerts' },
+                    { id: 'shelter', label: '🏠 Open Shelters', cost: 10000, time: 35, effect: 'protects' }
+                ]
+            },
+            {
+                type: 'pandemic',
+                name: 'Pandemic',
+                icon: '🦠',
+                text: 'A highly contagious virus is spreading through the community. Hospitals are nearing capacity. 150 people are at risk of infection.',
+                actions: [
+                    { id: 'vaccinate', label: '💉 Distribute Vaccines', cost: 25000, time: 60, effect: 'protects' },
+                    { id: 'isolate', label: '🏥 Set Up Isolation', cost: 15000, time: 40, effect: 'contains' },
+                    { id: 'test', label: '🧪 Mass Testing', cost: 10000, time: 30, effect: 'identifies' },
+                    { id: 'info', label: '📢 Public Awareness', cost: 8000, time: 20, effect: 'educates' }
+                ]
+            },
+            {
+                type: 'earthquake',
+                name: 'Earthquake',
+                icon: '🏚️',
+                text: 'A 7.2 magnitude earthquake has struck the city. Buildings have collapsed and people are trapped. 80 people need rescue.',
+                actions: [
+                    { id: 'search', label: '🔍 Search & Rescue', cost: 15000, time: 45, effect: 'saves' },
+                    { id: 'medical', label: '🏥 Field Hospital', cost: 20000, time: 50, effect: 'treats' },
+                    { id: 'supplies', label: '📦 Distribute Supplies', cost: 10000, time: 30, effect: 'supports' },
+                    { id: 'assess', label: '📋 Damage Assessment', cost: 8000, time: 25, effect: 'plans' }
+                ]
+            },
+            {
+                type: 'flood',
+                name: 'Flood',
+                icon: '💧',
+                text: 'Heavy rainfall has caused severe flooding. Water levels are rising rapidly. 90 people are trapped in their homes.',
+                actions: [
+                    { id: 'evacuate', label: '🚤 Boat Evacuation', cost: 12000, time: 40, effect: 'saves' },
+                    { id: 'sandbags', label: '🛑 Deploy Sandbags', cost: 8000, time: 35, effect: 'contains' },
+                    { id: 'warning', label: '📢 Flood Warnings', cost: 5000, time: 20, effect: 'alerts' },
+                    { id: 'rescue', label: '🚁 Helicopter Rescue', cost: 25000, time: 60, effect: 'saves' }
+                ]
+            }
+        ];
+        
+        // Initialize the game
+        function initGame() {
+            // Clear previous timer
+            clearInterval(gameState.timer);
+            
+            // Select a random scenario
+            const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            gameState.disasterType = randomScenario.type;
+            
+            // Reset game state
+            gameState.time = 300;
+            gameState.resources = 50000;
+            gameState.saved = 0;
+            gameState.totalPeople = Math.floor(Math.random() * 51) + 50; // 50-100 people
+            gameState.score = 0;
+            gameState.gameOver = false;
+            
+            // Update scenario display
+            document.getElementById('scenario-image').textContent = randomScenario.icon;
+            document.getElementById('scenario-text').textContent = randomScenario.text;
+            
+            // Update actions
+            const actionsContainer = document.querySelector('.actions');
+            actionsContainer.innerHTML = '';
+            
+            randomScenario.actions.forEach(action => {
+                const button = document.createElement('button');
+                button.textContent = action.label;
+                button.onclick = () => takeAction(action.id);
+                
+                // Add style based on action type
+                if (action.id === 'evacuate' || action.id === 'rescue') {
+                    button.classList.add('danger');
+                } else if (action.id === 'warning' || action.id === 'info') {
+                    button.classList.add('success');
+                } else if (action.id === 'contain' || action.id === 'isolate') {
+                    button.classList.add('warning');
+                }
+                
+                actionsContainer.appendChild(button);
+            });
+            
+            // Clear log and add initial message
+            const log = document.getElementById('log');
+            log.innerHTML = '';
+            addLog(`${randomScenario.name} emergency reported! Response needed immediately.`, 'info');
+            addLog(`${gameState.totalPeople} civilians in danger. Time is critical.`, 'warning');
+            addLog(`Resources available: $${gameState.resources.toLocaleString()} and 5 minutes.`, 'info');
+            
+            // Update display
+            updateDisplay();
+            
+            // Update statistics
+            updateStatistics();
+            
+            // Start timer
+            startTimer();
+        }
+        
+        // Update the game display
+        function updateDisplay() {
+            const minutes = Math.floor(gameState.time / 60);
+            const seconds = gameState.time % 60;
+            document.getElementById('time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('resources').textContent = `$${gameState.resources.toLocaleString()}`;
+            document.getElementById('saved').textContent = `${gameState.saved}/${gameState.totalPeople}`;
+            document.getElementById('score').textContent = gameState.score;
+        }
+        
+        // Update statistics panel
+        function updateStatistics() {
+            document.getElementById('high-score').textContent = gameState.highScore;
+            document.getElementById('games-played').textContent = gameState.gamesPlayed;
+            document.getElementById('total-saved').textContent = gameState.totalSaved;
+            document.getElementById('best-time').textContent = gameState.bestTime;
+        }
+        
+        // Start the countdown timer
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                if (gameState.gameOver) {
+                    clearInterval(gameState.timer);
+                    return;
+                }
+                
+                gameState.time--;
+                
+                if (gameState.time <= 0) {
+                    endGame();
+                    return;
+                }
+                
+                // Random event chance
+                if (Math.random() > 0.95) {
+                    const events = [
+                        {msg: 'Secondary disaster threat!', resources: -5000, time: -30, type: 'danger'},
+                        {msg: 'International aid arriving!', resources: +10000, type: 'success'},
+                        {msg: 'Weather conditions worsening!', time: -45, type: 'warning'},
+                        {msg: 'Volunteers arriving to help!', time: +20, type: 'info'}
+                    ];
+                    
+                    const event = events[Math.floor(Math.random() * events.length)];
+                    addLog(event.msg, event.type);
+                    
+                    if (event.resources) gameState.resources += event.resources;
+                    if (event.time) gameState.time += event.time;
+                }
+                
+                updateDisplay();
+            }, 1000);
+        }
+        
+        // Add a message to the log
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}-text`;
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Process player actions
+        function takeAction(action) {
+            if (gameState.gameOver) return;
+            
+            let cost, time, saves, message;
+            
+            switch(action) {
+                case 'evacuate':
+                case 'rescue':
+                    cost = 10000 + Math.floor(Math.random() * 5000);
+                    time = 30;
+                    saves = 10 + Math.floor(Math.random() * 11); // 10-20 people
+                    message = `Evacuation in progress. ${saves} people moved to safety.`;
+                    break;
+                    
+                case 'contain':
+                case 'barriers':
+                case 'sandbags':
+                    cost = 8000 + Math.floor(Math.random() * 4000);
+                    time = 40;
+                    saves = 5 + Math.floor(Math.random() * 6); // 5-10 people
+                    message = 'Containment measures deployed. Threat reduced.';
+                    break;
+                    
+                case 'water':
+                case 'vaccinate':
+                case 'medical':
+                    cost = 15000 + Math.floor(Math.random() * 5000);
+                    time = 50;
+                    saves = 15 + Math.floor(Math.random() * 11); // 15-25 people
+                    message = 'Specialist response deployed. Effective countermeasures.';
+                    break;
+                    
+                case 'shelter':
+                case 'isolate':
+                    cost = 7000 + Math.floor(Math.random() * 3000);
+                    time = 25;
+                    saves = 8 + Math.floor(Math.random() * 7); // 8-14 people
+                    message = 'Shelter established. People protected from immediate danger.';
+                    break;
+                    
+                case 'warning':
+                case 'info':
+                    cost = 5000 + Math.floor(Math.random() * 3000);
+                    time = 20;
+                    saves = 5 + Math.floor(Math.random() * 6); // 5-10 people
+                    message = 'Public awareness campaign launched. People taking precautions.';
+                    break;
+                    
+                case 'test':
+                case 'assess':
+                    cost = 6000 + Math.floor(Math.random() * 4000);
+                    time = 30;
+                    saves = 7 + Math.floor(Math.random() * 6); // 7-12 people
+                    message = 'Assessment completed. Better understanding of the situation.';
+                    break;
+                    
+                case 'search':
+                    cost = 12000 + Math.floor(Math.random() * 6000);
+                    time = 45;
+                    saves = 12 + Math.floor(Math.random() * 9); // 12-20 people
+                    message = 'Search and rescue operation underway. People being located.';
+                    break;
+                    
+                case 'supplies':
+                    cost = 8000 + Math.floor(Math.random() * 4000);
+                    time = 35;
+                    saves = 9 + Math.floor(Math.random() * 7); // 9-15 people
+                    message = 'Emergency supplies distributed. Basic needs being met.';
+                    break;
+            }
+            
+            // Check if player has enough resources and time
+            if (gameState.resources >= cost && gameState.time > time) {
+                gameState.resources -= cost;
+                gameState.time -= time;
+                gameState.saved = Math.min(gameState.totalPeople, gameState.saved + saves);
+                
+                // Calculate score
+                const actionScore = saves * 10 + Math.floor((cost / 1000) * 5);
+                gameState.score += actionScore;
+                
+                addLog(message, 'success');
+                addLog(`Action cost: $${cost}, Time: ${time} seconds, People helped: ${saves}`, 'info');
+            } else {
+                addLog('Not enough resources or time for this action!', 'danger');
+            }
+            
+            // Check if all people are saved
+            if (gameState.saved >= gameState.totalPeople) {
+                addLog('All people have been saved! Excellent work!', 'success');
+                endGame();
+            }
+            
+            updateDisplay();
+        }
+        
+        // End the game
+        function endGame() {
+            gameState.gameOver = true;
+            clearInterval(gameState.timer);
+            
+            // Calculate final score
+            const peopleScore = gameState.saved * 100;
+            const timeBonus = gameState.time * 10;
+            const efficiencyBonus = Math.floor(gameState.resources / 100);
+            
+            gameState.score += peopleScore + timeBonus + efficiencyBonus;
+            
+            // Update statistics
+            gameState.gamesPlayed++;
+            gameState.totalSaved += gameState.saved;
+            
+            if (gameState.score > gameState.highScore) {
+                gameState.highScore = gameState.score;
+            }
+            
+            const minutes = Math.floor(gameState.time / 60);
+            const seconds = gameState.time % 60;
+            const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (gameState.bestTime === 'N/A' || gameState.time > parseInt(gameState.bestTime)) {
+                gameState.bestTime = timeString;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('highScore', gameState.highScore);
+            localStorage.setItem('gamesPlayed', gameState.gamesPlayed);
+            localStorage.setItem('totalSaved', gameState.totalSaved);
+            localStorage.setItem('bestTime', gameState.bestTime);
+            
+            // Display results
+            addLog(`GAME OVER! Final score: ${gameState.score}`, 'info');
+            addLog(`People saved: ${gameState.saved}/${gameState.totalPeople}`, 
+                  gameState.saved === gameState.totalPeople ? 'success' : 'warning');
+            addLog(`Time remaining: ${timeString}`, 'info');
+            addLog(`Resources remaining: $${gameState.resources}`, 'info');
+            
+            updateStatistics();
+        }
+        
+        // Initialize the game when page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>

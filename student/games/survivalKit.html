@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survival Kit Builder 🎒</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .rules-panel {
+            flex: 1;
+            padding: 25px;
+            background: linear-gradient(to bottom, #4b6cb7, #182848);
+            color: white;
+        }
+        
+        .game-panel {
+            flex: 2;
+            padding: 25px;
+            background: #f9f9f9;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            margin: 15px 0 10px;
+            color: #ffcc00;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 5px;
+        }
+        
+        h3 {
+            margin: 15px 0 10px;
+            color: #4b6cb7;
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .scenario {
+            background: #4b6cb7;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .budget {
+            background: #ffcc00;
+            color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .item {
+            background: white;
+            border: 2px solid #4b6cb7;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-color: #ffcc00;
+        }
+        
+        .item.selected {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .item.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            color: #4b6cb7;
+        }
+        
+        .kit-items {
+            background: white;
+            border: 2px dashed #4b6cb7;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 150px;
+            margin-bottom: 20px;
+        }
+        
+        .kit-item {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #submit-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        #submit-btn:hover {
+            background: #218838;
+        }
+        
+        #reset-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        #reset-btn:hover {
+            background: #c82333;
+        }
+        
+        #next-btn {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        #next-btn:hover {
+            background: #138496;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4b6cb7;
+            margin-top: 20px;
+        }
+        
+        .result {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .high-score {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .rules-panel, .game-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="rules-panel">
+            <h1>Survival Kit Builder 🎒</h1>
+            
+            <h2>Game Rules</h2>
+            <ul>
+                <li>You have a limited budget to build your survival kit</li>
+                <li>Different disasters require different items</li>
+                <li>Choose wisely - wrong items will reduce your score</li>
+                <li>You get points for each correct item selected</li>
+                <li>You lose points for wrong or unnecessary items</li>
+                <li>Try to maximize your score within the budget</li>
+            </ul>
+            
+            <h2>Important Points</h2>
+            <ul>
+                <li>Prioritize essentials: water, food, shelter</li>
+                <li>Consider the specific disaster scenario</li>
+                <li>Balance between tools and consumables</li>
+                <li>Don't forget first aid and communication</li>
+                <li>Avoid redundant or luxury items</li>
+            </ul>
+            
+            <h2>Outcomes</h2>
+            <ul>
+                <li><strong>Perfect Kit:</strong> Maximum points + bonus</li>
+                <li><strong>Good Kit:</strong> Most essentials covered</li>
+                <li><strong>Fair Kit:</strong> Missing some critical items</li>
+                <li><strong>Poor Kit:</strong> Inadequate for survival</li>
+                <li><strong>Failed:</strong> Wrong items selected</li>
+            </ul>
+            
+            <div class="high-score">
+                <h2>Your High Score</h2>
+                <p id="high-score">0 points</p>
+            </div>
+        </div>
+        
+        <div class="game-panel">
+            <h2>Build Your Survival Kit</h2>
+            
+            <div class="scenario" id="scenario">
+                Disaster Scenario: Earthquake
+            </div>
+            
+            <div class="budget" id="budget">
+                Remaining Budget: $100
+            </div>
+            
+            <h3>Available Items</h3>
+            <div class="items-grid" id="items-container">
+                <!-- Items will be generated here -->
+            </div>
+            
+            <h3>Your Survival Kit</h3>
+            <div class="kit-items" id="kit-items">
+                <!-- Selected items will appear here -->
+            </div>
+            
+            <div class="controls">
+                <button id="reset-btn">Reset Kit</button>
+                <button id="submit-btn">Submit Kit</button>
+                <button id="next-btn">Next Scenario</button>
+            </div>
+            
+            <div class="result" id="result"></div>
+            
+            <div class="score">
+                Current Score: <span id="score">0</span> points
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const scenarios = [
+            {
+                name: "Earthquake",
+                budget: 100,
+                essentials: ["Water", "First Aid Kit", "Flashlight", "Whistle", "Emergency Blanket", "Dust Mask"],
+                useful: ["Canned Food", "Multi-tool", "Work Gloves", "Portable Radio", "Battery Pack"],
+                unnecessary: ["Tent", "Fishing Rod", "Board Games", "Perfume", "Books"],
+                wrong: ["Heavy Machinery", "Glass Items", "Large Furniture"]
+            },
+            {
+                name: "Flood",
+                budget: 120,
+                essentials: ["Life Jacket", Water", "Waterproof Bag", "First Aid Kit", "Water Purification Tablets", "Rope"],
+                useful: ["Canned Food", "Flashlight", "Whistle", "Emergency Blanket", "Multi-tool"],
+                unnecessary: ["Electronics", "Books", "Mattress", "Carpet", "Heavy Coats"],
+                wrong: ["Electrical Appliances", "Generator", "Hairdryer"]
+            },
+            {
+                name: "Wildfire",
+                budget: 90,
+                essentials: ["N95 Masks", "Emergency Blanket", "Water", "First Aid Kit", "Goggles", "Whistle"],
+                useful: ["Canned Food", "Flashlight", "Portable Radio", "Multi-tool", "Duct Tape"],
+                unnecessary: ["Tent", "Sleeping Bag", "Camping Stove", "Lantern", "Books"],
+                wrong: ["Matches", "Lighter", "Flammable Liquids"]
+            },
+            {
+                name: "Hurricane",
+                budget: 110,
+                essentials: ["Water", "Canned Food", "First Aid Kit", "Flashlight", "Portable Radio", "Battery Pack"],
+                useful: ["Emergency Blanket", "Multi-tool", "Duct Tape", "Whistle", "Waterproof Bag"],
+                unnecessary: ["Umbrella", "Beach Equipment", "Lightweight Clothing", "Sunscreen", "Cooler"],
+                wrong: ["Glass Items", "Electronic Devices", "Gazebo"]
+            }
+        ];
+
+        const allItems = [
+            { name: "Water", price: 10, category: "essential" },
+            { name: "Canned Food", price: 8, category: "useful" },
+            { name: "First Aid Kit", price: 15, category: "essential" },
+            { name: "Flashlight", price: 12, category: "useful" },
+            { name: "Battery Pack", price: 15, category: "useful" },
+            { name: "Portable Radio", price: 20, category: "useful" },
+            { name: "Emergency Blanket", price: 5, category: "essential" },
+            { name: "Whistle", price: 3, category: "essential" },
+            { name: "Multi-tool", price: 25, category: "useful" },
+            { name: "Dust Mask", price: 4, category: "essential" },
+            { name: "N95 Masks", price: 8, category: "essential" },
+            { name: "Life Jacket", price: 20, category: "essential" },
+            { name: "Waterproof Bag", price: 15, category: "essential" },
+            { name: "Water Purification Tablets", price: 10, category: "essential" },
+            { name: "Rope", price: 8, category: "useful" },
+            { name: "Goggles", price: 10, category: "essential" },
+            { name: "Duct Tape", price: 5, category: "useful" },
+            { name: "Work Gloves", price: 7, category: "useful" },
+            { name: "Tent", price: 40, category: "unnecessary" },
+            { name: "Sleeping Bag", price: 25, category: "unnecessary" },
+            { name: "Camping Stove", price: 30, category: "unnecessary" },
+            { name: "Lantern", price: 15, category: "unnecessary" },
+            { name: "Fishing Rod", price: 20, category: "unnecessary" },
+            { name: "Board Games", price: 12, category: "unnecessary" },
+            { name: "Perfume", price: 20, category: "unnecessary" },
+            { name: "Books", price: 10, category: "unnecessary" },
+            { name: "Heavy Machinery", price: 80, category: "wrong" },
+            { name: "Glass Items", price: 15, category: "wrong" },
+            { name: "Large Furniture", price: 70, category: "wrong" },
+            { name: "Electrical Appliances", price: 40, category: "wrong" },
+            { name: "Generator", price: 60, category: "wrong" },
+            { name: "Hairdryer", price: 15, category: "wrong" },
+            { name: "Matches", price: 2, category: "wrong" },
+            { name: "Lighter", price: 3, category: "wrong" },
+            { name: "Flammable Liquids", price: 10, category: "wrong" },
+            { name: "Umbrella", price: 10, category: "unnecessary" },
+            { name: "Beach Equipment", price: 20, category: "unnecessary" },
+            { name: "Lightweight Clothing", price: 15, category: "unnecessary" },
+            { name: "Sunscreen", price: 8, category: "unnecessary" },
+            { name: "Cooler", price: 25, category: "unnecessary" },
+            { name: "Gazebo", price: 50, category: "wrong" },
+            { name: "Electronic Devices", price: 40, category: "wrong" }
+        ];
+
+        // Game state
+        let currentScenarioIndex = 0;
+        let currentBudget = 0;
+        let score = 0;
+        let highScore = 0;
+        let selectedItems = [];
+
+        // DOM elements
+        const scenarioElement = document.getElementById('scenario');
+        const budgetElement = document.getElementById('budget');
+        const itemsContainer = document.getElementById('items-container');
+        const kitItemsElement = document.getElementById('kit-items');
+        const scoreElement = document.getElementById('score');
+        const highScoreElement = document.getElementById('high-score');
+        const resultElement = document.getElementById('result');
+        const resetBtn = document.getElementById('reset-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Initialize the game
+        function initGame() {
+            // Reset game state
+            selectedItems = [];
+            currentBudget = scenarios[currentScenarioIndex].budget;
+            
+            // Update UI
+            scenarioElement.textContent = `Disaster Scenario: ${scenarios[currentScenarioIndex].name}`;
+            budgetElement.textContent = `Remaining Budget: $${currentBudget}`;
+            scoreElement.textContent = score;
+            highScoreElement.textContent = `${highScore} points`;
+            kitItemsElement.innerHTML = '';
+            resultElement.className = 'result';
+            
+            // Generate items
+            generateItems();
+        }
+
+        // Generate items for the current scenario
+        function generateItems() {
+            itemsContainer.innerHTML = '';
+            
+            // Filter items to show for this scenario
+            const scenario = scenarios[currentScenarioIndex];
+            const availableItems = allItems.filter(item => {
+                return scenario.essentials.includes(item.name) || 
+                       scenario.useful.includes(item.name) || 
+                       scenario.unnecessary.includes(item.name) || 
+                       scenario.wrong.includes(item.name);
+            });
+            
+            // Shuffle items for variety
+            shuffleArray(availableItems);
+            
+            // Display items
+            availableItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item';
+                itemElement.innerHTML = `
+                    <div>${item.name}</div>
+                    <div class="item-price">$${item.price}</div>
+                `;
+                
+                itemElement.addEventListener('click', () => {
+                    selectItem(item, itemElement);
+                });
+                
+                itemsContainer.appendChild(itemElement);
+            });
+        }
+
+        // Select an item
+        function selectItem(item, element) {
+            // Check if already selected
+            if (selectedItems.includes(item)) {
+                return;
+            }
+            
+            // Check budget
+            if (currentBudget - item.price < 0) {
+                alert("Not enough budget for this item!");
+                return;
+            }
+            
+            // Add to selected items
+            selectedItems.push(item);
+            currentBudget -= item.price;
+            
+            // Update UI
+            budgetElement.textContent = `Remaining Budget: $${currentBudget}`;
+            element.classList.add('selected');
+            
+            // Add to kit display
+            const kitItemElement = document.createElement('div');
+            kitItemElement.className = 'kit-item';
+            kitItemElement.textContent = item.name;
+            kitItemsElement.appendChild(kitItemElement);
+        }
+
+        // Submit the kit for evaluation
+        function submitKit() {
+            const scenario = scenarios[currentScenarioIndex];
+            let kitScore = 0;
+            let feedback = "";
+            
+            // Check essentials
+            const selectedEssentialCount = selectedItems.filter(item => 
+                scenario.essentials.includes(item.name)).length;
+            const essentialPercentage = selectedEssentialCount / scenario.essentials.length;
+            
+            if (essentialPercentage === 1) {
+                kitScore += 50;
+                feedback += "Perfect! You have all essential items. ";
+            } else if (essentialPercentage >= 0.7) {
+                kitScore += 30;
+                feedback += "Good! You have most essential items. ";
+            } else if (essentialPercentage >= 0.5) {
+                kitScore += 15;
+                feedback += "Fair! You have some essential items. ";
+            } else {
+                feedback += "Poor! You're missing many essential items. ";
+            }
+            
+            // Add points for useful items
+            const usefulItems = selectedItems.filter(item => 
+                scenario.useful.includes(item.name));
+            kitScore += usefulItems.length * 5;
+            
+            // Deduct points for unnecessary items
+            const unnecessaryItems = selectedItems.filter(item => 
+                scenario.unnecessary.includes(item.name));
+            kitScore -= unnecessaryItems.length * 10;
+            
+            // Heavy penalty for wrong items
+            const wrongItems = selectedItems.filter(item => 
+                scenario.wrong.includes(item.name));
+            kitScore -= wrongItems.length * 20;
+            
+            // Bonus for leftover budget
+            kitScore += currentBudget;
+            
+            // Update total score
+            score += Math.max(0, kitScore);
+            if (score > highScore) {
+                highScore = score;
+            }
+            
+            // Generate feedback
+            if (wrongItems.length > 0) {
+                feedback += `Avoid these wrong items: ${wrongItems.map(i => i.name).join(', ')}. `;
+            }
+            
+            if (unnecessaryItems.length > 0) {
+                feedback += `These items are unnecessary: ${unnecessaryItems.map(i => i.name).join(', ')}. `;
+            }
+            
+            feedback += `You scored ${kitScore} points for this scenario.`;
+            
+            // Show result
+            resultElement.textContent = feedback;
+            if (kitScore >= 40) {
+                resultElement.className = 'result success';
+            } else {
+                resultElement.className = 'result fail';
+            }
+            
+            // Update score displays
+            scoreElement.textContent = score;
+            highScoreElement.textContent = `${highScore} points`;
+            
+            // Disable items
+            const itemElements = document.querySelectorAll('.item');
+            itemElements.forEach(element => {
+                element.style.pointerEvents = 'none';
+            });
+        }
+
+        // Move to next scenario
+        function nextScenario() {
+            currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+            initGame();
+        }
+
+        // Reset the current kit
+        function resetKit() {
+            selectedItems = [];
+            currentBudget = scenarios[currentScenarioIndex].budget;
+            
+            budgetElement.textContent = `Remaining Budget: $${currentBudget}`;
+            kitItemsElement.innerHTML = '';
+            resultElement.className = 'result';
+            
+            const itemElements = document.querySelectorAll('.item');
+            itemElements.forEach(element => {
+                element.classList.remove('selected');
+                element.style.pointerEvents = 'auto';
+            });
+        }
+
+        // Utility function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Event listeners
+        resetBtn.addEventListener('click', resetKit);
+        submitBtn.addEventListener('click', submitKit);
+        nextBtn.addEventListener('click', nextScenario);
+
+        // Start the game
+        initGame();
+    </script>
+</body>
+</html>

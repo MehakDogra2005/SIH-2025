@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Drill Race 🏃‍♂️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c2461, #1e3799, #4a69bd);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .rules-panel {
+            flex: 1;
+            padding: 25px;
+            background: linear-gradient(to bottom, #2c3e50, #3498db);
+            color: white;
+        }
+        
+        .game-panel {
+            flex: 2;
+            padding: 25px;
+            background: #ecf0f1;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f1c40f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            margin: 15px 0 10px;
+            color: #f1c40f;
+            border-bottom: 2px solid #f1c40f;
+            padding-bottom: 5px;
+        }
+        
+        h3 {
+            margin: 15px 0 10px;
+            color: #3498db;
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .scenario {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .timer {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .evacuation-map {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #bdc3c7;
+            padding: 15px;
+            border-radius: 10px;
+            min-height: 400px;
+        }
+        
+        .map-cell {
+            background: white;
+            border: 2px solid #7f8c8d;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .map-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .exit {
+            background: #2ecc71;
+            border-color: #27ae60;
+        }
+        
+        .blocked {
+            background: #e74c3c;
+            border-color: #c0392b;
+            cursor: not-allowed;
+        }
+        
+        .group {
+            background: #3498db;
+            border-color: #2980b9;
+            color: white;
+        }
+        
+        .panic {
+            background: #f39c12;
+            border-color: #e67e22;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .action-log {
+            background: white;
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 150px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .log-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .log-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .log-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #start-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        #start-btn:hover {
+            background: #27ae60;
+        }
+        
+        #calm-btn {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        #calm-btn:hover {
+            background: #8e44ad;
+        }
+        
+        #next-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        #next-btn:hover {
+            background: #2980b9;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+        
+        .result {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .high-score {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            margin: 0 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .rules-panel, .game-panel {
+                width: 100%;
+            }
+            
+            .evacuation-map {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="rules-panel">
+            <h1>Virtual Drill Race 🏃‍♂️</h1>
+            
+            <h2>Game Rules</h2>
+            <ul>
+                <li>Guide groups to safety through the evacuation map</li>
+                <li>Find alternative routes when exits are blocked</li>
+                <li>Calm panicking groups to prevent chaos</li>
+                <li>Complete the evacuation before time runs out</li>
+                <li>Earn more points for efficient evacuations</li>
+                <li>Lose points for poor decisions and panic spread</li>
+            </ul>
+            
+            <h2>Important Points</h2>
+            <ul>
+                <li>Always prioritize the closest safe exit</li>
+                <li>Calm panicking groups immediately</li>
+                <li>Plan alternative routes in case of blocked exits</li>
+                <li>Keep track of time remaining</li>
+                <li>Coordinate multiple groups efficiently</li>
+            </ul>
+            
+            <h2>Outcomes</h2>
+            <ul>
+                <li><strong>Perfect Evacuation:</strong> All groups saved quickly + bonus</li>
+                <li><strong>Good Evacuation:</strong> Most groups saved with minimal panic</li>
+                <li><strong>Fair Evacuation:</strong> Some groups saved but with issues</li>
+                <li><strong>Poor Evacuation:</strong> Many casualties due to poor planning</li>
+                <li><strong>Failed Evacuation:</strong> Chaos and many casualties</li>
+            </ul>
+            
+            <div class="high-score">
+                <h2>Your High Score</h2>
+                <p id="high-score">0 points</p>
+            </div>
+        </div>
+        
+        <div class="game-panel">
+            <h2>Evacuation Command Center</h2>
+            
+            <div class="scenario" id="scenario">
+                Select a scenario to begin
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <h3>Groups to Evacuate</h3>
+                    <p id="groups-count">0</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Panic Level</h3>
+                    <p id="panic-level">Low</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Evacuated</h3>
+                    <p id="evacuated-count">0</p>
+                </div>
+            </div>
+            
+            <div class="timer" id="timer">
+                Time: 120 seconds
+            </div>
+            
+            <h3>Evacuation Map</h3>
+            <div class="evacuation-map" id="map">
+                <!-- Map cells will be generated here -->
+            </div>
+            
+            <h3>Action Log</h3>
+            <div class="action-log" id="action-log">
+                <!-- Action log will appear here -->
+            </div>
+            
+            <div class="controls">
+                <button id="start-btn">Start Drill</button>
+                <button id="calm-btn" disabled>Calm Panic</button>
+                <button id="next-btn" disabled>Next Scenario</button>
+            </div>
+            
+            <div class="result" id="result"></div>
+            
+            <div class="score">
+                Current Score: <span id="score">0</span> points
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const scenarios = [
+            {
+                name: "School Fire Drill",
+                description: "A fire has broken out in the science lab. Evacuate all students and staff safely.",
+                time: 120,
+                groups: 5,
+                panicChance: 0.2,
+                blockedExits: 1
+            },
+            {
+                name: "Office Building Emergency",
+                description: "An earthquake has struck. Evacuate the building with multiple blocked exits.",
+                time: 150,
+                groups: 7,
+                panicChance: 0.3,
+                blockedExits: 2
+            },
+            {
+                name: "Shopping Mall Crisis",
+                description: "A security threat has been reported. Evacuate the crowded mall quickly.",
+                time: 180,
+                groups: 8,
+                panicChance: 0.4,
+                blockedExits: 2
+            },
+            {
+                name: "Theater Emergency",
+                description: "A fire alarm has gone off during a packed show. Manage the crowd panic.",
+                time: 100,
+                groups: 6,
+                panicChance: 0.5,
+                blockedExits: 1
+            }
+        ];
+
+        // Game state
+        let currentScenarioIndex = 0;
+        let timeLeft = 0;
+        let score = 0;
+        let highScore = 0;
+        let gameActive = false;
+        let timerInterval = null;
+        let groups = [];
+        let evacuatedCount = 0;
+        let panicLevel = 0;
+        let selectedCell = null;
+
+        // DOM elements
+        const scenarioElement = document.getElementById('scenario');
+        const timerElement = document.getElementById('timer');
+        const mapElement = document.getElementById('map');
+        const actionLogElement = document.getElementById('action-log');
+        const scoreElement = document.getElementById('score');
+        const highScoreElement = document.getElementById('high-score');
+        const resultElement = document.getElementById('result');
+        const startBtn = document.getElementById('start-btn');
+        const calmBtn = document.getElementById('calm-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const groupsCountElement = document.getElementById('groups-count');
+        const panicLevelElement = document.getElementById('panic-level');
+        const evacuatedCountElement = document.getElementById('evacuated-count');
+
+        // Initialize the game
+        function initGame() {
+            // Reset game state
+            const scenario = scenarios[currentScenarioIndex];
+            timeLeft = scenario.time;
+            evacuatedCount = 0;
+            panicLevel = 0;
+            groups = [];
+            selectedCell = null;
+            
+            // Create groups
+            for (let i = 0; i < scenario.groups; i++) {
+                groups.push({
+                    id: i,
+                    evacuated: false,
+                    panicking: Math.random() < scenario.panicChance
+                });
+            }
+            
+            // Update UI
+            scenarioElement.textContent = `${scenario.name}: ${scenario.description}`;
+            timerElement.textContent = `Time: ${timeLeft} seconds`;
+            groupsCountElement.textContent = scenario.groups;
+            panicLevelElement.textContent = "Low";
+            evacuatedCountElement.textContent = "0";
+            actionLogElement.innerHTML = '';
+            resultElement.className = 'result';
+            scoreElement.textContent = score;
+            
+            // Generate map
+            generateMap();
+            
+            // Update buttons
+            startBtn.disabled = false;
+            calmBtn.disabled = true;
+            nextBtn.disabled = true;
+        }
+
+        // Generate the evacuation map
+        function generateMap() {
+            mapElement.innerHTML = '';
+            
+            const scenario = scenarios[currentScenarioIndex];
+            const totalCells = 25;
+            const exitCount = 3;
+            const blockedExitsCount = scenario.blockedExits;
+            
+            // Create cells
+            for (let i = 0; i < totalCells; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'map-cell';
+                cell.dataset.id = i;
+                
+                // Determine cell type
+                if (i === 0 || i === 4 || i === 24) {
+                    // Potential exits
+                    if (i === 0 || (i === 4 && blockedExitsCount < 2) || (i === 24 && blockedExitsCount < 3)) {
+                        cell.classList.add('exit');
+                        cell.textContent = '🚪';
+                    } else {
+                        cell.classList.add('blocked');
+                        cell.textContent = '🚧';
+                    }
+                } else if (i === 2 || i === 6 || i === 10 || i === 14 || i === 18) {
+                    // Group starting positions
+                    const groupIndex = Math.floor(i / 4);
+                    if (groupIndex < groups.length) {
+                        cell.classList.add('group');
+                        if (groups[groupIndex].panicking) {
+                            cell.classList.add('panic');
+                            cell.textContent = '😰';
+                        } else {
+                            cell.textContent = '👥';
+                        }
+                    }
+                } else {
+                    // Regular path
+                    cell.textContent = '·';
+                }
+                
+                cell.addEventListener('click', () => {
+                    handleCellClick(cell);
+                });
+                
+                mapElement.appendChild(cell);
+            }
+        }
+
+        // Handle cell click
+        function handleCellClick(cell) {
+            if (!gameActive) return;
+            
+            const cellId = parseInt(cell.dataset.id);
+            
+            // Reset previous selection
+            if (selectedCell) {
+                selectedCell.style.borderColor = '#7f8c8d';
+            }
+            
+            // Set new selection
+            selectedCell = cell;
+            cell.style.borderColor = '#f1c40f';
+            
+            // Check if it's a group cell
+            if (cell.classList.contains('group')) {
+                calmBtn.disabled = false;
+                addToLog("Group selected. You can now calm them if needed.", "warning");
+            } else if (cell.classList.contains('exit')) {
+                calmBtn.disabled = true;
+                addToLog("Exit selected. Now select a group to direct them here.", "warning");
+            } else {
+                calmBtn.disabled = true;
+                addToLog("Path selected. Now select a group to direct them.", "warning");
+            }
+        }
+
+        // Add entry to action log
+        function addToLog(message, type) {
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = message;
+            actionLogElement.appendChild(logEntry);
+            actionLogElement.scrollTop = actionLogElement.scrollHeight;
+        }
+
+        // Start the game
+        function startGame() {
+            gameActive = true;
+            startBtn.disabled = true;
+            calmBtn.disabled = true;
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = `Time: ${timeLeft} seconds`;
+                
+                // Random panic event
+                if (Math.random() < 0.05) {
+                    triggerPanicEvent();
+                }
+                
+                if (timeLeft <= 0) {
+                    endGame(false);
+                }
+                
+                // Check if all groups evacuated
+                if (evacuatedCount >= groups.length) {
+                    endGame(true);
+                }
+            }, 1000);
+            
+            addToLog("Evacuation drill started! Guide groups to safety!", "success");
+        }
+
+        // Trigger a random panic event
+        function triggerPanicEvent() {
+            if (!gameActive) return;
+            
+            // Find a non-panicking group
+            const nonPanickingGroups = groups.filter(group => !group.panicking && !group.evacuated);
+            if (nonPanickingGroups.length > 0) {
+                const randomGroup = nonPanickingGroups[Math.floor(Math.random() * nonPanickingGroups.length)];
+                randomGroup.panicking = true;
+                
+                // Update map
+                const groupCells = document.querySelectorAll('.group');
+                groupCells.forEach(cell => {
+                    const cellId = parseInt(cell.dataset.id);
+                    if (cellId === randomGroup.id * 4 + 2) {
+                        cell.classList.add('panic');
+                        cell.textContent = '😰';
+                    }
+                });
+                
+                panicLevel += 10;
+                updatePanicLevel();
+                
+                addToLog(`Group ${randomGroup.id + 1} is panicking! Calm them quickly!`, "danger");
+            }
+        }
+
+        // Update panic level display
+        function updatePanicLevel() {
+            let levelText;
+            if (panicLevel < 20) {
+                levelText = "Low";
+            } else if (panicLevel < 50) {
+                levelText = "Medium";
+            } else if (panicLevel < 80) {
+                levelText = "High";
+            } else {
+                levelText = "Critical";
+            }
+            
+            panicLevelElement.textContent = levelText;
+            
+            // If panic reaches critical level, game over
+            if (panicLevel >= 100) {
+                addToLog("Critical panic level! Evacuation failed!", "danger");
+                endGame(false);
+            }
+        }
+
+        // Calm panicking group
+        function calmPanic() {
+            if (!selectedCell || !gameActive) return;
+            
+            const cellId = parseInt(selectedCell.dataset.id);
+            const groupId = Math.floor((cellId - 2) / 4);
+            
+            if (selectedCell.classList.contains('group') && selectedCell.classList.contains('panic')) {
+                // Calm the group
+                groups[groupId].panicking = false;
+                selectedCell.classList.remove('panic');
+                selectedCell.textContent = '👥';
+                
+                panicLevel = Math.max(0, panicLevel - 15);
+                updatePanicLevel();
+                
+                score += 20;
+                scoreElement.textContent = score;
+                
+                addToLog(`Group ${groupId + 1} has been calmed. +20 points!`, "success");
+                
+                // Reset selection
+                selectedCell.style.borderColor = '#7f8c8d';
+                selectedCell = null;
+                calmBtn.disabled = true;
+            }
+        }
+
+        // End the game
+        function endGame(isSuccess) {
+            clearInterval(timerInterval);
+            gameActive = false;
+            calmBtn.disabled = true;
+            nextBtn.disabled = false;
+            
+            // Calculate final score
+            let bonus = 0;
+            if (isSuccess) {
+                bonus = timeLeft * 2; // Time bonus
+                score += bonus;
+                addToLog(`Time bonus: +${bonus} points!`, "success");
+            }
+            
+            // Update high score
+            if (score > highScore) {
+                highScore = score;
+                highScoreElement.textContent = `${highScore} points`;
+            }
+            
+            // Show result
+            if (isSuccess) {
+                resultElement.textContent = `Evacuation successful! Final score: ${score} points`;
+                resultElement.className = 'result success';
+            } else {
+                resultElement.textContent = `Evacuation failed! Final score: ${score} points`;
+                resultElement.className = 'result fail';
+            }
+            
+            // Disable map cells
+            const mapCells = document.querySelectorAll('.map-cell');
+            mapCells.forEach(cell => {
+                cell.style.pointerEvents = 'none';
+            });
+        }
+
+        // Move to next scenario
+        function nextScenario() {
+            currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+            initGame();
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        calmBtn.addEventListener('click', calmPanic);
+        nextBtn.addEventListener('click', nextScenario);
+
+        // Initialize the game on load
+        window.addEventListener('load', () => {
+            // Select a random scenario to start with
+            currentScenarioIndex = Math.floor(Math.random() * scenarios.length);
+            initGame();
+        });
+    </script>
+</body>
+</html>

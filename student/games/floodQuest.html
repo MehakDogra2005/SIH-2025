@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloodQuest 🌊</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #1a2a6c, #2c3e50);
+            color: #ecf0f1;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .game-info {
+            flex: 1;
+            min-width: 340px;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-area {
+            flex: 2;
+            min-width: 650px;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #3498db;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #2ecc71;
+            margin: 15px 0 10px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .stats {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #2c3e50;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #34495e;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .status-item {
+            text-align: center;
+            flex: 1;
+            padding: 12px;
+            margin: 0 5px;
+            background: #2c3e50;
+            border-radius: 5px;
+        }
+        
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f39c12;
+        }
+        
+        .scenario {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .scenario-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-right: 20px;
+        }
+        
+        .scenario-details {
+            flex-grow: 1;
+        }
+        
+        .scenario-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .city-map {
+            height: 200px;
+            background: #2c3e50;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .river {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: #3498db;
+        }
+        
+        .neighborhood {
+            position: absolute;
+            width: 25%;
+            height: 40%;
+            background: #2ecc71;
+            border-radius: 5px;
+        }
+        
+        .neighborhood-1 {
+            bottom: 30%;
+            left: 10%;
+        }
+        
+        .neighborhood-2 {
+            bottom: 30%;
+            right: 10%;
+        }
+        
+        .city-center {
+            position: absolute;
+            bottom: 30%;
+            left: 40%;
+            width: 20%;
+            height: 50%;
+            background: #e74c3c;
+            border-radius: 5px;
+        }
+        
+        .levee {
+            position: absolute;
+            bottom: 30%;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #f39c12;
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .danger {
+            background: #e74c3c;
+        }
+        
+        .success {
+            background: #2ecc71;
+        }
+        
+        .warning {
+            background: #f39c12;
+        }
+        
+        .prevention {
+            background: #9b59b6;
+        }
+        
+        .log {
+            background: #2c3e50;
+            height: 180px;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #34495e;
+            line-height: 1.5;
+        }
+        
+        .success-text {
+            color: #2ecc71;
+        }
+        
+        .danger-text {
+            color: #e74c3c;
+        }
+        
+        .warning-text {
+            color: #f39c12;
+        }
+        
+        .info-text {
+            color: #3498db;
+        }
+        
+        .prevention-text {
+            color: #9b59b6;
+        }
+        
+        .restart-btn {
+            width: 100%;
+            padding: 15px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .restart-btn:hover {
+            background: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .progress-container {
+            height: 20px;
+            background: #2c3e50;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .flood-level {
+            height: 20px;
+            background: #2c3e50;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .flood-level-fill {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #1a5276);
+            border-radius: 10px;
+            width: 30%;
+            transition: width 0.5s ease;
+        }
+        
+        .flood-level-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        @media (max-width: 1100px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .game-info, .game-area {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-info">
+            <header>
+                <h1>FloodQuest 🌊</h1>
+                <p>Urban Flood Preparedness Education Game</p>
+            </header>
+            
+            <h2>Game Rules</h2>
+            <ul class="rules-list">
+                <li>Anticipate, simulate, and respond to urban flooding scenarios</li>
+                <li>Balance immediate response with long-term prevention</li>
+                <li>Manage limited resources effectively</li>
+                <li>Make decisions under time pressure</li>
+                <li>Learn realistic flood preparedness strategies</li>
+                <li>Each playthrough features different scenarios and challenges</li>
+            </ul>
+            
+            <h2>Scoring System</h2>
+            <ul class="points-list">
+                <li>+100 points for preventing major flooding</li>
+                <li>+75 points for effective evacuation plans</li>
+                <li>+50 points for efficient resource allocation</li>
+                <li>+60 points for infrastructure protection</li>
+                <li>+40 points for timely warnings</li>
+                <li>-30 points for each neighborhood flooded</li>
+            </ul>
+            
+            <div class="stats">
+                <h2>Your Statistics</h2>
+                <div class="stat-item">
+                    <span>Highest Score:</span>
+                    <span id="high-score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Games Played:</span>
+                    <span id="games-played">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Neighborhoods Saved:</span>
+                    <span id="neighborhoods-saved">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Prevention Level:</span>
+                    <span id="prevention-level">0%</span>
+                </div>
+            </div>
+            
+            <button class="restart-btn" onclick="initGame()">🌊 New Flood Scenario</button>
+        </div>
+        
+        <div class="game-area">
+            <div class="status-bar">
+                <div class="status-item">
+                    <div>Resources</div>
+                    <div class="status-value" id="resources">$75,000</div>
+                </div>
+                <div class="status-item">
+                    <div>Time</div>
+                    <div class="status-value" id="time">08:00</div>
+                </div>
+                <div class="status-item">
+                    <div>Safety Score</div>
+                    <div class="status-value" id="safety">85%</div>
+                </div>
+                <div class="status-item">
+                    <div>Total Score</div>
+                    <div class="status-value" id="score">0</div>
+                </div>
+            </div>
+            
+            <div class="flood-level">
+                <div class="flood-level-fill" id="flood-level"></div>
+                <div class="flood-level-text" id="flood-level-text">Flood Level: 30%</div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="scenario">
+                <div class="scenario-header">
+                    <div class="scenario-icon">🌧️</div>
+                    <div class="scenario-details">
+                        <h3 id="scenario-name">River Flood Preparedness</h3>
+                        <p id="scenario-difficulty">Risk Level: High</p>
+                    </div>
+                </div>
+                
+                <div class="city-map">
+                    <div class="river"></div>
+                    <div class="levee"></div>
+                    <div class="neighborhood neighborhood-1">Homes</div>
+                    <div class="neighborhood neighborhood-2">Businesses</div>
+                    <div class="city-center">City Center</div>
+                </div>
+                
+                <div class="scenario-text" id="scenario-text">
+                    The river is rising after 3 days of heavy rainfall. Current level is 30% capacity and increasing. 
+                    You need to protect 3 key areas: Residential neighborhood (5,000 people), Business district (200 businesses), 
+                    and City Center (hospital, emergency services). Make decisions to prevent flooding and minimize damage.
+                </div>
+                
+                <div class="actions">
+                    <button class="prevention" onclick="makeDecision('reinforce')">🛡️ Reinforce Levees</button>
+                    <button class="warning" onclick="makeDecision('evacuate')">🚨 Evacuate Areas</button>
+                    <button onclick="makeDecision('drainage')">🔄 Improve Drainage</button>
+                    <button class="success" onclick="makeDecision('sandbags')">🛍️ Deploy Sandbags</button>
+                </div>
+            </div>
+            
+            <div class="log" id="log">
+                <div class="log-entry info-text">Flood warning issued! River levels are rising rapidly.</div>
+                <div class="log-entry warning-text">3 key areas at risk: Homes, Businesses, and City Center.</div>
+                <div class="log-entry">You have $75,000 and 8 minutes to prevent disaster.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            resources: 75000,
+            time: 480, // 8 minutes in seconds
+            safety: 85,
+            score: 0,
+            progress: 0,
+            floodLevel: 30,
+            gameOver: false,
+            timer: null,
+            scenario: null,
+            neighborhoods: [true, true, true], // Homes, Businesses, City Center
+            highScore: parseInt(localStorage.getItem('highScore')) || 0,
+            gamesPlayed: parseInt(localStorage.getItem('gamesPlayed')) || 0,
+            neighborhoodsSaved: parseInt(localStorage.getItem('neighborhoodsSaved')) || 0,
+            preventionLevel: parseInt(localStorage.getItem('preventionLevel')) || 0
+        };
+        
+        // Flood scenarios
+        const scenarios = [
+            {
+                name: "River Flood Preparedness",
+                icon: "🌧️",
+                difficulty: "High",
+                description: "The river is rising after 3 days of heavy rainfall. Current level is 30% capacity and increasing. You need to protect 3 key areas: Residential neighborhood (5,000 people), Business district (200 businesses), and City Center (hospital, emergency services). Make decisions to prevent flooding and minimize damage.",
+                resources: 75000,
+                time: 480,
+                floodLevel: 30,
+                floodRate: 0.5 // % per second
+            },
+            {
+                name: "Flash Flood Emergency",
+                icon: "⚡",
+                difficulty: "Very High",
+                description: "A sudden thunderstorm has dumped 4 inches of rain in 2 hours. Flash flooding is imminent in low-lying urban areas. The drainage system is overwhelmed. You must act quickly to protect vulnerable areas and prevent casualties.",
+                resources: 60000,
+                time: 360,
+                floodLevel: 40,
+                floodRate: 0.8 // % per second
+            },
+            {
+                name: "Coastal Flooding",
+                icon: "🌊",
+                difficulty: "Extreme",
+                description: "A combination of high tides and storm surge is threatening coastal urban areas. Sea walls may be overtopped. You need to protect critical infrastructure and plan for potential evacuation of low-lying neighborhoods.",
+                resources: 90000,
+                time: 600,
+                floodLevel: 25,
+                floodRate: 0.4 // % per second
+            },
+            {
+                name: "Urban Drainage Failure",
+                icon: "🏙️",
+                difficulty: "Moderate",
+                description: "The city's aging drainage system has failed during heavy rainfall. Water is accumulating in streets and basements. You need to manage pumping operations and protect electrical infrastructure while planning repairs.",
+                resources: 50000,
+                time: 420,
+                floodLevel: 35,
+                floodRate: 0.6 // % per second
+            },
+            {
+                name: "Dam Release Warning",
+                icon: "🚧",
+                difficulty: "High",
+                description: "Upstream dam must release water due to structural concerns. Downstream urban areas will experience rapid water level rises. You have limited time to warn residents and protect property.",
+                resources: 80000,
+                time: 300,
+                floodLevel: 20,
+                floodRate: 1.0 // % per second
+            }
+        ];
+        
+        // Initialize the game
+        function initGame() {
+            // Clear previous timer
+            clearInterval(gameState.timer);
+            
+            // Select random scenario
+            gameState.scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            
+            // Reset game state
+            gameState.resources = gameState.scenario.resources;
+            gameState.time = gameState.scenario.time;
+            gameState.safety = 85;
+            gameState.score = 0;
+            gameState.progress = 0;
+            gameState.floodLevel = gameState.scenario.floodLevel;
+            gameState.gameOver = false;
+            gameState.neighborhoods = [true, true, true];
+            
+            // Update scenario display
+            document.getElementById('scenario-name').textContent = gameState.scenario.name;
+            document.getElementById('scenario-difficulty').textContent = `Risk Level: ${gameState.scenario.difficulty}`;
+            document.getElementById('scenario-text').textContent = gameState.scenario.description;
+            
+            // Clear log and add initial message
+            const log = document.getElementById('log');
+            log.innerHTML = '';
+            addLog(`Flood warning: ${gameState.scenario.name}`, 'info');
+            addLog(`Risk Level: ${gameState.scenario.difficulty}`, 'warning');
+            addLog(gameState.scenario.description, 'info');
+            addLog("Make strategic decisions to prevent flooding and protect urban areas.", 'prevention');
+            
+            // Update display
+            updateDisplay();
+            
+            // Update statistics
+            updateStatistics();
+            
+            // Start timer
+            startTimer();
+        }
+        
+        // Update the game display
+        function updateDisplay() {
+            document.getElementById('resources').textContent = `$${gameState.resources.toLocaleString()}`;
+            
+            const minutes = Math.floor(gameState.time / 60);
+            const seconds = gameState.time % 60;
+            document.getElementById('time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('safety').textContent = `${gameState.safety}%`;
+            document.getElementById('score').textContent = gameState.score;
+            
+            document.getElementById('flood-level').style.width = `${gameState.floodLevel}%`;
+            document.getElementById('flood-level-text').textContent = `Flood Level: ${Math.round(gameState.floodLevel)}%`;
+            
+            document.getElementById('progress-bar').style.width = `${gameState.progress}%`;
+            
+            // Update neighborhood colors based on flood risk
+            updateNeighborhoods();
+        }
+        
+        // Update neighborhood appearances based on flood risk
+        function updateNeighborhoods() {
+            const riskLevel = gameState.floodLevel / 100;
+            const homes = document.querySelector('.neighborhood-1');
+            const businesses = document.querySelector('.neighborhood-2');
+            const cityCenter = document.querySelector('.city-center');
+            
+            if (gameState.floodLevel > 70) {
+                homes.style.background = '#e74c3c';
+                businesses.style.background = '#e74c3c';
+                cityCenter.style.background = '#e74c3c';
+            } else if (gameState.floodLevel > 40) {
+                homes.style.background = '#f39c12';
+                businesses.style.background = '#f39c12';
+                cityCenter.style.background = '#e74c3c';
+            } else {
+                homes.style.background = '#2ecc71';
+                businesses.style.background = '#2ecc71';
+                cityCenter.style.background = '#e74c3c';
+            }
+        }
+        
+        // Update statistics panel
+        function updateStatistics() {
+            document.getElementById('high-score').textContent = gameState.highScore;
+            document.getElementById('games-played').textContent = gameState.gamesPlayed;
+            document.getElementById('neighborhoods-saved').textContent = gameState.neighborhoodsSaved;
+            document.getElementById('prevention-level').textContent = `${gameState.preventionLevel}%`;
+        }
+        
+        // Start the countdown timer
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                if (gameState.gameOver) {
+                    clearInterval(gameState.timer);
+                    return;
+                }
+                
+                gameState.time--;
+                gameState.floodLevel += gameState.scenario.floodRate;
+                
+                if (gameState.time <= 0 || gameState.floodLevel >= 100) {
+                    endGame();
+                    return;
+                }
+                
+                // Random event chance
+                if (Math.random() > 0.95) {
+                    const events = [
+                        {msg: 'Additional rainfall reported! Flood risk increasing.', floodLevel: +10, type: 'danger'},
+                        {msg: 'Federal emergency funds allocated!', resources: +15000, type: 'success'},
+                        {msg: 'Drainage system partially clogged!', floodLevel: +5, type: 'warning'},
+                        {msg: 'Community volunteers assisting with preparations!', safety: +5, type: 'info'},
+                        {msg: 'Unexpected levee weakness detected!', floodLevel: +8, type: 'prevention'}
+                    ];
+                    
+                    const event = events[Math.floor(Math.random() * events.length)];
+                    addLog(event.msg, event.type);
+                    
+                    if (event.resources) gameState.resources += event.resources;
+                    if (event.floodLevel) gameState.floodLevel += event.floodLevel;
+                    if (event.safety) gameState.safety += event.safety;
+                }
+                
+                updateDisplay();
+            }, 1000);
+        }
+        
+        // Add a message to the log
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}-text`;
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Process player decisions
+        function makeDecision(decision) {
+            if (gameState.gameOver) return;
+            
+            let resourceChange = 0;
+            let floodChange = 0;
+            let safetyChange = 0;
+            let progressChange = 0;
+            let scoreChange = 0;
+            let message = '';
+            
+            switch(decision) {
+                case 'reinforce':
+                    if (gameState.resources >= 20000) {
+                        resourceChange = -20000;
+                        floodChange = -15;
+                        safetyChange = 10;
+                        progressChange = 20;
+                        scoreChange = 80;
+                        message = 'Levees reinforced. Flood protection significantly improved.';
+                    } else {
+                        safetyChange = -5;
+                        message = 'Insufficient resources for levee reinforcement. Seek additional funding.';
+                    }
+                    break;
+                    
+                case 'evacuate':
+                    if (gameState.resources >= 10000) {
+                        resourceChange = -10000;
+                        floodChange = -5;
+                        safetyChange = 15;
+                        progressChange = 15;
+                        scoreChange = 70;
+                        message = 'Evacuation plans implemented. Residents moving to safety.';
+                    } else {
+                        safetyChange = -8;
+                        message = 'Limited resources for evacuation efforts. Some areas at risk.';
+                    }
+                    break;
+                    
+                case 'drainage':
+                    if (gameState.resources >= 15000) {
+                        resourceChange = -15000;
+                        floodChange = -10;
+                        safetyChange = 5;
+                        progressChange = 18;
+                        scoreChange = 60;
+                        message = 'Drainage systems improved. Water diversion effective.';
+                    } else {
+                        floodChange = 5;
+                        message = 'Drainage improvements delayed due to budget constraints.';
+                    }
+                    break;
+                    
+                case 'sandbags':
+                    if (gameState.resources >= 8000) {
+                        resourceChange = -8000;
+                        floodChange = -8;
+                        safetyChange = 8;
+                        progressChange = 12;
+                        scoreChange = 50;
+                        message = 'Sandbag barriers deployed. Immediate protection established.';
+                    } else {
+                        floodChange = 3;
+                        message = 'Insufficient sandbags for all vulnerable areas. Prioritization needed.';
+                    }
+                    break;
+            }
+            
+            // Apply changes
+            gameState.resources = Math.max(0, gameState.resources + resourceChange);
+            gameState.floodLevel = Math.min(100, Math.max(0, gameState.floodLevel + floodChange));
+            gameState.safety = Math.min(100, Math.max(0, gameState.safety + safetyChange));
+            gameState.progress = Math.min(100, gameState.progress + progressChange);
+            gameState.score += scoreChange;
+            
+            // Add log message
+            addLog(message, floodChange < 0 ? 'success' : 'warning');
+            
+            // Check for game completion
+            if (gameState.progress >= 100) {
+                addLog('Flood prevention measures completed successfully!', 'success');
+                endGame();
+            }
+            
+            updateDisplay();
+        }
+        
+        // End the game
+        function endGame() {
+            gameState.gameOver = true;
+            clearInterval(gameState.timer);
+            
+            // Calculate final score
+            const safetyBonus = gameState.safety * 2;
+            const resourceBonus = gameState.resources / 100;
+            const floodPenalty = gameState.floodLevel * 10;
+            
+            gameState.score += safetyBonus + resourceBonus - floodPenalty;
+            
+            // Calculate neighborhoods saved
+            const saved = gameState.floodLevel < 70 ? 3 : gameState.floodLevel < 85 ? 2 : 1;
+            gameState.neighborhoodsSaved += saved;
+            
+            // Calculate prevention level
+            gameState.preventionLevel = Math.max(0, 100 - gameState.floodLevel);
+            
+            // Update statistics
+            gameState.gamesPlayed++;
+            
+            if (gameState.score > gameState.highScore) {
+                gameState.highScore = gameState.score;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('highScore', gameState.highScore);
+            localStorage.setItem('gamesPlayed', gameState.gamesPlayed);
+            localStorage.setItem('neighborhoodsSaved', gameState.neighborhoodsSaved);
+            localStorage.setItem('preventionLevel', gameState.preventionLevel);
+            
+            // Display results
+            addLog(`FLOOD ${gameState.floodLevel < 70 ? 'PREVENTED' : 'OCCURRED'}! Final score: ${gameState.score}`, 'info');
+            addLog(`Final flood level: ${Math.round(gameState.floodLevel)}%`, gameState.floodLevel < 70 ? 'success' : 'danger');
+            addLog(`Neighborhoods saved: ${saved}/3`, saved > 2 ? 'success' : 'warning');
+            addLog(`Resources remaining: $${gameState.resources.toLocaleString()}`, 'info');
+            
+            updateStatistics();
+        }
+        
+        // Initialize the game when page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>
