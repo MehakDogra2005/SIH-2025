@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Prevention Basics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #34a853;
+            --accent: #4285f4;
+            --warning: #fbbc05;
+            --danger: #ea4335;
+            --light: #e8f0fe;
+            --dark: #202124;
+            --water-blue: #4285f4;
+            --water-dark: #1a56c5;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #f5f9ff, #e1ebff);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: var(--dark);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .progress-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--water-blue), var(--water-dark));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+        
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        .module-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+        
+        .lessons-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .lesson-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .lesson-item:hover {
+            background: var(--light);
+        }
+        
+        .lesson-item.active {
+            background: var(--light);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .lesson-icon {
+            margin-right: 10px;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .lesson-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .lesson-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .lesson-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--water-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: #d9e6ff;
+        }
+        
+        .points-badge {
+            background: var(--warning);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-left: auto;
+        }
+        
+        .interactive-box {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .interactive-title {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .ar-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .lecture-content {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        
+        .quiz-container {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .quiz-question {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        .quiz-options {
+            list-style: none;
+        }
+        
+        .quiz-options li {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quiz-options li:hover {
+            background: #d9e6ff;
+        }
+        
+        .completed-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .final-score {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score-display {
+            font-size: 3rem;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+        
+        .congratulations {
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .module-content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="btn btn-secondary" id="back-to-modules" style="margin-bottom:20px;">&larr; Back to Modules</button>
+        <header>
+            <h1>Flood Prevention Basics</h1>
+            <p class="subtitle">Learn how to protect yourself, your home, and your community from flooding</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-header">
+                <h2>Your Progress</h2>
+                <span id="total-points">0/200 points</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-stats">
+                <span>0% Complete</span>
+                <span id="completed-lessons">0/5 Lessons & 0/2 Quizzes</span>
+            </div>
+        </div>
+        
+        <div class="module-content">
+            <div class="lessons-sidebar">
+                <div class="lesson-item active">
+                    <i class="fas fa-water lesson-icon"></i>
+                    <span>Lesson 1: Understanding Floods</span>
+                    <span class="points-badge">30 pts</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-home lesson-icon"></i>
+                    <span>Lesson 2: Household Safety</span>
+                    <span class="points-badge">20 pts</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-tasks lesson-icon"></i>
+                    <span>Quiz 1</span>
+                    <span class="points-badge">25 pts</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-first-aid lesson-icon"></i>
+                    <span>Lesson 3: Emergency Preparedness</span>
+                    <span class="points-badge">30 pts</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-users lesson-icon"></i>
+                    <span>Lesson 4: Community Awareness</span>
+                    <span class="points-badge">30 pts</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-clipboard-list lesson-icon"></i>
+                    <span>Lesson 5: Recovery After Floods</span>
+                    <span class="points-badge">20 pts</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-question-circle lesson-icon"></i>
+                    <span>Quiz 2</span>
+                    <span class="points-badge">40 pts</span>
+                </div>
+                <div class="lesson-item">
+                    <i class="fas fa-trophy lesson-icon"></i>
+                    <span>Final Results</span>
+                    <span class="completed-badge">Locked</span>
+                </div>
+            </div>
+            
+            <div class="lesson-content" id="lesson-content">
+                <!-- Dynamic lesson/quiz content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Back button handler
+    document.addEventListener('DOMContentLoaded', function() {
+        const backBtn = document.getElementById('back-to-modules');
+        if (backBtn) {
+            backBtn.onclick = function() {
+                // Save completion status to localStorage
+                // Mark module as completed if all lessons/quizzes are done
+                if ((lessonsCompleted + quizzesCompleted) === 7) {
+                    localStorage.setItem('flood-prevention-completed', 'true');
+                }
+                window.location.href = 'education-modules.html';
+            };
+        }
+    });
+    // Demo modules and quizzes data
+    const modules = [
+        {
+            type: 'lesson',
+            title: 'Lesson 1: Understanding Floods',
+            content: `
+                <div class="interactive-box">
+                    <i class="fas fa-vr-cardboard ar-icon"></i>
+                    <h3 class="interactive-title">Explore Flood-Prone Areas in 3D</h3>
+                    <p>Interact with this 3D map to see areas that are most vulnerable to flooding</p>
+                    <button class="btn btn-primary" id="launch-vr-btn" style="margin-top: 15px;">Launch AR Experience</button>
+                </div>
+                <div class="lecture-content">
+                    <h3>Causes of Floods</h3>
+                    <p>Floods can occur for various reasons, and understanding these causes is the first step in flood prevention.</p>
+                    <ul style="margin: 15px 0 15px 20px;">
+                        <li><strong>Heavy rainfall:</strong> Intense rain over a short period can overwhelm drainage systems.</li>
+                        <li><strong>River overflow:</strong> Rivers can overflow when they receive more water than their capacity.</li>
+                        <li><strong>Storm surges:</strong> Coastal areas can experience flooding during hurricanes and tropical storms.</li>
+                        <li><strong>Melting snow:</strong> Rapid snowmelt can lead to flooding, especially in mountainous regions.</li>
+                        <li><strong>Dam failures:</strong> Structural failures in dams or levees can cause catastrophic flooding.</li>
+                    </ul>
+                    <p>By understanding these causes, communities can better prepare and implement effective flood prevention measures.</p>
+                </div>
+            `,
+            points: 30
+        },
+        {
+            type: 'lesson',
+            title: 'Lesson 2: Household Safety',
+            content: `
+                <div class="lecture-content">
+                    <h3>Household Flood Safety Tips</h3>
+                    <ul style="margin: 15px 0 15px 20px;">
+                        <li>Keep emergency supplies ready (food, water, flashlight, batteries).</li>
+                        <li>Know your evacuation routes and practice them with your family.</li>
+                        <li>Install check valves in plumbing to prevent floodwater backup.</li>
+                        <li>Move valuables to higher ground or upper floors.</li>
+                        <li>Stay tuned to local weather alerts and warnings.</li>
+                    </ul>
+                </div>
+            `,
+            points: 20
+        },
+        {
+            type: 'quiz',
+            title: 'Quiz 1',
+            points: 25,
+            questions: [
+                {
+                    q: 'Which of the following is NOT a common cause of floods?',
+                    options: ['Heavy rainfall', 'River overflow', 'Earthquake', 'Storm surge'],
+                    answer: 2
+                },
+                {
+                    q: 'What should you do to prepare your household for a flood?',
+                    options: ['Ignore weather alerts', 'Keep emergency supplies', 'Leave valuables on the ground floor', 'Block exits'],
+                    answer: 1
+                }
+            ]
+        },
+        {
+            type: 'lesson',
+            title: 'Lesson 3: Emergency Preparedness',
+            content: `
+                <div class="lecture-content">
+                    <h3>Emergency Preparedness</h3>
+                    <ul style="margin: 15px 0 15px 20px;">
+                        <li>Have a family emergency plan and practice it regularly.</li>
+                        <li>Keep important documents in a waterproof container.</li>
+                        <li>Know how to turn off utilities (gas, electricity, water).</li>
+                        <li>Prepare a "go-bag" with essentials for quick evacuation.</li>
+                    </ul>
+                </div>
+            `,
+            points: 30
+        },
+        {
+            type: 'lesson',
+            title: 'Lesson 4: Community Awareness',
+            content: `
+                <div class="lecture-content">
+                    <h3>Community Awareness</h3>
+                    <ul style="margin: 15px 0 15px 20px;">
+                        <li>Participate in community flood drills.</li>
+                        <li>Share flood safety information with neighbors.</li>
+                        <li>Support local flood prevention initiatives.</li>
+                    </ul>
+                </div>
+            `,
+            points: 30
+        },
+        {
+            type: 'lesson',
+            title: 'Lesson 5: Recovery After Floods',
+            content: `
+                <div class="lecture-content">
+                    <h3>Recovery After Floods</h3>
+                    <ul style="margin: 15px 0 15px 20px;">
+                        <li>Wait for official "all clear" before returning home.</li>
+                        <li>Document damage for insurance claims.</li>
+                        <li>Clean and disinfect everything that got wet.</li>
+                        <li>Seek help from local authorities if needed.</li>
+                    </ul>
+                </div>
+            `,
+            points: 20
+        },
+        {
+            type: 'quiz',
+            title: 'Quiz 2',
+            points: 40,
+            questions: [
+                {
+                    q: 'What should you do after a flood before returning home?',
+                    options: ['Return immediately', 'Wait for official all clear', 'Ignore safety warnings', 'None of the above'],
+                    answer: 1
+                },
+                {
+                    q: 'Which is a good community action for flood safety?',
+                    options: ['Keep information to yourself', 'Participate in drills', 'Ignore neighbors', 'Block roads'],
+                    answer: 1
+                }
+            ]
+        },
+        {
+            type: 'final',
+            title: 'Final Results',
+            content: `<div class="final-score">
+                <div class="congratulations"><i class="fas fa-trophy"></i> Congratulations!</div>
+                <div class="score-display" id="final-score-display"></div>
+                <div>You have completed all modules and quizzes.</div>
+            </div>`
+        }
+    ];
+
+    // State
+    let currentIndex = 0;
+    let points = 0;
+    let lessonsCompleted = 0;
+    let quizzesCompleted = 0;
+    let completed = Array(modules.length).fill(false);
+    let quizAttempts = Array(modules.length).fill(0); // Track attempts per quiz
+
+    function updateSidebar() {
+        const sidebar = document.querySelector('.lessons-sidebar');
+        const items = sidebar.querySelectorAll('.lesson-item');
+        items.forEach((item, idx) => {
+            item.classList.toggle('active', idx === currentIndex);
+            // Mark completed
+            if (completed[idx] && !item.querySelector('.completed-badge')) {
+                const badge = document.createElement('span');
+                badge.className = 'completed-badge';
+                badge.textContent = 'Completed';
+                item.appendChild(badge);
+            }
+            if (!completed[idx] && item.querySelector('.completed-badge')) {
+                item.querySelector('.completed-badge').remove();
+            }
+            // Lock final results if not all done
+            if (modules[idx].type === 'final') {
+                let badge = item.querySelector('.completed-badge');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'completed-badge';
+                    item.appendChild(badge);
+                }
+                badge.textContent = (lessonsCompleted + quizzesCompleted === 7) ? 'Unlocked' : 'Locked';
+                badge.style.background = (lessonsCompleted + quizzesCompleted === 7) ? '#34a853' : '#ccc';
+            }
+        });
+    }
+
+    function updateProgress() {
+        const progressFill = document.getElementById('progress-fill');
+        const totalPoints = document.getElementById('total-points');
+        const completedLessons = document.getElementById('completed-lessons');
+        const maxPoints = modules.reduce((sum, m) => sum + (m.points || 0), 0);
+        const maxLessons = modules.filter(m => m.type === 'lesson').length;
+        const maxQuizzes = modules.filter(m => m.type === 'quiz').length;
+        const percentage = (points / maxPoints) * 100;
+        progressFill.style.width = `${percentage}%`;
+        totalPoints.textContent = `${points}/${maxPoints} points`;
+        completedLessons.textContent = `${lessonsCompleted}/${maxLessons} Lessons & ${quizzesCompleted}/${maxQuizzes} Quizzes`;
+    }
+
+    function renderModule(idx) {
+        const mod = modules[idx];
+        const contentDiv = document.getElementById('lesson-content');
+        let html = `<h2 class="lesson-title">${mod.title}</h2>`;
+        if (mod.type === 'lesson') {
+            html += mod.content;
+            html += `<div class="lesson-actions">
+                <button class="btn btn-secondary" id="prev-btn">Previous</button>
+                <button class="btn btn-primary" id="complete-btn">Mark Complete & Next</button>
+            </div>`;
+        } else if (mod.type === 'quiz') {
+            html += `<form class="quiz-container" id="quiz-form">`;
+            mod.questions.forEach((q, i) => {
+                html += `<div class="quiz-question">
+                    <div><strong>Q${i+1}:</strong> ${q.q}</div>
+                    <ul class="quiz-options">`;
+                q.options.forEach((opt, j) => {
+                    html += `<li><label><input type="radio" name="q${i}" value="${j}"> ${opt}</label></li>`;
+                });
+                html += `</ul></div>`;
+            });
+            html += `<button class="btn btn-primary" type="submit">Submit Quiz</button></form>`;
+            html += `<div class="lesson-actions">
+                <button class="btn btn-secondary" id="prev-btn">Previous</button>
+            </div>`;
+        } else if (mod.type === 'final') {
+            html += mod.content;
+        }
+        contentDiv.innerHTML = html;
+
+        // Button handlers
+        // VR Launch button handler (only for lesson 1)
+        if (idx === 0) {
+            setTimeout(() => {
+                const vrBtn = document.getElementById('launch-vr-btn');
+                if (vrBtn) {
+                    vrBtn.onclick = function() {
+                        window.open('vrmodule.html', '_blank');
+                    };
+                }
+            }, 0);
+        }
+        if (document.getElementById('prev-btn')) {
+            document.getElementById('prev-btn').onclick = () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    renderModule(currentIndex);
+                    updateSidebar();
+                }
+            };
+        }
+        if (document.getElementById('complete-btn')) {
+            document.getElementById('complete-btn').onclick = () => {
+                if (!completed[idx]) {
+                    points += mod.points;
+                    lessonsCompleted++;
+                    completed[idx] = true;
+                }
+                if (currentIndex < modules.length - 1) {
+                    currentIndex++;
+                    renderModule(currentIndex);
+                    updateSidebar();
+                }
+                updateProgress();
+            };
+        }
+        if (document.getElementById('quiz-form')) {
+            document.getElementById('quiz-form').onsubmit = function(e) {
+                e.preventDefault();
+                if (completed[idx]) return;
+                let correct = 0;
+                mod.questions.forEach((q, i) => {
+                    const selected = this[`q${i}`].value;
+                    if (parseInt(selected) === q.answer) correct++;
+                });
+                quizAttempts[idx] = (quizAttempts[idx] || 0) + 1;
+                let earned = 0;
+                if (correct === mod.questions.length) {
+                    if (quizAttempts[idx] === 1) {
+                        earned = mod.points;
+                    } else if (quizAttempts[idx] === 2) {
+                        earned = Math.floor(mod.points / 2);
+                    } else {
+                        earned = 0;
+                    }
+                    points += earned;
+                    quizzesCompleted++;
+                    completed[idx] = true;
+                    alert(`Quiz completed! You earned ${earned} points.`);
+                    if (currentIndex < modules.length - 1) {
+                        currentIndex++;
+                        renderModule(currentIndex);
+                        updateSidebar();
+                    }
+                } else {
+                    if (quizAttempts[idx] === 1) {
+                        alert(`You got ${correct} out of ${mod.questions.length} correct. Try again! (Full points if correct next time: ${mod.points})`);
+                    } else if (quizAttempts[idx] === 2) {
+                        alert(`You got ${correct} out of ${mod.questions.length} correct. Try again! (Half points if correct next time: ${Math.floor(mod.points/2)})`);
+                    } else {
+                        alert(`You got ${correct} out of ${mod.questions.length} correct. No more points for this quiz, but you can finish for practice.`);
+                    }
+                }
+                updateProgress();
+            };
+        }
+        // Show final score
+        if (mod.type === 'final') {
+            document.getElementById('final-score-display').textContent = `${points} points`;
+            // Save completion status when final is reached
+            if ((lessonsCompleted + quizzesCompleted) === 7) {
+                localStorage.setItem('flood-prevention-completed', 'true');
+            }
+        }
+    }
+
+    // Add VR points from localStorage if present
+    function addVRPointsIfAny() {
+        const vrPoints = parseInt(localStorage.getItem('vrmodule-points') || '0', 10);
+        if (vrPoints > 0) {
+            points += vrPoints;
+            localStorage.removeItem('vrmodule-points');
+            updateProgress();
+            alert(`You earned ${vrPoints} points from the VR experience!`);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sidebar navigation
+        const sidebar = document.querySelector('.lessons-sidebar');
+        const items = sidebar.querySelectorAll('.lesson-item');
+        items.forEach((item, idx) => {
+            item.onclick = function() {
+                // Only allow final results if all modules complete
+                if (modules[idx].type === 'final' && (lessonsCompleted + quizzesCompleted < 7)) return;
+                currentIndex = idx;
+                renderModule(idx);
+                updateSidebar();
+            };
+        });
+    renderModule(currentIndex);
+    updateSidebar();
+    updateProgress();
+    addVRPointsIfAny();
+    });
+    </script>
+</body>
+</html>

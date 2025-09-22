@@ -505,7 +505,7 @@
 
         <div class="modules-grid" id="modulesGrid">
             <!-- Mitigation Modules -->
-            <div class="module-card" data-age="1-5,5-8" data-topic="mitigation">
+            <div class="module-card" id="flood-prevention-card" data-age="1-5,5-8" data-topic="mitigation">
                 <div class="ar-vr-indicator">AR Ready</div>
                 <div class="module-icon">
                     <i class="fas fa-shield-alt"></i>
@@ -519,11 +519,12 @@
                     <span class="feature-tag">Beginner</span>
                 </div>
                 <div class="module-actions">
-                    <button class="btn-primary" onclick="openModule('flood-prevention')">Start Learning</button>
+                    <button class="btn-primary" onclick="window.location.href='educationmodule1.html'">Start Learning</button>
                     <button class="btn-secondary" onclick="previewAR('flood-ar')">
                         <i class="fas fa-eye"></i>
                     </button>
                 </div>
+                <span id="flood-prevention-status" style="position:absolute;top:15px;left:15px;display:none;background:#34a853;color:white;padding:5px 12px;border-radius:12px;font-size:0.9rem;z-index:2;">Completed</span>
             </div>
 
             <div class="module-card" data-age="8-12,12+" data-topic="mitigation">
@@ -791,9 +792,14 @@
             document.getElementById('arModal').style.display = 'block';
         }
 
-        // Module opening functionality
+
+        // Module opening functionality (other modules)
         function openModule(moduleId) {
-            alert(`Opening ${moduleId} module. This would launch the full interactive AR/VR experience.`);
+            if (moduleId === 'flood-prevention') {
+                window.location.href = 'educationmodule1.html';
+            } else {
+                alert(`Opening ${moduleId} module. This would launch the full interactive AR/VR experience.`);
+            }
         }
 
         // Language change functionality
@@ -833,6 +839,11 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             filterModules();
+            // Show completed badge for Flood Prevention Basics if done
+            if (localStorage.getItem('flood-prevention-completed') === 'true') {
+                const badge = document.getElementById('flood-prevention-status');
+                if (badge) badge.style.display = 'inline-block';
+            }
         });
     </script>
 </body>
