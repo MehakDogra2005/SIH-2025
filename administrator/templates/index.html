@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Parent Safety Updates</title>
+	<title>NDMA Disaster Report</title>
 	<link rel="stylesheet" href="../styles.css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,8 +13,8 @@
 		<header class="header">
 			<div class="header-content">
 				<h1 class="logo">
-					<i class="fas fa-user-shield"></i>
-					Parent Safety Updates
+					<i class="fas fa-building-shield"></i>
+					NDMA Disaster Report
 				</h1>
 			</div>
 		</header>
@@ -23,47 +23,103 @@
 			<section class="parent-section">
 				<div class="card">
 					<div class="card-header">
-						<h2><i class="fas fa-user-shield"></i> Send Safety Notification</h2>
+						<h2><i class="fas fa-file-shield"></i> Submit College Update</h2>
 					</div>
-					<form class="drill-form" id="parentForm">
-						<div class="form-group">
-							<label for="studentName">Student Name</label>
-							<input type="text" id="studentName" name="studentName" placeholder="Enter student's full name" required>
-						</div>
-
-						<div class="form-group">
-							<label for="studentStatus">Status</label>
-							<select id="studentStatus" name="studentStatus" required>
-								<option value="">Select status</option>
-								<option value="Safe and accounted for">Safe and accounted for</option>
-								<option value="Evacuated to designated shelter">Evacuated to designated shelter</option>
-								<option value="Injured but stable">Injured but stable</option>
-								<option value="Receiving medical attention">Receiving medical attention</option>
-								<option value="Temporarily unaccounted for">Temporarily unaccounted for</option>
-								<option value="Other">Other</option>
-							</select>
+					<form class="drill-form" id="ndmaForm">
+						<div class="form-row">
+							<div class="form-group">
+								<label for="collegeName">College Name</label>
+								<input type="text" id="collegeName" name="collegeName" placeholder="Enter college name" required>
+							</div>
+							<div class="form-group">
+								<label for="collegeCode">College Code/ID</label>
+								<input type="text" id="collegeCode" name="collegeCode" placeholder="Optional identifier">
+							</div>
 						</div>
 
 						<div class="form-row">
 							<div class="form-group">
-								<label for="currentLocation">Location (optional)</label>
-								<input type="text" id="currentLocation" name="currentLocation" placeholder="e.g., Gymnasium Shelter, Room 12">
+								<label for="contactPerson">Reporting Officer</label>
+								<input type="text" id="contactPerson" name="contactPerson" placeholder="Full name" required>
 							</div>
 							<div class="form-group">
-								<label for="parentContacts">Parent Contacts</label>
-								<input type="text" id="parentContacts" name="parentContacts" placeholder="Enter parent emails (comma separated)" required>
-								<small>Example: parent1@email.com, parent2@email.com</small>
+								<label for="contactEmail">Officer Email</label>
+								<input type="email" id="contactEmail" name="contactEmail" placeholder="name@example.com" required>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group">
+								<label for="disasterType">Disaster Type</label>
+								<select id="disasterType" name="disasterType" required>
+									<option value="">Select type</option>
+									<option value="Earthquake">Earthquake</option>
+									<option value="Flood">Flood</option>
+									<option value="Fire">Fire</option>
+									<option value="Cyclone">Cyclone</option>
+									<option value="Landslide">Landslide</option>
+									<option value="Other">Other</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="severity">Severity</label>
+								<select id="severity" name="severity" required>
+									<option value="Low">Low</option>
+									<option value="Moderate">Moderate</option>
+									<option value="High">High</option>
+									<option value="Critical">Critical</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group">
+								<label for="affectedCount">Affected Students</label>
+								<input type="number" id="affectedCount" name="affectedCount" min="0" placeholder="0" required>
+							</div>
+							<div class="form-group">
+								<label for="safeCount">Safe and Accounted</label>
+								<input type="number" id="safeCount" name="safeCount" min="0" placeholder="0" required>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="additionalMessage">Additional Message (optional)</label>
-							<textarea id="additionalMessage" name="additionalMessage" placeholder="Add any relevant details or next steps" rows="3"></textarea>
+							<label for="resourcesNeeded">Immediate Needs</label>
+							<input type="text" id="resourcesNeeded" name="resourcesNeeded" placeholder="e.g., Medical kits, water, transport">
+						</div>
+
+						<div class="form-group">
+							<label for="situationSummary">Situation Summary</label>
+							<textarea id="situationSummary" name="situationSummary" rows="4" placeholder="Brief summary of current situation and actions taken" required></textarea>
+						</div>
+
+						<div class="card-header" style="margin-top:12px">
+							<h2><i class="fas fa-id-card"></i> Reporting Student Details</h2>
+						</div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="studentName">Student Name</label>
+								<input type="text" id="studentName" name="studentName" placeholder="Full name" required>
+							</div>
+							<div class="form-group">
+								<label for="studentId">Student ID</label>
+								<input type="text" id="studentId" name="studentId" placeholder="College roll/ID">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="studentPhone">Student Phone</label>
+								<input type="tel" id="studentPhone" name="studentPhone" placeholder="Optional">
+							</div>
+							<div class="form-group">
+								<label for="studentEmail">Student Email</label>
+								<input type="email" id="studentEmail" name="studentEmail" placeholder="Optional">
+							</div>
 						</div>
 
 						<button type="submit" class="btn btn-primary">
 							<i class="fas fa-paper-plane"></i>
-							Send Safety Update
+							Send Report to NDMA
 						</button>
 					</form>
 				</div>
@@ -72,12 +128,12 @@
 			<section class="notifications-section">
 				<div class="card">
 					<div class="card-header">
-						<h2><i class="fas fa-bell"></i> Recent Notifications</h2>
+						<h2><i class="fas fa-inbox"></i> Submitted Reports</h2>
 					</div>
-					<div class="notifications-list" id="notificationsList">
+					<div class="notifications-list" id="reportsList">
 						<div class="no-notifications">
 							<i class="fas fa-bell-slash"></i>
-							<p>No notifications yet</p>
+							<p>No reports submitted yet</p>
 						</div>
 					</div>
 				</div>
