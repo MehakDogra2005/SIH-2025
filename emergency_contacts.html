@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JeevanSetu - Emergency Contacts</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+:root {
+    --primary:#1a73e8;
+    --secondary:#0b4fa3;
+    --accent:#ff6b35;
+    --light:#f5f7f9;
+    --dark:#2c3e50;
+    --gray:#6c757d;
+    --light-gray:#e9ecef;
+    --card-shadow:0 4px 12px rgba(0,0,0,0.08);
+    --transition: all 0.3s ease;
+}
+body { display:flex; min-height:100vh; background:#f0f2f5; }
+
+/* Sidebar */
+.sidebar { width:260px; background:linear-gradient(to bottom, var(--primary), var(--secondary)); color:white; padding:20px 0; height:100vh; position:fixed; overflow-y:auto; transition:var(--transition);}
+.logo { padding:0 20px 20px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:20px;}
+.logo h1 { font-size:24px; display:flex; align-items:center; gap:10px;}
+.logo span { color: var(--accent);}
+.nav-menu { list-style:none; padding:0;}
+.nav-item { margin-bottom:5px;}
+.nav-link { display:flex; align-items:center; padding:12px 20px; color:rgba(255,255,255,0.8); text-decoration:none; transition:var(--transition); font-size:16px;}
+.nav-link:hover, .nav-link.active { background-color: rgba(255,255,255,0.1); color:white; border-left:4px solid var(--accent);}
+.nav-link i { margin-right:12px; font-size:18px; width:24px; text-align:center;}
+
+/* Main Content */
+.main-content { flex:1; margin-left:260px; padding:20px; transition:var(--transition);}
+.header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; background-color:white; padding:20px 25px; border-radius:12px; box-shadow:var(--card-shadow);}
+.welcome h2 { color: var(--dark); margin-bottom:5px; font-size:1.5rem; }
+.welcome p { color: var(--gray); font-size:0.95rem;}
+.user-info { display:flex; align-items:center; gap:15px; }
+.user-img { width:45px; height:45px; border-radius:50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:18px; box-shadow:0 4px 8px rgba(0,0,0,0.1); }
+.user-img:hover { transform: scale(1.05); }
+
+.page-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;}
+.page-title h2 { color: var(--dark); font-size:1.8rem; font-weight:700; }
+.page-title p { color: var(--gray); margin-top:5px; font-size:0.95rem; }
+
+.contacts-panel { background:white; border-radius:12px; padding:25px; box-shadow:var(--card-shadow);}
+.contact-list { list-style:none; padding:0;}
+.contact-item { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; border-radius:8px; background:var(--light); margin-bottom:12px; transition:var(--transition); cursor:pointer; }
+.contact-item:hover { background: rgba(26,115,232,0.1);}
+.contact-info { display:flex; align-items:center; gap:15px;}
+.contact-icon { font-size:24px; color:var(--primary); width:30px; text-align:center; }
+.contact-details { display:flex; flex-direction:column;}
+.contact-name { font-weight:600; color:var(--dark);}
+.contact-number { color:var(--gray); font-size:0.9rem; text-decoration:none;}
+
+/* Search */
+.search-bar { margin-bottom:20px; }
+.search-bar input { width:100%; padding:12px 16px; border-radius:8px; border:1px solid var(--light-gray); font-size:16px; transition:var(--transition);}
+.search-bar input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,115,232,0.2); }
+
+/* Location selector */
+.location-select { margin-bottom:20px; }
+.location-select select { width:100%; padding:12px 16px; border-radius:8px; border:1px solid var(--light-gray); font-size:16px; transition:var(--transition);}
+.location-select select:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,115,232,0.2); }
+
+.footer { text-align:center; padding:20px; color: var(--gray); font-size:0.9rem; margin-top:auto;}
+
+@media (max-width:992px){.sidebar{width:70px;}.sidebar .logo h1 span,.sidebar .nav-link span{display:none;}.main-content{margin-left:70px;}}
+@media (max-width:768px){.header{flex-direction:column;text-align:center;gap:15px;}.user-info{justify-content:center;}.page-title{flex-direction:column;text-align:center;gap:15px;}}
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-book"></i><span>Education Modules</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link active"><i class="fas fa-vr-cardboard"></i><span>Emergency Contacts</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link "><i class="fas fa-calendar-alt"></i><span>Drill Schedule</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-book"></i><span>Do's & Dont's</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-exclamation-triangle"></i><span>Evacuation Plan</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-brain"></i><span>Psychological Help</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+        </ul>
+    </aside>
+
+<main class="main-content">
+    <div class="header">
+        <div class="welcome">
+            <h2>Welcome back, Priya!</h2>
+            <p>Access emergency contacts instantly</p>
+        </div>
+        <div class="user-info"><div class="user-img">P</div></div>
+    </div>
+
+    <div class="page-title">
+        <div>
+            <h2>Emergency Contacts</h2>
+            <p>Select your location to see nearest faculty or warden, and view general emergency contacts</p>
+        </div>
+    </div>
+
+    <div class="contacts-panel">
+        <div class="location-select">
+            <select id="locationSelect">
+                <option value="">Select Your Location</option>
+                <option value="admin">Admin Block</option>
+                <option value="cse">CSE Block</option>
+                <option value="it">IT Block</option>
+                <option value="ece">ECE Block</option>
+                <option value="mech">Mechanical Block</option>
+                <option value="civil">Civil Block</option>
+                <option value="hostel_girls">Girls Hostel</option>
+            </select>
+        </div>
+
+        <ul class="contact-list" id="facultyContactList"></ul>
+
+        <div class="search-bar">
+            <input type="text" id="contactSearch" placeholder="Search general contacts...">
+        </div>
+        <ul class="contact-list" id="contactList">
+            <li class="contact-item">
+                <div class="contact-info">
+                    <i class="contact-icon fas fa-shield-alt"></i>
+                    <div class="contact-details">
+                        <span class="contact-name">Police</span>
+                        <a href="tel:100" class="contact-number">100</a>
+                    </div>
+                </div>
+            </li>
+            <li class="contact-item">
+                <div class="contact-info">
+                    <i class="contact-icon fas fa-fire-extinguisher"></i>
+                    <div class="contact-details">
+                        <span class="contact-name">Fire Department</span>
+                        <a href="tel:101" class="contact-number">101</a>
+                    </div>
+                </div>
+            </li>
+            <li class="contact-item">
+                <div class="contact-info">
+                    <i class="contact-icon fas fa-ambulance"></i>
+                    <div class="contact-details">
+                        <span class="contact-name">Ambulance</span>
+                        <a href="tel:102" class="contact-number">102</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="footer">&copy; 2025 JeevanSetu. All Rights Reserved.</div>
+</main>
+
+<script>
+// IGDTUW faculty/warden contacts
+const facultyContacts = {
+    admin: [{name:"Admin In-charge", number:"011-12345678"}],
+    cse: [
+        {name:"CSE Faculty 1", number:"011-23456789"},
+        {name:"CSE Faculty 2", number:"011-23456780"}
+    ],
+    it: [
+        {name:"IT Faculty 1", number:"011-34567890"},
+        {name:"IT Faculty 2", number:"011-34567891"}
+    ],
+    ece: [{name:"ECE Faculty In-charge", number:"011-45678901"}],
+    mech: [{name:"Mechanical Faculty", number:"011-56789012"}],
+    civil: [{name:"Civil Faculty", number:"011-67890123"}],
+    hostel_girls: [
+        {name:"Girls Hostel Warden 1", number:"011-78901234"},
+        {name:"Girls Hostel Warden 2", number:"011-78901235"}
+    ]
+};
+
+const locationSelect = document.getElementById('locationSelect');
+const facultyContactList = document.getElementById('facultyContactList');
+
+locationSelect.addEventListener('change', function(){
+    const value = this.value;
+    facultyContactList.innerHTML = '';
+    if(value && facultyContacts[value]){
+        facultyContacts[value].forEach(contact => {
+            const li = document.createElement('li');
+            li.className = 'contact-item';
+            li.innerHTML = `
+                <div class="contact-info">
+                    <i class="contact-icon fas fa-user-tie"></i>
+                    <div class="contact-details">
+                        <span class="contact-name">${contact.name}</span>
+                        <a href="tel:${contact.number}" class="contact-number">${contact.number}</a>
+                    </div>
+                </div>
+            `;
+            facultyContactList.appendChild(li);
+        });
+    }
+});
+
+// General contact search
+const contactSearch = document.getElementById('contactSearch');
+contactSearch.addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    document.querySelectorAll('#contactList .contact-item').forEach(item => {
+        const name = item.querySelector('.contact-name').textContent.toLowerCase();
+        const number = item.querySelector('.contact-number').textContent.toLowerCase();
+        item.style.display = (name.includes(filter) || number.includes(filter)) ? 'flex' : 'none';
+    });
+});
+</script>
+</body>
+</html>
