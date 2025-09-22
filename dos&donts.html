@@ -1,380 +1,569 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevansetu - Disaster Guidelines</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <style>
-        * {
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         :root {
             --primary: #1a73e8;
-            --secondary: #0b4fa3;
-            --accent: #ff6b35;
-            --light: #f5f7f9;
-            --dark: #2c3e50;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
-            --info: #17a2b8;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
+            /* original blue navbar */
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            /* user palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
         }
-        
-        body {
-            background-color: #f0f2f5; 
-            color: #333; 
-            display: flex; 
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        
-        .sidebar {
-            width: 260px; 
-            background: linear-gradient(to bottom, var(--primary), var(--secondary)); 
-            color: white; 
-            padding: 20px 0; 
-            height: 100vh; 
-            position: fixed; 
-            overflow-y: auto;
-            transition: var(--transition);
-            z-index: 1000;
-        }
-        
-        .logo {
-            padding: 0 20px 20px; 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-            margin-bottom: 20px;
-        }
-        
-        .logo h1 {
-            font-size: 24px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px;
-        }
-        
-        .logo span {
-            color: var(--accent);
-        }
-        
-        .nav-menu {
-            list-style: none; 
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
             padding: 0;
         }
-        
-        .nav-item {
-            margin-bottom: 5px;
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
         }
-        
-        .nav-link {
-            display: flex; 
-            align-items: center; 
-            padding: 12px 20px; 
-            color: rgba(255, 255, 255, 0.8); 
-            text-decoration: none; 
-            transition: var(--transition); 
-            font-size: 16px;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1); 
-            color: white; 
-            border-left: 4px solid var(--accent);
-        }
-        
-        .nav-link i {
-            margin-right: 12px; 
-            font-size: 18px;
-            width: 24px;
+
+        .page-header {
             text-align: center;
-        }
-        
-        .main-content {
-            flex: 1; 
-            margin-left: 260px; 
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
             padding: 20px;
-            transition: var(--transition);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
         }
-        
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
+            position: fixed;
+            width: 240px;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .logo i {
+            font-size: 22px;
+            color: var(--p6)
+        }
+
+        .logo h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px
+        }
+
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .menu-item {
+            /* font-weight: bold; */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95)
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06)
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08)
+        }
+
+        .new-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #fff;
+            margin-left: auto
+        }
+
+        /* Main content */
+        .main-content {
+            grid-column: 2;
+            padding: 20px;
+            min-height: 100vh
+        }
+
+        /* padding-left accounts for fixed sidebar */
         .header {
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 30px; 
-            background-color: white; 
-            padding: 20px 25px; 
-            border-radius: 12px; 
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            border-radius: 12px;
+            /* background: linear-gradient(90deg, var(--primary), var(--primary-dark)); */
+            background: transparent;
+            color: white;
+            box-shadow: var(--shadow);
+            gap: 12px;
+            flex-wrap: wrap
         }
-        
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 8px 12px;
+            border-radius: 999px;
+            width: 42%;
+            min-width: 220px;
+            gap: 10px
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%
+        }
+
+        .search-bar .search-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .user-profile img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.15)
+        }
+
+        .user-profile h4 {
+            font-size: 16px;
+            margin-bottom: 2px
+        }
+
+        .user-profile p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85)
+        }
+
+        /* language selector aligned right and won't overlap due to header spacing */
+        .header-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* Sidebar User Profile */
+        .sidebar-user-profile {
+            margin-top: auto;
+            padding: 12px;
+            margin: 0 -12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .sidebar-user-profile:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+        }
+
         .welcome h2 {
-            color: var(--dark); 
+            color: var(--dark);
             margin-bottom: 5px;
             font-size: 1.5rem;
         }
-        
+
         .welcome p {
             color: var(--gray);
             font-size: 0.95rem;
         }
-        
+
+        /* 
         .user-info {
-            display: flex; 
-            align-items: center; 
+            display: flex;
+            align-items: center;
             gap: 15px;
-        }
-        
+        } */
+
         .user-img {
-            width: 45px; 
-            height: 45px; 
-            border-radius: 50%; 
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: white; 
-            font-weight: bold; 
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
             font-size: 18px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: var(--transition);
         }
-        
+
         .user-img:hover {
             transform: scale(1.05);
         }
-        
+
         .page-title {
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 25px;
         }
-        
+
         .page-title h2 {
-            color: var(--dark); 
+            color: var(--dark);
             font-size: 1.8rem;
             font-weight: 700;
         }
-        
+
         .page-title p {
             color: var(--gray);
             margin-top: 5px;
             font-size: 0.95rem;
         }
-        
+
         .selection-panel {
-            background: white; 
-            border-radius: 12px; 
-            padding: 25px; 
-            box-shadow: var(--card-shadow); 
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
             margin-bottom: 30px;
             transition: var(--transition);
         }
-        
+
         .section-header {
             margin-bottom: 25px;
         }
-        
+
         .section-title {
-            font-size: 1.4rem; 
-            color: var(--dark); 
+            font-size: 1.4rem;
+            color: var(--dark);
             margin-bottom: 10px;
             font-weight: 600;
         }
-        
+
         .section-subtitle {
-            color: var(--gray); 
+            color: var(--gray);
             font-size: 0.95rem;
         }
-        
+
         .form-row {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 20px; 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             margin-bottom: 20px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
             position: relative;
         }
-        
+
         .form-label {
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 500; 
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
             color: var(--dark);
             font-size: 0.95rem;
         }
-        
+
         .form-control {
-            width: 100%; 
-            padding: 14px 16px; 
-            border: 1px solid var(--light-gray); 
-            border-radius: 8px; 
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
             font-size: 16px;
             transition: var(--transition);
             background-color: var(--light);
         }
-        
+
         .form-control:focus {
-            outline: none; 
+            outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
         }
-        
+
         .btn {
-            padding: 14px 24px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 16px; 
-            font-weight: 500; 
-            cursor: pointer; 
-            display: inline-flex; 
-            align-items: center; 
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
             gap: 8px;
             transition: var(--transition);
         }
-        
+
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(26, 115, 232, 0.4);
         }
-        
+
         .guidelines-section {
-            background: white; 
-            border-radius: 12px; 
-            padding: 30px; 
-            box-shadow: var(--card-shadow); 
-            margin-bottom: 30px; 
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
             display: none;
             animation: fadeIn 0.5s ease;
             transition: var(--transition);
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .guidelines-section.active {
             display: block;
         }
-        
+
         .guidelines-header {
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            margin-bottom: 25px; 
-            padding-bottom: 20px; 
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--light-gray);
         }
-        
+
         .disaster-icon {
-            width: 60px; 
-            height: 60px; 
-            border-radius: 50%; 
-            background: linear-gradient(135deg, rgba(26, 115, 232, 0.1), rgba(11, 79, 163, 0.1)); 
-            color: var(--primary); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.1), rgba(11, 79, 163, 0.1));
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 24px;
             flex-shrink: 0;
         }
-        
+
         .guidelines-content {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
-        
-        .dos-container, .donts-container {
-            padding: 25px; 
+
+        .dos-container,
+        .donts-container {
+            padding: 25px;
             border-radius: 12px;
             transition: var(--transition);
         }
-        
-        .dos-container:hover, .donts-container:hover {
+
+        .dos-container:hover,
+        .donts-container:hover {
             transform: translateY(-5px);
         }
-        
+
         .dos-container {
-            background: linear-gradient(to bottom right, rgba(40, 167, 69, 0.05), rgba(40, 167, 69, 0.1)); 
+            background: linear-gradient(to bottom right, rgba(40, 167, 69, 0.05), rgba(40, 167, 69, 0.1));
             border-left: 4px solid var(--success);
         }
-        
+
         .donts-container {
-            background: linear-gradient(to bottom right, rgba(220, 53, 69, 0.05), rgba(220, 53, 69, 0.1)); 
+            background: linear-gradient(to bottom right, rgba(220, 53, 69, 0.05), rgba(220, 53, 69, 0.1));
             border-left: 4px solid var(--danger);
         }
-        
+
         .guidelines-title {
-            font-size: 1.3rem; 
-            font-weight: 600; 
-            margin-bottom: 20px; 
-            display: flex; 
-            align-items: center; 
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
             gap: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
-        
+
         .guidelines-title i {
             font-size: 24px;
         }
-        
+
         .dos-container .guidelines-title {
             color: var(--success);
         }
-        
+
         .donts-container .guidelines-title {
             color: var(--danger);
         }
-        
+
         .guidelines-list {
             list-style-type: none;
         }
-        
+
         .guidelines-list li {
-            margin-bottom: 14px; 
-            padding-left: 30px; 
+            margin-bottom: 14px;
+            padding-left: 30px;
             position: relative;
             font-size: 0.95rem;
         }
-        
+
         .guidelines-list li:before {
-            content: "•"; 
-            position: absolute; 
-            left: 0; 
+            content: "•";
+            position: absolute;
+            left: 0;
             font-size: 24px;
             top: -3px;
         }
-        
+
         .dos-container .guidelines-list li:before {
             color: var(--success);
         }
-        
+
         .donts-container .guidelines-list li:before {
             color: var(--danger);
         }
-        
+
         .disaster-info {
             margin-top: 25px;
             padding: 20px;
@@ -382,7 +571,7 @@
             border-radius: 10px;
             border-left: 4px solid var(--warning);
         }
-        
+
         .disaster-info h4 {
             display: flex;
             align-items: center;
@@ -390,17 +579,17 @@
             color: var(--dark);
             margin-bottom: 15px;
         }
-        
+
         .disaster-info h4 i {
             color: var(--warning);
         }
-        
+
         .disaster-info p {
             color: var(--gray);
             font-size: 0.95rem;
             line-height: 1.6;
         }
-        
+
         .language-info {
             display: flex;
             align-items: center;
@@ -411,75 +600,88 @@
             border-radius: 8px;
             border-left: 4px solid var(--info);
         }
-        
+
         .language-info i {
             color: var(--info);
             font-size: 18px;
         }
-        
+
         .language-info span {
             font-size: 0.9rem;
             color: var(--gray);
         }
-        
+
         @media (max-width: 992px) {
             .sidebar {
                 width: 70px;
             }
-            .sidebar .logo h1 span, .sidebar .nav-link span {
+
+            .sidebar .logo h1 span,
+            .sidebar .nav-link span {
                 display: none;
             }
+
             .sidebar .logo h1 {
                 justify-content: center;
             }
+
             .main-content {
                 margin-left: 70px;
             }
         }
-        
+
         @media (max-width: 768px) {
             .guidelines-content {
                 grid-template-columns: 1fr;
             }
+
             .header {
-                flex-direction: column; 
-                text-align: center; 
+                flex-direction: column;
+                text-align: center;
                 gap: 15px;
             }
+
             .user-info {
                 justify-content: center;
             }
+
             .form-row {
                 grid-template-columns: 1fr;
             }
+
             .page-title {
                 flex-direction: column;
                 text-align: center;
                 gap: 15px;
             }
+
             .guidelines-header {
                 flex-direction: column;
                 text-align: center;
             }
         }
-        
+
         @media (max-width: 576px) {
             .main-content {
                 padding: 15px;
             }
+
             .header {
                 padding: 15px;
             }
-            .selection-panel, .guidelines-section {
+
+            .selection-panel,
+            .guidelines-section {
                 padding: 20px;
             }
+
             .disaster-icon {
                 width: 50px;
                 height: 50px;
                 font-size: 20px;
             }
         }
-        
+
         .footer {
             text-align: center;
             padding: 20px;
@@ -487,622 +689,866 @@
             font-size: 0.9rem;
             margin-top: auto;
         }
-        
+
         /* Loading animation */
         .loading {
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+            border: 3px solid rgba(255, 255, 255, .3);
             border-radius: 50%;
             border-top-color: #fff;
             animation: spin 1s ease-in-out infinite;
         }
-        
+
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">
-            <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-book"></i><span>Education Modules</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-vr-cardboard"></i><span>Emergency Contacts</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link "><i class="fas fa-calendar-alt"></i><span>Drill Schedule</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link active"><i class="fas fa-book"></i><span>Do's & Dont's</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-exclamation-triangle"></i><span>Evacuation Plan</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-brain"></i><span>Psychological Help</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i><span>Settings</span></a></li>
-        </ul>
-    </aside>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>ResQ</h1>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item active"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
+                <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item"><i class="fa-solid fa-book-open"></i><span>Do's & Dont's</span></div>
+                <div class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
+                <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
 
-    <main class="main-content">
-        <div class="header">
-            <div class="welcome">
-                <h2>Welcome back, Priya!</h2>
-                <p>Learn disaster safety measures based on NDMA guidelines.</p>
-            </div>
-            <div class="user-info">
-                <div class="user-img">P</div>
-            </div>
-        </div>
-
-        <div class="page-title">
-            <div>
-                <h2>Disaster Do's & Don'ts</h2>
-                <p>Select a disaster and language to view safety guidelines</p>
-            </div>
-            <button class="btn btn-primary"><i class="fas fa-download"></i> Download Guidelines</button>
-        </div>
-
-        <div class="selection-panel">
-            <div class="section-header">
-                <h3 class="section-title">Select Disaster & Language</h3>
-                <p class="section-subtitle">Choose from the options below to view specific safety guidelines</p>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="disasterType"><i class="fas fa-exclamation-triangle"></i> Disaster Type</label>
-                    <select class="form-control" id="disasterType">
-                        <option value="">Select a disaster type</option>
-                        <option value="earthquake">Earthquake</option>
-                        <option value="flood">Flood</option>
-                        <option value="fire">Fire</option>
-                        <option value="cyclone">Cyclone</option>
-                        <option value="tsunami">Tsunami</option>
-                        <option value="landslide">Landslide</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="language"><i class="fas fa-language"></i> Language</label>
-                    <select class="form-control" id="language">
-                        <option value="english">English</option>
-                        <option value="hindi">Hindi</option>
-                        <option value="tamil">Tamil</option>
-                        <option value="telugu">Telugu</option>
-                        <option value="bengali">Bengali</option>
-                        <option value="marathi">Marathi</option>
-                    </select>
+            <!-- User Profile at Bottom -->
+            <div class="sidebar-user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h4 id="sidebarUserName">User</h4>
+                    <p>Student</p>
                 </div>
             </div>
-            <button class="btn btn-primary" id="showGuidelines">
-                <i class="fas fa-eye"></i> View Guidelines
-            </button>
-            
-            <div class="language-info">
-                <i class="fas fa-info-circle"></i>
-                <span>Guidelines are available in multiple Indian languages</span>
-            </div>
-        </div>
+        </aside>
 
-        <div id="guidelinesDisplay"></div>
-        
-        <div class="footer">
-            <p>Jeevansetu © 2023 | Disaster Preparedness Platform</p>
-        </div>
-    </main>
+        <main class="main-content">
+            <div class="page-header">
+                <h1 data-translate="title">Disaster Do's & Dont's</h1>
+                <p data-translate="subtitle">Select a disaster and language to choose the safety guidelines.</p>
+            </div>
+
+            <!-- <div class="page-title">
+                    <div>
+                        <h2>Disaster Do's & Don'ts</h2>
+                        <p>Select a disaster and language to view safety guidelines</p>
+                    </div>
+                    <button class="btn btn-primary"><i class="fas fa-download"></i> Download Guidelines</button>
+                </div> -->
+
+            <div class="selection-panel">
+                <!-- <div class="section-header">
+                    <h3 class="section-title">Select Disaster & Language</h3>
+                    <p class="section-subtitle">Choose from the options below to view specific safety guidelines</p>
+                </div> -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="disasterType"><i class="fas fa-exclamation-triangle"></i>
+                            Disaster
+                            Type</label>
+                        <select class="form-control" id="disasterType">
+                            <option value="">Select a disaster type</option>
+                            <option value="earthquake">Earthquake</option>
+                            <option value="flood">Flood</option>
+                            <option value="fire">Fire</option>
+                            <option value="cyclone">Cyclone</option>
+                            <option value="tsunami">Tsunami</option>
+                            <option value="landslide">Landslide</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="language"><i class="fas fa-language"></i> Language</label>
+                        <select class="form-control" id="language">
+                            <option value="english">English</option>
+                            <option value="hindi">Hindi</option>
+                            <option value="tamil">Tamil</option>
+                            <option value="telugu">Telugu</option>
+                            <option value="bengali">Bengali</option>
+                            <option value="marathi">Marathi</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="showGuidelines">
+                    <i class="fas fa-eye"></i> View Guidelines
+                </button>
+
+                <div class="language-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Guidelines are available in multiple Indian languages</span>
+                </div>
+            </div>
+
+            <div id="guidelinesDisplay"></div>
+
+            <!-- <div class="footer">
+                <p>Jeevansetu © 2023 | Disaster Preparedness Platform</p>
+            </div>
+        </main> -->
+    </div>
 
     <script>
+        /**********************
+              * Menu Navigation
+              *********************/
+
+        function initializeMenuNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            // Define page mappings for each menu item
+            const pageMapping = {
+                'Dashboard': '/student/dashboard-student.html',
+                'Education Modules': '/student/education-modules.html',
+                'Sandbox Simulator': '/student/sandbox-simulator.html',
+                'Emergency Contacts': '../emergency_contacts.html',
+                "Do's & Dont's": '../dos&donts.html',
+                'Disaster Map': '../advanced-map.html',
+                'AI Helper': '/student/chatbot.html',
+                'Gamified Learning': '/student/gamified-learning.html',
+                'Profile & Badges': 'profile-badges.html',
+                'Settings': '/student/settings.html'
+            };
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Update active state
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Get the menu item text
+                    const menuText = this.querySelector('span').textContent.trim();
+                    const targetPage = pageMapping[menuText];
+
+                    if (targetPage) {
+                        if (targetPage.startsWith('#')) {
+                            // Handle anchor links (scroll to section)
+                            if (targetPage === '#emergency-contacts') {
+                                document.querySelector('.emergency-contacts-section').scrollIntoView({
+                                    behavior: 'smooth'
+                                });
+                            }
+                        } else {
+                            // Navigate to page
+                            navigateToPage(targetPage, menuText);
+                        }
+                    }
+                });
+
+                // Add hover effect
+                item.addEventListener('mouseenter', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                    }
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        }
+
+        function navigateToPage(targetPage, menuText) {
+            // Show loading indicator
+            showLoadingIndicator();
+
+            // Add smooth transition
+            document.body.style.opacity = '0.8';
+            document.body.style.transition = 'opacity 0.3s ease';
+
+            setTimeout(() => {
+                try {
+                    window.location.href = targetPage;
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    hideLoadingIndicator();
+                    showNavigationError(menuText);
+                    document.body.style.opacity = '1';
+                }
+            }, 300);
+        }
+
+        function showLoadingIndicator() {
+            // Create loading overlay if it doesn't exist
+            if (!document.getElementById('loadingOverlay')) {
+                const loadingHTML = `
+                    <div id="loadingOverlay" style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(26, 115, 232, 0.9);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                        color: white;
+                    ">
+                        <div style="
+                            width: 50px;
+                            height: 50px;
+                            border: 3px solid rgba(255, 255, 255, 0.3);
+                            border-top: 3px solid white;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            margin-bottom: 20px;
+                        "></div>
+                        <h3>Loading...</h3>
+                        <p>Navigating to your selected page</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+                document.body.insertAdjacentHTML('beforeend', loadingHTML);
+            }
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoadingIndicator() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+
+        function showNavigationError(menuText) {
+            alert(`⚠️ Navigation Error\n\nSorry, the ${menuText} page is currently unavailable.\n\nThis might be because:\n• The page is still being developed\n• The file path has changed\n• There's a temporary server issue\n\nPlease try again later or contact support.`);
+        }
+
+        // Add keyboard navigation
+        function initializeKeyboardNavigation() {
+            document.addEventListener('keydown', function (e) {
+                if (e.altKey) {
+                    const menuItems = document.querySelectorAll('.menu-item');
+                    const currentActive = document.querySelector('.menu-item.active');
+                    let currentIndex = Array.from(menuItems).indexOf(currentActive);
+
+                    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        currentIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+                        menuItems[currentIndex].click();
+                    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        currentIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
+                        menuItems[currentIndex].click();
+                    }
+                }
+            });
+        }
+
+        // Load User Information from MongoDB database
+        async function loadUserInfo() {
+            try {
+                // First try to get user data from session/localStorage
+                let userData = null;
+
+                // Check localStorage for stored user data
+                const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
+                if (localData) {
+                    userData = JSON.parse(localData);
+                }
+
+                // If no local data or token exists, try to fetch from backend
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
+                if (!userData && token) {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/current', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            userData = await response.json();
+                            // Save to localStorage for future use
+                            localStorage.setItem('resq_user', JSON.stringify(userData));
+                        } else {
+                            console.log('Failed to fetch user from backend:', response.status);
+                        }
+                    } catch (fetchError) {
+                        console.log('Could not fetch user from backend:', fetchError.message);
+                    }
+                }
+
+                if (userData) {
+                    const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
+                    const lastName = userData.lastName || '';
+                    const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+
+                    // Update sidebar user profile
+                    const userNameElement = document.getElementById('sidebarUserName');
+                    const userAvatarElement = document.getElementById('userAvatar');
+
+                    if (userNameElement) userNameElement.textContent = fullName;
+                    if (userAvatarElement) userAvatarElement.textContent = firstName.charAt(0).toUpperCase();
+
+                    console.log('User loaded:', fullName);
+                } else {
+                    // Fallback to default values
+                    console.log('No user data found');
+                    setDefaultUser();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                setDefaultUser();
+            }
+        }
+
+        function setDefaultUser() {
+            const userNameElement = document.getElementById('userName');
+            const userPointsElement = document.getElementById('userPoints');
+
+            if (userNameElement) userNameElement.textContent = 'Guest User';
+            if (userPointsElement) userPointsElement.textContent = '0';
+        }
+
+        // FETCHING POINTS AND USER DATA FROM DATABASE
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+
+            // Refresh user data every 5 minutes
+            setInterval(loadUserInfo, 5 * 60 * 1000);
+        });
         // Your original JavaScript code
         const guidelinesData = {
-    earthquake: {
-        english: {
-            dos: [
-                "Drop, Cover, and Hold On under a sturdy table or piece of furniture",
-                "Stay indoors until shaking stops and it's safe to exit",
-                "Keep emergency kit ready",
-                "Turn off gas, electricity, water if safe",
-                "Follow evacuation orders",
-                "Be prepared for aftershocks"
-            ],
-            donts: [
-                "Do not run outside during shaking",
-                "Do not stand near windows or glass",
-                "Do not use elevators",
-                "Do not use open flames in case of gas leaks",
-                "Do not re-enter damaged buildings",
-                "Do not panic",
-                "Do not use telephone unless for emergency"
-            ]
-        },
-        hindi: {
-            dos: [
-                "झटके के दौरान नीचे झुकें, ढकें और पकड़े रहें",
-                "हिलना बंद होने तक घर में रहें",
-                "आपातकालीन किट तैयार रखें",
-                "गैस, बिजली, पानी बंद करें अगर सुरक्षित हो",
-                "निकासी निर्देशों का पालन करें",
-                "अनफॉलोशॉक्स के लिए तैयार रहें"
-            ],
-            donts: [
-                "कंपन के दौरान बाहर भागें नहीं",
-                "खिड़कियों के पास न खड़े हों",
-                "लिफ्ट का उपयोग न करें",
-                "गैस रिसाव की स्थिति में आग का प्रयोग न करें",
-                "क्षतिग्रस्त इमारतों में वापस न जाएं",
-                "घबराएं नहीं",
-                "आपातकालीन के बिना फ़ोन न करें"
-            ]
-        },
-        tamil: {
-            dos: [
-                "கீழே விழுங்கள், பாதுகாப்பு கொள்ளுங்கள், பிடித்து இருங்கள்",
-                "நடமாடுவதை நிறுத்தவும்",
-                "அவசரக் குழாய் தயார் வைத்துக் கொள்ளவும்",
-                "வாயு, மின், தண்ணீர் அணைக்கவும்",
-                "வெளியேற்ற ஆணைகள் பின்பற்றவும்",
-                "பின்விளைவுகளுக்குத் தயாராக இருங்கள்"
-            ],
-            donts: [
-                "குலுங்கும் போது வெளியே ஓட வேண்டாம்",
-                "ஜன்னல்களுக்கு அருகே நிற்காதீர்கள்",
-                "ஏற்றுமதி எரிகாமுறை பயன்படுத்த வேண்டாம்",
-                "கேஸ் லீக் உள்ள இடத்தில் தீ பயன்படுத்த வேண்டாம்",
-                "சேதமடைந்த கட்டிடங்களுக்கு திரும்பாதீர்கள்",
-                "பயப்படாதீர்கள்",
-                "அவசர காலத்திற்காக மட்டுமே தொலைபேசி பயன்படுத்தவும்"
-            ]
-        },
-        telugu: {
-            dos: [
-                "పడ్డో, కవర్ అవ్వండి, పట్టుకో",
-                "కదలకుండా ఉండండి",
-                "అత్యవసర కిట్ సిద్ధం ఉంచండి",
-                "గ్యాస్, విద్యుత్, నీరు ఆపండి",
-                "తొలగింపు ఆదేశాలను అనుసరించండి",
-                "తదుపరి రేకుల కోసం సిద్ధంగా ఉండు"
-            ],
-            donts: [
-                "కంపం సమయంలో బయటకి పరుగెత్తవద్దు",
-                "కిటికీల దగ్గర నిలబడకండి",
-                "లిఫ్ట్ ఉపయోగించకండి",
-                "గ్యాస్ లీక్ ఉన్నప్పుడు మంట వాడకండి",
-                "నష్టం చెందిన భవనాల్లోకి తిరిగి వెళ్లకండి",
-                "భయపడకండి",
-                "అత్యవసరానికి తప్ప ఫోన్ వాడకండి"
-            ]
-        },
-        marathi: {
-            dos: [
-                "खाली झुकणे, झाकणे आणि धरून राहणे",
-                "कंपने थांपर्यंत घरात राहणे",
-                "आपत्कालीन किट तयार ठेवा",
-                "वायू, वीज, पाणी बंद करा",
-                "निर्वासन आदेशांचे पालन करा",
-                "अनंतर झटकेसाठी तयार रहा"
-            ],
-            donts: [
-                "कंपताना बाहेर धावू नका",
-                "खिडक्याजवळ उभे राहू नका",
-                "लिफ्ट वापरू नका",
-                "गॅस लीक असल्यास आग लावू नका",
-                "नुकसानी झालेल्या इमारतीत परत जाऊ नका",
-                "घाबरू नका",
-                "आपत्कालीन शिवाय फोन वापरू नका"
-            ]
-        }
-    },
-    flood: {
-        english: {
-            dos: [
-                "Move to higher ground",
-                "Listen to local alerts",
-                "Keep emergency kit ready",
-                "Disconnect electricity",
-                "Follow evacuation instructions"
-            ],
-            donts: [
-                "Do not walk through floodwaters",
-                "Do not drive in flooded areas",
-                "Do not touch electrical equipment",
-                "Do not drink floodwater",
-                "Do not ignore warnings"
-            ]
-        },
-        hindi: {
-            dos: [
-                "ऊँचे स्थान पर जाएं",
-                "स्थानीय चेतावनियों को सुनें",
-                "आपातकालीन किट तैयार रखें",
-                "बिजली बंद करें",
-                "निकासी निर्देशों का पालन करें"
-            ],
-            donts: [
-                "बाढ़ के पानी में न चलें",
-                "बाढ़ वाले इलाके में गाड़ी न चलाएं",
-                "विद्युत उपकरण को न छुएं",
-                "बाढ़ का पानी न पिएं",
-                "चेतावनियों की अनदेखी न करें"
-            ]
-        },
-        tamil: {
-            dos: [
-                "உயரமான இடத்திற்கு செல்லுங்கள்",
-                "உள்ளூர் அறிவிப்புகளை கேளுங்கள்",
-                "அவசரக் குழாய் தயார் வைத்துக் கொள்ளவும்",
-                "மின்சாரத்தை துண்டிக்கவும்",
-                "வெளியேற்ற வழிமுறைகளை பின்பற்றவும்"
-            ],
-            donts: [
-                "வெள்ளம் வந்த தண்ணீரில் நடக்க வேண்டாம்",
-                "வெள்ளப்பிரதேசங்களில் வண்டி ஓட்ட வேண்டாம்",
-                "மின்சார சாதனங்களை தொடக்க வேண்டாம்",
-                "வெள்ள தண்ணீர் குடிக்க வேண்டாம்",
-                "எச்சரிக்கையை புறக்கணிக்க வேண்டாம்"
-            ]
-        },
-        telugu: {
-            dos: [
-                "ఎత్తైన ప్రదేశానికి వెళ్లండి",
-                "స్థానిక అలర్ట్స్ విని ఉండు",
-                "అత్యవసర కిట్ సిద్ధం ఉంచండి",
-                "విద్యుత్ ఆప్ చేయండి",
-                "తొలగింపు ఆదేశాలను అనుసరించండి"
-            ],
-            donts: [
-                "వరదజలంలో నడవకండి",
-                "వరద ప్రాంతాల్లో డ్రైవ్ చేయకండి",
-                "విద్యుత్ పరికరాలను తాకకండి",
-                "వరదజలాన్ని తాగకండి",
-                "హెచ్చరికలను దాటవేయకండి"
-            ]
-        },
-        marathi: {
-            dos: [
-                "उंच ठिकाणी जा",
-                "स्थानिक अलर्ट ऐका",
-                "आपत्कालीन किट तयार ठेवा",
-                "वीज बंद करा",
-                "निर्वासन सूचना पाळा"
-            ],
-            donts: [
-                "पूराचे पाणी चालत जाऊ नका",
-                "पूराच्या भागात वाहन चालवू नका",
-                "विद्युत उपकरणांना स्पर्श करू नका",
-                "पूराचे पाणी पिऊ नका",
-                "चेतावणी दुर्लक्षित करू नका"
-            ]
-        }
-    },
-    tsunami: {
-        english: {
-            dos: [
-                "Move to higher ground immediately",
-                "Follow tsunami alerts",
-                "Help children and elderly evacuate",
-                "Stay away from the beach",
-                "Wait for official all-clear"
-            ],
-            donts: [
-                "Do not go to the shore to watch",
-                "Do not ignore warnings",
-                "Do not return until authorities say",
-                "Do not drive through flooded areas",
-                "Do not panic"
-            ]
-        },
-        hindi: {
-            dos: [
-                "तुरंत ऊँचे स्थान पर जाएं",
-                "सूनामी चेतावनियों का पालन करें",
-                "बच्चों और बुजुर्गों की मदद करें",
-                "समुद्र तट से दूर रहें",
-                "आधिकारिक अनुमति का इंतजार करें"
-            ],
-            donts: [
-                "देखने के लिए समुद्र तट पर न जाएं",
-                "चेतावनियों की अनदेखी न करें",
-                "अधिकारियों के कहे बिना वापस न जाएं",
-                "बाढ़ वाले इलाकों में गाड़ी न चलाएं",
-                "घबराएं नहीं"
-            ]
-        },
-        tamil: {
-            dos: [
-                "உடனடியாக உயரமான இடத்திற்கு செல்லுங்கள்",
-                "சுனாமி அறிவிப்புகளை பின்பற்றுங்கள்",
-                "குழந்தைகள் மற்றும் முதியோருக்கு உதவுங்கள்",
-                "கடற்கரைக்கு அருகில் இருக்க வேண்டாம்",
-                "அதிகாரப்பூர்வமான “அல்ல் கிளியர்” க்கு காத்திருங்கள்"
-            ],
-            donts: [
-                "கடற்கரை நோக்கி செல்ல வேண்டாம்",
-                "எச்சரிக்கைகளை புறக்கணிக்க வேண்டாம்",
-                "அதிகாரிகள் கூறும் வரை திரும்ப வேண்டாம்",
-                "வெள்ளப்பிரதேசங்களில் வாகனம் ஓட்ட வேண்டாம்",
-                "பயப்பட வேண்டாம்"
-            ]
-        },
-        telugu: {
-            dos: [
-                "వెంటనే ఎత్తైన ప్రదేశానికి వెళ్లండి",
-                "సునామీ అలర్ట్స్ అనుసరించండి",
-                "పిల్లలు మరియు వృద్ధులకు సహాయం చేయండి",
-                "సముద్ర తీరానికి దూరంగా ఉండు",
-                "అధికారాల “అల-క్లియర్” కోసం ఎదురుచూడు"
-            ],
-            donts: [
-                "చూడటానికి తీరానికి వెళ్లవద్దు",
-                "హెచ్చరికలను పరిగణించకండి",
-                "అధికారులు చెప్పేవరకు తిరిగి వెళ్ళవద్దు",
-                "వరద ప్రాంతాల్లో డ్రైవ్ చేయకండి",
-                "భయపడకండి"
-            ]
-        },
-        marathi: {
-            dos: [
-                "तातडीने उंच ठिकाणी जा",
-                "सूनामी चेतावण्या पाळा",
-                "लहान मुलं आणि वृद्धांची मदत करा",
-                "किनाऱ्यापासून दूर रहा",
-                "अधिकाऱ्यांच्या परवानगीची प्रतीक्षा करा"
-            ],
-            donts: [
-                "पाहण्यासाठी किनाऱ्यावर जाऊ नका",
-                "चेतावणी दुर्लक्षित करू नका",
-                "अधिकारी सांगेपर्यंत परत जाऊ नका",
-                "पूरग्रस्त भागात वाहन चालवू नका",
-                "घाबरू नका"
-            ]
-        }
-    },
-    cyclone: {
-        english: {
-            dos: [
-                "Stay indoors in a safe room",
-                "Listen to weather alerts",
-                "Secure windows and doors",
-                "Keep emergency kit ready",
-                "Evacuate if instructed"
-            ],
-            donts: [
-                "Do not go outside during storm",
-                "Do not touch fallen power lines",
-                "Do not drive in floodwater",
-                "Do not ignore official warnings",
-                "Do not underestimate the storm"
-            ]
-        },
-        hindi: {
-            dos: [
-                "सुरक्षित कमरे में रहें",
-                "मौसम की चेतावनियां सुनें",
-                "खिड़कियां और दरवाजे सुरक्षित करें",
-                "आपातकालीन किट तैयार रखें",
-                "आदेश मिलने पर निकास करें"
-            ],
-            donts: [
-                "तूफान के दौरान बाहर न जाएं",
-                "गिरी बिजली की तारों को न छुएं",
-                "बाढ़ वाले इलाकों में गाड़ी न चलाएं",
-                "आधिकारिक चेतावनी नज़रअंदाज न करें",
-                "तूफान को कम न आंकें"
-            ]
-        },
-        tamil: {
-            dos: [
-                "பாதுகாப்பான அறையில் இருங்கள்",
-                "வானிலை அறிவிப்புகளை கேளுங்கள்",
-                "ஜன்னல்கள் மற்றும் கதவுகளை உறுதியாக செய்யவும்",
-                "அவசரக் குழாய் தயார் வைத்துக் கொள்ளவும்",
-                "அறிவுறுத்தப்படும்போது வெளியேறவும்"
-            ],
-            donts: [
-                "புயலின் போது வெளியே போக வேண்டாம்",
-                "விழுந்த மின் கம்பிகளை தொடக்க வேண்டாம்",
-                "வெள்ளப்பிரதேசங்களில் வாகனம் ஓட்ட வேண்டாம்",
-                "அதிகாரப்பூர்வ எச்சரிக்கைகளை புறக்கணிக்க வேண்டாம்",
-                "புயலை குறைக்க மதிப்பிட வேண்டாம்"
-            ]
-        },
-        telugu: {
-            dos: [
-                "సురక్షిత గది లో ఉండండి",
-                "వాతావరణ అలర్ట్స్ వినండి",
-                "కిటికీలు మరియు తలుపులు బలంగా కప్పండి",
-                "అత్యవసర కిట్ సిద్ధం ఉంచండి",
-                "ఆదేశిస్తే ఎవక్యుయేట్ అవ్వండి"
-            ],
-            donts: [
-                "తుపానీ సమయంలో బయటకు వెళ్లవద్దు",
-                "పడ్డ విద్యుత్ లైన్ ను తాకవద్దు",
-                "వరద ప్రాంతాల్లో డ్రైవ్ చేయవద్దు",
-                "అధికారపు హెచ్చరికలను పுறాకణించవద్దు",
-                "తుపాను తక్కువగా అంచనా వేయకండి"
-            ]
-        },
-        marathi: {
-            dos: [
-                "सुरक्षित खोलीत रहा",
-                "हवामान अलर्ट ऐका",
-                "खिडक्या आणि दारे सुरक्षित करा",
-                "आपत्कालीन किट तयार ठेवा",
-                "आदेश मिळाल्यास निर्वासित व्हा"
-            ],
-            donts: [
-                "वादळाच्या वेळी बाहेर जाऊ नका",
-                "गळलेले विद्युत तारे स्पर्श करू नका",
-                "पूरग्रस्त भागात वाहन चालवू नका",
-                "अधिकृत चेतावणी दुर्लक्षित करू नका",
-                "वादळ कमी समजून घेऊ नका"
-            ]
-        }
-    },
-    fire: {
-        english: {
-            dos: [
-                "Alert others and call emergency number",
-                "Use fire extinguisher if safe",
-                "Evacuate calmly",
-                "Stay low to avoid smoke",
-                "Stop, Drop, and Roll if clothes catch fire"
-            ],
-            donts: [
-                "Do not hide during fire",
-                "Do not use elevators",
-                "Do not enter burning buildings",
-                "Do not inhale smoke",
-                "Do not panic"
-            ]
-        },
-        hindi: {
-            dos: [
-                "दूसरों को चेताएं और आपातकालीन नंबर पर कॉल करें",
-                "सुरक्षित होने पर आग बुझाने वाला उपयोग करें",
-                "शांतिपूर्वक निकास करें",
-                "धुएँ से बचने के लिए झुकें",
-                "कपड़े में आग लगने पर “स्टॉप, ड्रॉप, रोल” करें"
-            ],
-            donts: [
-                "आग के दौरान छुपें नहीं",
-                "लिफ्ट का उपयोग न करें",
-                "जलती हुई इमारत में प्रवेश न करें",
-                "धुआँ न साँस लें",
-                "घबराएं नहीं"
-            ]
-        },
-        tamil: {
-            dos: [
-                "மற்றவர்களுக்கு அறிவிக்கவும் மற்றும் அவசர எண்ணுக்கு அழைக்கவும்",
-                "பாதுகாப்பானபோது தீ அணைக்கும் கருவியைப் பயன்படுத்தவும்",
-                "அமைதியாக வெளியேறவும்",
-                "புகையிலிருந்து தூரமாக கீழே இருங்கள்",
-                "உடலில் தீ Catch ஆனால் “Stop, Drop, Roll” செய்யவும்"
-            ],
-            donts: [
-                "தீ நேரத்தில் மறைக்க வேண்டாம்",
-                "ஏறுதலைப் பயன்படுத்த வேண்டாம்",
-                "தீயில் எரியும் கட்டிடத்தில் நுழைய வேண்டாம்",
-                "புகையை சுவாசிக்க வேண்டாம்",
-                "பயப்பட வேண்டாம்"
-            ]
-        },
-        telugu: {
-            dos: [
-                "ఇతరులను హెచ్చరించండి మరియు అత్యవసర నంబర్ కు కాల్ చేయండి",
-                "సురక్షితంగా ఉంటే అగ్ని మాప్పు పరికరం ఉపయోగించండి",
-                "శాంతంగా బయటకు వెళ్లండి",
-                "పొగ నుంచి దూరంగా కింద ఉండండి",
-                "దుస్తులలో అగ్ని వస్తే “స్టాప్, డ్రాప్, రోల్” చేయండి"
-            ],
-            donts: [
-                "అగ్ని సమయంలో దాగకండి",
-                "లిఫ్ట్ ఉపయోగించవద్దు",
-                "దహించిన భవనంలోకి వెళ్లకండి",
-                "పొగను శ్వాసించకండి",
-                "భయపడకండి"
-            ]
-        },
-        marathi: {
-            dos: [
-                "इतरांना सतर्क करा आणि आपत्कालीन क्रमांकाला कॉल करा",
-                "सुरक्षित असल्यास आग विझवण्याचे साधन वापरा",
-                "शांततेने बाहेर पडा",
-                "धुरापासून बचावासाठी खाली रहा",
-                "कपड्यांवर आग लागल्यास “स्टॉप, ड्रॉप, रोल” करा"
-            ],
-            donts: [
-                "आगेत लपून राहू नका",
-                "लिफ्ट वापरू नका",
-                "जळत असलेल्या इमारतीत जाऊ नका",
-                "धूर श्वासात घेऊ नका",
-                "घाबरू नका"
-            ]
-        }
-    },
-    landslide: {
-        english: {
-            dos: [
-                "Move away from slope immediately",
-                "Follow local alerts",
-                "Help others evacuate",
-                "Take emergency kit",
-                "Stay on stable ground"
-            ],
-            donts: [
-                "Do not stay near the slope",
-                "Do not drive through landslide area",
-                "Do not ignore warnings",
-                "Do not panic",
-                "Do not go back until safe"
-            ]
-        },
-        hindi: {
-            dos: [
-                "तुरंत ढलान से दूर जाएं",
-                "स्थानीय चेतावनियों का पालन करें",
-                "अन्य लोगों की मदद करें",
-                "आपातकालीन किट रखें",
-                "स्थिर जमीन पर रहें"
-            ],
-            donts: [
-                "ढलान के पास न रहें",
-                "लैंडस्लाइड क्षेत्र में ड्राइव न करें",
-                "चेतावनी नज़रअंदाज न करें",
-                "घबराएं नहीं",
-                "सुरक्षित होने तक वापस न जाएं"
-            ]
-        },
-        tamil: {
-            dos: [
-                "உடனடியாக சிகரம் விட்டு விலகுங்கள்",
-                "உள்ளூர் எச்சரிக்கைகளை பின்பற்றுங்கள்",
-                "மற்றவர்களை உதவுங்கள்",
-                "அவசரக் குழாய் எடுத்துக்கொள்ளுங்கள்",
-                "நிலையான நிலத்தில் இருங்கள்"
-            ],
-            donts: [
-                "அடிமலையின் அருகில் இருங்கள் வேண்டாம்",
-                "நிலச்சரிவு பகுதியில் வாகனம் ஓட்ட வேண்டாம்",
-                "எச்சரிக்கைகளை புறக்கணிக்க வேண்டாம்",
-                "பயப்பட வேண்டாம்",
-                "பாதுகாப்பாக இல்லாமல் திரும்ப வேண்டாம்"
-            ]
-        },
-        telugu: {
-            dos: [
-                "వెంటనే వాలిక ప్రాంతం నుంచి దూరంగా ఉండు",
-                "స్థానిక హెచ్చరికలను అనుసరించండి",
-                "ఇతరులను బయటకు తీసుకోవడంలో సహాయం చేయండి",
-                "అత్యవసర కిట్ తీసుకోండి",
-                "స్థిరమైన భూభాగంలో ఉండు"
-            ],
-            donts: [
-                "వాలిక దగ్గర ఉండకండి",
-                "ల్యాండ్స్లైడ్ ప్రాంతంలో డ్రైవ్ చేయవద్దు",
-                "హెచ్చరికలను పరిగణించకండి",
-                "భయపడకండి",
-                "సురక్షితం కాకుండా తిరిగి వెళ్లవద్దు"
-            ]
-        },
-        marathi: {
-            dos: [
-                "तातडीने उतारापासून दूर जा",
-                "स्थानिक चेतावण्या ऐका",
-                "इतरांना मदत करा",
-                "आपत्कालीन किट घ्या",
-                "स्थिर जमिनीवर रहा"
-            ],
-            donts: [
-                "उताराजवळ राहू नका",
-                "लँडस्लाईड क्षेत्रात वाहन चालवू नका",
-                "चेतावणी दुर्लक्षित करू नका",
-                "घाबरू नका",
-                "सुरक्षित नसल्यास परत जाऊ नका"
-            ]
-        }
-    }
-};
+            earthquake: {
+                english: {
+                    dos: [
+                        "Drop, Cover, and Hold On under a sturdy table or piece of furniture",
+                        "Stay indoors until shaking stops and it's safe to exit",
+                        "Keep emergency kit ready",
+                        "Turn off gas, electricity, water if safe",
+                        "Follow evacuation orders",
+                        "Be prepared for aftershocks"
+                    ],
+                    donts: [
+                        "Do not run outside during shaking",
+                        "Do not stand near windows or glass",
+                        "Do not use elevators",
+                        "Do not use open flames in case of gas leaks",
+                        "Do not re-enter damaged buildings",
+                        "Do not panic",
+                        "Do not use telephone unless for emergency"
+                    ]
+                },
+                hindi: {
+                    dos: [
+                        "झटके के दौरान नीचे झुकें, ढकें और पकड़े रहें",
+                        "हिलना बंद होने तक घर में रहें",
+                        "आपातकालीन किट तैयार रखें",
+                        "गैस, बिजली, पानी बंद करें अगर सुरक्षित हो",
+                        "निकासी निर्देशों का पालन करें",
+                        "अनफॉलोशॉक्स के लिए तैयार रहें"
+                    ],
+                    donts: [
+                        "कंपन के दौरान बाहर भागें नहीं",
+                        "खिड़कियों के पास न खड़े हों",
+                        "लिफ्ट का उपयोग न करें",
+                        "गैस रिसाव की स्थिति में आग का प्रयोग न करें",
+                        "क्षतिग्रस्त इमारतों में वापस न जाएं",
+                        "घबराएं नहीं",
+                        "आपातकालीन के बिना फ़ोन न करें"
+                    ]
+                },
+                tamil: {
+                    dos: [
+                        "கீழே விழுங்கள், பாதுகாப்பு கொள்ளுங்கள், பிடித்து இருங்கள்",
+                        "நடமாடுவதை நிறுத்தவும்",
+                        "அவசரக் குழாய் தயார் வைத்துக் கொள்ளவும்",
+                        "வாயு, மின், தண்ணீர் அணைக்கவும்",
+                        "வெளியேற்ற ஆணைகள் பின்பற்றவும்",
+                        "பின்விளைவுகளுக்குத் தயாராக இருங்கள்"
+                    ],
+                    donts: [
+                        "குலுங்கும் போது வெளியே ஓட வேண்டாம்",
+                        "ஜன்னல்களுக்கு அருகே நிற்காதீர்கள்",
+                        "ஏற்றுமதி எரிகாமுறை பயன்படுத்த வேண்டாம்",
+                        "கேஸ் லீக் உள்ள இடத்தில் தீ பயன்படுத்த வேண்டாம்",
+                        "சேதமடைந்த கட்டிடங்களுக்கு திரும்பாதீர்கள்",
+                        "பயப்படாதீர்கள்",
+                        "அவசர காலத்திற்காக மட்டுமே தொலைபேசி பயன்படுத்தவும்"
+                    ]
+                },
+                telugu: {
+                    dos: [
+                        "పడ్డో, కవర్ అవ్వండి, పట్టుకో",
+                        "కదలకుండా ఉండండి",
+                        "అత్యవసర కిట్ సిద్ధం ఉంచండి",
+                        "గ్యాస్, విద్యుత్, నీరు ఆపండి",
+                        "తొలగింపు ఆదేశాలను అనుసరించండి",
+                        "తదుపరి రేకుల కోసం సిద్ధంగా ఉండు"
+                    ],
+                    donts: [
+                        "కంపం సమయంలో బయటకి పరుగెత్తవద్దు",
+                        "కిటికీల దగ్గర నిలబడకండి",
+                        "లిఫ్ట్ ఉపయోగించకండి",
+                        "గ్యాస్ లీక్ ఉన్నప్పుడు మంట వాడకండి",
+                        "నష్టం చెందిన భవనాల్లోకి తిరిగి వెళ్లకండి",
+                        "భయపడకండి",
+                        "అత్యవసరానికి తప్ప ఫోన్ వాడకండి"
+                    ]
+                },
+                marathi: {
+                    dos: [
+                        "खाली झुकणे, झाकणे आणि धरून राहणे",
+                        "कंपने थांपर्यंत घरात राहणे",
+                        "आपत्कालीन किट तयार ठेवा",
+                        "वायू, वीज, पाणी बंद करा",
+                        "निर्वासन आदेशांचे पालन करा",
+                        "अनंतर झटकेसाठी तयार रहा"
+                    ],
+                    donts: [
+                        "कंपताना बाहेर धावू नका",
+                        "खिडक्याजवळ उभे राहू नका",
+                        "लिफ्ट वापरू नका",
+                        "गॅस लीक असल्यास आग लावू नका",
+                        "नुकसानी झालेल्या इमारतीत परत जाऊ नका",
+                        "घाबरू नका",
+                        "आपत्कालीन शिवाय फोन वापरू नका"
+                    ]
+                }
+            },
+            flood: {
+                english: {
+                    dos: [
+                        "Move to higher ground",
+                        "Listen to local alerts",
+                        "Keep emergency kit ready",
+                        "Disconnect electricity",
+                        "Follow evacuation instructions"
+                    ],
+                    donts: [
+                        "Do not walk through floodwaters",
+                        "Do not drive in flooded areas",
+                        "Do not touch electrical equipment",
+                        "Do not drink floodwater",
+                        "Do not ignore warnings"
+                    ]
+                },
+                hindi: {
+                    dos: [
+                        "ऊँचे स्थान पर जाएं",
+                        "स्थानीय चेतावनियों को सुनें",
+                        "आपातकालीन किट तैयार रखें",
+                        "बिजली बंद करें",
+                        "निकासी निर्देशों का पालन करें"
+                    ],
+                    donts: [
+                        "बाढ़ के पानी में न चलें",
+                        "बाढ़ वाले इलाके में गाड़ी न चलाएं",
+                        "विद्युत उपकरण को न छुएं",
+                        "बाढ़ का पानी न पिएं",
+                        "चेतावनियों की अनदेखी न करें"
+                    ]
+                },
+                tamil: {
+                    dos: [
+                        "உயரமான இடத்திற்கு செல்லுங்கள்",
+                        "உள்ளூர் அறிவிப்புகளை கேளுங்கள்",
+                        "அவசரக் குழாய் தயார் வைத்துக் கொள்ளவும்",
+                        "மின்சாரத்தை துண்டிக்கவும்",
+                        "வெளியேற்ற வழிமுறைகளை பின்பற்றவும்"
+                    ],
+                    donts: [
+                        "வெள்ளம் வந்த தண்ணீரில் நடக்க வேண்டாம்",
+                        "வெள்ளப்பிரதேசங்களில் வண்டி ஓட்ட வேண்டாம்",
+                        "மின்சார சாதனங்களை தொடக்க வேண்டாம்",
+                        "வெள்ள தண்ணீர் குடிக்க வேண்டாம்",
+                        "எச்சரிக்கையை புறக்கணிக்க வேண்டாம்"
+                    ]
+                },
+                telugu: {
+                    dos: [
+                        "ఎత్తైన ప్రదేశానికి వెళ్లండి",
+                        "స్థానిక అలర్ట్స్ విని ఉండు",
+                        "అత్యవసర కిట్ సిద్ధం ఉంచండి",
+                        "విద్యుత్ ఆప్ చేయండి",
+                        "తొలగింపు ఆదేశాలను అనుసరించండి"
+                    ],
+                    donts: [
+                        "వరదజలంలో నడవకండి",
+                        "వరద ప్రాంతాల్లో డ్రైవ్ చేయకండి",
+                        "విద్యుత్ పరికరాలను తాకకండి",
+                        "వరదజలాన్ని తాగకండి",
+                        "హెచ్చరికలను దాటవేయకండి"
+                    ]
+                },
+                marathi: {
+                    dos: [
+                        "उंच ठिकाणी जा",
+                        "स्थानिक अलर्ट ऐका",
+                        "आपत्कालीन किट तयार ठेवा",
+                        "वीज बंद करा",
+                        "निर्वासन सूचना पाळा"
+                    ],
+                    donts: [
+                        "पूराचे पाणी चालत जाऊ नका",
+                        "पूराच्या भागात वाहन चालवू नका",
+                        "विद्युत उपकरणांना स्पर्श करू नका",
+                        "पूराचे पाणी पिऊ नका",
+                        "चेतावणी दुर्लक्षित करू नका"
+                    ]
+                }
+            },
+            tsunami: {
+                english: {
+                    dos: [
+                        "Move to higher ground immediately",
+                        "Follow tsunami alerts",
+                        "Help children and elderly evacuate",
+                        "Stay away from the beach",
+                        "Wait for official all-clear"
+                    ],
+                    donts: [
+                        "Do not go to the shore to watch",
+                        "Do not ignore warnings",
+                        "Do not return until authorities say",
+                        "Do not drive through flooded areas",
+                        "Do not panic"
+                    ]
+                },
+                hindi: {
+                    dos: [
+                        "तुरंत ऊँचे स्थान पर जाएं",
+                        "सूनामी चेतावनियों का पालन करें",
+                        "बच्चों और बुजुर्गों की मदद करें",
+                        "समुद्र तट से दूर रहें",
+                        "आधिकारिक अनुमति का इंतजार करें"
+                    ],
+                    donts: [
+                        "देखने के लिए समुद्र तट पर न जाएं",
+                        "चेतावनियों की अनदेखी न करें",
+                        "अधिकारियों के कहे बिना वापस न जाएं",
+                        "बाढ़ वाले इलाकों में गाड़ी न चलाएं",
+                        "घबराएं नहीं"
+                    ]
+                },
+                tamil: {
+                    dos: [
+                        "உடனடியாக உயரமான இடத்திற்கு செல்லுங்கள்",
+                        "சுனாமி அறிவிப்புகளை பின்பற்றுங்கள்",
+                        "குழந்தைகள் மற்றும் முதியோருக்கு உதவுங்கள்",
+                        "கடற்கரைக்கு அருகில் இருக்க வேண்டாம்",
+                        "அதிகாரப்பூர்வமான “அல்ல் கிளியர்” க்கு காத்திருங்கள்"
+                    ],
+                    donts: [
+                        "கடற்கரை நோக்கி செல்ல வேண்டாம்",
+                        "எச்சரிக்கைகளை புறக்கணிக்க வேண்டாம்",
+                        "அதிகாரிகள் கூறும் வரை திரும்ப வேண்டாம்",
+                        "வெள்ளப்பிரதேசங்களில் வாகனம் ஓட்ட வேண்டாம்",
+                        "பயப்பட வேண்டாம்"
+                    ]
+                },
+                telugu: {
+                    dos: [
+                        "వెంటనే ఎత్తైన ప్రదేశానికి వెళ్లండి",
+                        "సునామీ అలర్ట్స్ అనుసరించండి",
+                        "పిల్లలు మరియు వృద్ధులకు సహాయం చేయండి",
+                        "సముద్ర తీరానికి దూరంగా ఉండు",
+                        "అధికారాల “అల-క్లియర్” కోసం ఎదురుచూడు"
+                    ],
+                    donts: [
+                        "చూడటానికి తీరానికి వెళ్లవద్దు",
+                        "హెచ్చరికలను పరిగణించకండి",
+                        "అధికారులు చెప్పేవరకు తిరిగి వెళ్ళవద్దు",
+                        "వరద ప్రాంతాల్లో డ్రైవ్ చేయకండి",
+                        "భయపడకండి"
+                    ]
+                },
+                marathi: {
+                    dos: [
+                        "तातडीने उंच ठिकाणी जा",
+                        "सूनामी चेतावण्या पाळा",
+                        "लहान मुलं आणि वृद्धांची मदत करा",
+                        "किनाऱ्यापासून दूर रहा",
+                        "अधिकाऱ्यांच्या परवानगीची प्रतीक्षा करा"
+                    ],
+                    donts: [
+                        "पाहण्यासाठी किनाऱ्यावर जाऊ नका",
+                        "चेतावणी दुर्लक्षित करू नका",
+                        "अधिकारी सांगेपर्यंत परत जाऊ नका",
+                        "पूरग्रस्त भागात वाहन चालवू नका",
+                        "घाबरू नका"
+                    ]
+                }
+            },
+            cyclone: {
+                english: {
+                    dos: [
+                        "Stay indoors in a safe room",
+                        "Listen to weather alerts",
+                        "Secure windows and doors",
+                        "Keep emergency kit ready",
+                        "Evacuate if instructed"
+                    ],
+                    donts: [
+                        "Do not go outside during storm",
+                        "Do not touch fallen power lines",
+                        "Do not drive in floodwater",
+                        "Do not ignore official warnings",
+                        "Do not underestimate the storm"
+                    ]
+                },
+                hindi: {
+                    dos: [
+                        "सुरक्षित कमरे में रहें",
+                        "मौसम की चेतावनियां सुनें",
+                        "खिड़कियां और दरवाजे सुरक्षित करें",
+                        "आपातकालीन किट तैयार रखें",
+                        "आदेश मिलने पर निकास करें"
+                    ],
+                    donts: [
+                        "तूफान के दौरान बाहर न जाएं",
+                        "गिरी बिजली की तारों को न छुएं",
+                        "बाढ़ वाले इलाकों में गाड़ी न चलाएं",
+                        "आधिकारिक चेतावनी नज़रअंदाज न करें",
+                        "तूफान को कम न आंकें"
+                    ]
+                },
+                tamil: {
+                    dos: [
+                        "பாதுகாப்பான அறையில் இருங்கள்",
+                        "வானிலை அறிவிப்புகளை கேளுங்கள்",
+                        "ஜன்னல்கள் மற்றும் கதவுகளை உறுதியாக செய்யவும்",
+                        "அவசரக் குழாய் தயார் வைத்துக் கொள்ளவும்",
+                        "அறிவுறுத்தப்படும்போது வெளியேறவும்"
+                    ],
+                    donts: [
+                        "புயலின் போது வெளியே போக வேண்டாம்",
+                        "விழுந்த மின் கம்பிகளை தொடக்க வேண்டாம்",
+                        "வெள்ளப்பிரதேசங்களில் வாகனம் ஓட்ட வேண்டாம்",
+                        "அதிகாரப்பூர்வ எச்சரிக்கைகளை புறக்கணிக்க வேண்டாம்",
+                        "புயலை குறைக்க மதிப்பிட வேண்டாம்"
+                    ]
+                },
+                telugu: {
+                    dos: [
+                        "సురక్షిత గది లో ఉండండి",
+                        "వాతావరణ అలర్ట్స్ వినండి",
+                        "కిటికీలు మరియు తలుపులు బలంగా కప్పండి",
+                        "అత్యవసర కిట్ సిద్ధం ఉంచండి",
+                        "ఆదేశిస్తే ఎవక్యుయేట్ అవ్వండి"
+                    ],
+                    donts: [
+                        "తుపానీ సమయంలో బయటకు వెళ్లవద్దు",
+                        "పడ్డ విద్యుత్ లైన్ ను తాకవద్దు",
+                        "వరద ప్రాంతాల్లో డ్రైవ్ చేయవద్దు",
+                        "అధికారపు హెచ్చరికలను పுறాకణించవద్దు",
+                        "తుపాను తక్కువగా అంచనా వేయకండి"
+                    ]
+                },
+                marathi: {
+                    dos: [
+                        "सुरक्षित खोलीत रहा",
+                        "हवामान अलर्ट ऐका",
+                        "खिडक्या आणि दारे सुरक्षित करा",
+                        "आपत्कालीन किट तयार ठेवा",
+                        "आदेश मिळाल्यास निर्वासित व्हा"
+                    ],
+                    donts: [
+                        "वादळाच्या वेळी बाहेर जाऊ नका",
+                        "गळलेले विद्युत तारे स्पर्श करू नका",
+                        "पूरग्रस्त भागात वाहन चालवू नका",
+                        "अधिकृत चेतावणी दुर्लक्षित करू नका",
+                        "वादळ कमी समजून घेऊ नका"
+                    ]
+                }
+            },
+            fire: {
+                english: {
+                    dos: [
+                        "Alert others and call emergency number",
+                        "Use fire extinguisher if safe",
+                        "Evacuate calmly",
+                        "Stay low to avoid smoke",
+                        "Stop, Drop, and Roll if clothes catch fire"
+                    ],
+                    donts: [
+                        "Do not hide during fire",
+                        "Do not use elevators",
+                        "Do not enter burning buildings",
+                        "Do not inhale smoke",
+                        "Do not panic"
+                    ]
+                },
+                hindi: {
+                    dos: [
+                        "दूसरों को चेताएं और आपातकालीन नंबर पर कॉल करें",
+                        "सुरक्षित होने पर आग बुझाने वाला उपयोग करें",
+                        "शांतिपूर्वक निकास करें",
+                        "धुएँ से बचने के लिए झुकें",
+                        "कपड़े में आग लगने पर “स्टॉप, ड्रॉप, रोल” करें"
+                    ],
+                    donts: [
+                        "आग के दौरान छुपें नहीं",
+                        "लिफ्ट का उपयोग न करें",
+                        "जलती हुई इमारत में प्रवेश न करें",
+                        "धुआँ न साँस लें",
+                        "घबराएं नहीं"
+                    ]
+                },
+                tamil: {
+                    dos: [
+                        "மற்றவர்களுக்கு அறிவிக்கவும் மற்றும் அவசர எண்ணுக்கு அழைக்கவும்",
+                        "பாதுகாப்பானபோது தீ அணைக்கும் கருவியைப் பயன்படுத்தவும்",
+                        "அமைதியாக வெளியேறவும்",
+                        "புகையிலிருந்து தூரமாக கீழே இருங்கள்",
+                        "உடலில் தீ Catch ஆனால் “Stop, Drop, Roll” செய்யவும்"
+                    ],
+                    donts: [
+                        "தீ நேரத்தில் மறைக்க வேண்டாம்",
+                        "ஏறுதலைப் பயன்படுத்த வேண்டாம்",
+                        "தீயில் எரியும் கட்டிடத்தில் நுழைய வேண்டாம்",
+                        "புகையை சுவாசிக்க வேண்டாம்",
+                        "பயப்பட வேண்டாம்"
+                    ]
+                },
+                telugu: {
+                    dos: [
+                        "ఇతరులను హెచ్చరించండి మరియు అత్యవసర నంబర్ కు కాల్ చేయండి",
+                        "సురక్షితంగా ఉంటే అగ్ని మాప్పు పరికరం ఉపయోగించండి",
+                        "శాంతంగా బయటకు వెళ్లండి",
+                        "పొగ నుంచి దూరంగా కింద ఉండండి",
+                        "దుస్తులలో అగ్ని వస్తే “స్టాప్, డ్రాప్, రోల్” చేయండి"
+                    ],
+                    donts: [
+                        "అగ్ని సమయంలో దాగకండి",
+                        "లిఫ్ట్ ఉపయోగించవద్దు",
+                        "దహించిన భవనంలోకి వెళ్లకండి",
+                        "పొగను శ్వాసించకండి",
+                        "భయపడకండి"
+                    ]
+                },
+                marathi: {
+                    dos: [
+                        "इतरांना सतर्क करा आणि आपत्कालीन क्रमांकाला कॉल करा",
+                        "सुरक्षित असल्यास आग विझवण्याचे साधन वापरा",
+                        "शांततेने बाहेर पडा",
+                        "धुरापासून बचावासाठी खाली रहा",
+                        "कपड्यांवर आग लागल्यास “स्टॉप, ड्रॉप, रोल” करा"
+                    ],
+                    donts: [
+                        "आगेत लपून राहू नका",
+                        "लिफ्ट वापरू नका",
+                        "जळत असलेल्या इमारतीत जाऊ नका",
+                        "धूर श्वासात घेऊ नका",
+                        "घाबरू नका"
+                    ]
+                }
+            },
+            landslide: {
+                english: {
+                    dos: [
+                        "Move away from slope immediately",
+                        "Follow local alerts",
+                        "Help others evacuate",
+                        "Take emergency kit",
+                        "Stay on stable ground"
+                    ],
+                    donts: [
+                        "Do not stay near the slope",
+                        "Do not drive through landslide area",
+                        "Do not ignore warnings",
+                        "Do not panic",
+                        "Do not go back until safe"
+                    ]
+                },
+                hindi: {
+                    dos: [
+                        "तुरंत ढलान से दूर जाएं",
+                        "स्थानीय चेतावनियों का पालन करें",
+                        "अन्य लोगों की मदद करें",
+                        "आपातकालीन किट रखें",
+                        "स्थिर जमीन पर रहें"
+                    ],
+                    donts: [
+                        "ढलान के पास न रहें",
+                        "लैंडस्लाइड क्षेत्र में ड्राइव न करें",
+                        "चेतावनी नज़रअंदाज न करें",
+                        "घबराएं नहीं",
+                        "सुरक्षित होने तक वापस न जाएं"
+                    ]
+                },
+                tamil: {
+                    dos: [
+                        "உடனடியாக சிகரம் விட்டு விலகுங்கள்",
+                        "உள்ளூர் எச்சரிக்கைகளை பின்பற்றுங்கள்",
+                        "மற்றவர்களை உதவுங்கள்",
+                        "அவசரக் குழாய் எடுத்துக்கொள்ளுங்கள்",
+                        "நிலையான நிலத்தில் இருங்கள்"
+                    ],
+                    donts: [
+                        "அடிமலையின் அருகில் இருங்கள் வேண்டாம்",
+                        "நிலச்சரிவு பகுதியில் வாகனம் ஓட்ட வேண்டாம்",
+                        "எச்சரிக்கைகளை புறக்கணிக்க வேண்டாம்",
+                        "பயப்பட வேண்டாம்",
+                        "பாதுகாப்பாக இல்லாமல் திரும்ப வேண்டாம்"
+                    ]
+                },
+                telugu: {
+                    dos: [
+                        "వెంటనే వాలిక ప్రాంతం నుంచి దూరంగా ఉండు",
+                        "స్థానిక హెచ్చరికలను అనుసరించండి",
+                        "ఇతరులను బయటకు తీసుకోవడంలో సహాయం చేయండి",
+                        "అత్యవసర కిట్ తీసుకోండి",
+                        "స్థిరమైన భూభాగంలో ఉండు"
+                    ],
+                    donts: [
+                        "వాలిక దగ్గర ఉండకండి",
+                        "ల్యాండ్స్లైడ్ ప్రాంతంలో డ్రైవ్ చేయవద్దు",
+                        "హెచ్చరికలను పరిగణించకండి",
+                        "భయపడకండి",
+                        "సురక్షితం కాకుండా తిరిగి వెళ్లవద్దు"
+                    ]
+                },
+                marathi: {
+                    dos: [
+                        "तातडीने उतारापासून दूर जा",
+                        "स्थानिक चेतावण्या ऐका",
+                        "इतरांना मदत करा",
+                        "आपत्कालीन किट घ्या",
+                        "स्थिर जमिनीवर रहा"
+                    ],
+                    donts: [
+                        "उताराजवळ राहू नका",
+                        "लँडस्लाईड क्षेत्रात वाहन चालवू नका",
+                        "चेतावणी दुर्लक्षित करू नका",
+                        "घाबरू नका",
+                        "सुरक्षित नसल्यास परत जाऊ नका"
+                    ]
+                }
+            }
+        };
 
 
-        document.getElementById('showGuidelines').addEventListener('click', function() {
+        document.getElementById('showGuidelines').addEventListener('click', function () {
             const disaster = document.getElementById('disasterType').value;
             const lang = document.getElementById('language').value;
             const container = document.getElementById('guidelinesDisplay');
@@ -1113,7 +1559,7 @@
             }
 
             const data = guidelinesData[disaster][lang] || guidelinesData[disaster]['english'];
-            
+
             // Get the appropriate icon for each disaster type
             const disasterIcons = {
                 earthquake: "fa-house-damage",
@@ -1123,7 +1569,7 @@
                 tsunami: "fa-wave-square",
                 landslide: "fa-mountain"
             };
-            
+
             container.innerHTML = `
                 <div class="guidelines-section active">
                     <div class="guidelines-header">
@@ -1153,11 +1599,13 @@
                     </div>
                 </div>
             `;
-            
+
             // Smooth scroll to the guidelines
             container.scrollIntoView({ behavior: 'smooth' });
         });
-        
+        initializeMenuNavigation();
+        initializeKeyboardNavigation();
     </script>
 </body>
+
 </html>
