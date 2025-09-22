@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,7 @@
     <title>Disaster Poly - Emergency Preparedness Board Game</title>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -44,13 +44,15 @@
         body {
             background: var(--light-bg);
             color: var(--text-dark);
-            font-family: "Ubuntu", sans-serif;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-weight: 400;
             font-style: normal;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             min-height: 100vh;
             padding: 20px;
+            letter-spacing: -0.01em;
+            line-height: 1.6;
         }
         
         .container {
@@ -83,14 +85,15 @@
         }
         
         .game-board {
-            width: 600px;
-            height: 600px;
+            width: 800px;
+            height: 800px;
             position: relative;
             background: linear-gradient(135deg, var(--card-bg), #fbfdff);
-            border: 3px solid var(--primary);
-            border-radius: 16px;
+            border: 4px solid var(--primary);
+            border-radius: 20px;
             margin-bottom: 20px;
             box-shadow: var(--shadow);
+            overflow: visible;
         }
 
         .board-center {
@@ -98,31 +101,37 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
+            width: 520px;
+            height: 520px;
             background: linear-gradient(135deg, var(--p6), var(--p7));
-            border: 2px solid var(--primary);
-            border-radius: 12px;
+            border: 3px solid var(--primary);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: var(--text-dark);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .board-logo h3 {
             font-size: 28px;
-            font-weight: 900;
+            font-weight: 600;
             margin: 10px 0;
             color: var(--primary);
             line-height: 1.1;
+            font-family: "Playfair Display", Georgia, serif;
+            letter-spacing: -0.02em;
         }
 
         .board-logo p {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--p1);
             margin: 0;
             font-weight: 500;
+            font-family: "Inter", sans-serif;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
         }
 
         .board-logo i {
@@ -133,10 +142,10 @@
         
         .board-space {
             position: absolute;
-            border: 2px solid rgba(26, 115, 232, 0.15);
+            border: 2px solid rgba(26, 115, 232, 0.2);
             background: var(--card-bg);
             color: var(--text-dark);
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
             text-align: center;
             cursor: pointer;
@@ -145,34 +154,38 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 4px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(18, 38, 63, 0.04);
+            padding: 3px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(18, 38, 63, 0.08);
+            overflow: hidden;
+            z-index: 1;
         }
         
         .board-space:hover {
-            transform: scale(1.05);
-            z-index: 10;
-            box-shadow: var(--shadow);
+            transform: scale(1.08);
+            z-index: 15;
+            box-shadow: 0 8px 25px rgba(26, 115, 232, 0.2);
             border-color: var(--primary);
         }
         
         .board-space.corner {
-            width: 90px;
-            height: 90px;
+            width: 120px;
+            height: 120px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             font-weight: 700;
+            font-size: 11px;
+            border: 3px solid var(--primary-dark);
         }
         
         .board-space.side {
-            width: 60px;
-            height: 90px;
+            width: 65px;
+            height: 95px;
         }
         
         .board-space.top, .board-space.bottom {
-            width: 90px;
-            height: 60px;
+            width: 95px;
+            height: 65px;
         }
         
         .property {
@@ -211,10 +224,24 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
-        .player1 { background: linear-gradient(135deg, var(--accent), #f56b77); }
-        .player2 { background: linear-gradient(135deg, var(--p1), #2f8fc1); }
-        .player3 { background: linear-gradient(135deg, var(--secondary), #2ea044); }
-        .player4 { background: linear-gradient(135deg, var(--p2), #f1a85b); }
+        /* Default player colors - will be overridden by dynamic colors */
+        .player1 { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .player2 { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .player3 { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .player4 { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        
+        /* Board space highlighting for current player */
+        .board-space.current-player {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            border: 2px solid #ffd700;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 1); }
+            100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        }
         
         .dice-container {
             display: flex;
@@ -238,11 +265,48 @@
             cursor: pointer;
             transition: var(--transition);
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dice:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .dice:hover:before {
+            left: 100%;
         }
         
         .dice:hover {
             transform: scale(1.05);
             box-shadow: 0 12px 24px rgba(18, 38, 63, 0.12);
+            border-color: var(--secondary);
+        }
+        
+        .dice:active {
+            transform: scale(0.95);
+        }
+        
+        /* Special button styles */
+        #roll-dice {
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
+            font-size: 16px;
+            padding: 14px 24px;
+        }
+        
+        #roll-dice:hover {
+            background: linear-gradient(90deg, #2ea044, var(--secondary));
+        }
+        
+        #roll-dice:disabled {
+            background: linear-gradient(90deg, #95a5a6, #7f8c8d);
         }
         
         .controls {
@@ -263,7 +327,24 @@
             font-weight: 700;
             transition: var(--transition);
             box-shadow: var(--shadow);
-            font-family: "Ubuntu", sans-serif;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        button:hover:before {
+            left: 100%;
         }
         
         button:hover {
@@ -271,11 +352,25 @@
             box-shadow: 0 12px 24px rgba(18, 38, 63, 0.15);
         }
         
+        button:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow);
+        }
+        
         button:disabled {
             background: linear-gradient(90deg, #7f8c8d, #95a5a6);
             cursor: not-allowed;
             transform: none;
             opacity: 0.6;
+        }
+        
+        button:disabled:hover {
+            transform: none;
+            box-shadow: var(--shadow);
+        }
+        
+        button:disabled:before {
+            display: none;
         }
         
         .game-status {
@@ -357,9 +452,12 @@
             color: var(--primary);
             margin-bottom: 24px;
             text-align: center;
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 32px;
+            font-weight: 600;
+            font-family: "Playfair Display", Georgia, serif;
             text-shadow: none;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
         
         h2 {
@@ -368,12 +466,28 @@
             border-bottom: 2px solid rgba(26, 115, 232, 0.08);
             padding-bottom: 8px;
             font-weight: 600;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 22px;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
         }
         
         h3 {
             color: var(--primary);
             margin: 12px 0;
             font-weight: 600;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 18px;
+            letter-spacing: -0.01em;
+            line-height: 1.4;
+        }
+        
+        h4 {
+            font-family: "Inter", sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: -0.01em;
+            line-height: 1.4;
         }
         
         .rules-list, .disaster-list {
@@ -443,23 +557,23 @@
             }
             
             .game-board {
-                width: 500px;
-                height: 500px;
+                width: 600px;
+                height: 600px;
             }
             
             .board-space.corner {
-                width: 75px;
-                height: 75px;
+                width: 90px;
+                height: 90px;
             }
             
             .board-space.side {
-                width: 50px;
+                width: 55px;
                 height: 75px;
             }
             
             .board-space.top, .board-space.bottom {
                 width: 75px;
-                height: 50px;
+                height: 55px;
             }
         }
         
@@ -473,23 +587,23 @@
             }
             
             .game-board {
-                width: 400px;
-                height: 400px;
+                width: 500px;
+                height: 500px;
             }
             
             .board-space.corner {
-                width: 60px;
-                height: 60px;
+                width: 75px;
+                height: 75px;
             }
             
             .board-space.side {
-                width: 40px;
-                height: 60px;
+                width: 45px;
+                height: 65px;
             }
             
             .board-space.top, .board-space.bottom {
-                width: 60px;
-                height: 40px;
+                width: 65px;
+                height: 45px;
             }
             
             .player {
@@ -536,22 +650,240 @@
             color: var(--accent);
         }
         
-        /* Custom scrollbar */
-        .info-panel::-webkit-scrollbar {
-            width: 8px;
+        /* Custom tooltip styling */
+        [title] {
+            position: relative;
         }
         
-        .info-panel::-webkit-scrollbar-thumb {
-            background: linear-gradient(90deg, var(--p6), var(--p1));
+        [title]:hover:after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
+            max-width: 250px;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+        
+        [title]:hover:before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            pointer-events: none;
+        }
+        
+        /* Improved game status styling */
+        .game-status {
+            background: linear-gradient(135deg, var(--card-bg), var(--p6));
+            border: 2px solid rgba(26, 115, 232, 0.1);
+        }
+        
+        /* Better space highlighting */
+        .board-space.current-player {
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 20px rgba(242, 92, 84, 0.4);
+            z-index: 10;
+        }
+
+        /* Player Setup Modal */
+        .setup-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(6, 12, 30, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(8px);
+        }
+
+        .setup-content {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(16, 24, 32, 0.04);
+            box-shadow: 0 25px 80px rgba(8, 12, 32, 0.3);
+        }
+
+        .setup-content h2 {
+            margin-bottom: 16px;
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--p1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .setup-content p {
+            margin-bottom: 32px;
+            color: var(--text-dark);
+            opacity: 0.8;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .player-setup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .player-setup-card {
+            background: linear-gradient(135deg, var(--light-bg), #fff);
+            padding: 24px;
+            border-radius: 16px;
+            border: 2px solid rgba(26, 115, 232, 0.1);
+            transition: var(--transition);
+        }
+
+        .player-setup-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .player-setup-card h4 {
+            margin-bottom: 16px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .color-selection {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 3px solid transparent;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-option.selected {
+            border-color: var(--text-dark);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.3);
+        }
+
+        .color-option.selected:after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .setup-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .setup-actions button {
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 12px;
+        }
+
+        #start-game-btn {
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
+        }
+
+        #start-game-btn:hover {
+            background: linear-gradient(90deg, #2ea044, var(--secondary));
+        }
+
+        /* Back to main page button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-decoration: none;
             border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 1000;
         }
-        
-        .info-panel::-webkit-scrollbar-track {
-            background: transparent;
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(18, 38, 63, 0.15);
+            text-decoration: none;
+            color: white;
+        }
+
+        .back-button i {
+            font-size: 1rem;
+        }
+
+        /* Adjust container for back button */
+        .container {
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .back-button {
+                top: 10px;
+                left: 10px;
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .container {
+                margin-top: 55px;
+            }
         }
     </style>
 </head>
 <body>
+    <a href="../gamified-learning.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Games
+    </a>
     <div class="container">
         <div class="info-panel">
             <h1><i class="fas fa-shield-alt"></i> Disaster Poly</h1>
@@ -607,24 +939,34 @@
             </div>
 
             <div class="dice-container">
-                <div class="dice" id="dice1">🎲</div>
-                <div class="dice" id="dice2">🎲</div>
-                <div id="dice-total" style="margin-left: 20px; font-size: 20px; font-weight: bold; color: var(--primary);">
+                <div class="dice" id="dice1" title="First die - click Roll Dice to roll both dice">🎲</div>
+                <div class="dice" id="dice2" title="Second die - click Roll Dice to roll both dice">🎲</div>
+                <div id="dice-total" style="margin-left: 20px; font-size: 20px; font-weight: bold; color: var(--primary);" title="Total of both dice - this is how many spaces you'll move">
                     <i class="fas fa-dice"></i> Total: 0
                 </div>
             </div>
 
             <div class="controls">
-                <button id="roll-dice"><i class="fas fa-dice"></i> Roll Dice</button>
-                <button id="buy-property" disabled><i class="fas fa-shopping-cart"></i> Buy Property ($200)</button>
-                <button id="use-supplies" disabled><i class="fas fa-first-aid"></i> Use Supplies</button>
-                <button id="end-turn" disabled><i class="fas fa-forward"></i> End Turn</button>
-                <button id="new-game"><i class="fas fa-redo"></i> New Game</button>
+                <button id="roll-dice" title="Roll the dice to move your player around the board">
+                    <i class="fas fa-dice"></i> Roll Dice
+                </button>
+                <button id="buy-property" disabled title="Purchase this emergency service to improve your preparedness">
+                    <i class="fas fa-shopping-cart"></i> Buy Property ($200)
+                </button>
+                <button id="use-supplies" disabled title="Use emergency supplies to avoid disaster penalty">
+                    <i class="fas fa-first-aid"></i> Use Supplies
+                </button>
+                <button id="end-turn" disabled title="End your turn and let the next player play">
+                    <i class="fas fa-forward"></i> End Turn
+                </button>
+                <button id="new-game" title="Start a new game with fresh players and reset all progress">
+                    <i class="fas fa-redo"></i> New Game
+                </button>
             </div>
 
             <div class="player-stats">
                 <div class="player-card active" id="player1-card">
-                    <h4><i class="fas fa-user-circle" style="color: var(--accent);"></i> Player 1</h4>
+                    <h4><i class="fas fa-user-circle" style="color: #e74c3c;"></i> Player 1</h4>
                     <div><i class="fas fa-dollar-sign"></i> Money: $<span id="p1-money">1500</span></div>
                     <div><i class="fas fa-heart"></i> Preparedness: <span id="p1-preparedness">100</span></div>
                     <div><i class="fas fa-first-aid"></i> Supplies: <span id="p1-supplies">3</span></div>
@@ -634,7 +976,7 @@
                     </div>
                 </div>
                 <div class="player-card" id="player2-card">
-                    <h4><i class="fas fa-user-circle" style="color: var(--p1);"></i> Player 2</h4>
+                    <h4><i class="fas fa-user-circle" style="color: #3498db;"></i> Player 2</h4>
                     <div><i class="fas fa-dollar-sign"></i> Money: $<span id="p2-money">1500</span></div>
                     <div><i class="fas fa-heart"></i> Preparedness: <span id="p2-preparedness">100</span></div>
                     <div><i class="fas fa-first-aid"></i> Supplies: <span id="p2-supplies">3</span></div>
@@ -657,6 +999,45 @@
         </div>
     </div>
 
+    <!-- Player Setup Modal -->
+    <div class="setup-modal" id="setup-modal">
+        <div class="setup-content">
+            <h2><i class="fas fa-users"></i> Game Setup</h2>
+            <p>Choose your player colors and start your emergency preparedness adventure!</p>
+            
+            <div class="player-setup-grid">
+                <div class="player-setup-card" id="player-1-setup">
+                    <h4><i class="fas fa-user-circle"></i> Player 1</h4>
+                    <div class="color-selection">
+                        <div class="color-option selected" data-color="#e74c3c" style="background: linear-gradient(135deg, #e74c3c, #c0392b);" title="Classic Red"></div>
+                        <div class="color-option" data-color="#3498db" style="background: linear-gradient(135deg, #3498db, #2980b9);" title="Ocean Blue"></div>
+                        <div class="color-option" data-color="#2ecc71" style="background: linear-gradient(135deg, #2ecc71, #27ae60);" title="Emerald Green"></div>
+                        <div class="color-option" data-color="#f39c12" style="background: linear-gradient(135deg, #f39c12, #e67e22);" title="Golden Orange"></div>
+                        <div class="color-option" data-color="#9b59b6" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);" title="Royal Purple"></div>
+                        <div class="color-option" data-color="#1abc9c" style="background: linear-gradient(135deg, #1abc9c, #16a085);" title="Turquoise"></div>
+                    </div>
+                </div>
+                
+                <div class="player-setup-card" id="player-2-setup">
+                    <h4><i class="fas fa-user-circle"></i> Player 2</h4>
+                    <div class="color-selection">
+                        <div class="color-option" data-color="#e74c3c" style="background: linear-gradient(135deg, #e74c3c, #c0392b);" title="Classic Red"></div>
+                        <div class="color-option selected" data-color="#3498db" style="background: linear-gradient(135deg, #3498db, #2980b9);" title="Ocean Blue"></div>
+                        <div class="color-option" data-color="#2ecc71" style="background: linear-gradient(135deg, #2ecc71, #27ae60);" title="Emerald Green"></div>
+                        <div class="color-option" data-color="#f39c12" style="background: linear-gradient(135deg, #f39c12, #e67e22);" title="Golden Orange"></div>
+                        <div class="color-option" data-color="#9b59b6" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);" title="Royal Purple"></div>
+                        <div class="color-option" data-color="#1abc9c" style="background: linear-gradient(135deg, #1abc9c, #16a085);" title="Turquoise"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setup-actions">
+                <button id="start-game-btn"><i class="fas fa-play"></i> Start Game</button>
+                <button id="add-player-btn" style="display: none;"><i class="fas fa-plus"></i> Add Player</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Disaster Poly Game - Emergency Preparedness Board Game
         
@@ -664,8 +1045,8 @@
         const gameState = {
             currentPlayer: 0,
             players: [
-                { position: 0, money: 1500, preparedness: 100, supplies: 3, knowledge: 10, properties: [] },
-                { position: 0, money: 1500, preparedness: 100, supplies: 3, knowledge: 10, properties: [] }
+                { position: 0, money: 1500, preparedness: 100, supplies: 3, knowledge: 10, properties: [], color: '#e74c3c' },
+                { position: 0, money: 1500, preparedness: 100, supplies: 3, knowledge: 10, properties: [], color: '#3498db' }
             ],
             round: 1,
             turn: 1,
@@ -673,7 +1054,8 @@
             lastRoll: [0, 0],
             gameBoard: null,
             disasterCards: [],
-            winner: null
+            winner: null,
+            gameStarted: false
         };
 
         // Board spaces configuration
@@ -790,6 +1172,13 @@
         // Initialize the game
         function initGame() {
             console.log('Initializing game...');
+            
+            // Show setup modal if game hasn't started
+            if (!gameState.gameStarted) {
+                showSetupModal();
+                return;
+            }
+            
             console.log('Creating board...');
             createBoard();
             console.log('Resetting game state...');
@@ -800,8 +1189,78 @@
             updateGameStatus();
             console.log('Adding event listeners...');
             addEventListeners();
-            showMessage('Welcome to Disaster Poly! Click "Roll Dice" to start your turn.');
+            updateGameInstructions();
+            showMessage('🎮 Welcome to Disaster Poly! Click "Roll Dice" to start your turn.');
             console.log('Game initialization complete!');
+        }
+
+        // Show setup modal
+        function showSetupModal() {
+            const setupModal = document.getElementById('setup-modal');
+            setupModal.style.display = 'flex';
+            
+            // Add event listeners for color selection
+            setupColorSelectionListeners();
+            
+            // Add event listener for start game button
+            document.getElementById('start-game-btn').addEventListener('click', startGameFromSetup);
+        }
+
+        // Setup color selection listeners
+        function setupColorSelectionListeners() {
+            const playerCards = document.querySelectorAll('.player-setup-card');
+            
+            playerCards.forEach((card, playerIndex) => {
+                const colorOptions = card.querySelectorAll('.color-option');
+                
+                colorOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        // Remove selection from other options in this player's card
+                        colorOptions.forEach(opt => opt.classList.remove('selected'));
+                        
+                        // Add selection to clicked option
+                        option.classList.add('selected');
+                        
+                        // Update player color in game state
+                        const selectedColor = option.dataset.color;
+                        gameState.players[playerIndex].color = selectedColor;
+                        
+                        // Remove this color from other players' options
+                        updateAvailableColors();
+                    });
+                });
+            });
+        }
+
+        // Update available colors based on selections
+        function updateAvailableColors() {
+            const selectedColors = gameState.players.map(p => p.color);
+            const allColorOptions = document.querySelectorAll('.color-option');
+            
+            allColorOptions.forEach(option => {
+                const color = option.dataset.color;
+                const isSelected = option.classList.contains('selected');
+                
+                if (selectedColors.includes(color) && !isSelected) {
+                    option.style.opacity = '0.3';
+                    option.style.pointerEvents = 'none';
+                } else {
+                    option.style.opacity = '1';
+                    option.style.pointerEvents = 'auto';
+                }
+            });
+        }
+
+        // Start game from setup
+        function startGameFromSetup() {
+            // Hide setup modal
+            document.getElementById('setup-modal').style.display = 'none';
+            
+            // Mark game as started
+            gameState.gameStarted = true;
+            
+            // Initialize the actual game
+            initGame();
         }
 
         // Create game board
@@ -837,30 +1296,47 @@
                 space.style.left = position.x + 'px';
                 space.style.top = position.y + 'px';
                 space.style.position = 'absolute';
-                space.style.width = '60px';
-                space.style.height = '60px';
                 
-                // Add appropriate classes
+                // Set size based on corner or regular space
                 if ([0, 10, 20, 30].includes(i)) {
-                    space.classList.add('corner-space');
-                    space.style.width = '90px';
-                    space.style.height = '90px';
+                    space.classList.add('corner');
+                    space.style.width = '100px';
+                    space.style.height = '100px';
+                } else {
+                    space.style.width = '55px';
+                    space.style.height = '85px';
                 }
                 
                 // Add type-specific styling
                 space.classList.add(spaceData.type);
                 
-                // Add content
+                // Add content with better sizing
+                const isCorner = [0, 10, 20, 30].includes(i);
+                const iconSize = isCorner ? '16px' : '14px';
+                const nameSize = isCorner ? '8px' : '7px';
+                const costSize = isCorner ? '6px' : '5px';
+                
                 space.innerHTML = `
-                    <div class="space-content">
-                        <div class="space-icon" style="font-size: 16px;">${spaceData.emoji}</div>
-                        <div class="space-name" style="font-size: 8px; line-height: 1.1;">${spaceData.name}</div>
-                        ${spaceData.price ? `<div class="space-cost" style="font-size: 7px; color: #27ae60;">$${spaceData.price}</div>` : ''}
+                    <div class="space-content" style="padding: 2px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <div class="space-icon" style="font-size: ${iconSize}; margin-bottom: 2px;">${spaceData.emoji}</div>
+                        <div class="space-name" style="font-size: ${nameSize}; line-height: 1.1; text-align: center; overflow: hidden; display: -webkit-box; -webkit-line-clamp: ${isCorner ? 3 : 2}; -webkit-box-orient: vertical;">${spaceData.name}</div>
+                        ${spaceData.price ? `<div class="space-cost" style="font-size: ${costSize}; color: #27ae60; font-weight: bold; margin-top: 1px;">$${spaceData.price}</div>` : ''}
                     </div>
                 `;
                 
-                // Add click listener
+                // Add click listener for space info
                 space.addEventListener('click', () => showSpaceInfo(spaceData));
+                
+                // Add hover effect
+                space.addEventListener('mouseenter', () => {
+                    space.style.transform = 'scale(1.1)';
+                    space.style.zIndex = '100';
+                });
+                
+                space.addEventListener('mouseleave', () => {
+                    space.style.transform = 'scale(1)';
+                    space.style.zIndex = '1';
+                });
                 
                 board.appendChild(space);
             }
@@ -871,44 +1347,77 @@
 
         // Calculate board position for space index
         function getBoardPosition(index) {
-            const boardSize = 600;
-            const spaceSize = 60;
-            const cornerSize = 90;
+            const boardSize = 800;
+            const margin = 25;
+            const cornerSize = 120;
+            const regularWidth = 65;
+            const regularHeight = 95;
             
-            // Bottom row (spaces 0-10)
-            if (index >= 0 && index <= 10) {
-                const x = boardSize - cornerSize - (index * spaceSize);
-                return { x: Math.max(0, x), y: boardSize - cornerSize };
+            // Total spaces per side (including corners)
+            const totalSpacesPerSide = 11; // 0-10, 11-20, etc.
+            const regularSpacesPerSide = 9; // excluding corners
+            
+            // Available space for regular spaces on each side
+            const sideLength = boardSize - (2 * margin) - (2 * cornerSize);
+            const spaceGap = sideLength / regularSpacesPerSide;
+            
+            let x, y;
+            
+            // Bottom side (0-10): right to left
+            if (index <= 10) {
+                if (index === 0) {
+                    // Bottom-right corner (START)
+                    x = boardSize - margin - cornerSize;
+                    y = boardSize - margin - cornerSize;
+                } else if (index === 10) {
+                    // Bottom-left corner
+                    x = margin;
+                    y = boardSize - margin - cornerSize;
+                } else {
+                    // Regular bottom spaces (1-9)
+                    const relativePos = index - 1; // 0-8 for spaces 1-9
+                    x = boardSize - margin - cornerSize - spaceGap - (relativePos * spaceGap) - (regularWidth / 2);
+                    y = boardSize - margin - regularHeight;
+                }
+            }
+            // Left side (11-19): bottom to top
+            else if (index <= 19) {
+                const relativePos = index - 11; // 0-8 for spaces 11-19
+                x = margin;
+                y = boardSize - margin - cornerSize - spaceGap - (relativePos * spaceGap) - (regularHeight / 2);
+            }
+            // Top side (20-30): left to right
+            else if (index <= 30) {
+                if (index === 20) {
+                    // Top-left corner
+                    x = margin;
+                    y = margin;
+                } else if (index === 30) {
+                    // Top-right corner
+                    x = boardSize - margin - cornerSize;
+                    y = margin;
+                } else {
+                    // Regular top spaces (21-29)
+                    const relativePos = index - 21; // 0-8 for spaces 21-29
+                    x = margin + cornerSize + spaceGap + (relativePos * spaceGap) - (regularWidth / 2);
+                    y = margin;
+                }
+            }
+            // Right side (31-39): top to bottom
+            else {
+                const relativePos = index - 31; // 0-8 for spaces 31-39
+                x = boardSize - margin - regularWidth;
+                y = margin + cornerSize + spaceGap + (relativePos * spaceGap) - (regularHeight / 2);
             }
             
-            // Left side (spaces 11-19)
-            if (index >= 11 && index <= 19) {
-                const relativeIndex = index - 11;
-                const y = boardSize - cornerSize - spaceSize - (relativeIndex * spaceSize);
-                return { x: 0, y: Math.max(0, y) };
-            }
-            
-            // Top row (spaces 20-30)
-            if (index >= 20 && index <= 30) {
-                const relativeIndex = index - 20;
-                const x = cornerSize + (relativeIndex * spaceSize);
-                return { x: Math.min(boardSize - spaceSize, x), y: 0 };
-            }
-            
-            // Right side (spaces 31-39)
-            if (index >= 31 && index <= 39) {
-                const relativeIndex = index - 31;
-                const y = cornerSize + (relativeIndex * spaceSize);
-                return { x: boardSize - cornerSize, y: Math.min(boardSize - spaceSize, y) };
-            }
-            
-            return { x: 0, y: 0 };
+            return { x: Math.round(x), y: Math.round(y) };
         }
 
         // Add player pieces to the board
         function addPlayersToBoard() {
-            // Remove existing player pieces
+            // Remove existing player pieces and highlights
             document.querySelectorAll('.player').forEach(p => p.remove());
+            document.querySelectorAll('.board-space').forEach(s => s.classList.remove('current-player'));
             
             gameState.players.forEach((player, index) => {
                 const playerElement = document.createElement('div');
@@ -916,12 +1425,51 @@
                 playerElement.id = `player-${index + 1}`;
                 
                 const position = getBoardPosition(player.position);
-                const offset = index * 25; // Offset multiple players on same space
-                playerElement.style.left = (position.x + 35 + offset) + 'px';
-                playerElement.style.top = (position.y + 35 + offset) + 'px';
+                
+                // Better offset calculation for multiple players on same space
+                const spaceIsCorner = [0, 10, 20, 30].includes(player.position);
+                const baseOffset = spaceIsCorner ? 60 : 35;
+                const offsetX = (index % 2) * 30 - 15;
+                const offsetY = Math.floor(index / 2) * 30 - 15;
+                
+                playerElement.style.left = (position.x + baseOffset + offsetX) + 'px';
+                playerElement.style.top = (position.y + baseOffset + offsetY) + 'px';
+                
+                // Apply player's chosen color
+                const darkerColor = darkenColor(player.color, 20);
+                playerElement.style.background = `linear-gradient(135deg, ${player.color}, ${darkerColor})`;
+                
+                // Add player label
+                playerElement.title = `Player ${index + 1} - Preparedness: ${player.preparedness}, Money: $${player.money}`;
+                
+                // Add smooth transition
+                playerElement.style.transition = 'all 0.5s ease-in-out';
+                playerElement.style.zIndex = '20';
+                
+                // Highlight current player's space
+                if (index === gameState.currentPlayer && !gameState.winner) {
+                    const spaceElement = document.getElementById(`space-${player.position}`);
+                    if (spaceElement) {
+                        spaceElement.classList.add('current-player');
+                    }
+                    // Make current player piece slightly larger
+                    playerElement.style.transform = 'scale(1.1)';
+                }
                 
                 document.getElementById('game-board').appendChild(playerElement);
             });
+        }
+
+        // Helper function to darken a color
+        function darkenColor(color, percent) {
+            const num = parseInt(color.slice(1), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
         }
 
         // Show space information
@@ -931,14 +1479,40 @@
             const description = document.getElementById('card-description');
             const choices = document.getElementById('card-choices');
             
-            title.textContent = `${spaceData.emoji} ${spaceData.name}`;
+            title.innerHTML = `${spaceData.emoji} ${spaceData.name}`;
             
-            let desc = `Type: ${spaceData.type.replace('-', ' ').toUpperCase()}`;
-            if (spaceData.price) desc += `\nPrice: $${spaceData.price}`;
-            if (spaceData.penalty) desc += `\nPenalty: $${spaceData.penalty}`;
-            if (spaceData.reward) desc += `\nReward: $${spaceData.reward}`;
+            let desc = `<div style="text-align: left;">`;
+            desc += `<p><strong>Type:</strong> ${spaceData.type.replace('-', ' ').toUpperCase()}</p>`;
             
-            description.textContent = desc;
+            // Add specific information based on space type
+            switch(spaceData.type) {
+                case 'emergency-service':
+                    desc += `<p><strong>Purchase Price:</strong> $${spaceData.price}</p>`;
+                    desc += `<p><strong>Effect:</strong> Provides protection against disasters (+20 preparedness when landed on by owner)</p>`;
+                    break;
+                case 'disaster-zone':
+                    desc += `<p><strong>Penalty:</strong> $${spaceData.penalty} (can be avoided with supplies)</p>`;
+                    desc += `<p><strong>Effect:</strong> Tests your emergency preparedness (-30 preparedness if no supplies)</p>`;
+                    break;
+                case 'safe-zone':
+                    desc += `<p><strong>Reward:</strong> $${spaceData.reward}</p>`;
+                    desc += `<p><strong>Effect:</strong> +30 preparedness, +1 supply</p>`;
+                    break;
+                case 'special':
+                    if (spaceData.name.includes('Disaster Card')) {
+                        desc += `<p><strong>Effect:</strong> Draw a disaster scenario card with choice-based outcomes</p>`;
+                    } else {
+                        desc += `<p><strong>Effect:</strong> Emergency training drill (+15 knowledge, +40 preparedness)</p>`;
+                    }
+                    break;
+                case 'corner':
+                    desc += `<p><strong>Effect:</strong> Special corner space with major benefits</p>`;
+                    if (spaceData.effect === 'start') desc += `<p>Collect $200 and +50 preparedness when passing</p>`;
+                    break;
+            }
+            
+            desc += `</div>`;
+            description.innerHTML = desc;
             choices.innerHTML = '';
             
             modal.style.display = 'flex';
@@ -950,38 +1524,62 @@
             
             if (gameState.diceRolled) {
                 console.log('Dice already rolled this turn');
+                showMessage('You have already rolled this turn! Click "End Turn" to continue.');
                 return;
             }
             
-            const dice1 = Math.floor(Math.random() * 6) + 1;
-            const dice2 = Math.floor(Math.random() * 6) + 1;
-            const total = dice1 + dice2;
-            
-            console.log('Dice rolled:', dice1, dice2, 'Total:', total);
-            
-            gameState.lastRoll = [dice1, dice2];
-            gameState.diceRolled = true;
-            
-            // Update dice display
+            // Add rolling animation
             const dice1El = document.getElementById('dice1');
             const dice2El = document.getElementById('dice2');
-            const diceTotalEl = document.getElementById('dice-total');
             
-            if (dice1El) dice1El.textContent = dice1;
-            if (dice2El) dice2El.textContent = dice2;
-            if (diceTotalEl) diceTotalEl.textContent = `Total: ${total}`;
+            dice1El.style.animation = 'spin 0.5s ease';
+            dice2El.style.animation = 'spin 0.5s ease';
             
-            // Move player
-            movePlayer(gameState.currentPlayer, total);
+            // Add spin animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
             
-            // Update UI
-            const rollBtn = document.getElementById('roll-dice');
-            const endBtn = document.getElementById('end-turn');
-            
-            if (rollBtn) rollBtn.disabled = true;
-            if (endBtn) endBtn.disabled = false;
-            
-            console.log('Dice roll complete');
+            setTimeout(() => {
+                const dice1 = Math.floor(Math.random() * 6) + 1;
+                const dice2 = Math.floor(Math.random() * 6) + 1;
+                const total = dice1 + dice2;
+                
+                console.log('Dice rolled:', dice1, dice2, 'Total:', total);
+                
+                gameState.lastRoll = [dice1, dice2];
+                gameState.diceRolled = true;
+                
+                // Update dice display
+                const diceTotalEl = document.getElementById('dice-total');
+                
+                if (dice1El) dice1El.textContent = dice1;
+                if (dice2El) dice2El.textContent = dice2;
+                if (diceTotalEl) diceTotalEl.innerHTML = `<i class="fas fa-dice"></i> Total: ${total}`;
+                
+                // Move player
+                movePlayer(gameState.currentPlayer, total);
+                
+                // Update UI
+                const rollBtn = document.getElementById('roll-dice');
+                const endBtn = document.getElementById('end-turn');
+                
+                if (rollBtn) rollBtn.disabled = true;
+                if (endBtn) endBtn.disabled = false;
+                
+                showMessage(`🎲 Rolled ${dice1} + ${dice2} = ${total}! Moving ${total} spaces.`);
+                
+                // Reset animations
+                dice1El.style.animation = '';
+                dice2El.style.animation = '';
+                
+                console.log('Dice roll complete');
+            }, 500);
         }
 
         // Move player
@@ -992,6 +1590,9 @@
             // Calculate new position
             player.position = (player.position + spaces) % 40;
             
+            // Highlight the path (animate movement)
+            highlightPlayerPath(oldPosition, player.position, spaces);
+            
             // Check if passed start (gained money and preparedness)
             if (player.position < oldPosition) {
                 player.money += 200;
@@ -999,16 +1600,57 @@
                 showMessage("🏛️ Passed Emergency HQ! +$200 and +50 preparedness!");
             }
             
-            // Update visual position
-            addPlayersToBoard();
+            // Update visual position after a delay for animation
+            setTimeout(() => {
+                addPlayersToBoard();
+                
+                // Handle space landing
+                const spaceData = boardSpaces.find(s => s.id === player.position);
+                if (spaceData) {
+                    // Highlight the current space
+                    const spaceElement = document.getElementById(`space-${player.position}`);
+                    if (spaceElement) {
+                        spaceElement.classList.add('pulse');
+                        setTimeout(() => {
+                            spaceElement.classList.remove('pulse');
+                        }, 1100);
+                    }
+                    
+                    handleSpaceLanding(playerIndex, spaceData);
+                }
+                
+                updatePlayerStats();
+            }, 200);
+        }
+
+        // Highlight player movement path
+        function highlightPlayerPath(startPos, endPos, spaces) {
+            let currentPos = startPos;
+            let stepsToGo = spaces;
             
-            // Handle space landing
-            const spaceData = boardSpaces.find(s => s.id === player.position);
-            if (spaceData) {
-                handleSpaceLanding(playerIndex, spaceData);
-            }
+            const highlightNext = () => {
+                if (stepsToGo <= 0) return;
+                
+                currentPos = (currentPos + 1) % 40;
+                stepsToGo--;
+                
+                const spaceElement = document.getElementById(`space-${currentPos}`);
+                if (spaceElement) {
+                    spaceElement.style.backgroundColor = 'rgba(26, 115, 232, 0.3)';
+                    spaceElement.style.borderColor = 'var(--primary)';
+                    
+                    setTimeout(() => {
+                        spaceElement.style.backgroundColor = '';
+                        spaceElement.style.borderColor = '';
+                    }, 300);
+                }
+                
+                if (stepsToGo > 0) {
+                    setTimeout(highlightNext, 100);
+                }
+            };
             
-            updatePlayerStats();
+            setTimeout(highlightNext, 100);
         }
 
         // Handle landing on a space
@@ -1019,7 +1661,10 @@
                 case 'emergency-service':
                     if (!player.properties.includes(spaceData.id)) {
                         if (player.money >= spaceData.price) {
-                            document.getElementById('buy-property').disabled = false;
+                            const buyBtn = document.getElementById('buy-property');
+                            buyBtn.disabled = false;
+                            buyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Buy ${spaceData.name} ($${spaceData.price})`;
+                            buyBtn.title = `Purchase ${spaceData.name} for $${spaceData.price} to improve your preparedness`;
                         }
                         showMessage(`${spaceData.emoji} ${spaceData.name} available for $${spaceData.price}`);
                     } else {
@@ -1154,10 +1799,14 @@
                 player.properties.push(spaceData.id);
                 player.preparedness += 50;
                 
-                showMessage(`Purchased ${spaceData.name} for $${spaceData.price}! +50 preparedness`);
+                showMessage(`✅ Purchased ${spaceData.name} for $${spaceData.price}! +50 preparedness`);
                 updatePlayerStats();
                 
-                document.getElementById('buy-property').disabled = true;
+                // Reset buy button
+                const buyBtn = document.getElementById('buy-property');
+                buyBtn.disabled = true;
+                buyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Buy Property`;
+                buyBtn.title = 'Purchase this emergency service to improve your preparedness';
             }
         }
 
@@ -1182,15 +1831,25 @@
             if (gameState.players[gameState.currentPlayer].preparedness >= 1000) {
                 gameState.winner = gameState.currentPlayer;
                 showMessage(`🎉 Player ${gameState.currentPlayer + 1} wins with ${gameState.players[gameState.currentPlayer].preparedness} preparedness points!`);
+                
+                // Disable all action buttons
+                document.getElementById('roll-dice').disabled = true;
+                document.getElementById('buy-property').disabled = true;
+                document.getElementById('use-supplies').disabled = true;
+                document.getElementById('end-turn').disabled = true;
+                
+                updateGameInstructions();
                 return;
             }
             
             // Switch to next player
+            const previousPlayer = gameState.currentPlayer;
             gameState.currentPlayer = (gameState.currentPlayer + 1) % gameState.players.length;
             gameState.turn++;
             
             if (gameState.currentPlayer === 0) {
                 gameState.round++;
+                showMessage(`🔄 Round ${gameState.round} begins!`);
             }
             
             // Reset turn state
@@ -1199,15 +1858,25 @@
             // Update UI
             updateGameStatus();
             updatePlayerStats();
+            updateGameInstructions();
             
+            // Reset button states
             document.getElementById('roll-dice').disabled = false;
-            document.getElementById('buy-property').disabled = true;
+            const buyBtn = document.getElementById('buy-property');
+            buyBtn.disabled = true;
+            buyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Buy Property`;
+            buyBtn.title = 'Purchase this emergency service to improve your preparedness';
+            
             document.getElementById('use-supplies').disabled = true;
             document.getElementById('end-turn').disabled = true;
             
+            // Reset dice display
             document.getElementById('dice1').textContent = '🎲';
             document.getElementById('dice2').textContent = '🎲';
-            document.getElementById('dice-total').textContent = 'Total: 0';
+            document.getElementById('dice-total').innerHTML = '<i class="fas fa-dice"></i> Total: 0';
+            
+            // Show turn change message
+            showMessage(`🔄 Player ${previousPlayer + 1} turn ended. Player ${gameState.currentPlayer + 1}'s turn!`);
         }
 
         // Reset game
@@ -1225,6 +1894,7 @@
                 player.supplies = 3;
                 player.knowledge = 10;
                 player.properties = [];
+                // Keep the color - don't reset it
             });
             
             addPlayersToBoard();
@@ -1249,6 +1919,12 @@
                     card.classList.remove('active');
                 }
                 
+                // Update player icon color
+                const playerIcon = card.querySelector('.fa-user-circle');
+                if (playerIcon) {
+                    playerIcon.style.color = player.color;
+                }
+                
                 // Update stats
                 document.getElementById(`p${index + 1}-money`).textContent = player.money;
                 document.getElementById(`p${index + 1}-preparedness`).textContent = player.preparedness;
@@ -1259,6 +1935,9 @@
                 const resourceBar = document.getElementById(`p${index + 1}-resource-bar`);
                 const percentage = Math.min(100, (player.preparedness / 1000) * 100);
                 resourceBar.style.width = percentage + '%';
+                
+                // Update resource bar color to match player color
+                resourceBar.style.background = `linear-gradient(90deg, ${player.color}, ${darkenColor(player.color, 20)})`;
             });
         }
 
@@ -1269,7 +1948,7 @@
             document.getElementById('turn-counter').textContent = gameState.turn;
         }
 
-        // Show message with better styling
+        // Show message with better styling and game state feedback
         function showMessage(message) {
             // Create a toast notification similar to dashboard style
             const toast = document.createElement('div');
@@ -1304,7 +1983,12 @@
             `;
             document.head.appendChild(style);
             
-            toast.textContent = message;
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                    <span>${message}</span>
+                </div>
+            `;
             document.body.appendChild(toast);
             
             // Auto remove after 4 seconds
@@ -1317,8 +2001,56 @@
                 }, 300);
             }, 4000);
             
+            // Also update game status area with current action
+            updateGameInstructions();
+            
             // Also log to console for debugging
             console.log(message);
+        }
+
+        // Add game instructions based on current state
+        function updateGameInstructions() {
+            const statusElement = document.querySelector('.game-status');
+            let instructions = '';
+            
+            if (gameState.winner !== null) {
+                instructions = `🎉 Game Over! Player ${gameState.winner + 1} wins!`;
+            } else if (!gameState.diceRolled) {
+                instructions = `🎲 Player ${gameState.currentPlayer + 1}'s turn - Click "Roll Dice" to move`;
+            } else {
+                const player = gameState.players[gameState.currentPlayer];
+                const spaceData = boardSpaces.find(s => s.id === player.position);
+                
+                if (spaceData) {
+                    if (spaceData.type === 'emergency-service' && !player.properties.includes(spaceData.id) && player.money >= spaceData.price) {
+                        instructions = `💰 You can buy ${spaceData.name} for $${spaceData.price}`;
+                    } else if (spaceData.type === 'disaster-zone' && player.supplies > 0) {
+                        instructions = `⚠️ Disaster zone! Use supplies to avoid penalty`;
+                    } else {
+                        instructions = `✅ Action completed - Click "End Turn"`;
+                    }
+                }
+            }
+            
+            // Add or update instructions element
+            let instructionsEl = document.getElementById('game-instructions');
+            if (!instructionsEl) {
+                instructionsEl = document.createElement('div');
+                instructionsEl.id = 'game-instructions';
+                instructionsEl.style.cssText = `
+                    background: linear-gradient(90deg, var(--p6), var(--p7));
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    margin-top: 10px;
+                    text-align: center;
+                    font-weight: 600;
+                    color: var(--primary);
+                    border: 1px solid rgba(26, 115, 232, 0.2);
+                `;
+                statusElement.appendChild(instructionsEl);
+            }
+            
+            instructionsEl.innerHTML = `<i class="fas fa-lightbulb"></i> ${instructions}`;
         }
 
         // Add event listeners
@@ -1355,7 +2087,10 @@
             }
             
             if (newGameBtn) {
-                newGameBtn.addEventListener('click', resetGame);
+                newGameBtn.addEventListener('click', () => {
+                    gameState.gameStarted = false;
+                    initGame();
+                });
             }
             
             if (cardCloseBtn) {
