@@ -4,77 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Floodplain Project 💧</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(to bottom, #3498db, #2c3e50);
-            color: #ecf0f1;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .container {
             max-width: 1000px;
             width: 100%;
-            background: rgba(44, 62, 80, 0.9);
+            background: var(--card-bg);
             border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            padding: 25px;
+            box-shadow: var(--shadow);
             margin-top: 20px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #3498db;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.08);
         }
         
         h1 {
             font-size: 2.5rem;
-            color: #3498db;
+            color: var(--primary);
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: none;
+            font-weight: 700;
+        }
+
+        header p {
+            color: #6c757d;
+            font-size: 16px;
+            line-height: 1.5;
         }
         
         .status-bar {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
-            background: #34495e;
-            padding: 10px;
-            border-radius: 8px;
+            margin-bottom: 25px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.3));
+            padding: 15px;
+            border-radius: 12px;
             flex-wrap: wrap;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .status-item {
             text-align: center;
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             margin: 5px;
-            background: #2c3e50;
-            border-radius: 5px;
+            background: var(--card-bg);
+            border-radius: 10px;
             min-width: 120px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: var(--transition);
+        }
+
+        .status-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
         
         .status-value {
             font-size: 1.5rem;
-            font-weight: bold;
-            color: #2ecc71;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-top: 5px;
+        }
+
+        .status-item div:first-child {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 14px;
         }
         
         .map-container {
             display: flex;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             gap: 20px;
             flex-wrap: wrap;
         }
@@ -82,12 +135,13 @@
         .map {
             flex: 1;
             min-width: 300px;
-            height: 250px;
-            background: #34495e;
-            border-radius: 10px;
+            height: 280px;
+            background: linear-gradient(180deg, var(--p6), #b8dff0);
+            border-radius: 12px;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary);
         }
         
         .river {
@@ -95,70 +149,98 @@
             bottom: 0;
             width: 100%;
             height: 30%;
-            background: #3498db;
+            background: linear-gradient(180deg, var(--p1), #2b8bbf);
+            animation: waterFlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes waterFlow {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
         }
         
         .levee {
             position: absolute;
             bottom: 30%;
             width: 80%;
-            height: 15px;
-            background: #7f8c8d;
+            height: 18px;
+            background: linear-gradient(135deg, #7f8c8d, #95a5a6);
             left: 10%;
-            border-radius: 5px 5px 0 0;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         .neighborhood {
             position: absolute;
-            bottom: 45%;
+            bottom: 48%;
             width: 70%;
             height: 40%;
-            background: #2ecc71;
+            background: linear-gradient(135deg, var(--secondary), #2ea044);
             left: 15%;
-            border-radius: 10px 10px 0 0;
+            border-radius: 12px 12px 0 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #2c3e50;
-            font-weight: bold;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .sandbags {
             position: absolute;
             bottom: 30%;
-            width: 20%;
-            height: 20px;
-            background: #f39c12;
-            left: 40%;
+            width: 22%;
+            height: 25px;
+            background: linear-gradient(135deg, var(--warning), #ffa726);
+            left: 39%;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         .actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         button {
-            padding: 15px;
+            padding: 16px 20px;
             border: none;
-            border-radius: 8px;
-            background: #3498db;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            font-size: 1rem;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
         }
         
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 20px rgba(26, 115, 232, 0.25);
         }
         
         button:active {
@@ -166,103 +248,181 @@
         }
         
         .danger {
-            background: #e74c3c;
+            background: linear-gradient(135deg, var(--accent), #e74c3c);
+            box-shadow: 0 4px 12px rgba(242, 92, 84, 0.15);
+        }
+
+        .danger:hover {
+            box-shadow: 0 8px 20px rgba(242, 92, 84, 0.25);
         }
         
         .success {
-            background: #2ecc71;
+            background: linear-gradient(135deg, var(--secondary), #2ea044);
+            box-shadow: 0 4px 12px rgba(52, 168, 83, 0.15);
+        }
+
+        .success:hover {
+            box-shadow: 0 8px 20px rgba(52, 168, 83, 0.25);
         }
         
         .warning {
-            background: #f39c12;
+            background: linear-gradient(135deg, var(--warning), #ffa726);
+            box-shadow: 0 4px 12px rgba(249, 168, 37, 0.15);
+        }
+
+        .warning:hover {
+            box-shadow: 0 8px 20px rgba(249, 168, 37, 0.25);
         }
         
         .community {
-            background: #9b59b6;
+            background: linear-gradient(135deg, var(--p5), #d1a3cd);
+            box-shadow: 0 4px 12px rgba(226, 175, 211, 0.15);
+        }
+
+        .community:hover {
+            box-shadow: 0 8px 20px rgba(226, 175, 211, 0.25);
         }
         
         .log {
-            background: #2c3e50;
-            height: 150px;
-            border-radius: 10px;
-            padding: 15px;
+            background: linear-gradient(180deg, var(--card-bg), #fbfdff);
+            height: 180px;
+            border-radius: 12px;
+            padding: 18px;
             overflow-y: auto;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            margin-bottom: 25px;
+            font-size: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .log-entry {
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #34495e;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(26, 115, 232, 0.03);
+            border-left: 3px solid var(--primary);
+            line-height: 1.5;
+            transition: var(--transition);
+        }
+
+        .log-entry:hover {
+            background: rgba(26, 115, 232, 0.06);
+            transform: translateX(3px);
         }
         
         .success-text {
-            color: #2ecc71;
+            color: var(--secondary);
+            border-left-color: var(--secondary);
+            background: rgba(52, 168, 83, 0.03);
+        }
+
+        .success-text:hover {
+            background: rgba(52, 168, 83, 0.06);
         }
         
         .danger-text {
-            color: #e74c3c;
+            color: var(--accent);
+            border-left-color: var(--accent);
+            background: rgba(242, 92, 84, 0.03);
+        }
+
+        .danger-text:hover {
+            background: rgba(242, 92, 84, 0.06);
         }
         
         .warning-text {
-            color: #f39c12;
+            color: var(--warning);
+            border-left-color: var(--warning);
+            background: rgba(249, 168, 37, 0.03);
+        }
+
+        .warning-text:hover {
+            background: rgba(249, 168, 37, 0.06);
         }
         
         .info-text {
-            color: #3498db;
+            color: var(--primary);
+            border-left-color: var(--primary);
         }
         
         .community-text {
-            color: #9b59b6;
+            color: var(--p5);
+            border-left-color: var(--p5);
+            background: rgba(226, 175, 211, 0.03);
+        }
+
+        .community-text:hover {
+            background: rgba(226, 175, 211, 0.06);
         }
         
         .upgrades {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 18px;
+            margin-bottom: 25px;
         }
         
         .upgrade {
             flex: 1;
-            min-width: 200px;
-            background: #34495e;
-            padding: 15px;
-            border-radius: 10px;
+            min-width: 280px;
+            background: linear-gradient(180deg, var(--card-bg), #fbfdff);
+            padding: 20px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
+            transition: var(--transition);
+        }
+
+        .upgrade:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(18, 38, 63, 0.12);
         }
         
         .upgrade-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #3498db;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-size: 16px;
         }
         
         .upgrade-desc {
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            font-size: 14px;
+            margin-bottom: 18px;
             flex-grow: 1;
+            color: #6c757d;
+            line-height: 1.5;
         }
         
         .progress-bar {
-            height: 10px;
-            background: #2c3e50;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            height: 12px;
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 6px;
+            margin-bottom: 15px;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .progress {
             height: 100%;
-            background: #2ecc71;
-            border-radius: 5px;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
+            border-radius: 6px;
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.8s ease;
+            box-shadow: 0 2px 8px rgba(52, 168, 83, 0.3);
         }
         
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+                margin-top: 10px;
+            }
+
             .actions {
                 grid-template-columns: 1fr;
             }
@@ -274,6 +434,103 @@
             .map-container {
                 flex-direction: column;
             }
+
+            .map {
+                min-width: 100%;
+                height: 220px;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .status-item {
+                margin: 0;
+                width: 100%;
+            }
+
+            .upgrades {
+                flex-direction: column;
+            }
+
+            .upgrade {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            button {
+                padding: 14px 16px;
+                font-size: 13px;
+            }
+
+            .map {
+                height: 200px;
+            }
+        }
+
+        /* Enhanced animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        /* Custom scrollbar for log */
+        .log::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .log::-webkit-scrollbar-track {
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 4px;
+        }
+
+        .log::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            border-radius: 4px;
+        }
+
+        .log::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--primary-dark), #1565c0);
         }
     </style>
 </head>
@@ -362,94 +619,236 @@
             gameOver: false
         };
         
-        // Update the game display
+        // Update the game display with enhanced animations
         function updateDisplay() {
-            document.getElementById('trust').textContent = `${gameState.trust}%`;
-            document.getElementById('protection').textContent = `${gameState.protection}%`;
-            document.getElementById('preparedness').textContent = `${gameState.preparedness}%`;
-            document.getElementById('resources').textContent = `$${gameState.resources.toLocaleString()}`;
+            // Animate value changes
+            animateValue('trust', gameState.trust, '%');
+            animateValue('protection', gameState.protection, '%');
+            animateValue('preparedness', gameState.preparedness, '%');
+            animateValue('resources', gameState.resources, '$', true);
             
-            document.getElementById('levee-progress').style.width = `${gameState.leveeLevel}%`;
-            document.getElementById('elevation-progress').style.width = `${gameState.elevationLevel}%`;
+            // Update progress bars with animation
+            const leveeProgress = document.getElementById('levee-progress');
+            const elevationProgress = document.getElementById('elevation-progress');
+            
+            leveeProgress.style.width = `${gameState.leveeLevel}%`;
+            elevationProgress.style.width = `${gameState.elevationLevel}%`;
+            
+            // Add pulse effect to updated elements
+            document.querySelectorAll('.status-value').forEach(el => {
+                el.classList.add('pulse');
+                setTimeout(() => el.classList.remove('pulse'), 600);
+            });
+        }
+
+        // Animate value changes
+        function animateValue(elementId, targetValue, suffix = '', isCurrency = false) {
+            const element = document.getElementById(elementId);
+            const currentValue = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
+            const increment = targetValue > currentValue ? 1 : -1;
+            const step = Math.abs(targetValue - currentValue) / 20; // 20 steps for smooth animation
+            
+            let current = currentValue;
+            const timer = setInterval(() => {
+                current += increment * Math.max(1, Math.floor(step));
+                
+                if ((increment > 0 && current >= targetValue) || (increment < 0 && current <= targetValue)) {
+                    current = targetValue;
+                    clearInterval(timer);
+                }
+                
+                let displayValue = isCurrency ? `$${current.toLocaleString()}` : `${current}${suffix}`;
+                element.textContent = displayValue;
+                
+                // Color coding for values
+                if (elementId === 'trust' || elementId === 'protection' || elementId === 'preparedness') {
+                    if (current >= 70) element.style.color = 'var(--secondary)';
+                    else if (current >= 40) element.style.color = 'var(--warning)';
+                    else element.style.color = 'var(--accent)';
+                }
+            }, 50);
         }
         
-        // Add a message to the log
+        // Add a message to the log with enhanced feedback
         function addLog(message, type = 'info') {
             const log = document.getElementById('log');
             const entry = document.createElement('div');
-            entry.className = `log-entry ${type}-text`;
-            entry.textContent = message;
+            entry.className = `log-entry ${type}-text slide-in`;
+            
+            // Add icon based on type
+            const icons = {
+                'success': '✅',
+                'danger': '🚨',
+                'warning': '⚠️',
+                'info': 'ℹ️',
+                'community': '👥'
+            };
+            
+            const icon = icons[type] || 'ℹ️';
+            entry.innerHTML = `${icon} ${message}`;
+            
             log.appendChild(entry);
             log.scrollTop = log.scrollHeight;
+            
+            // Remove old entries if log gets too long
+            const entries = log.querySelectorAll('.log-entry');
+            if (entries.length > 15) {
+                entries[0].style.opacity = '0';
+                setTimeout(() => entries[0].remove(), 300);
+            }
+            
+            // Flash effect for important messages
+            if (type === 'danger' || type === 'success') {
+                entry.style.transform = 'scale(1.02)';
+                setTimeout(() => entry.style.transform = 'scale(1)', 200);
+            }
         }
         
-        // Process player actions
+        // Process player actions with enhanced feedback
         function takeAction(action) {
             if (gameState.gameOver) return;
             
+            // Add button click feedback
+            const clickedButton = event.target.closest('button');
+            if (clickedButton) {
+                clickedButton.style.transform = 'scale(0.95)';
+                setTimeout(() => clickedButton.style.transform = '', 200);
+            }
+            
             // Advance time with each action
             gameState.week++;
+            
+            let actionResult = { success: true, message: '', type: 'info' };
             
             switch(action) {
                 case 'meeting':
                     gameState.trust += 5;
                     gameState.preparedness += 3;
-                    addLog('Community meeting held. Trust and preparedness increased.', 'community');
+                    actionResult = {
+                        success: true,
+                        message: 'Community meeting held successfully! Trust and preparedness increased.',
+                        type: 'community'
+                    };
                     break;
                     
                 case 'drill':
                     if (gameState.trust > 50) {
                         gameState.preparedness += 10;
-                        addLog('Successful evacuation drill! Community preparedness improved.', 'success');
+                        actionResult = {
+                            success: true,
+                            message: 'Excellent evacuation drill! Community preparedness significantly improved.',
+                            type: 'success'
+                        };
                     } else {
-                        addLog('Not enough community trust to organize an effective drill.', 'warning');
+                        actionResult = {
+                            success: false,
+                            message: 'Insufficient community trust to organize an effective drill. Build relationships first.',
+                            type: 'warning'
+                        };
                     }
                     break;
                     
                 case 'warning':
                     gameState.preparedness += 5;
                     gameState.trust -= 2;
-                    addLog('Flood warning issued. Community is preparing.', 'warning');
+                    actionResult = {
+                        success: true,
+                        message: 'Flood warning issued to all residents. Community is taking precautions.',
+                        type: 'warning'
+                    };
                     break;
                     
                 case 'evacuate':
                     gameState.preparedness += 8;
-                    addLog('Evacuation routes planned and marked.', 'info');
+                    actionResult = {
+                        success: true,
+                        message: 'Evacuation routes planned and clearly marked. Emergency access improved.',
+                        type: 'info'
+                    };
                     break;
                     
                 case 'drainage':
-                    gameState.protection += 7;
-                    gameState.resources -= 2000;
-                    addLog('Drainage systems improved. Flood protection increased.', 'success');
+                    if (gameState.resources >= 2000) {
+                        gameState.protection += 7;
+                        gameState.resources -= 2000;
+                        actionResult = {
+                            success: true,
+                            message: 'Drainage systems upgraded! Water flow management significantly improved.',
+                            type: 'success'
+                        };
+                    } else {
+                        actionResult = {
+                            success: false,
+                            message: 'Insufficient funds for drainage improvements. Need $2,000.',
+                            type: 'warning'
+                        };
+                        return; // Don't advance time for failed action
+                    }
                     break;
                     
                 case 'green':
-                    gameState.protection += 5;
-                    gameState.trust += 3;
-                    gameState.resources -= 3000;
-                    addLog('Green infrastructure installed. Helps with absorption and community morale.', 'success');
+                    if (gameState.resources >= 3000) {
+                        gameState.protection += 5;
+                        gameState.trust += 3;
+                        gameState.resources -= 3000;
+                        actionResult = {
+                            success: true,
+                            message: 'Green infrastructure installed! Rain gardens and permeable surfaces help absorption.',
+                            type: 'success'
+                        };
+                    } else {
+                        actionResult = {
+                            success: false,
+                            message: 'Insufficient funds for green infrastructure. Need $3,000.',
+                            type: 'warning'
+                        };
+                        return; // Don't advance time for failed action
+                    }
                     break;
             }
             
+            // Add visual feedback based on action result
+            if (actionResult.success) {
+                // Positive feedback
+                document.body.style.background = 'linear-gradient(135deg, var(--light-bg), var(--p6))';
+                setTimeout(() => document.body.style.background = 'var(--light-bg)', 500);
+            } else {
+                // Negative feedback
+                document.body.classList.add('shake');
+                setTimeout(() => document.body.classList.remove('shake'), 500);
+            }
+            
+            addLog(actionResult.message, actionResult.type);
+            
+            // Continue with rest of the game logic...
+            processGameEvents();
+            updateDisplay();
+        }
+
+        // Process random events and game progression
+        function processGameEvents() {
             // Update protection based on infrastructure
             gameState.protection = Math.min(100, Math.max(0, 
                 (gameState.leveeLevel * 0.6) + (gameState.elevationLevel * 0.4)
             ));
             
             // Random event chance
-            if (Math.random() > 0.6) {
+            if (Math.random() > 0.65) {
                 const events = [
-                    {msg: 'Heavy rainfall! Flood risk increased.', risk: +15, type: 'danger'},
-                    {msg: 'Government grant received!', resources: +5000, type: 'success'},
-                    {msg: 'Community volunteers organized a cleanup day!', trust: +5, preparedness: +3, type: 'community'},
-                    {msg: 'Aging infrastructure failed!', protection: -5, type: 'warning'},
-                    {msg: 'Local business donated supplies!', resources: +3000, type: 'success'},
-                    {msg: 'Public skepticism growing about flood risks.', trust: -5, type: 'warning'}
+                    {msg: 'Heavy seasonal rainfall incoming! Flood risk increased by 15%.', risk: +15, type: 'danger'},
+                    {msg: 'Federal emergency grant approved! +$5,000 received.', resources: +5000, type: 'success'},
+                    {msg: 'Community volunteers organized neighborhood watch! Trust and preparedness improved.', trust: +5, preparedness: +3, type: 'community'},
+                    {msg: 'Aging infrastructure shows stress. Protection effectiveness reduced.', protection: -5, type: 'warning'},
+                    {msg: 'Local business donated emergency supplies! +$3,000 value received.', resources: +3000, type: 'success'},
+                    {msg: 'Social media misinformation spreads doubt about flood preparations.', trust: -5, type: 'warning'},
+                    {msg: 'Neighboring community shares flood management expertise! Protection improved.', protection: +3, type: 'info'},
+                    {msg: 'Climate change study confirms increased flood frequency in your area.', risk: +10, type: 'warning'}
                 ];
                 
                 const event = events[Math.floor(Math.random() * events.length)];
                 addLog(event.msg, event.type);
                 
+                // Apply event effects with animation
                 if (event.risk) gameState.floodRisk += event.risk;
                 if (event.resources) gameState.resources += event.resources;
                 if (event.trust) gameState.trust += event.trust;
@@ -457,78 +856,241 @@
                 if (event.preparedness) gameState.preparedness += event.preparedness;
             }
             
-            // Check flood event
+            // Check flood event every 4 weeks
             if (gameState.week % 4 === 0) {
-                const floodSeverity = Math.max(0, gameState.floodRisk - gameState.protection);
-                
-                if (floodSeverity > 30) {
-                    const damage = Math.floor(floodSeverity * 100);
-                    addLog(`FLOOD EVENT! ${floodSeverity}% severity. $${damage} in damages.`, 'danger');
-                    gameState.resources -= damage;
-                    gameState.trust -= 10;
-                    
-                    if (gameState.resources < 0) {
-                        addLog('Community bankrupt! Game over.', 'danger');
-                        gameState.gameOver = true;
-                    }
-                } else {
-                    addLog('Flood threat mitigated! Your defenses held.', 'success');
-                    gameState.trust += 5;
-                }
-                
-                // Reset for next season
-                gameState.floodRisk = 40 + Math.floor(Math.random() * 30);
+                handleFloodEvent();
             }
             
             // Ensure values stay within bounds
             gameState.trust = Math.min(100, Math.max(0, gameState.trust));
             gameState.protection = Math.min(100, Math.max(0, gameState.protection));
             gameState.preparedness = Math.min(100, Math.max(0, gameState.preparedness));
+            gameState.resources = Math.max(0, gameState.resources);
+        }
+
+        // Handle major flood events
+        function handleFloodEvent() {
+            const floodSeverity = Math.max(0, gameState.floodRisk - gameState.protection);
             
-            updateDisplay();
+            if (floodSeverity > 30) {
+                const damage = Math.floor(floodSeverity * 100 + Math.random() * 2000);
+                const casualties = floodSeverity > 60 ? 'with casualties' : 'minimal casualties';
+                
+                addLog(`🌊 MAJOR FLOOD EVENT! Severity: ${Math.round(floodSeverity)}%. Damage: $${damage.toLocaleString()} ${casualties}.`, 'danger');
+                
+                gameState.resources -= damage;
+                gameState.trust -= Math.min(15, Math.floor(floodSeverity / 4));
+                
+                if (gameState.resources < 0) {
+                    addLog('💔 Community resources depleted! Recovery becomes impossible. Game Over.', 'danger');
+                    gameState.gameOver = true;
+                    showGameOverModal();
+                }
+                
+                // Visual flood effect
+                const map = document.querySelector('.map');
+                map.style.filter = 'hue-rotate(180deg) brightness(0.7)';
+                setTimeout(() => map.style.filter = '', 2000);
+                
+            } else if (floodSeverity > 10) {
+                addLog(`🌧️ Minor flooding occurred but defenses held! Only $${Math.floor(floodSeverity * 50)} in minor damages.`, 'warning');
+                gameState.resources -= Math.floor(floodSeverity * 50);
+                gameState.trust += 2; // Successful defense builds trust
+                
+            } else {
+                addLog('🛡️ Excellent flood defenses! Your community weathered the storm perfectly!', 'success');
+                gameState.trust += 8;
+                gameState.preparedness += 5;
+            }
+            
+            // Reset flood risk for next season
+            gameState.floodRisk = 40 + Math.floor(Math.random() * 30);
+        }
+
+        // Show game over modal
+        function showGameOverModal() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: var(--card-bg);
+                padding: 40px;
+                border-radius: 12px;
+                text-align: center;
+                max-width: 500px;
+                box-shadow: var(--shadow);
+            `;
+            
+            content.innerHTML = `
+                <h2 style="color: var(--accent); margin-bottom: 20px;">Game Over</h2>
+                <p style="margin-bottom: 20px; color: var(--text-dark);">
+                    Your community lasted ${gameState.week} weeks before succumbing to flood damage.
+                    <br><br>
+                    <strong>Final Scores:</strong><br>
+                    Trust: ${gameState.trust}%<br>
+                    Protection: ${gameState.protection}%<br>
+                    Preparedness: ${gameState.preparedness}%
+                </p>
+                <button onclick="location.reload()" style="margin-top: 20px;">Play Again</button>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
         }
         
-        // Upgrade infrastructure
+        // Upgrade infrastructure with enhanced feedback
         function upgrade(type) {
             if (gameState.gameOver) return;
             
-            let cost, increase;
+            let cost, increase, upgradeName;
+            let canAfford = false;
+            let maxedOut = false;
             
             switch(type) {
                 case 'levee':
                     cost = 5000;
                     increase = 10;
-                    if (gameState.resources >= cost && gameState.leveeLevel < 100) {
+                    upgradeName = 'Levee System';
+                    canAfford = gameState.resources >= cost;
+                    maxedOut = gameState.leveeLevel >= 100;
+                    
+                    if (canAfford && !maxedOut) {
                         gameState.resources -= cost;
                         gameState.leveeLevel += increase;
-                        addLog('Levee system upgraded!', 'success');
-                    } else if (gameState.leveeLevel >= 100) {
-                        addLog('Levee system already at maximum level.', 'info');
+                        addLog(`🌊 ${upgradeName} upgraded! Levee strength increased to ${gameState.leveeLevel}%.`, 'success');
+                        
+                        // Visual feedback on map
+                        const levee = document.querySelector('.levee');
+                        levee.style.transform = 'scaleY(1.2)';
+                        setTimeout(() => levee.style.transform = '', 500);
+                        
+                    } else if (maxedOut) {
+                        addLog(`✅ ${upgradeName} already at maximum level! Cannot upgrade further.`, 'info');
                     } else {
-                        addLog('Not enough resources for levee upgrade.', 'warning');
+                        addLog(`💰 Insufficient funds for ${upgradeName} upgrade. Need $${cost.toLocaleString()}.`, 'warning');
+                        // Shake the button to indicate insufficient funds
+                        event.target.classList.add('shake');
+                        setTimeout(() => event.target.classList.remove('shake'), 500);
                     }
                     break;
                     
                 case 'elevation':
                     cost = 8000;
                     increase = 8;
-                    if (gameState.resources >= cost && gameState.elevationLevel < 100) {
+                    upgradeName = 'Structure Elevation';
+                    canAfford = gameState.resources >= cost;
+                    maxedOut = gameState.elevationLevel >= 100;
+                    
+                    if (canAfford && !maxedOut) {
                         gameState.resources -= cost;
                         gameState.elevationLevel += increase;
-                        addLog('Structures elevated!', 'success');
-                    } else if (gameState.elevationLevel >= 100) {
-                        addLog('Structures already at maximum elevation.', 'info');
+                        addLog(`🏠 ${upgradeName} completed! Buildings raised to ${gameState.elevationLevel}% flood-safe level.`, 'success');
+                        
+                        // Visual feedback on map
+                        const neighborhood = document.querySelector('.neighborhood');
+                        neighborhood.style.transform = 'translateY(-5px)';
+                        setTimeout(() => neighborhood.style.transform = '', 500);
+                        
+                    } else if (maxedOut) {
+                        addLog(`✅ ${upgradeName} already at maximum level! All structures are flood-safe.`, 'info');
                     } else {
-                        addLog('Not enough resources for elevation project.', 'warning');
+                        addLog(`💰 Insufficient funds for ${upgradeName}. Need $${cost.toLocaleString()}.`, 'warning');
+                        // Shake the button to indicate insufficient funds
+                        event.target.classList.add('shake');
+                        setTimeout(() => event.target.classList.remove('shake'), 500);
                     }
                     break;
             }
             
+            // Update button text to show current level
+            if (canAfford && !maxedOut) {
+                updateUpgradeButtons();
+                updateDisplay();
+                
+                // Add success animation to the upgrade card
+                const upgradeCard = event.target.closest('.upgrade');
+                upgradeCard.style.background = 'linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.5))';
+                setTimeout(() => {
+                    upgradeCard.style.background = 'linear-gradient(180deg, var(--card-bg), #fbfdff)';
+                }, 1000);
+            }
+        }
+
+        // Update upgrade button text and availability
+        function updateUpgradeButtons() {
+            const buttons = document.querySelectorAll('.upgrade button');
+            buttons.forEach(button => {
+                const upgradeCard = button.closest('.upgrade');
+                const title = upgradeCard.querySelector('.upgrade-title').textContent;
+                
+                if (title.includes('Levee')) {
+                    if (gameState.leveeLevel >= 100) {
+                        button.textContent = '✅ Maxed Out';
+                        button.style.opacity = '0.6';
+                        button.style.cursor = 'not-allowed';
+                    } else {
+                        button.innerHTML = `💰 Upgrade ($5,000) - Level ${Math.floor(gameState.leveeLevel/10)}`;
+                    }
+                } else if (title.includes('Elevated')) {
+                    if (gameState.elevationLevel >= 100) {
+                        button.textContent = '✅ Maxed Out';
+                        button.style.opacity = '0.6';
+                        button.style.cursor = 'not-allowed';
+                    } else {
+                        button.innerHTML = `💰 Upgrade ($8,000) - Level ${Math.floor(gameState.elevationLevel/10)}`;
+                    }
+                }
+            });
+        }
+        
+        // Initialize the game with enhanced features
+        function initializeGame() {
             updateDisplay();
+            updateUpgradeButtons();
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (gameState.gameOver) return;
+                
+                switch(e.key) {
+                    case '1': takeAction('meeting'); break;
+                    case '2': takeAction('drill'); break;
+                    case '3': takeAction('warning'); break;
+                    case '4': takeAction('evacuate'); break;
+                    case '5': takeAction('drainage'); break;
+                    case '6': takeAction('green'); break;
+                    case 'q': upgrade('levee'); break;
+                    case 'w': upgrade('elevation'); break;
+                }
+            });
+            
+            // Add tooltips to buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach((button, index) => {
+                const shortcuts = ['1', '2', '3', '4', '5', '6'];
+                if (index < 6) {
+                    button.title = `Press ${shortcuts[index]} for quick access`;
+                }
+            });
+            
+            // Initialize welcome message
+            addLog('🏘️ Welcome to The Floodplain Project! Use keyboard shortcuts 1-6 for actions, Q/W for upgrades.', 'info');
         }
         
         // Initialize the game
-        updateDisplay();
+        initializeGame();
     </script>
 </body>
 </html>

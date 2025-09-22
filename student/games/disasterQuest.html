@@ -3,76 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disaster Escape Room 🚨</title>
+    <title>Disaster Quest - Emergency Escape Room</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            /* User palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(to bottom, #2c3e50, #1a2530);
-            color: #ecf0f1;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             min-height: 100vh;
             padding: 20px;
+            letter-spacing: -0.01em;
+            line-height: 1.6;
+        }
+        
+        /* Back to main page button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(18, 38, 63, 0.15);
+            text-decoration: none;
+            color: white;
+        }
+
+        .back-button i {
+            font-size: 1rem;
         }
         
         .container {
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
-            gap: 25px;
-            flex-wrap: wrap;
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            min-height: 90vh;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .game-info {
             flex: 1;
-            min-width: 340px;
-            background: rgba(44, 62, 80, 0.9);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
+            padding: 24px;
+            border-right: 1px solid rgba(16, 24, 32, 0.06);
+            background: linear-gradient(180deg, #fff, #fbfdff);
+            overflow-y: auto;
         }
         
         .game-area {
-            flex: 2;
-            min-width: 650px;
-            background: rgba(44, 62, 80, 0.9);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            flex: 2.5;
+            padding: 24px;
             display: flex;
             flex-direction: column;
+            background: var(--light-bg);
         }
         
         header {
             text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e74c3c;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.08);
         }
         
         h1 {
-            font-size: 2.8rem;
-            color: #e74c3c;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: var(--primary);
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 600;
+            font-family: "Playfair Display", Georgia, serif;
+            text-shadow: none;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
         
         h2 {
-            font-size: 1.8rem;
-            color: #f39c12;
-            margin-bottom: 15px;
+            color: var(--primary);
+            margin: 20px 0 12px;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.08);
+            padding-bottom: 8px;
+            font-weight: 600;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 22px;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
         }
         
         h3 {
-            font-size: 1.4rem;
-            color: #2ecc71;
-            margin: 15px 0 10px;
+            color: var(--primary);
+            margin: 12px 0;
+            font-weight: 600;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 18px;
+            letter-spacing: -0.01em;
+            line-height: 1.4;
+        }
+        
+        .subtitle {
+            color: var(--p1);
+            margin: 0;
+            font-weight: 500;
+            font-family: "Inter", sans-serif;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            font-size: 0.9rem;
         }
         
         .rules-list, .points-list {
@@ -83,13 +174,16 @@
         li {
             margin-bottom: 10px;
             line-height: 1.5;
+            color: var(--text-dark);
         }
         
         .stats {
-            background: #34495e;
+            background: var(--card-bg);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            border: 2px solid var(--p6);
+            box-shadow: var(--shadow);
         }
         
         .stat-item {
@@ -97,72 +191,105 @@
             justify-content: space-between;
             margin-bottom: 12px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #2c3e50;
+            border-bottom: 1px solid rgba(16, 24, 32, 0.06);
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
         
         .status-bar {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
             margin-bottom: 20px;
-            background: #34495e;
-            padding: 15px;
-            border-radius: 8px;
         }
         
         .status-item {
             text-align: center;
-            flex: 1;
-            padding: 12px;
-            margin: 0 5px;
-            background: #2c3e50;
-            border-radius: 5px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 2px solid var(--p6);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .status-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(18, 38, 63, 0.12);
+        }
+        
+        .status-label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-weight: 500;
         }
         
         .status-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #3498db;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: "Inter", sans-serif;
         }
         
         .escape-room {
-            background: #34495e;
-            padding: 20px;
-            border-radius: 10px;
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
             margin-bottom: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            border: 2px solid rgba(26, 115, 232, 0.1);
+            box-shadow: var(--shadow);
         }
         
         .scenario-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            background: #2c3e50;
-            padding: 15px;
-            border-radius: 10px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--p6), var(--p7));
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(26, 115, 232, 0.1);
         }
         
         .scenario-icon {
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            background: #e74c3c;
+            background: linear-gradient(135deg, var(--accent), #ea6f7b);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.5rem;
             margin-right: 20px;
+            box-shadow: var(--shadow);
         }
         
         .scenario-details {
             flex-grow: 1;
         }
         
+        .scenario-details h3 {
+            margin: 0 0 8px 0;
+            color: var(--primary);
+        }
+        
+        .scenario-details p {
+            color: var(--text-dark);
+            opacity: 0.8;
+            margin: 0;
+        }
+        
         .room-view {
             height: 200px;
-            background: #2c3e50;
-            border-radius: 10px;
+            background: linear-gradient(135deg, var(--p1), var(--p6));
+            border-radius: 12px;
             margin-bottom: 20px;
             position: relative;
             overflow: hidden;
@@ -170,189 +297,331 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            font-weight: bold;
+            font-weight: 600;
+            color: var(--text-dark);
+            border: 2px solid rgba(26, 115, 232, 0.2);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
         }
         
         .puzzle-area {
-            background: #2c3e50;
-            padding: 15px;
-            border-radius: 10px;
+            background: linear-gradient(135deg, var(--light-bg), #fff);
+            padding: 20px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            border: 2px solid rgba(26, 115, 232, 0.1);
+            box-shadow: var(--shadow);
         }
         
         .puzzle-text {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             line-height: 1.6;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 10px;
+            border-left: 4px solid var(--p1);
         }
         
         .options {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
             margin-bottom: 15px;
         }
         
         .option {
-            padding: 12px;
-            background: #34495e;
-            border: 2px solid #3498db;
-            border-radius: 8px;
+            padding: 16px;
+            background: var(--card-bg);
+            border: 2px solid var(--p1);
+            border-radius: 10px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .option:hover:before {
+            left: 100%;
         }
         
         .option:hover {
-            background: #3498db;
+            background: var(--p1);
+            color: white;
             transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(26, 115, 232, 0.2);
         }
         
         .kit-items {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
         }
         
         .kit-item {
-            padding: 10px;
-            background: #34495e;
-            border: 2px solid #f39c12;
-            border-radius: 8px;
+            padding: 12px;
+            background: var(--card-bg);
+            border: 2px solid var(--p2);
+            border-radius: 10px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 100px;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kit-item:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(230, 156, 66, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .kit-item:hover:before {
+            left: 100%;
         }
         
         .kit-item.selected {
-            background: #f39c12;
-            color: #2c3e50;
-            font-weight: bold;
+            background: var(--p2);
+            color: white;
+            font-weight: 700;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(230, 156, 66, 0.3);
         }
         
         .kit-item:hover {
             transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(230, 156, 66, 0.2);
         }
         
         .actions {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
             margin-bottom: 20px;
         }
         
         button {
-            padding: 15px;
+            padding: 15px 20px;
             border: none;
-            border-radius: 8px;
-            background: #3498db;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        button:hover:before {
+            left: 100%;
         }
         
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(18, 38, 63, 0.15);
         }
         
         button:active {
-            transform: translateY(1px);
+            transform: translateY(0);
+            box-shadow: var(--shadow);
         }
         
         .danger {
-            background: #e74c3c;
+            background: linear-gradient(90deg, var(--accent), #f56b77);
+        }
+        
+        .danger:hover {
+            background: linear-gradient(90deg, #f56b77, var(--accent));
         }
         
         .success {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
+        }
+        
+        .success:hover {
+            background: linear-gradient(90deg, #2ea044, var(--secondary));
         }
         
         .warning {
-            background: #f39c12;
+            background: linear-gradient(90deg, var(--warning), #f1c40f);
+        }
+        
+        .warning:hover {
+            background: linear-gradient(90deg, #f1c40f, var(--warning));
+        }
+        
+        /* Animation keyframes */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
         }
         
         .log {
-            background: #2c3e50;
-            height: 180px;
-            border-radius: 10px;
-            padding: 15px;
+            background: var(--card-bg);
+            height: 200px;
+            border-radius: 12px;
+            padding: 16px;
             overflow-y: auto;
             margin-bottom: 20px;
             font-size: 0.95rem;
+            border: 2px solid rgba(26, 115, 232, 0.1);
+            box-shadow: var(--shadow);
         }
         
         .log-entry {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #34495e;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(16, 24, 32, 0.06);
             line-height: 1.5;
         }
         
+        .log-entry:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
         .success-text {
-            color: #2ecc71;
+            color: var(--secondary);
+            font-weight: 600;
         }
         
         .danger-text {
-            color: #e74c3c;
+            color: var(--accent);
+            font-weight: 600;
         }
         
         .warning-text {
-            color: #f39c12;
+            color: var(--warning);
+            font-weight: 600;
         }
         
         .info-text {
-            color: #3498db;
+            color: var(--primary);
+            font-weight: 600;
         }
         
-        .puzzle-text {
-            color: #9b59b6;
+        .puzzle-text-log {
+            color: var(--p5);
+            font-weight: 600;
         }
         
         .restart-btn {
             width: 100%;
-            padding: 15px;
-            background: #2ecc71;
+            padding: 16px;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             margin-top: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .restart-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .restart-btn:hover:before {
+            left: 100%;
         }
         
         .restart-btn:hover {
-            background: #27ae60;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(90deg, #2ea044, var(--secondary));
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(18, 38, 63, 0.15);
         }
         
         .progress-container {
-            height: 20px;
-            background: #2c3e50;
-            border-radius: 10px;
+            height: 24px;
+            background: var(--light-bg);
+            border-radius: 12px;
             margin-bottom: 20px;
             overflow: hidden;
+            border: 2px solid rgba(26, 115, 232, 0.1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .progress-bar {
             height: 100%;
-            background: linear-gradient(to right, #3498db, #2ecc71);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 10px;
             width: 0%;
             transition: width 0.5s ease;
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
         }
         
         .timer-warning {
@@ -360,39 +629,76 @@
         }
         
         @keyframes pulse {
-            0% { background-color: #2c3e50; }
-            50% { background-color: #e74c3c; }
-            100% { background-color: #2c3e50; }
+            0% { 
+                background: var(--card-bg);
+                border-color: rgba(26, 115, 232, 0.1);
+            }
+            50% { 
+                background: rgba(242, 92, 84, 0.1);
+                border-color: var(--accent);
+            }
+            100% { 
+                background: var(--card-bg);
+                border-color: rgba(26, 115, 232, 0.1);
+            }
         }
         
-        @media (max-width: 1100px) {
+        /* Responsive design */
+        @media (max-width: 1200px) {
             .container {
                 flex-direction: column;
             }
             
-            .game-info, .game-area {
-                min-width: 100%;
+            .game-info {
+                border-right: none;
+                border-bottom: 1px solid rgba(16, 24, 32, 0.06);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            
+            .container {
+                border-radius: 12px;
+                margin-top: 60px;
             }
             
             h1 {
-                font-size: 2.2rem;
+                font-size: 24px;
             }
             
-            .actions, .options {
+            .actions, .options, .kit-items {
                 grid-template-columns: 1fr;
+            }
+            
+            .status-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .back-button {
+                top: 10px;
+                left: 10px;
+                padding: 10px 12px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
+    <a href="../gamified-learning.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Games
+    </a>
     <div class="container">
         <div class="game-info">
             <header>
-                <h1>Disaster Escape Room 🚨</h1>
-                <p>Timed escape experience with simulated disasters</p>
+                <h1><i class="fas fa-shield-alt"></i> Disaster Quest</h1>
+                <p class="subtitle">Emergency Escape Room Challenge</p>
             </header>
             
-            <h2>Game Rules</h2>
+            <h2><i class="fas fa-gamepad"></i> How to Play</h2>
             <ul class="rules-list">
                 <li>Solve puzzles to evacuate safely from disaster scenarios</li>
                 <li>Choose the right emergency kit items for each situation</li>
@@ -402,55 +708,57 @@
                 <li>Different scenario each time you play</li>
             </ul>
             
-            <h2>Scoring System</h2>
+            <h2><i class="fas fa-trophy"></i> Scoring System</h2>
             <ul class="points-list">
-                <li>+100 points for successful escape</li>
-                <li>+50 points for each correct puzzle solved</li>
-                <li>+25 points for each essential kit item selected</li>
-                <li>+75 points for time remaining when escaping</li>
-                <li>-30 points for incorrect choices</li>
-                <li>Bonus points for finding hidden safety items</li>
+                <li><strong>+100 points</strong> for successful escape</li>
+                <li><strong>+50 points</strong> for each correct puzzle solved</li>
+                <li><strong>+25 points</strong> for each essential kit item selected</li>
+                <li><strong>+75 points</strong> for time remaining when escaping</li>
+                <li><strong>-30 points</strong> for incorrect choices</li>
+                <li><strong>Bonus points</strong> for finding hidden safety items</li>
             </ul>
             
             <div class="stats">
-                <h2>Your Statistics</h2>
+                <h2><i class="fas fa-chart-line"></i> Your Statistics</h2>
                 <div class="stat-item">
-                    <span>Highest Score:</span>
+                    <span><i class="fas fa-star"></i> Highest Score:</span>
                     <span id="high-score">0</span>
                 </div>
                 <div class="stat-item">
-                    <span>Escapes Completed:</span>
+                    <span><i class="fas fa-door-open"></i> Escapes Completed:</span>
                     <span id="escapes-completed">0</span>
                 </div>
                 <div class="stat-item">
-                    <span>Puzzles Solved:</span>
+                    <span><i class="fas fa-puzzle-piece"></i> Puzzles Solved:</span>
                     <span id="puzzles-solved">0</span>
                 </div>
                 <div class="stat-item">
-                    <span>Average Time:</span>
+                    <span><i class="fas fa-clock"></i> Average Time:</span>
                     <span id="average-time">0s</span>
                 </div>
             </div>
             
-            <button class="restart-btn" onclick="initGame()">🔄 New Escape Room</button>
+            <button class="restart-btn" onclick="initGame()">
+                <i class="fas fa-redo"></i> Start New Challenge
+            </button>
         </div>
         
         <div class="game-area">
             <div class="status-bar">
                 <div class="status-item">
-                    <div>Time Remaining</div>
+                    <div class="status-label"><i class="fas fa-clock"></i> Time Remaining</div>
                     <div class="status-value" id="time">05:00</div>
                 </div>
                 <div class="status-item">
-                    <div>Puzzles Solved</div>
+                    <div class="status-label"><i class="fas fa-puzzle-piece"></i> Puzzles Solved</div>
                     <div class="status-value" id="puzzles">0/3</div>
                 </div>
                 <div class="status-item">
-                    <div>Safety Score</div>
+                    <div class="status-label"><i class="fas fa-shield-alt"></i> Safety Score</div>
                     <div class="status-value" id="safety">100%</div>
                 </div>
                 <div class="status-item">
-                    <div>Total Score</div>
+                    <div class="status-label"><i class="fas fa-star"></i> Total Score</div>
                     <div class="status-value" id="score">0</div>
                 </div>
             </div>
@@ -479,30 +787,56 @@
                     </div>
                     
                     <div class="kit-items">
-                        <div class="kit-item" onclick="selectItem(0)">Fire Extinguisher</div>
-                        <div class="kit-item" onclick="selectItem(1)">Water Bottle</div>
-                        <div class="kit-item" onclick="selectItem(2)">Emergency Blanket</div>
-                        <div class="kit-item" onclick="selectItem(3)">Dust Mask</div>
+                        <div class="kit-item" onclick="selectItem(0)">
+                            <i class="fas fa-fire-extinguisher"></i> Fire Extinguisher
+                        </div>
+                        <div class="kit-item" onclick="selectItem(1)">
+                            <i class="fas fa-tint"></i> Water Bottle
+                        </div>
+                        <div class="kit-item" onclick="selectItem(2)">
+                            <i class="fas fa-shield-alt"></i> Emergency Blanket
+                        </div>
+                        <div class="kit-item" onclick="selectItem(3)">
+                            <i class="fas fa-head-side-mask"></i> Dust Mask
+                        </div>
                     </div>
                     
                     <div class="options">
-                        <div class="option" onclick="solvePuzzle(0)">Exit through main hallway</div>
-                        <div class="option" onclick="solvePuzzle(1)">Use emergency staircase</div>
-                        <div class="option" onclick="solvePuzzle(2)">Wait by window for rescue</div>
-                        <div class="option" onclick="solvePuzzle(3)">Take elevator to ground floor</div>
+                        <div class="option" onclick="solvePuzzle(0)">
+                            <i class="fas fa-walking"></i> Exit through main hallway
+                        </div>
+                        <div class="option" onclick="solvePuzzle(1)">
+                            <i class="fas fa-stairs"></i> Use emergency staircase
+                        </div>
+                        <div class="option" onclick="solvePuzzle(2)">
+                            <i class="fas fa-window-maximize"></i> Wait by window for rescue
+                        </div>
+                        <div class="option" onclick="solvePuzzle(3)">
+                            <i class="fas fa-elevator"></i> Take elevator to ground floor
+                        </div>
                     </div>
                 </div>
                 
                 <div class="actions">
-                    <button class="danger" onclick="useItem()">Use Selected Item</button>
-                    <button class="success" onclick="attemptEscape()">Attempt Escape</button>
+                    <button class="warning" onclick="useItem()">
+                        <i class="fas fa-hand-holding"></i> Use Selected Item
+                    </button>
+                    <button class="success" onclick="attemptEscape()">
+                        <i class="fas fa-running"></i> Attempt Escape
+                    </button>
                 </div>
             </div>
             
             <div class="log" id="log">
-                <div class="log-entry info-text">Fire alarm activated! Emergency protocol initiated.</div>
-                <div class="log-entry warning-text">Smoke detected on the floor. Evacuation necessary.</div>
-                <div class="log-entry">Choose the right items and escape route to survive.</div>
+                <div class="log-entry info-text">
+                    <i class="fas fa-bell"></i> Fire alarm activated! Emergency protocol initiated.
+                </div>
+                <div class="log-entry warning-text">
+                    <i class="fas fa-exclamation-triangle"></i> Smoke detected on the floor. Evacuation necessary.
+                </div>
+                <div class="log-entry">
+                    <i class="fas fa-info-circle"></i> Choose the right items and escape route to survive.
+                </div>
             </div>
         </div>
     </div>
@@ -521,6 +855,7 @@
             scenario: null,
             selectedItem: null,
             currentPuzzle: 0,
+            hintsUsed: 0,
             highScore: parseInt(localStorage.getItem('highScore')) || 0,
             escapesCompleted: parseInt(localStorage.getItem('escapesCompleted')) || 0,
             puzzlesSolvedTotal: parseInt(localStorage.getItem('puzzlesSolvedTotal')) || 0,
@@ -538,6 +873,7 @@
                 puzzles: [
                     {
                         question: "The fire alarm is sounding and smoke is visible under the door. Choose the most essential items from the emergency kit for this situation.",
+                        hint: "Breathing protection and fire suppression tools are most important in fire emergencies.",
                         items: ["Fire Extinguisher", "Water Bottle", "Emergency Blanket", "Dust Mask"],
                         correctItems: [0, 3], // Fire Extinguisher and Dust Mask
                         options: [
@@ -551,6 +887,7 @@
                     },
                     {
                         question: "You encounter smoke filling the staircase. What should you do?",
+                        hint: "Remember that smoke rises and sound travels far in emergencies.",
                         items: ["Wet Cloth", "Flashlight", "Whistle", "First Aid Kit"],
                         correctItems: [0, 2], // Wet Cloth and Whistle
                         options: [
@@ -564,6 +901,7 @@
                     },
                     {
                         question: "You've reached the lobby but the main exit is blocked by fire. Choose items to help you safely exit.",
+                        hint: "Focus on tools that can create new exits or provide protection during escape.",
                         items: ["Emergency Hammer", "Phone Charger", "Fire Blanket", "Water Bottle"],
                         correctItems: [0, 2], // Emergency Hammer and Fire Blanket
                         options: [
@@ -734,8 +1072,36 @@
             puzzle.items.forEach((item, i) => {
                 const itemElement = document.createElement('div');
                 itemElement.className = 'kit-item';
-                itemElement.textContent = item;
+                
+                // Add appropriate icons for different items
+                const icons = {
+                    'Fire Extinguisher': 'fas fa-fire-extinguisher',
+                    'Water Bottle': 'fas fa-tint',
+                    'Emergency Blanket': 'fas fa-shield-alt',
+                    'Dust Mask': 'fas fa-head-side-mask',
+                    'Hard Hat': 'fas fa-hard-hat',
+                    'First Aid Kit': 'fas fa-medkit',
+                    'Life Jacket': 'fas fa-life-ring',
+                    'Waterproof Bag': 'fas fa-shopping-bag',
+                    'Flashlight': 'fas fa-flashlight',
+                    'Whistle': 'fas fa-bullhorn',
+                    'Mirror': 'fas fa-mirror',
+                    'Emergency Flares': 'fas fa-fire',
+                    'Wet Cloth': 'fas fa-tshirt',
+                    'Phone Charger': 'fas fa-battery-three-quarters',
+                    'Emergency Hammer': 'fas fa-hammer',
+                    'Fire Blanket': 'fas fa-shield-alt',
+                    'Gloves': 'fas fa-hand-paper',
+                    'Multi-tool': 'fas fa-tools',
+                    'Crowbar': 'fas fa-wrench',
+                    'Rope': 'fas fa-rope',
+                    'Colorful Clothing': 'fas fa-tshirt'
+                };
+                
+                const iconClass = icons[item] || 'fas fa-box';
+                itemElement.innerHTML = `<i class="${iconClass}"></i> ${item}`;
                 itemElement.onclick = () => selectItem(i);
+                itemElement.title = `Click to select ${item}`;
                 kitItems.appendChild(itemElement);
             });
             
@@ -745,8 +1111,53 @@
             puzzle.options.forEach((option, i) => {
                 const optionElement = document.createElement('div');
                 optionElement.className = 'option';
-                optionElement.textContent = option;
+                
+                // Add appropriate icons for different actions
+                const actionIcons = {
+                    'Exit through main hallway': 'fas fa-walking',
+                    'Use emergency staircase': 'fas fa-stairs',
+                    'Wait by window for rescue': 'fas fa-window-maximize',
+                    'Take elevator to ground floor': 'fas fa-elevator',
+                    'Go back to your office': 'fas fa-arrow-left',
+                    'Continue down through the smoke': 'fas fa-arrow-down',
+                    'Crawl low under the smoke': 'fas fa-child',
+                    'Break a window for air': 'fas fa-hammer',
+                    'Look for another exit': 'fas fa-search',
+                    'Try to put out the fire': 'fas fa-fire-extinguisher',
+                    'Break a window to escape': 'fas fa-hammer',
+                    'Hide in a bathroom': 'fas fa-door-closed',
+                    'Take cover under sturdy furniture': 'fas fa-chair',
+                    'Move to the center of the room': 'fas fa-arrows-alt',
+                    'Climb over debris to escape': 'fas fa-mountain',
+                    'Move quickly toward sunlight': 'fas fa-sun',
+                    'Test each step before moving': 'fas fa-walking',
+                    'Yell for help continuously': 'fas fa-bullhorn',
+                    'Climb over shelves': 'fas fa-mountain',
+                    'Start removing debris carefully': 'fas fa-hand-paper',
+                    'Try to squeeze through the opening': 'fas fa-compress',
+                    'Look for another way out': 'fas fa-search',
+                    'Wait for rescue teams': 'fas fa-clock',
+                    'Move to higher ground within the building': 'fas fa-arrow-up',
+                    'Try to swim to safety': 'fas fa-swimmer',
+                    'Barricade the doors': 'fas fa-shield-alt',
+                    'Break a window to escape': 'fas fa-hammer',
+                    'Stay indoors with supplies': 'fas fa-home',
+                    'Help clear emergency routes': 'fas fa-road',
+                    'Venture out unnecessarily': 'fas fa-walking',
+                    'Wait silently for rescue': 'fas fa-volume-mute',
+                    'Make noise to attract attention': 'fas fa-bullhorn',
+                    'Create a visible signal from window': 'fas fa-flag',
+                    'Try to reach the roof': 'fas fa-arrow-up',
+                    'Jump into the water and swim toward them': 'fas fa-swimmer',
+                    'Wave and signal from your safe position': 'fas fa-hand-paper',
+                    'Throw items to create splashes': 'fas fa-baseball-ball',
+                    'Break windows to make noise': 'fas fa-hammer'
+                };
+                
+                const iconClass = actionIcons[option] || 'fas fa-arrow-right';
+                optionElement.innerHTML = `<i class="${iconClass}"></i> ${option}`;
                 optionElement.onclick = () => solvePuzzle(i);
+                optionElement.title = `Click to choose: ${option}`;
                 options.appendChild(optionElement);
             });
             
@@ -827,9 +1238,29 @@
             const log = document.getElementById('log');
             const entry = document.createElement('div');
             entry.className = `log-entry ${type}-text`;
-            entry.textContent = message;
+            
+            // Add appropriate icons based on message type
+            const icons = {
+                'success': 'fas fa-check-circle',
+                'danger': 'fas fa-exclamation-triangle',
+                'warning': 'fas fa-exclamation-circle',
+                'info': 'fas fa-info-circle',
+                'puzzle': 'fas fa-puzzle-piece'
+            };
+            
+            const icon = icons[type] || 'fas fa-circle';
+            entry.innerHTML = `<i class="${icon}"></i> ${message}`;
             log.appendChild(entry);
             log.scrollTop = log.scrollHeight;
+            
+            // Add animation effect
+            entry.style.opacity = '0';
+            entry.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                entry.style.transition = 'all 0.3s ease';
+                entry.style.opacity = '1';
+                entry.style.transform = 'translateY(0)';
+            }, 50);
         }
         
         // Select an item from the kit
@@ -838,25 +1269,59 @@
             items.forEach(item => item.classList.remove('selected'));
             items[index].classList.add('selected');
             gameState.selectedItem = index;
+            
+            const puzzle = gameState.scenario.puzzles[gameState.currentPuzzle];
+            const itemName = puzzle.items[index];
+            addLog(`Selected: ${itemName}`, 'info');
+            
+            // Add visual feedback
+            items[index].style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                items[index].style.transform = '';
+            }, 200);
         }
         
         // Use the selected item
         function useItem() {
             if (gameState.selectedItem === null) {
-                addLog("Please select an item first.", 'warning');
+                addLog("Please select an item first before using it!", 'warning');
+                
+                // Highlight kit items to draw attention
+                const items = document.querySelectorAll('.kit-item');
+                items.forEach(item => {
+                    item.style.animation = 'pulse 0.5s ease-in-out';
+                    setTimeout(() => {
+                        item.style.animation = '';
+                    }, 500);
+                });
                 return;
             }
             
             const puzzle = gameState.scenario.puzzles[gameState.currentPuzzle];
             const isCorrect = puzzle.correctItems.includes(gameState.selectedItem);
+            const itemName = puzzle.items[gameState.selectedItem];
             
             if (isCorrect) {
-                addLog(`Good choice! The ${puzzle.items[gameState.selectedItem]} is useful in this situation.`, 'success');
+                addLog(`Excellent choice! The ${itemName} is very useful in this situation.`, 'success');
                 gameState.score += 25;
+                
+                // Visual success feedback
+                const selectedItem = document.querySelector('.kit-item.selected');
+                if (selectedItem) {
+                    selectedItem.style.background = 'linear-gradient(135deg, var(--secondary), #2ea044)';
+                    selectedItem.style.color = 'white';
+                }
             } else {
-                addLog(`The ${puzzle.items[gameState.selectedItem]} isn't the best choice here.`, 'danger');
+                addLog(`The ${itemName} isn't the best choice for this emergency situation.`, 'danger');
                 gameState.safety -= 10;
                 gameState.time -= 20;
+                
+                // Visual error feedback
+                const selectedItem = document.querySelector('.kit-item.selected');
+                if (selectedItem) {
+                    selectedItem.style.background = 'linear-gradient(135deg, var(--accent), #f56b77)';
+                    selectedItem.style.color = 'white';
+                }
             }
             
             updateDisplay();
@@ -886,6 +1351,44 @@
             }
             
             updateDisplay();
+        }
+        
+        // Get a hint for the current puzzle
+        function getHint() {
+            if (gameState.hintsUsed >= 3) {
+                addLog("No more hints available! You need to rely on your knowledge now.", 'warning');
+                
+                // Shake the hint button to show it's disabled
+                const hintBtn = document.querySelector('.control-btn:nth-child(2)');
+                if (hintBtn) {
+                    hintBtn.style.animation = 'shake 0.5s ease-in-out';
+                    setTimeout(() => {
+                        hintBtn.style.animation = '';
+                    }, 500);
+                }
+                return;
+            }
+            
+            const puzzle = gameState.scenario.puzzles[gameState.currentPuzzle];
+            if (puzzle.hint) {
+                addLog(`💡 Hint: ${puzzle.hint}`, 'info');
+                gameState.hintsUsed++;
+                gameState.score -= 5; // Small penalty for using hints
+                
+                // Update hint button to show remaining hints
+                const hintBtn = document.querySelector('.control-btn:nth-child(2)');
+                if (hintBtn) {
+                    hintBtn.innerHTML = `<i class="fas fa-lightbulb"></i> Hint (${3 - gameState.hintsUsed} left)`;
+                    if (gameState.hintsUsed === 3) {
+                        hintBtn.style.opacity = '0.5';
+                        hintBtn.style.cursor = 'not-allowed';
+                    }
+                }
+                
+                updateDisplay();
+            } else {
+                addLog("No hint available for this puzzle. Think carefully about emergency procedures!", 'info');
+            }
         }
         
         // Attempt to escape

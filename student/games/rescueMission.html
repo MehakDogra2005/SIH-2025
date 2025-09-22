@@ -4,62 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rescue Mission Simulator 🚑</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
         }
         
         body {
-            background: linear-gradient(135deg, #0c2461, #1e3799, #4a69bd);
-            color: #333;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navigation header */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 0;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(26, 115, 232, 0.3);
+        }
+
+        .back-btn i {
+            font-size: 1rem;
         }
         
         .container {
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .rules-panel {
             flex: 1;
             padding: 25px;
-            background: linear-gradient(to bottom, #2c3e50, #3498db);
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
             color: white;
         }
         
         .game-panel {
             flex: 2;
             padding: 25px;
-            background: #ecf0f1;
+            background: var(--light-bg);
         }
         
         h1 {
             text-align: center;
             margin-bottom: 20px;
-            color: #f1c40f;
+            color: var(--p6);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             font-size: 2.5rem;
+            font-weight: 700;
         }
         
         h2 {
             margin: 15px 0 10px;
-            color: #f1c40f;
-            border-bottom: 2px solid #f1c40f;
+            color: var(--p6);
+            border-bottom: 2px solid var(--p6);
             padding-bottom: 5px;
+            font-weight: 600;
         }
         
         h3 {
             margin: 15px 0 10px;
-            color: #3498db;
+            color: var(--primary);
+            font-weight: 600;
         }
         
         ul {
@@ -69,12 +137,14 @@
         
         li {
             margin-bottom: 8px;
+            line-height: 1.5;
         }
         
         .role-selection {
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
+            gap: 10px;
         }
         
         .role {
@@ -82,218 +152,253 @@
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
             width: 30%;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
         }
         
         .role:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(26, 115, 232, 0.15);
         }
         
         .role.selected {
-            border: 3px solid #f1c40f;
+            border: 3px solid var(--primary);
+            box-shadow: 0 8px 20px rgba(26, 115, 232, 0.2);
         }
         
         .firefighter {
-            background: linear-gradient(to bottom, #e74c3c, #c0392b);
+            background: linear-gradient(135deg, var(--accent), #d32f2f);
             color: white;
         }
         
         .paramedic {
-            background: linear-gradient(to bottom, #2ecc71, #27ae60);
+            background: linear-gradient(135deg, var(--secondary), #2e7d32);
             color: white;
         }
         
         .volunteer {
-            background: linear-gradient(to bottom, #9b59b6, #8e44ad);
+            background: linear-gradient(135deg, var(--p5), #7b1fa2);
             color: white;
         }
         
         .scenario {
-            background: #3498db;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 1.2rem;
+            box-shadow: var(--shadow);
         }
         
         .timer {
-            background: #e74c3c;
+            background: linear-gradient(90deg, var(--accent), #d32f2f);
             color: white;
-            padding: 10px;
+            padding: 12px;
             border-radius: 10px;
             text-align: center;
             margin-bottom: 20px;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 1.5rem;
+            box-shadow: var(--shadow);
         }
         
         .tasks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
         
         .task {
-            background: white;
-            border: 2px solid #3498db;
-            border-radius: 10px;
+            background: var(--card-bg);
+            border: 2px solid rgba(26, 115, 232, 0.2);
+            border-radius: 12px;
             padding: 15px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
         }
         
         .task:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            border-color: #f1c40f;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(26, 115, 232, 0.15);
+            border-color: var(--primary);
         }
         
         .task.selected {
-            background: #d4edda;
-            border-color: #28a745;
+            background: rgba(52, 168, 83, 0.1);
+            border-color: var(--secondary);
+            color: var(--text-dark);
         }
         
         .task.disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            background: rgba(108, 117, 125, 0.1);
         }
         
         .priority-indicator {
-            height: 10px;
-            border-radius: 5px;
+            height: 6px;
+            border-radius: 3px;
             margin: 10px 0;
         }
         
         .high-priority {
-            background: linear-gradient(to right, #e74c3c, #c0392b);
+            background: linear-gradient(to right, var(--accent), #d32f2f);
         }
         
         .medium-priority {
-            background: linear-gradient(to right, #f39c12, #e67e22);
+            background: linear-gradient(to right, var(--warning), var(--p2));
         }
         
         .low-priority {
-            background: linear-gradient(to right, #3498db, #2980b9);
+            background: linear-gradient(to right, var(--p1), var(--primary));
         }
         
         .action-log {
-            background: white;
-            border: 2px dashed #3498db;
-            border-radius: 10px;
+            background: var(--card-bg);
+            border: 2px dashed rgba(26, 115, 232, 0.3);
+            border-radius: 12px;
             padding: 15px;
             min-height: 150px;
             margin-bottom: 20px;
             max-height: 200px;
             overflow-y: auto;
+            box-shadow: var(--shadow);
         }
         
         .log-entry {
             margin-bottom: 8px;
-            padding: 5px;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
         
         .log-success {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(52, 168, 83, 0.1);
+            color: #2e7d32;
+            border-left: 4px solid var(--secondary);
         }
         
         .log-warning {
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(249, 168, 37, 0.1);
+            color: #8a6914;
+            border-left: 4px solid var(--warning);
         }
         
         .log-danger {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(242, 92, 84, 0.1);
+            color: #d32f2f;
+            border-left: 4px solid var(--accent);
         }
         
         .controls {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 15px;
         }
         
         button {
             padding: 12px 25px;
             border: none;
-            border-radius: 8px;
-            font-weight: bold;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
+            font-size: 0.95rem;
         }
         
         #start-btn {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2e7d32);
             color: white;
+            box-shadow: var(--shadow);
         }
         
         #start-btn:hover {
-            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(52, 168, 83, 0.3);
         }
         
         #submit-btn {
-            background: #3498db;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
+            box-shadow: var(--shadow);
         }
         
         #submit-btn:hover {
-            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(26, 115, 232, 0.3);
         }
         
         #next-btn {
-            background: #9b59b6;
+            background: linear-gradient(90deg, var(--p5), #7b1fa2);
             color: white;
+            box-shadow: var(--shadow);
         }
         
         #next-btn:hover {
-            background: #8e44ad;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(155, 89, 182, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
         }
         
         .score {
             text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
             margin-top: 20px;
+            padding: 15px;
+            background: rgba(26, 115, 232, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(26, 115, 232, 0.2);
         }
         
         .result {
             text-align: center;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px;
             margin-top: 20px;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 1.1rem;
             display: none;
+            box-shadow: var(--shadow);
         }
         
         .success {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(52, 168, 83, 0.1);
+            color: #2e7d32;
+            border: 2px solid var(--secondary);
             display: block;
         }
         
         .fail {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(242, 92, 84, 0.1);
+            color: #d32f2f;
+            border: 2px solid var(--accent);
             display: block;
         }
         
         .high-score {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 12px;
             margin-top: 15px;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         @media (max-width: 900px) {
@@ -308,21 +413,84 @@
             .role-selection {
                 flex-direction: column;
                 align-items: center;
+                gap: 15px;
             }
             
             .role {
                 width: 80%;
-                margin-bottom: 15px;
+                margin-bottom: 10px;
             }
+
+            .nav-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Custom scrollbar for action log */
+        .action-log::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .action-log::-webkit-scrollbar-track {
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 4px;
+        }
+
+        .action-log::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--p1), var(--primary));
+            border-radius: 4px;
+        }
+
+        .action-log::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        }
+
+        /* Animation for timer urgency */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* Success animations */
+        @keyframes taskComplete {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .task.completing {
+            animation: taskComplete 0.5s ease-in-out;
         }
     </style>
 </head>
 <body>
+    <div class="nav-header">
+        <a href="../gamified-learning.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Gamified Learning
+        </a>
+        <div style="display: flex; align-items: center; gap: 15px; color: var(--primary);">
+            <i class="fas fa-ambulance" style="font-size: 1.5rem;"></i>
+            <h2 style="margin: 0; font-weight: 700;">Rescue Mission Simulator</h2>
+        </div>
+    </div>
     <div class="container">
         <div class="rules-panel">
-            <h1>Rescue Mission Simulator 🚑</h1>
+            <h1>🚑 Rescue Mission</h1>
             
-            <h2>Game Rules</h2>
+            <h2><i class="fas fa-book-open"></i> Game Rules</h2>
             <ul>
                 <li>Choose your responder role: Firefighter, Paramedic, or Volunteer</li>
                 <li>Each role has different abilities and limitations</li>
@@ -332,7 +500,7 @@
                 <li>Wrong choices will cost time and points</li>
             </ul>
             
-            <h2>Important Points</h2>
+            <h2><i class="fas fa-lightbulb"></i> Important Points</h2>
             <ul>
                 <li>Always prioritize life-threatening situations first</li>
                 <li>Some tasks require specific roles - know your limitations</li>
@@ -341,7 +509,7 @@
                 <li>Coordinate with other responders when possible</li>
             </ul>
             
-            <h2>Outcomes</h2>
+            <h2><i class="fas fa-trophy"></i> Outcomes</h2>
             <ul>
                 <li><strong>Excellent Response:</strong> Saved all critical patients + bonus</li>
                 <li><strong>Good Response:</strong> Most critical tasks completed</li>
@@ -351,56 +519,70 @@
             </ul>
             
             <div class="high-score">
-                <h2>Your High Score</h2>
-                <p id="high-score">0 points</p>
+                <h2><i class="fas fa-star"></i> Your High Score</h2>
+                <p id="high-score" style="font-size: 1.2rem; font-weight: 700;">0 points</p>
             </div>
         </div>
         
         <div class="game-panel">
-            <h2>Emergency Response Center</h2>
+            <h2><i class="fas fa-headset"></i> Emergency Response Center</h2>
             
             <div class="role-selection">
                 <div class="role firefighter" data-role="firefighter">
+                    <i class="fas fa-fire-extinguisher" style="font-size: 2rem; margin-bottom: 10px;"></i>
                     <h3>Firefighter</h3>
-                    <p>Specializes in fire suppression and rescue</p>
+                    <p>Specializes in fire suppression and rescue operations</p>
                 </div>
                 <div class="role paramedic" data-role="paramedic">
+                    <i class="fas fa-user-md" style="font-size: 2rem; margin-bottom: 10px;"></i>
                     <h3>Paramedic</h3>
-                    <p>Specializes in medical emergencies</p>
+                    <p>Specializes in medical emergencies and treatment</p>
                 </div>
                 <div class="role volunteer" data-role="volunteer">
+                    <i class="fas fa-hands-helping" style="font-size: 2rem; margin-bottom: 10px;"></i>
                     <h3>Volunteer</h3>
                     <p>Jack-of-all-trades, master of none</p>
                 </div>
             </div>
             
             <div class="scenario" id="scenario">
+                <i class="fas fa-clipboard-list" style="margin-right: 10px;"></i>
                 Select your role to begin
             </div>
             
             <div class="timer" id="timer">
+                <i class="fas fa-clock" style="margin-right: 10px;"></i>
                 Time: 60 seconds
             </div>
             
-            <h3>Emergency Tasks</h3>
+            <h3><i class="fas fa-tasks"></i> Emergency Tasks</h3>
             <div class="tasks-grid" id="tasks-container">
                 <!-- Tasks will be generated here -->
             </div>
             
-            <h3>Action Log</h3>
+            <h3><i class="fas fa-list-alt"></i> Action Log</h3>
             <div class="action-log" id="action-log">
-                <!-- Action log will appear here -->
+                <div class="log-entry" style="text-align: center; color: #666; font-style: italic;">
+                    Action log will appear here...
+                </div>
             </div>
             
             <div class="controls">
-                <button id="start-btn">Start Mission</button>
-                <button id="submit-btn" disabled>Call Backup</button>
-                <button id="next-btn" disabled>Next Mission</button>
+                <button id="start-btn">
+                    <i class="fas fa-play"></i> Start Mission
+                </button>
+                <button id="submit-btn" disabled>
+                    <i class="fas fa-phone"></i> Call Backup
+                </button>
+                <button id="next-btn" disabled>
+                    <i class="fas fa-forward"></i> Next Mission
+                </button>
             </div>
             
             <div class="result" id="result"></div>
             
             <div class="score">
+                <i class="fas fa-star" style="margin-right: 8px;"></i>
                 Current Score: <span id="score">0</span> points
             </div>
         </div>
@@ -487,20 +669,38 @@
             // Reset game state
             timeLeft = 60;
             completedTasks = [];
+            score = 0;
             
             // Update UI
-            scenarioElement.textContent = `${scenarios[currentScenarioIndex].name}: ${scenarios[currentScenarioIndex].description}`;
-            timerElement.textContent = `Time: ${timeLeft} seconds`;
-            actionLogElement.innerHTML = '';
+            if (selectedRole) {
+                scenarioElement.innerHTML = `
+                    <i class="fas fa-clipboard-list" style="margin-right: 10px;"></i>
+                    ${scenarios[currentScenarioIndex].name}: ${scenarios[currentScenarioIndex].description}
+                `;
+            } else {
+                scenarioElement.innerHTML = `
+                    <i class="fas fa-clipboard-list" style="margin-right: 10px;"></i>
+                    Select your role to begin
+                `;
+            }
+            
+            timerElement.innerHTML = `<i class="fas fa-clock" style="margin-right: 10px;"></i>Time: ${timeLeft} seconds`;
+            scoreElement.textContent = score;
             resultElement.className = 'result';
             
             // Generate tasks
             generateTasks();
             
             // Update buttons
-            startBtn.disabled = false;
+            startBtn.disabled = !selectedRole;
             submitBtn.disabled = true;
             nextBtn.disabled = true;
+            
+            if (!selectedRole) {
+                startBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Select Role First';
+            } else {
+                startBtn.innerHTML = '<i class="fas fa-play"></i> Start Mission';
+            }
         }
 
         // Generate tasks for the current scenario
@@ -524,16 +724,30 @@
                     taskElement.classList.add('disabled');
                 }
                 
+                // Create priority icon
+                const priorityIcon = task.priority === 'high' ? 'fa-exclamation-triangle' : 
+                                   task.priority === 'medium' ? 'fa-exclamation-circle' : 'fa-info-circle';
+                const priorityColor = task.priority === 'high' ? '#f25c54' : 
+                                    task.priority === 'medium' ? '#f9a825' : '#309ad4';
+                
                 taskElement.innerHTML = `
-                    <div>${task.name}</div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <i class="fas ${priorityIcon}" style="color: ${priorityColor}; font-size: 1.1rem;"></i>
+                        <strong style="font-size: 0.95rem;">${task.name}</strong>
+                    </div>
                     <div class="priority-indicator ${task.priority}-priority"></div>
-                    <div>Time: ${task.time}s | Points: ${task.points}</div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #666;">
+                        <span><i class="fas fa-clock"></i> ${task.time}s</span>
+                        <span><i class="fas fa-star"></i> ${task.points} pts</span>
+                    </div>
                 `;
                 
                 if (!taskElement.classList.contains('disabled')) {
                     taskElement.addEventListener('click', () => {
                         attemptTask(task, taskElement);
                     });
+                } else {
+                    taskElement.title = `This task requires a ${task.roles.join(' or ')} role`;
                 }
                 
                 tasksContainer.appendChild(taskElement);
@@ -546,35 +760,50 @@
             
             // Check if task is already completed
             if (completedTasks.includes(task.id)) {
-                addToLog("You've already completed this task!", "warning");
+                addToLog("⚠️ You've already completed this task!", "warning");
                 return;
             }
             
             // Check if enough time is available
             if (timeLeft < task.time) {
-                addToLog("Not enough time to complete this task!", "danger");
+                addToLog("⏰ Not enough time to complete this task!", "danger");
                 return;
             }
+            
+            // Add completion animation
+            element.classList.add('completing');
             
             // Deduct time and complete task
             timeLeft -= task.time;
             completedTasks.push(task.id);
             
-            // Update score
-            score += task.points;
+            // Update score with priority bonus
+            let points = task.points;
+            if (task.priority === 'high') points = Math.floor(points * 1.2); // 20% bonus for high priority
+            score += points;
             
             // Update UI
-            timerElement.textContent = `Time: ${timeLeft} seconds`;
+            timerElement.innerHTML = `<i class="fas fa-clock" style="margin-right: 10px;"></i>Time: ${timeLeft} seconds`;
             scoreElement.textContent = score;
             element.classList.add('selected');
             element.style.pointerEvents = 'none';
             
-            // Add to log
-            addToLog(`Completed: ${task.name} (+${task.points} points)`, "success");
+            // Add to log with priority indication
+            const priorityEmoji = task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🔵';
+            addToLog(`${priorityEmoji} Completed: ${task.name} (+${points} points)`, "success");
+            
+            // Check if all high-priority tasks are completed
+            const scenario = scenarios[currentScenarioIndex];
+            const highPriorityTasks = scenario.tasks.filter(t => t.priority === 'high');
+            const completedHighPriority = highPriorityTasks.filter(t => completedTasks.includes(t.id));
+            
+            if (completedHighPriority.length === highPriorityTasks.length && completedHighPriority.length > 0) {
+                addToLog("🏆 Excellent! All critical tasks completed!", "success");
+            }
             
             // Check if all tasks are completed
-            if (completedTasks.length === scenarios[currentScenarioIndex].tasks.length) {
-                endGame(true);
+            if (completedTasks.length === scenario.tasks.length) {
+                setTimeout(() => endGame(true), 500);
             }
         }
 
@@ -590,25 +819,56 @@
         // Start the game
         function startGame() {
             if (!selectedRole) {
-                alert("Please select a role first!");
+                // Create a more user-friendly alert
+                const alertDiv = document.createElement('div');
+                alertDiv.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, #f25c54, #d32f2f);
+                    color: white;
+                    padding: 20px 30px;
+                    border-radius: 12px;
+                    box-shadow: 0 10px 30px rgba(242, 92, 84, 0.3);
+                    z-index: 1000;
+                    text-align: center;
+                    font-weight: 600;
+                `;
+                alertDiv.innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                    Please select a role first!<br>
+                    <small style="opacity: 0.9;">Choose Firefighter, Paramedic, or Volunteer to begin.</small>
+                `;
+                document.body.appendChild(alertDiv);
+                setTimeout(() => document.body.removeChild(alertDiv), 3000);
                 return;
             }
             
             gameActive = true;
             startBtn.disabled = true;
+            startBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mission Active';
             submitBtn.disabled = false;
             
             // Start timer
             timerInterval = setInterval(() => {
                 timeLeft--;
-                timerElement.textContent = `Time: ${timeLeft} seconds`;
+                timerElement.innerHTML = `<i class="fas fa-clock" style="margin-right: 10px;"></i>Time: ${timeLeft} seconds`;
+                
+                // Add urgency color as time runs low
+                if (timeLeft <= 10) {
+                    timerElement.style.background = 'linear-gradient(90deg, #f25c54, #d32f2f)';
+                    timerElement.style.animation = 'pulse 1s infinite';
+                } else if (timeLeft <= 30) {
+                    timerElement.style.background = 'linear-gradient(90deg, #f9a825, #e69c42)';
+                }
                 
                 if (timeLeft <= 0) {
                     endGame(false);
                 }
             }, 1000);
             
-            addToLog("Mission started! Good luck!", "success");
+            addToLog("🚨 Mission started! Prioritize high-priority tasks to save lives!", "success");
         }
 
         // End the game
@@ -617,40 +877,113 @@
             gameActive = false;
             submitBtn.disabled = true;
             nextBtn.disabled = false;
+            startBtn.innerHTML = '<i class="fas fa-play"></i> Start Mission';
+            startBtn.disabled = true;
             
-            // Calculate final score
+            // Reset timer styling
+            timerElement.style.background = 'linear-gradient(90deg, var(--accent), #d32f2f)';
+            timerElement.style.animation = 'none';
+            
+            // Calculate final score with various bonuses
             let bonus = 0;
+            let bonusDetails = [];
+            
             if (isSuccess) {
-                bonus = timeLeft * 2; // Time bonus
+                // Time bonus
+                const timeBonus = timeLeft * 2;
+                bonus += timeBonus;
+                bonusDetails.push(`Time bonus: +${timeBonus}`);
+                
+                // Role efficiency bonus
+                const scenario = scenarios[currentScenarioIndex];
+                const roleSpecificTasks = scenario.tasks.filter(task => 
+                    task.roles.length === 1 && task.roles.includes(selectedRole)
+                );
+                const completedRoleSpecific = roleSpecificTasks.filter(task => 
+                    completedTasks.includes(task.id)
+                );
+                
+                if (completedRoleSpecific.length > 0) {
+                    const roleBonus = completedRoleSpecific.length * 10;
+                    bonus += roleBonus;
+                    bonusDetails.push(`Role expertise bonus: +${roleBonus}`);
+                }
+                
                 score += bonus;
-                addToLog(`Time bonus: +${bonus} points!`, "success");
+                scoreElement.textContent = score;
+                
+                if (bonusDetails.length > 0) {
+                    bonusDetails.forEach(detail => addToLog(`🎉 ${detail}`, "success"));
+                }
             }
             
             // Update high score
             if (score > highScore) {
                 highScore = score;
                 highScoreElement.textContent = `${highScore} points`;
+                addToLog("🏆 NEW HIGH SCORE!", "success");
+            }
+            
+            // Determine performance level
+            const scenario = scenarios[currentScenarioIndex];
+            const totalTasks = scenario.tasks.length;
+            const completionRate = (completedTasks.length / totalTasks) * 100;
+            const highPriorityTasks = scenario.tasks.filter(t => t.priority === 'high');
+            const completedHighPriority = highPriorityTasks.filter(t => completedTasks.includes(t.id));
+            
+            let performance, message, className;
+            
+            if (completedHighPriority.length === highPriorityTasks.length && completionRate >= 80) {
+                performance = "🌟 EXCELLENT RESPONSE";
+                message = `Outstanding work! You completed ${completedTasks.length}/${totalTasks} tasks including all critical ones. Lives saved!`;
+                className = 'success';
+            } else if (completedHighPriority.length >= Math.ceil(highPriorityTasks.length * 0.75)) {
+                performance = "✅ GOOD RESPONSE";
+                message = `Good job! You handled most critical situations. ${completedTasks.length}/${totalTasks} tasks completed.`;
+                className = 'success';
+            } else if (completedHighPriority.length >= Math.ceil(highPriorityTasks.length * 0.5)) {
+                performance = "⚠️ FAIR RESPONSE";
+                message = `Adequate response, but some critical tasks were missed. ${completedTasks.length}/${totalTasks} tasks completed.`;
+                className = 'result';
+            } else {
+                performance = "❌ POOR RESPONSE";
+                message = `Critical situations were not properly handled. More training needed. ${completedTasks.length}/${totalTasks} tasks completed.`;
+                className = 'fail';
             }
             
             // Show result
-            if (isSuccess) {
-                resultElement.textContent = `Mission accomplished! Final score: ${score} points`;
-                resultElement.className = 'result success';
-            } else {
-                resultElement.textContent = `Mission failed! Time's up. Final score: ${score} points`;
-                resultElement.className = 'result fail';
-            }
+            resultElement.innerHTML = `
+                <div style="font-size: 1.3rem; margin-bottom: 10px;">${performance}</div>
+                <div style="margin-bottom: 15px;">${message}</div>
+                <div style="font-size: 1.1rem;">Final Score: <strong>${score} points</strong></div>
+                ${bonus > 0 ? `<div style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">Bonus: +${bonus} points</div>` : ''}
+            `;
+            resultElement.className = `result ${className}`;
             
             // Disable tasks
             const taskElements = document.querySelectorAll('.task');
             taskElements.forEach(element => {
                 element.style.pointerEvents = 'none';
+                if (!element.classList.contains('selected')) {
+                    element.style.opacity = '0.6';
+                }
             });
         }
 
         // Move to next scenario
         function nextScenario() {
             currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+            score = 0; // Reset score for new scenario
+            scoreElement.textContent = score;
+            
+            // Reset timer styling
+            timerElement.style.background = 'linear-gradient(90deg, var(--accent), #d32f2f)';
+            timerElement.style.animation = 'none';
+            
+            // Clear action log and add new scenario message
+            actionLogElement.innerHTML = '';
+            addToLog(`🚁 New scenario: ${scenarios[currentScenarioIndex].name}`, "success");
+            
             initGame();
         }
 
@@ -666,10 +999,17 @@
         startBtn.addEventListener('click', startGame);
         submitBtn.addEventListener('click', () => {
             if (gameActive) {
-                addToLog("Backup called! Additional resources are on the way.", "success");
+                addToLog("📞 Backup called! Additional resources are on the way (+15 seconds).", "success");
                 timeLeft += 15;
-                timerElement.textContent = `Time: ${timeLeft} seconds`;
+                timerElement.innerHTML = `<i class="fas fa-clock" style="margin-right: 10px;"></i>Time: ${timeLeft} seconds`;
                 submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Backup Called';
+                
+                // Reset timer color if it was in warning state
+                if (timeLeft > 30) {
+                    timerElement.style.background = 'linear-gradient(90deg, var(--accent), #d32f2f)';
+                    timerElement.style.animation = 'none';
+                }
             }
         });
         nextBtn.addEventListener('click', nextScenario);
@@ -680,7 +1020,27 @@
                 roleElements.forEach(r => r.classList.remove('selected'));
                 role.classList.add('selected');
                 selectedRole = role.dataset.role;
-                addToLog(`Role selected: ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}`, "success");
+                
+                // Clear action log and add role selection message
+                actionLogElement.innerHTML = '';
+                addToLog(`Role selected: ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}! 
+                         You can now perform tasks specific to your role.`, "success");
+                
+                // Update scenario text with role-specific message
+                const roleMessages = {
+                    firefighter: "As a Firefighter, you excel at rescue operations and fire suppression.",
+                    paramedic: "As a Paramedic, you're the medical expert for treating injuries.",
+                    volunteer: "As a Volunteer, you can assist with various support tasks."
+                };
+                
+                scenarioElement.innerHTML = `
+                    <i class="fas fa-clipboard-list" style="margin-right: 10px;"></i>
+                    ${scenarios[currentScenarioIndex].name}: ${scenarios[currentScenarioIndex].description}
+                    <div style="margin-top: 8px; font-size: 0.9rem; opacity: 0.9;">
+                        ${roleMessages[selectedRole]}
+                    </div>
+                `;
+                
                 initGame();
             });
         });

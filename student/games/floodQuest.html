@@ -4,19 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FloodQuest 🌊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Ubuntu", sans-serif;
         }
         
         body {
-            background: linear-gradient(to bottom, #1a2a6c, #2c3e50);
-            color: #ecf0f1;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .container {
@@ -30,49 +57,54 @@
         .game-info {
             flex: 1;
             min-width: 340px;
-            background: rgba(44, 62, 80, 0.9);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .game-area {
             flex: 2;
             min-width: 650px;
-            background: rgba(44, 62, 80, 0.9);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         header {
             text-align: center;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid var(--p1);
         }
         
         h1 {
             font-size: 2.8rem;
-            color: #3498db;
+            color: var(--primary);
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: none;
+            font-weight: 700;
         }
         
         h2 {
             font-size: 1.8rem;
-            color: #f39c12;
+            color: var(--p2);
             margin-bottom: 15px;
+            font-weight: 600;
         }
         
         h3 {
             font-size: 1.4rem;
-            color: #2ecc71;
+            color: var(--secondary);
             margin: 15px 0 10px;
+            font-weight: 500;
         }
         
         .rules-list, .points-list {
@@ -86,10 +118,11 @@
         }
         
         .stats {
-            background: #34495e;
+            background: linear-gradient(180deg, #fff, #fbfdff);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .stat-item {
@@ -97,16 +130,18 @@
             justify-content: space-between;
             margin-bottom: 12px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #2c3e50;
+            border-bottom: 1px solid rgba(26, 115, 232, 0.08);
         }
         
         .status-bar {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
-            background: #34495e;
+            background: linear-gradient(180deg, #fff, #fbfdff);
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
+            box-shadow: var(--shadow);
         }
         
         .status-item {
@@ -114,43 +149,49 @@
             flex: 1;
             padding: 12px;
             margin: 0 5px;
-            background: #2c3e50;
-            border-radius: 5px;
+            background: linear-gradient(180deg, var(--light-bg), #fff);
+            border-radius: 8px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .status-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #f39c12;
+            color: var(--primary);
         }
         
         .scenario {
-            background: #34495e;
+            background: linear-gradient(180deg, #fff, #fbfdff);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 20px;
             flex-grow: 1;
+            border: 1px solid rgba(16, 24, 32, 0.03);
+            box-shadow: var(--shadow);
         }
         
         .scenario-header {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
-            background: #2c3e50;
+            background: linear-gradient(180deg, var(--light-bg), #fff);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .scenario-icon {
             width: 70px;
             height: 70px;
-            border-radius: 50%;
-            background: #3498db;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--p1), var(--primary));
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.5rem;
             margin-right: 20px;
+            color: white;
+            box-shadow: 0 6px 18px rgba(48, 154, 212, 0.3);
         }
         
         .scenario-details {
@@ -161,18 +202,20 @@
             font-size: 1.2rem;
             line-height: 1.6;
             margin-bottom: 20px;
-            background: #2c3e50;
+            background: linear-gradient(180deg, var(--light-bg), #fff);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .city-map {
             height: 200px;
-            background: #2c3e50;
-            border-radius: 10px;
+            background: linear-gradient(180deg, var(--light-bg), #fff);
+            border-radius: 12px;
             margin-bottom: 20px;
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .river {
@@ -180,15 +223,15 @@
             bottom: 0;
             width: 100%;
             height: 30%;
-            background: #3498db;
+            background: linear-gradient(90deg, var(--p1), var(--primary));
         }
         
         .neighborhood {
             position: absolute;
             width: 25%;
             height: 40%;
-            background: #2ecc71;
-            border-radius: 5px;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
+            border-radius: 8px;
         }
         
         .neighborhood-1 {
@@ -207,8 +250,8 @@
             left: 40%;
             width: 20%;
             height: 50%;
-            background: #e74c3c;
-            border-radius: 5px;
+            background: linear-gradient(90deg, var(--p3), var(--accent));
+            border-radius: 8px;
         }
         
         .levee {
@@ -217,7 +260,7 @@
             left: 0;
             width: 100%;
             height: 5px;
-            background: #f39c12;
+            background: linear-gradient(90deg, var(--p2), var(--warning));
         }
         
         .actions {
@@ -230,14 +273,14 @@
         button {
             padding: 15px;
             border: none;
-            border-radius: 8px;
-            background: #3498db;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -246,7 +289,7 @@
         
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 28px rgba(26, 115, 232, 0.25);
         }
         
         button:active {
@@ -254,107 +297,127 @@
         }
         
         .danger {
-            background: #e74c3c;
+            background: linear-gradient(90deg, var(--p3), var(--accent));
+        }
+        
+        .danger:hover {
+            box-shadow: 0 12px 28px rgba(242, 92, 84, 0.25);
         }
         
         .success {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
+        }
+        
+        .success:hover {
+            box-shadow: 0 12px 28px rgba(52, 168, 83, 0.25);
         }
         
         .warning {
-            background: #f39c12;
+            background: linear-gradient(90deg, var(--p2), var(--warning));
+        }
+        
+        .warning:hover {
+            box-shadow: 0 12px 28px rgba(230, 156, 66, 0.25);
         }
         
         .prevention {
-            background: #9b59b6;
+            background: linear-gradient(90deg, var(--p5), #9b59b6);
+        }
+        
+        .prevention:hover {
+            box-shadow: 0 12px 28px rgba(226, 175, 211, 0.25);
         }
         
         .log {
-            background: #2c3e50;
+            background: linear-gradient(180deg, #fff, #fbfdff);
             height: 180px;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 15px;
             overflow-y: auto;
             margin-bottom: 20px;
             font-size: 0.95rem;
+            border: 1px solid rgba(16, 24, 32, 0.03);
+            box-shadow: var(--shadow);
         }
         
         .log-entry {
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #34495e;
+            border-bottom: 1px solid rgba(26, 115, 232, 0.08);
             line-height: 1.5;
         }
         
         .success-text {
-            color: #2ecc71;
+            color: var(--secondary);
         }
         
         .danger-text {
-            color: #e74c3c;
+            color: var(--accent);
         }
         
         .warning-text {
-            color: #f39c12;
+            color: var(--warning);
         }
         
         .info-text {
-            color: #3498db;
+            color: var(--primary);
         }
         
         .prevention-text {
-            color: #9b59b6;
+            color: var(--p5);
         }
         
         .restart-btn {
             width: 100%;
             padding: 15px;
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             margin-top: 10px;
+            box-shadow: var(--shadow);
         }
         
         .restart-btn:hover {
-            background: #27ae60;
             transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 28px rgba(52, 168, 83, 0.25);
         }
         
         .progress-container {
             height: 20px;
-            background: #2c3e50;
-            border-radius: 10px;
+            background: linear-gradient(180deg, var(--light-bg), #fff);
+            border-radius: 12px;
             margin-bottom: 20px;
             overflow: hidden;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .progress-bar {
             height: 100%;
-            background: linear-gradient(to right, #3498db, #2ecc71);
-            border-radius: 10px;
+            background: linear-gradient(to right, var(--p1), var(--secondary));
+            border-radius: 12px;
             width: 0%;
             transition: width 0.5s ease;
         }
         
         .flood-level {
             height: 20px;
-            background: #2c3e50;
-            border-radius: 10px;
+            background: linear-gradient(180deg, var(--light-bg), #fff);
+            border-radius: 12px;
             margin-bottom: 20px;
             overflow: hidden;
             position: relative;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .flood-level-fill {
             height: 100%;
-            background: linear-gradient(to right, #3498db, #1a5276);
-            border-radius: 10px;
+            background: linear-gradient(to right, var(--p1), var(--primary));
+            border-radius: 12px;
             width: 30%;
             transition: width 0.5s ease;
         }
@@ -368,8 +431,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            font-weight: 600;
+            text-shadow: none;
+            color: var(--text-dark);
         }
         
         @media (max-width: 1100px) {
@@ -388,6 +452,79 @@
             .actions {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* Scrollbar styling */
+        .log::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .log::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--p6), var(--p1));
+            border-radius: 12px;
+        }
+
+        .log::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* Animation for highlight effects */
+        @keyframes highlightPulse {
+            0% {
+                box-shadow: var(--shadow);
+                transform: translateY(0);
+            }
+            50% {
+                box-shadow: 0 12px 30px rgba(48, 154, 212, 0.15);
+                transform: translateY(-2px);
+            }
+            100% {
+                box-shadow: var(--shadow);
+                transform: translateY(0);
+            }
+        }
+
+        .highlight {
+            animation: highlightPulse 1s ease-in-out;
+        }
+
+        /* Enhanced city map styling */
+        .neighborhood, .city-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tooltip styling */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
         }
     </style>
 </head>
@@ -495,17 +632,26 @@
                 </div>
                 
                 <div class="actions">
-                    <button class="prevention" onclick="makeDecision('reinforce')">🛡️ Reinforce Levees</button>
-                    <button class="warning" onclick="makeDecision('evacuate')">🚨 Evacuate Areas</button>
-                    <button onclick="makeDecision('drainage')">🔄 Improve Drainage</button>
-                    <button class="success" onclick="makeDecision('sandbags')">🛍️ Deploy Sandbags</button>
+                    <button class="prevention tooltip" onclick="makeDecision('reinforce')" data-tooltip="Costs $20,000 - High effectiveness">
+                        🛡️ Reinforce Levees
+                    </button>
+                    <button class="warning tooltip" onclick="makeDecision('evacuate')" data-tooltip="Costs $10,000 - Saves lives">
+                        🚨 Evacuate Areas
+                    </button>
+                    <button class="tooltip" onclick="makeDecision('drainage')" data-tooltip="Costs $15,000 - Improves water flow">
+                        🔄 Improve Drainage
+                    </button>
+                    <button class="success tooltip" onclick="makeDecision('sandbags')" data-tooltip="Costs $8,000 - Quick protection">
+                        🛍️ Deploy Sandbags
+                    </button>
                 </div>
             </div>
             
             <div class="log" id="log">
-                <div class="log-entry info-text">Flood warning issued! River levels are rising rapidly.</div>
-                <div class="log-entry warning-text">3 key areas at risk: Homes, Businesses, and City Center.</div>
-                <div class="log-entry">You have $75,000 and 8 minutes to prevent disaster.</div>
+                <div class="log-entry info-text">🌊 Flood warning issued! River levels are rising rapidly.</div>
+                <div class="log-entry warning-text">⚠️ 3 key areas at risk: Homes, Businesses, and City Center.</div>
+                <div class="log-entry">💰 You have $75,000 and 8 minutes to prevent disaster.</div>
+                <div class="log-entry prevention-text">💡 Tip: Use keyboard shortcuts 1-4 for quick actions!</div>
             </div>
         </div>
     </div>
@@ -583,7 +729,57 @@
             }
         ];
         
-        // Initialize the game
+        // Enhanced visual feedback functions
+        function addButtonClickEffect(button) {
+            button.style.transform = 'scale(0.95)';
+            button.style.boxShadow = '0 4px 12px rgba(26, 115, 232, 0.4)';
+            setTimeout(() => {
+                button.style.transform = '';
+                button.style.boxShadow = '';
+            }, 150);
+        }
+        
+        function showInsufficientFundsEffect(button) {
+            const originalBg = button.style.background;
+            button.style.background = 'linear-gradient(90deg, var(--accent), #d32f2f)';
+            button.style.transform = 'scale(0.98) translateX(-2px)';
+            setTimeout(() => {
+                button.style.background = originalBg;
+                button.style.transform = '';
+            }, 300);
+        }
+        
+        function animateValue(elementId, startValue, endValue) {
+            const element = document.getElementById(elementId);
+            const duration = 800;
+            const startTime = performance.now();
+            
+            function updateValue(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const currentValue = Math.round(startValue + (endValue - startValue) * progress);
+                
+                if (elementId === 'resources') {
+                    element.textContent = `$${currentValue.toLocaleString()}`;
+                } else if (elementId === 'safety') {
+                    element.textContent = `${currentValue}%`;
+                } else {
+                    element.textContent = currentValue;
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateValue);
+                } else {
+                    element.classList.add('highlight');
+                    setTimeout(() => element.classList.remove('highlight'), 600);
+                }
+            }
+            
+            requestAnimationFrame(updateValue);
+        }
+        
+        // Initialize the game with enhanced features
         function initGame() {
             // Clear previous timer
             clearInterval(gameState.timer);
@@ -606,13 +802,14 @@
             document.getElementById('scenario-difficulty').textContent = `Risk Level: ${gameState.scenario.difficulty}`;
             document.getElementById('scenario-text').textContent = gameState.scenario.description;
             
-            // Clear log and add initial message
+            // Clear log and add initial messages with enhanced formatting
             const log = document.getElementById('log');
             log.innerHTML = '';
             addLog(`Flood warning: ${gameState.scenario.name}`, 'info');
             addLog(`Risk Level: ${gameState.scenario.difficulty}`, 'warning');
             addLog(gameState.scenario.description, 'info');
             addLog("Make strategic decisions to prevent flooding and protect urban areas.", 'prevention');
+            addLog("Keyboard shortcuts: 1-Reinforce, 2-Evacuate, 3-Drainage, 4-Sandbags", 'info');
             
             // Update display
             updateDisplay();
@@ -623,6 +820,45 @@
             // Start timer
             startTimer();
         }
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (gameState.gameOver) return;
+            
+            switch(event.key) {
+                case '1':
+                    makeDecision('reinforce');
+                    break;
+                case '2':
+                    makeDecision('evacuate');
+                    break;
+                case '3':
+                    makeDecision('drainage');
+                    break;
+                case '4':
+                    makeDecision('sandbags');
+                    break;
+                case 'r':
+                case 'R':
+                    if (event.ctrlKey) {
+                        event.preventDefault();
+                        initGame();
+                    }
+                    break;
+                case ' ':
+                    event.preventDefault();
+                    // Pause/unpause functionality
+                    if (gameState.timer) {
+                        clearInterval(gameState.timer);
+                        gameState.timer = null;
+                        addLog("Game paused. Press space to resume.", 'info');
+                    } else if (!gameState.gameOver) {
+                        startTimer();
+                        addLog("Game resumed.", 'info');
+                    }
+                    break;
+            }
+        });
         
         // Update the game display
         function updateDisplay() {
@@ -712,17 +948,38 @@
             }, 1000);
         }
         
-        // Add a message to the log
+        // Add a message to the log with enhanced visual feedback
         function addLog(message, type = 'info') {
             const log = document.getElementById('log');
             const entry = document.createElement('div');
             entry.className = `log-entry ${type}-text`;
-            entry.textContent = message;
+            
+            // Add icons based on message type
+            const icons = {
+                'success': '✅',
+                'danger': '❌',
+                'warning': '⚠️',
+                'info': 'ℹ️',
+                'prevention': '🛡️'
+            };
+            
+            const icon = icons[type] || '•';
+            entry.textContent = `${icon} ${message}`;
+            
             log.appendChild(entry);
             log.scrollTop = log.scrollHeight;
+            
+            // Add highlight animation to new entries
+            entry.style.opacity = '0';
+            entry.style.transform = 'translateX(-10px)';
+            setTimeout(() => {
+                entry.style.transition = 'all 0.3s ease';
+                entry.style.opacity = '1';
+                entry.style.transform = 'translateX(0)';
+            }, 100);
         }
         
-        // Process player decisions
+        // Process player decisions with enhanced feedback
         function makeDecision(decision) {
             if (gameState.gameOver) return;
             
@@ -742,9 +999,11 @@
                         progressChange = 20;
                         scoreChange = 80;
                         message = 'Levees reinforced. Flood protection significantly improved.';
+                        addButtonClickEffect(event.target);
                     } else {
                         safetyChange = -5;
                         message = 'Insufficient resources for levee reinforcement. Seek additional funding.';
+                        showInsufficientFundsEffect(event.target);
                     }
                     break;
                     
@@ -756,9 +1015,11 @@
                         progressChange = 15;
                         scoreChange = 70;
                         message = 'Evacuation plans implemented. Residents moving to safety.';
+                        addButtonClickEffect(event.target);
                     } else {
                         safetyChange = -8;
                         message = 'Limited resources for evacuation efforts. Some areas at risk.';
+                        showInsufficientFundsEffect(event.target);
                     }
                     break;
                     
@@ -770,9 +1031,11 @@
                         progressChange = 18;
                         scoreChange = 60;
                         message = 'Drainage systems improved. Water diversion effective.';
+                        addButtonClickEffect(event.target);
                     } else {
                         floodChange = 5;
                         message = 'Drainage improvements delayed due to budget constraints.';
+                        showInsufficientFundsEffect(event.target);
                     }
                     break;
                     
@@ -784,19 +1047,30 @@
                         progressChange = 12;
                         scoreChange = 50;
                         message = 'Sandbag barriers deployed. Immediate protection established.';
+                        addButtonClickEffect(event.target);
                     } else {
                         floodChange = 3;
                         message = 'Insufficient sandbags for all vulnerable areas. Prioritization needed.';
+                        showInsufficientFundsEffect(event.target);
                     }
                     break;
             }
             
-            // Apply changes
+            // Apply changes with animation
+            const oldResources = gameState.resources;
+            const oldSafety = gameState.safety;
+            const oldScore = gameState.score;
+            
             gameState.resources = Math.max(0, gameState.resources + resourceChange);
             gameState.floodLevel = Math.min(100, Math.max(0, gameState.floodLevel + floodChange));
             gameState.safety = Math.min(100, Math.max(0, gameState.safety + safetyChange));
             gameState.progress = Math.min(100, gameState.progress + progressChange);
             gameState.score += scoreChange;
+            
+            // Animate value changes
+            if (resourceChange !== 0) animateValue('resources', oldResources, gameState.resources);
+            if (safetyChange !== 0) animateValue('safety', oldSafety, gameState.safety);
+            if (scoreChange !== 0) animateValue('score', oldScore, gameState.score);
             
             // Add log message
             addLog(message, floodChange < 0 ? 'success' : 'warning');

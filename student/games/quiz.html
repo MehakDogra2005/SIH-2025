@@ -4,37 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disaster Knowledge Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #8bc34a;
+            --p5: #ff9800;
+            --p6: #c8e5f3;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Ubuntu', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
-            color: #2c3e50;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
+            padding-top: 80px;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .nav-separator {
+            width: 1px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .game-title-nav {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .back-icon {
+            font-size: 16px;
         }
         
         .container {
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
         }
         
         .info-panel {
             flex: 1;
             padding: 30px;
-            border-right: 2px solid #3498db;
-            background: #f8f9fa;
+            border-right: 2px solid var(--primary);
+            background: var(--p6);
         }
         
         .game-area {
@@ -45,7 +128,7 @@
             align-items: center;
             justify-content: center;
             min-height: 700px;
-            background: #eef5ff;
+            background: var(--card-bg);
         }
         
         .header {
@@ -55,15 +138,15 @@
         }
         
         h1 {
-            color: #3498db;
+            color: var(--primary);
             margin-left: 15px;
             font-size: 32px;
         }
         
         h2 {
-            color: #2980b9;
+            color: var(--primary-dark);
             margin: 20px 0 15px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 8px;
             font-size: 22px;
         }
@@ -79,48 +162,48 @@
         }
         
         .score-board {
-            background: #e3f2fd;
+            background: var(--p6);
             padding: 20px;
             border-radius: 10px;
             margin-top: 25px;
-            border: 2px solid #3498db;
+            border: 2px solid var(--primary);
         }
         
         .current-score {
             font-size: 24px;
             text-align: center;
             margin: 15px 0;
-            color: #2c3e50;
+            color: var(--text-dark);
         }
         
         .max-score {
             font-size: 22px;
             text-align: center;
-            color: #e74c3c;
+            color: var(--accent);
             font-weight: bold;
         }
         
         .game-container {
             width: 100%;
             max-width: 700px;
-            background: white;
+            background: var(--card-bg);
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 2px solid #3498db;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary);
         }
         
         .game-title {
             text-align: center;
             margin-bottom: 20px;
-            color: #3498db;
+            color: var(--primary);
             font-size: 28px;
         }
         
         .game-description {
             text-align: center;
             margin-bottom: 20px;
-            color: #7f8c8d;
+            color: var(--p1);
             font-style: italic;
         }
         
@@ -129,17 +212,17 @@
             justify-content: space-between;
             margin-bottom: 20px;
             padding: 10px 15px;
-            background: #e3f2fd;
+            background: var(--p6);
             border-radius: 8px;
             font-weight: bold;
         }
         
         .question-container {
-            background: #f8f9fa;
+            background: var(--light-bg);
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid var(--primary);
         }
         
         .question {
@@ -158,35 +241,36 @@
         
         .option {
             padding: 15px;
-            background: #e8f4fc;
+            background: var(--p6);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
-            border: 1px solid #3498db;
+            border: 1px solid var(--primary);
         }
         
         .option:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-            background: #d4e6f1;
+            box-shadow: var(--shadow);
+            background: var(--p1);
+            color: white;
         }
         
         .option.selected {
-            background: #3498db;
+            background: var(--primary);
             color: white;
-            border-color: #2980b9;
+            border-color: var(--primary-dark);
         }
         
         .option.correct {
-            background: #d4edda;
-            border-color: #28a745;
-            color: #155724;
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
         }
         
         .option.incorrect {
-            background: #f8d7da;
-            border-color: #dc3545;
-            color: #721c24;
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
         }
         
         .controls {
@@ -199,7 +283,7 @@
         
         button {
             padding: 12px 25px;
-            background: #3498db;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 6px;
@@ -212,9 +296,9 @@
         }
         
         button:hover {
-            background: #2980b9;
+            background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
         }
         
         button:disabled {
@@ -225,32 +309,32 @@
         }
         
         .submit-btn {
-            background: #2ecc71;
+            background: var(--secondary);
         }
         
         .submit-btn:hover {
-            background: #27ae60;
+            background: var(--p4);
         }
         
         .next-btn {
-            background: #f39c12;
+            background: var(--warning);
         }
         
         .next-btn:hover {
-            background: #e67e22;
+            background: var(--p2);
         }
         
         .results {
             margin-top: 20px;
             padding: 15px;
-            background: #e8f4fc;
+            background: var(--p6);
             border-radius: 8px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid var(--primary);
             display: none;
         }
         
         .results h3 {
-            color: #3498db;
+            color: var(--primary);
             margin-bottom: 10px;
         }
         
@@ -269,7 +353,7 @@
         
         .progress {
             height: 100%;
-            background: #3498db;
+            background: var(--primary);
             border-radius: 5px;
             width: 0%;
             transition: width 0.5s;
@@ -285,23 +369,75 @@
         
         .category-btn {
             padding: 10px 15px;
-            background: #e8f4fc;
-            border: 1px solid #3498db;
+            background: var(--p6);
+            border: 1px solid var(--primary);
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s;
         }
         
         .category-btn:hover {
-            background: #3498db;
+            background: var(--primary);
             color: white;
         }
         
         .category-btn.active {
-            background: #3498db;
+            background: var(--primary);
             color: white;
         }
         
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            transform: translateX(300px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.success {
+            background: var(--secondary);
+        }
+
+        .notification.error {
+            background: var(--accent);
+        }
+
+        .notification.warning {
+            background: var(--warning);
+        }
+
+        .notification.info {
+            background: var(--primary);
+        }
+
+        /* Enhanced button tooltips */
+        [title] {
+            position: relative;
+        }
+
+        [title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0.9;
+        }
+
         @media (max-width: 1024px) {
             .container {
                 flex-direction: column;
@@ -309,20 +445,100 @@
             
             .info-panel {
                 border-right: none;
-                border-bottom: 2px solid #3498db;
+                border-bottom: 2px solid var(--primary);
             }
             
             .options-container {
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                padding-top: 70px;
+            }
+
+            .nav-header {
+                padding: 12px 15px;
+            }
+
+            .nav-left {
+                gap: 15px;
+            }
+
+            .logo h1 {
+                font-size: 18px;
+            }
+
+            .game-title-nav {
+                font-size: 16px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .container {
+                margin: 0;
+                border-radius: 10px;
+            }
+
+            .info-panel, .game-area {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .game-title {
+                font-size: 24px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .category-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .category-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Navigation Header -->
+    <div class="nav-header">
+        <div class="nav-left">
+            <div class="logo">
+                <h1>ResQ</h1>
+            </div>
+            <div class="nav-separator"></div>
+            <div class="game-title-nav">Disaster Knowledge Quiz</div>
+        </div>
+        <a href="../gamified-learning.html" class="back-button">
+            <span class="back-icon">←</span>
+            Back to Learning Games
+        </a>
+    </div>
+
     <div class="container">
         <div class="info-panel">
             <div class="header">
-                <i class="fas fa-question-circle fa-3x" style="color: #3498db;"></i>
+                <i class="fas fa-question-circle fa-3x" style="color: var(--primary);"></i>
                 <h1>Disaster Knowledge Quiz</h1>
             </div>
             
@@ -358,10 +574,10 @@
                 <p class="game-description">Test your disaster preparedness knowledge with challenging questions</p>
                 
                 <div class="category-selector" id="category-selector">
-                    <div class="category-btn active" data-category="all">All Disasters</div>
-                    <div class="category-btn" data-category="earthquake">Earthquakes</div>
-                    <div class="category-btn" data-category="flood">Floods</div>
-                    <div class="category-btn" data-category="fire">Fires</div>
+                    <div class="category-btn active" data-category="all" title="Quiz covers all disaster types and emergency situations">All Disasters</div>
+                    <div class="category-btn" data-category="earthquake" title="Focus on earthquake preparedness and response knowledge">Earthquakes</div>
+                    <div class="category-btn" data-category="flood" title="Test your flood safety and evacuation knowledge">Floods</div>
+                    <div class="category-btn" data-category="fire" title="Fire safety, prevention, and emergency response">Fires</div>
                 </div>
                 
                 <div class="quiz-info">
@@ -391,13 +607,13 @@
                 </div>
                 
                 <div class="controls">
-                    <button class="submit-btn" id="submit-btn" disabled>
+                    <button class="submit-btn" id="submit-btn" disabled title="Submit your selected answer to see if it's correct">
                         <i class="fas fa-paper-plane"></i> Submit Answer
                     </button>
-                    <button class="next-btn" id="next-btn" style="display: none;">
+                    <button class="next-btn" id="next-btn" style="display: none;" title="Continue to the next question in the quiz">
                         <i class="fas fa-forward"></i> Next Question
                     </button>
-                    <button onclick="resetQuiz()">
+                    <button onclick="resetQuiz()" title="Start the quiz over from the beginning">
                         <i class="fas fa-redo"></i> Restart Quiz
                     </button>
                 </div>
@@ -406,6 +622,30 @@
     </div>
 
     <script>
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Hide and remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(300px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
         // Game data and state
         const gameData = {
             currentScore: 0,
@@ -515,6 +755,10 @@
                     this.classList.add('active');
                     gameData.selectedCategory = this.getAttribute('data-category');
                     document.getElementById('question-category').textContent = this.textContent;
+                    
+                    // Show category selection notification
+                    showNotification(`Quiz category: ${this.textContent}`, 'info');
+                    
                     resetQuiz();
                 });
             });
@@ -619,11 +863,17 @@
                 const points = question.difficulty === 'easy' ? 10 : question.difficulty === 'medium' ? 15 : 20;
                 gameData.currentScore += points;
                 document.getElementById('result-score').textContent = `You earned ${points} points!`;
+                
+                // Show success notification
+                showNotification(`Correct! +${points} points`, 'success');
             } else {
                 results.querySelector('#result-title').textContent = 'Incorrect!';
                 results.querySelector('#result-title').style.color = '#e74c3c';
                 results.style.borderLeftColor = '#e74c3c';
                 document.getElementById('result-score').textContent = `The correct answer is ${question.answer}.`;
+                
+                // Show error notification
+                showNotification('Incorrect answer. Keep learning!', 'error');
             }
             
             // Update score display
@@ -632,6 +882,9 @@
                 gameData.maxScore = gameData.currentScore;
                 localStorage.setItem('disasterQuizMaxScore', gameData.maxScore);
                 document.getElementById('max-score').textContent = gameData.maxScore;
+                
+                // Show new high score notification
+                showNotification('🏆 New High Score!', 'success');
             }
             
             // Show explanation

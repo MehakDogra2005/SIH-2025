@@ -4,25 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disaster Response Game 🚨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
         }
         
         body {
-            background: linear-gradient(to bottom, #2c3e50, #1a2530);
-            color: #ecf0f1;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
-            padding: 20px;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 12px 0;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .nav-right .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-dark);
         }
         
         .container {
-            display: flex;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
             gap: 20px;
             flex-wrap: wrap;
         }
@@ -30,19 +128,21 @@
         .game-info {
             flex: 1;
             min-width: 300px;
-            background: rgba(44, 62, 80, 0.9);
-            border-radius: 15px;
+            background: var(--card-bg);
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .game-area {
             flex: 2;
             min-width: 500px;
-            background: rgba(44, 62, 80, 0.9);
-            border-radius: 15px;
+            background: var(--card-bg);
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
             display: flex;
             flex-direction: column;
         }
@@ -51,26 +151,28 @@
             text-align: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #e74c3c;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.08);
         }
         
         h1 {
             font-size: 2.5rem;
-            color: #e74c3c;
+            color: var(--primary);
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
         }
         
         h2 {
             font-size: 1.8rem;
-            color: #3498db;
+            color: var(--primary);
             margin-bottom: 15px;
+            font-weight: 600;
         }
         
         h3 {
             font-size: 1.4rem;
-            color: #f39c12;
+            color: var(--p2);
             margin: 15px 0 10px;
+            font-weight: 600;
         }
         
         .rules-list, .points-list {
@@ -81,12 +183,86 @@
         li {
             margin-bottom: 8px;
         }
+
+        /* Game Instructions */
+        .game-instructions {
+            margin-bottom: 25px;
+        }
+
+        .instruction-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .instruction-card {
+            background: linear-gradient(135deg, var(--p6), rgba(200, 229, 243, 0.3));
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(16, 24, 32, 0.03);
+        }
+
+        .instruction-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .instruction-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--primary);
+        }
+
+        .instruction-card p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Scoring Grid */
+        .scoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--p7), rgba(250, 232, 199, 0.3));
+            border-radius: 10px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
+        }
+
+        .score-icon {
+            font-size: 1.5rem;
+        }
+
+        .score-item strong {
+            color: var(--primary);
+            font-size: 0.9rem;
+            display: block;
+        }
+
+        .score-item p {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 2px 0 0 0;
+        }
         
         .stats {
-            background: #34495e;
+            background: linear-gradient(180deg, #fff, #fbfdff);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .stat-item {
@@ -94,16 +270,17 @@
             justify-content: space-between;
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #2c3e50;
+            border-bottom: 1px solid rgba(16, 24, 32, 0.04);
         }
         
         .status-bar {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
-            background: #34495e;
+            background: linear-gradient(180deg, #fff, #fbfdff);
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .status-item {
@@ -111,40 +288,61 @@
             flex: 1;
             padding: 10px;
             margin: 0 5px;
-            background: #2c3e50;
-            border-radius: 5px;
+            background: var(--light-bg);
+            border-radius: 8px;
         }
         
         .status-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #3498db;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            width: 100%;
         }
         
         .scenario {
-            background: #34495e;
+            background: linear-gradient(180deg, #fff, #fbfdff);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 20px;
             flex-grow: 1;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .scenario-text {
             font-size: 1.2rem;
             line-height: 1.6;
             margin-bottom: 20px;
+            color: var(--text-dark);
         }
         
         .scenario-image {
             width: 100%;
             height: 200px;
-            background: #2c3e50;
-            border-radius: 10px;
+            background: linear-gradient(90deg, var(--p6), var(--p1));
+            border-radius: 12px;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
+            color: white;
+            box-shadow: var(--shadow);
         }
         
         .actions {
@@ -153,23 +351,89 @@
             gap: 15px;
             margin-bottom: 20px;
         }
+
+        .action-button {
+            position: relative;
+            padding: 18px 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            min-height: 80px;
+        }
+
+        .action-button .icon {
+            font-size: 1.8rem;
+        }
+
+        .action-button .label {
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(18, 38, 63, 0.2);
+        }
+
+        .action-button:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .action-button.danger {
+            background: linear-gradient(135deg, var(--accent), #e74c3c);
+        }
+
+        .action-button.success {
+            background: linear-gradient(135deg, var(--secondary), #2ecc71);
+        }
+
+        .action-button.warning {
+            background: linear-gradient(135deg, var(--warning), #f39c12);
+        }
+
+        .action-button.primary {
+            background: linear-gradient(135deg, var(--p1), #2f8fc1);
+        }
         
         button {
             padding: 15px;
             border: none;
-            border-radius: 8px;
-            background: #3498db;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
         }
         
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(18, 38, 63, 0.15);
         }
         
         button:active {
@@ -177,72 +441,79 @@
         }
         
         .danger {
-            background: #e74c3c;
+            background: linear-gradient(90deg, var(--accent), #e74c3c);
         }
         
         .success {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2ecc71);
         }
         
         .warning {
-            background: #f39c12;
+            background: linear-gradient(90deg, var(--warning), #f39c12);
         }
         
         .log {
-            background: #2c3e50;
+            background: var(--light-bg);
             height: 150px;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 15px;
             overflow-y: auto;
             margin-bottom: 20px;
             font-size: 0.9rem;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .log-entry {
             margin-bottom: 8px;
             padding-bottom: 8px;
-            border-bottom: 1px solid #34495e;
+            border-bottom: 1px solid rgba(16, 24, 32, 0.04);
         }
         
         .success-text {
-            color: #2ecc71;
+            color: var(--secondary);
+            font-weight: 500;
         }
         
         .danger-text {
-            color: #e74c3c;
+            color: var(--accent);
+            font-weight: 500;
         }
         
         .warning-text {
-            color: #f39c12;
+            color: var(--warning);
+            font-weight: 500;
         }
         
         .info-text {
-            color: #3498db;
+            color: var(--primary);
+            font-weight: 500;
         }
         
         .restart-btn {
             width: 100%;
             padding: 15px;
-            background: #9b59b6;
+            background: linear-gradient(90deg, var(--p5), #c39bd3);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             margin-top: 10px;
+            box-shadow: var(--shadow);
         }
         
         .restart-btn:hover {
-            background: #8e44ad;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(90deg, #d8a7ca, #b8860b);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(18, 38, 63, 0.15);
         }
         
-        @media (max-width: 900px) {
+        @media (max-width: 992px) {
             .container {
                 flex-direction: column;
+                padding: 0 15px;
             }
             
             .game-info, .game-area {
@@ -252,35 +523,168 @@
             h1 {
                 font-size: 2rem;
             }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .nav-left {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .instruction-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .scoring-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .action-button {
+                flex-direction: row;
+                text-align: left;
+                min-height: 60px;
+                justify-content: flex-start;
+                gap: 15px;
+            }
+
+            .action-button .icon {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                font-size: 14px;
+            }
+
+            .nav-header {
+                padding: 8px 0;
+            }
+
+            .back-btn span {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+
+            .scoring-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-bar {
+                flex-wrap: wrap;
+            }
+
+            .status-item {
+                min-width: 120px;
+                margin-bottom: 5px;
+            }
+
+            .scenario-image {
+                height: 150px;
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation Header -->
+    <div class="nav-header">
+        <div class="nav-content">
+            <div class="nav-left">
+                <a href="../dashboard-student.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </a>
+                <div class="page-title">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Disaster Response Game</span>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="user-info">
+                    <div class="user-avatar">U</div>
+                    <span>Student</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="game-info">
             <header>
-                <h1>Disaster Response Game 🚨</h1>
-                <p>Make rapid decisions with limited information</p>
+                <h1>🚨 Disaster Response Training</h1>
+                <p style="color: #666; font-size: 1.1rem; margin-top: 8px;">
+                    Master emergency response skills through realistic scenarios
+                </p>
             </header>
             
-            <h2>Game Rules</h2>
-            <ul class="rules-list">
-                <li>Respond quickly to emerging crises</li>
-                <li>Make decisions with limited information</li>
-                <li>Balance resources between different needs</li>
-                <li>Each action costs time and resources</li>
-                <li>Save as many lives as possible</li>
-                <li>Game changes every time you play</li>
-            </ul>
+            <div class="game-instructions">
+                <h2>📋 How to Play</h2>
+                <div class="instruction-cards">
+                    <div class="instruction-card">
+                        <div class="instruction-icon">⏱️</div>
+                        <h4>Act Fast</h4>
+                        <p>Time is critical in disasters. Make quick decisions to save lives.</p>
+                    </div>
+                    <div class="instruction-card">
+                        <div class="instruction-icon">💰</div>
+                        <h4>Manage Resources</h4>
+                        <p>Use your budget wisely. Each action costs time and money.</p>
+                    </div>
+                    <div class="instruction-card">
+                        <div class="instruction-icon">👥</div>
+                        <h4>Save Lives</h4>
+                        <p>Your goal is to rescue as many people as possible.</p>
+                    </div>
+                </div>
+            </div>
             
-            <h2>Scoring System</h2>
-            <ul class="points-list">
-                <li>+100 points for each life saved</li>
-                <li>+50 points for efficient resource use</li>
-                <li>+25 points for quick response time</li>
-                <li>-50 points for each life lost</li>
-                <li>Bonus points for preventing secondary disasters</li>
-            </ul>
+            <h2>🎯 Scoring System</h2>
+            <div class="scoring-grid">
+                <div class="score-item">
+                    <span class="score-icon">💚</span>
+                    <div>
+                        <strong>+100 pts</strong>
+                        <p>Each life saved</p>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <span class="score-icon">⚡</span>
+                    <div>
+                        <strong>+50 pts</strong>
+                        <p>Efficient resource use</p>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <span class="score-icon">🏃</span>
+                    <div>
+                        <strong>+25 pts</strong>
+                        <p>Quick response time</p>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <span class="score-icon">🎯</span>
+                    <div>
+                        <strong>Bonus</strong>
+                        <p>Preventing disasters</p>
+                    </div>
+                </div>
+            </div>
             
             <div class="stats">
                 <h2>Your Statistics</h2>
@@ -310,14 +714,23 @@
                 <div class="status-item">
                     <div>Time</div>
                     <div class="status-value" id="time">05:00</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="timeProgress"></div>
+                    </div>
                 </div>
                 <div class="status-item">
                     <div>Resources</div>
                     <div class="status-value" id="resources">$50,000</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="resourceProgress"></div>
+                    </div>
                 </div>
                 <div class="status-item">
                     <div>Lives Saved</div>
                     <div class="status-value" id="saved">0/100</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="savedProgress"></div>
+                    </div>
                 </div>
                 <div class="status-item">
                     <div>Score</div>
@@ -333,10 +746,22 @@
                 </div>
                 
                 <div class="actions">
-                    <button class="danger" onclick="takeAction('evacuate')">🚁 Evacuate Civilians</button>
-                    <button class="warning" onclick="takeAction('contain')">🔥 Contain Fire</button>
-                    <button onclick="takeAction('water')">💧 Deploy Water Bombers</button>
-                    <button class="success" onclick="takeAction('shelter')">🏠 Set Up Shelter</button>
+                    <button class="action-button danger" onclick="takeAction('evacuate')" data-tooltip="Quick evacuation saves lives but costs resources">
+                        <span class="icon">🚁</span>
+                        <span class="label">Evacuate Civilians</span>
+                    </button>
+                    <button class="action-button warning" onclick="takeAction('contain')" data-tooltip="Contains the disaster but takes time">
+                        <span class="icon">🔥</span>
+                        <span class="label">Contain Fire</span>
+                    </button>
+                    <button class="action-button primary" onclick="takeAction('water')" data-tooltip="Highly effective but expensive">
+                        <span class="icon">💧</span>
+                        <span class="label">Deploy Water Bombers</span>
+                    </button>
+                    <button class="action-button success" onclick="takeAction('shelter')" data-tooltip="Provides protection and safety">
+                        <span class="icon">🏠</span>
+                        <span class="label">Set Up Shelter</span>
+                    </button>
                 </div>
             </div>
             
@@ -364,6 +789,29 @@
             totalSaved: parseInt(localStorage.getItem('totalSaved')) || 0,
             bestTime: localStorage.getItem('bestTime') || 'N/A'
         };
+
+        // Helper function for action tooltips
+        function getActionTooltip(actionId) {
+            const tooltips = {
+                'evacuate': 'Quick evacuation saves lives but costs resources',
+                'rescue': 'Direct rescue operation with high success rate',
+                'contain': 'Contains the disaster but takes time',
+                'barriers': 'Deploys protective barriers to prevent spread',
+                'sandbags': 'Quick flood protection with moderate effectiveness',
+                'water': 'Highly effective but expensive water bombing',
+                'vaccinate': 'Mass vaccination to prevent disease spread',
+                'medical': 'Emergency medical response for casualties',
+                'shelter': 'Provides protection and safety for victims',
+                'isolate': 'Quarantine measures to contain spread',
+                'warning': 'Alert systems to warn the public',
+                'info': 'Public information campaign',
+                'test': 'Testing and assessment operations',
+                'assess': 'Damage assessment for better planning',
+                'search': 'Search and rescue operations',
+                'supplies': 'Emergency supply distribution'
+            };
+            return tooltips[actionId] || 'Emergency response action';
+        }
         
         // Disaster scenarios
         const scenarios = [
@@ -456,8 +904,23 @@
             
             randomScenario.actions.forEach(action => {
                 const button = document.createElement('button');
-                button.textContent = action.label;
+                button.className = 'action-button';
                 button.onclick = () => takeAction(action.id);
+                
+                // Create button structure
+                const icon = document.createElement('span');
+                icon.className = 'icon';
+                icon.textContent = action.label.split(' ')[0]; // Get emoji
+                
+                const label = document.createElement('span');
+                label.className = 'label';
+                label.textContent = action.label.substring(action.label.indexOf(' ') + 1); // Get text after emoji
+                
+                button.appendChild(icon);
+                button.appendChild(label);
+                
+                // Add tooltip
+                button.setAttribute('data-tooltip', getActionTooltip(action.id));
                 
                 // Add style based on action type
                 if (action.id === 'evacuate' || action.id === 'rescue') {
@@ -466,6 +929,8 @@
                     button.classList.add('success');
                 } else if (action.id === 'contain' || action.id === 'isolate') {
                     button.classList.add('warning');
+                } else {
+                    button.classList.add('primary');
                 }
                 
                 actionsContainer.appendChild(button);
@@ -496,6 +961,41 @@
             document.getElementById('resources').textContent = `$${gameState.resources.toLocaleString()}`;
             document.getElementById('saved').textContent = `${gameState.saved}/${gameState.totalPeople}`;
             document.getElementById('score').textContent = gameState.score;
+
+            // Update progress bars
+            const timeProgress = (gameState.time / 300) * 100;
+            const resourceProgress = (gameState.resources / 50000) * 100;
+            const savedProgress = (gameState.saved / gameState.totalPeople) * 100;
+
+            document.getElementById('timeProgress').style.width = `${timeProgress}%`;
+            document.getElementById('resourceProgress').style.width = `${resourceProgress}%`;
+            document.getElementById('savedProgress').style.width = `${savedProgress}%`;
+
+            // Change progress bar colors based on status
+            const timeBar = document.getElementById('timeProgress');
+            const resourceBar = document.getElementById('resourceProgress');
+            const savedBar = document.getElementById('savedProgress');
+
+            // Time bar: red when low, green when high
+            if (timeProgress < 20) {
+                timeBar.style.background = 'linear-gradient(90deg, var(--accent), #e74c3c)';
+            } else if (timeProgress < 50) {
+                timeBar.style.background = 'linear-gradient(90deg, var(--warning), #f39c12)';
+            } else {
+                timeBar.style.background = 'linear-gradient(90deg, var(--primary), var(--primary-dark))';
+            }
+
+            // Resource bar: red when low
+            if (resourceProgress < 20) {
+                resourceBar.style.background = 'linear-gradient(90deg, var(--accent), #e74c3c)';
+            } else if (resourceProgress < 50) {
+                resourceBar.style.background = 'linear-gradient(90deg, var(--warning), #f39c12)';
+            } else {
+                resourceBar.style.background = 'linear-gradient(90deg, var(--primary), var(--primary-dark))';
+            }
+
+            // Saved bar: always green/success color
+            savedBar.style.background = 'linear-gradient(90deg, var(--secondary), #2ecc71)';
         }
         
         // Update statistics panel
