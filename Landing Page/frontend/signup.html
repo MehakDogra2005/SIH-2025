@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - ResQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="signup-style.css">
+</head>
+
+<body>
+    <div class="signup-container">
+        <div class="signup-left">
+            <div class="signup-content">
+                <h1>Join the ResQ Community</h1>
+                <p>Create an account to access interactive disaster preparedness tools, real-time alerts, and
+                    educational resources.</p>
+                <div class="signup-benefits">
+                    <div class="benefit">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div>
+                            <h3>Interactive Learning</h3>
+                            <p>Access AR/VR modules and gamified content</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <i class="fas fa-bell"></i>
+                        <div>
+                            <h3>Real-time Alerts</h3>
+                            <p>Get notified about disasters in your area</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <h3>Safety Tools</h3>
+                            <p>Evacuation routes and emergency resources</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="signup-right">
+            <div class="signup-form-container">
+                <div class="signup-logo">
+                    <i class="fas fa-life-ring"></i>
+                    <span>ResQ</span>
+                </div>
+                <h2>Create Your Account</h2>
+                <br>
+                <!-- <p class="signup-subtitle">Join thousands of institutions using ResQ</p> -->
+
+                <form class="signup-form" id="signupForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="institution">Educational Institution</label>
+                        <input type="text" id="institution" name="institution" required>
+                    </div>
+
+                    <div class="user-type">
+                        <p>I am a:</p>
+                        <div class="type-options">
+                            <label class="radio-container">Student
+                                <input type="radio" name="userType" value="student" checked>
+                                <span class="radio-checkmark"></span>
+                            </label>
+                            <label class="radio-container">Faculty/Admin
+                                <input type="radio" name="userType" value="admin">
+                                <span class="radio-checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-agreement">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="signup-btn">Create Account</button>
+                </form>
+
+                <!-- <div class="signup-divider">
+                    <span>Or sign up with</span>
+                </div>
+
+                <div class="social-signup">
+                    <button class="social-btn google-btn">
+                        <i class="fab fa-google"></i>
+                        Google
+                    </button>
+                    <button class="social-btn microsoft-btn">
+                        <i class="fab fa-microsoft"></i>
+                        Microsoft
+                    </button>
+                </div> -->
+
+                <p class="login-link">Already have an account? <a href="login.html">Log in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="signup-app.js"></script>
+</body>
+
+</html>

@@ -20,6 +20,15 @@ torchvision>=0.15.0
 flask>=2.3.0
 flask-cors>=4.0.0
 
+# Google Gemini API
+google-generativeai>=0.3.0
+
+# PDF processing
+PyPDF2>=3.0.0
+
+# File handling and validation
+Werkzeug>=2.3.0
+
 # JSON and file handling
 jsonlines>=4.0.0
 pyyaml>=6.0.1
