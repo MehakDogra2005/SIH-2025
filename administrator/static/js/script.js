@@ -1,22 +1,22 @@
-// Parent Safety Notification - Standalone App
-class ParentNotificationApp {
+// NDMA Reporting - Standalone App
+class NdmaReportingApp {
 	constructor() {
-		this.storageKey = 'parentNotifications';
-		this.notifications = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+		this.storageKey = 'ndmaReports';
+		this.reports = JSON.parse(localStorage.getItem(this.storageKey)) || [];
 		this.init();
 	}
 
 	init() {
 		this.bindEvents();
-		this.renderNotifications();
+		this.renderReports();
 	}
 
 	bindEvents() {
-		const parentForm = document.getElementById('parentForm');
-		if (parentForm) {
-			parentForm.addEventListener('submit', (e) => {
+		const form = document.getElementById('ndmaForm');
+		if (form) {
+			form.addEventListener('submit', (e) => {
 				e.preventDefault();
-				this.sendParentSafetyUpdate();
+				this.submitReport();
 			});
 		}
 
@@ -26,73 +26,69 @@ class ParentNotificationApp {
 		}
 	}
 
-	sendParentSafetyUpdate() {
-		const form = document.getElementById('parentForm');
-		const formData = new FormData(form);
+	submitReport() {
+		const form = document.getElementById('ndmaForm');
+		const data = new FormData(form);
 
-		const studentName = formData.get('studentName');
-		const status = formData.get('studentStatus');
-		const location = formData.get('currentLocation');
-		const additional = formData.get('additionalMessage');
-		const parents = (formData.get('parentContacts') || '')
-			.split(',')
-			.map(e => e.trim())
-			.filter(Boolean);
-
-		if (parents.length === 0) {
-			this.showToast('Please enter at least one parent contact');
-			return;
-		}
-
-		const messageParts = [
-			`${studentName} status: ${status}.`,
-			location ? `Location: ${location}.` : '',
-			additional ? `Note: ${additional}` : ''
-		].filter(Boolean);
-
-		const notification = {
+		const report = {
 			id: Date.now().toString(),
-			title: `Safety Update: ${studentName}`,
-			message: messageParts.join(' '),
-			type: 'student_safety_update',
-			createdAt: new Date().toISOString(),
-			participants: parents
+			collegeName: data.get('collegeName'),
+			collegeCode: data.get('collegeCode'),
+			contactPerson: data.get('contactPerson'),
+			contactEmail: data.get('contactEmail'),
+			disasterType: data.get('disasterType'),
+			severity: data.get('severity'),
+			affectedCount: Number(data.get('affectedCount') || 0),
+			safeCount: Number(data.get('safeCount') || 0),
+			resourcesNeeded: data.get('resourcesNeeded'),
+			situationSummary: data.get('situationSummary'),
+			student: {
+				name: data.get('studentName'),
+				id: data.get('studentId'),
+				phone: data.get('studentPhone'),
+				email: data.get('studentEmail')
+			},
+			createdAt: new Date().toISOString()
 		};
 
-		this.notifications.unshift(notification);
-		this.saveNotifications();
-		this.renderNotifications();
+		this.reports.unshift(report);
+		this.saveReports();
+		this.renderReports();
 
-		parents.forEach((email, index) => {
-			setTimeout(() => console.log(`Parent update sent to: ${email}`), index * 100);
-		});
+		// Simulate sending to NDMA endpoint
+		setTimeout(() => {
+			console.log('Report sent to NDMA:', report);
+		}, 50);
 
-		this.showToast(`Safety update sent to ${parents.length} parent(s).`);
+		this.showToast('Report submitted to NDMA');
 		form.reset();
 	}
 
-	renderNotifications() {
-		const container = document.getElementById('notificationsList');
+	renderReports() {
+		const container = document.getElementById('reportsList');
 		if (!container) return;
 
-		if (this.notifications.length === 0) {
+		if (this.reports.length === 0) {
 			container.innerHTML = `
 				<div class="no-notifications">
 					<i class="fas fa-bell-slash"></i>
-					<p>No notifications yet</p>
+					<p>No reports submitted yet</p>
 				</div>
 			`;
 			return;
 		}
 
-		container.innerHTML = this.notifications.map(n => `
-			<div class="notification-item fade-in" data-id="${n.id}">
+		container.innerHTML = this.reports.map(r => `
+			<div class="notification-item fade-in" data-id="${r.id}">
 				<div class="notification-header">
-					<div class="notification-title">${n.title}</div>
-					<div class="notification-time">${this.formatTime(n.createdAt)}</div>
+					<div class="notification-title">${r.collegeName} • ${r.disasterType} (${r.severity})</div>
+					<div class="notification-time">${this.formatTime(r.createdAt)}</div>
 				</div>
-				<div class="notification-message">${n.message}</div>
-				${n.participants ? `<div class="notification-participants">Sent to: ${n.participants.join(', ')}</div>` : ''}
+				<div class="notification-message">${r.situationSummary}</div>
+				<div class="notification-participants">Officer: ${r.contactPerson} &lt;${r.contactEmail}&gt;</div>
+				<div class="notification-participants">Students: affected ${r.affectedCount}, safe ${r.safeCount}</div>
+				${r.resourcesNeeded ? `<div class="notification-participants">Needs: ${r.resourcesNeeded}</div>` : ''}
+				<div class="notification-participants">Reporting student: ${r.student.name}${r.student.id ? ` (${r.student.id})` : ''}${r.student.email ? ` • ${r.student.email}` : ''}</div>
 			</div>
 		`).join('');
 	}
@@ -120,13 +116,13 @@ class ParentNotificationApp {
 		});
 	}
 
-	saveNotifications() {
-		localStorage.setItem(this.storageKey, JSON.stringify(this.notifications));
+	saveReports() {
+		localStorage.setItem(this.storageKey, JSON.stringify(this.reports));
 	}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	new ParentNotificationApp();
+	new NdmaReportingApp();
 });
 
 
