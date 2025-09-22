@@ -314,7 +314,7 @@
                 gap: 10px;
                 padding: 15px;
             }
-            
+
             .filter-option {
                 padding: 10px 18px;
                 font-size: 13px;
@@ -624,8 +624,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideInUp {
@@ -633,6 +638,7 @@
                 opacity: 0;
                 transform: translateY(40px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -640,21 +646,36 @@
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
                 transform: translateY(0);
             }
+
             40% {
                 transform: translateY(-10px);
             }
+
             60% {
                 transform: translateY(-5px);
             }
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Responsive adjustments */
@@ -686,7 +707,7 @@
             .game-actions {
                 flex-direction: column;
             }
-            
+
             .disaster-modal-content {
                 width: 95%;
                 margin: 10px;
@@ -723,10 +744,12 @@
                 <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
                 <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
                 <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item"><i class="fa-solid fa-book-open"></i><span>Do's & Dont's</span></div>
+                <div class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
                 <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
                 <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
                 <div class="menu-item active"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
-                <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div>
+                <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
                 <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
 
@@ -1321,50 +1344,119 @@
         const disasterModalBody = document.getElementById('disasterModalBody');
 
         // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadUserInfo();
             initializeMenuNavigation();
             renderGameCards(gamesData);
             setupEventListeners();
         });
 
-        // Load User Information
         async function loadUserInfo() {
             try {
+                // First try to get user data from session/localStorage
                 let userData = null;
-                const localData = localStorage.getItem('resq_user_data');
-                
+
+                // Check localStorage for stored user data
+                const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
                 if (localData) {
                     userData = JSON.parse(localData);
-                    updateUserDisplay(userData);
+                }
+
+                // If no local data or token exists, try to fetch from backend
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
+                if (!userData && token) {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/current', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            userData = await response.json();
+                            // Save to localStorage for future use
+                            localStorage.setItem('resq_user', JSON.stringify(userData));
+                        } else {
+                            console.log('Failed to fetch user from backend:', response.status);
+                        }
+                    } catch (fetchError) {
+                        console.log('Could not fetch user from backend:', fetchError.message);
+                    }
+                }
+
+                if (userData) {
+                    const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
+                    const lastName = userData.lastName || '';
+                    const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+
+                    // Update sidebar user profile
+                    const userNameElement = document.getElementById('sidebarUserName');
+                    const userAvatarElement = document.getElementById('userAvatar');
+
+                    if (userNameElement) userNameElement.textContent = fullName;
+                    if (userAvatarElement) userAvatarElement.textContent = firstName.charAt(0).toUpperCase();
+
+                    console.log('User loaded:', fullName);
                 } else {
-                    updateUserDisplay({ name: 'Student', email: 'student@resq.com' });
+                    // Fallback to default values
+                    console.log('No user data found');
+                    setDefaultUser();
                 }
             } catch (error) {
-                console.error('Error loading user info:', error);
-                updateUserDisplay({ name: 'Student', email: 'student@resq.com' });
+                console.error('Error loading user data:', error);
+                setDefaultUser();
             }
         }
 
-        function updateUserDisplay(userData) {
+        function setDefaultUser() {
             const userNameElement = document.getElementById('sidebarUserName');
             const userAvatarElement = document.getElementById('userAvatar');
-            
-            if (userNameElement && userData.name) {
-                userNameElement.textContent = userData.name;
-            }
-            
-            if (userAvatarElement && userData.name) {
-                userAvatarElement.textContent = userData.name.charAt(0).toUpperCase();
+
+            if (userNameElement) userNameElement.textContent = 'Guest User';
+            if (userAvatarElement) userAvatarElement.textContent = 'G';
+        }
+
+        // Function to save user data (call this when user logs in)
+        function saveUserData(userData) {
+            try {
+                localStorage.setItem('resq_user', JSON.stringify(userData));
+                loadUserInfo(); // Refresh the display
+                console.log('User data saved:', userData);
+            } catch (error) {
+                console.error('Error saving user data:', error);
             }
         }
 
+        // Add hover effects for user profile
+        function initializeUserProfile() {
+            const userProfile = document.querySelector('.sidebar-user-profile');
+            if (userProfile) {
+                // Add hover effect only (no click navigation)
+                userProfile.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    this.style.borderRadius = '10px';
+                    this.style.transition = 'all 0.2s ease';
+                });
+
+                userProfile.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = 'transparent';
+                });
+            }
+        }
+
+        // Load user info when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            loadUserInfo();
+            initializeUserProfile();
+        });
         // Initialize menu navigation
         function initializeMenuNavigation() {
             const menuItems = document.querySelectorAll('.menu-item');
-            
+
             menuItems.forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     const text = this.querySelector('span').textContent;
                     handleMenuNavigation(text);
                 });
@@ -1383,7 +1475,7 @@
                 'Profile & Badges': 'profile-badges.html',
                 'Settings': 'settings.html'
             };
-            
+
             if (pageMap[page] && page !== 'Gamified Learning') {
                 window.location.href = pageMap[page];
             }
@@ -1392,7 +1484,7 @@
         // Render game cards
         function renderGameCards(games) {
             gamesGrid.innerHTML = '';
-            
+
             if (games.length === 0) {
                 gamesGrid.innerHTML = `
                     <div class="no-results">
@@ -1402,7 +1494,7 @@
                 `;
                 return;
             }
-            
+
             games.forEach(game => {
                 const gameCard = createGameCard(game);
                 gamesGrid.appendChild(gameCard);
@@ -1414,7 +1506,7 @@
             const card = document.createElement('div');
             card.className = 'game-card';
             card.setAttribute('data-category', game.category);
-            
+
             card.innerHTML = `
                 <div class="game-header" style="background: linear-gradient(90deg, ${getRandomGradient()});">
                     <div class="game-badge">${game.badge}</div>
@@ -1457,7 +1549,7 @@
                     </div>
                 </div>
             `;
-            
+
             return card;
         }
 
@@ -1471,7 +1563,7 @@
                 'var(--primary), var(--p1)',
                 'var(--secondary), var(--p2)'
             ];
-            
+
             return gradients[Math.floor(Math.random() * gradients.length)];
         }
 
@@ -1479,22 +1571,22 @@
         function setupEventListeners() {
             // Search functionality
             gameSearch.addEventListener('input', handleSearch);
-            
+
             // Filter functionality
             filterOptions.forEach(option => {
                 option.addEventListener('click', handleFilter);
             });
-            
+
             // Modal close functionality
             closeDisasterModal.addEventListener('click', closeModal);
-            disasterInfoModal.addEventListener('click', function(e) {
+            disasterInfoModal.addEventListener('click', function (e) {
                 if (e.target === disasterInfoModal) {
                     closeModal();
                 }
             });
-            
+
             // Escape key to close modal
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     closeModal();
                 }
@@ -1504,13 +1596,13 @@
         // Handle search functionality
         function handleSearch() {
             const searchTerm = gameSearch.value.toLowerCase();
-            const filteredGames = gamesData.filter(game => 
+            const filteredGames = gamesData.filter(game =>
                 game.title.toLowerCase().includes(searchTerm) ||
                 game.description.toLowerCase().includes(searchTerm) ||
                 game.disasterType.toLowerCase().includes(searchTerm) ||
                 game.features.some(feature => feature.toLowerCase().includes(searchTerm))
             );
-            
+
             renderGameCards(filteredGames);
         }
 
@@ -1518,19 +1610,19 @@
         function handleFilter(e) {
             // Remove active class from all options
             filterOptions.forEach(option => option.classList.remove('active'));
-            
+
             // Add active class to clicked option
             e.target.classList.add('active');
-            
+
             const filterValue = e.target.getAttribute('data-filter');
-            
+
             let filteredGames;
             if (filterValue === 'all') {
                 filteredGames = gamesData;
             } else {
                 filteredGames = gamesData.filter(game => game.category === filterValue);
             }
-            
+
             renderGameCards(filteredGames);
         }
 
@@ -1558,7 +1650,7 @@
                 'disasterpoly': 'games/disasterpoly.html',
                 'knowledgequiz': 'games/quiz.html'
             };
-            
+
             if (gameUrls[gameId]) {
                 window.location.href = gameUrls[gameId];
             } else {
@@ -1570,12 +1662,12 @@
         function showDisasterInfo(disasterType) {
             const info = disasterInfo[disasterType];
             if (!info) return;
-            
+
             disasterModalTitle.textContent = info.title;
             disasterModalSubtitle.textContent = info.subtitle;
-            
+
             let bodyContent = '';
-            
+
             // Add animated icon based on disaster type
             const animationIcons = {
                 'Multiple': 'fas fa-shield-alt',
@@ -1585,7 +1677,7 @@
                 'Earthquake': 'fas fa-house-damage',
                 'Flood': 'fas fa-house-flood-water'
             };
-            
+
             bodyContent += `
                 <div class="disaster-animation">
                     <div class="animation-icon">
@@ -1594,7 +1686,7 @@
                     <p><strong>Learn how to stay safe during ${disasterType.toLowerCase()} disasters</strong></p>
                 </div>
             `;
-            
+
             // Add sections
             info.sections.forEach(section => {
                 bodyContent += `
@@ -1614,7 +1706,7 @@
                     </div>
                 `;
             });
-            
+
             disasterModalBody.innerHTML = bodyContent;
             disasterInfoModal.classList.add('active');
         }
