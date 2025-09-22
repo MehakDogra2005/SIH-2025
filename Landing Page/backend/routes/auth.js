@@ -102,7 +102,7 @@ router.post('/login', async (req, res) => {
 router.get('/current', auth, async (req, res) => {
     try {
         const user = req.user;
-        
+
         res.json({
             id: user._id,
             firstName: user.firstName,
