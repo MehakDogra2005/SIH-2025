@@ -14,17 +14,17 @@
     
     <style>
         :root {
-            --primary-color: #3b82f6;
-            --secondary-color: #1e40af;
+            --primary-color: #4285F4;
+            --secondary-color: #1565C0;
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
             --info-color: #06b6d4;
             --dark-color: #1f2937;
             --light-color: #f8fafc;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
-            --content-bg: #f1f5f9;
+            --sidebar-bg: #1976D2;
+            --sidebar-hover: #1565C0;
+            --content-bg: #f8fafc;
         }
 
         * {
@@ -219,7 +219,7 @@
 
         /* Emergency Alert */
         .emergency-alert {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+            background: linear-gradient(135deg, #F44336, #D32F2F);
             color: white;
             border-radius: 12px;
             padding: 1rem;
@@ -245,10 +245,10 @@
         }
 
         .emergency-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.9);
             border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            border-radius: 8px;
+            color: #D32F2F;
+            border-radius: 25px;
             padding: 0.5rem 1rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -257,8 +257,9 @@
         }
 
         .emergency-btn:hover {
-            background: rgba(255,255,255,0.3);
-            color: white;
+            background: white;
+            color: #D32F2F;
+            transform: scale(1.05);
         }
 
         /* Module Cards */
@@ -356,8 +357,8 @@
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <h4><i class="fas fa-shield-alt me-2 text-primary"></i>Emergency Hub</h4>
-            <small>Disaster Management System</small>
+            <h4><i class="fas fa-shield-alt me-2" style="color: #4285F4;"></i>ResQ</h4>
+            <small>Emergency Management System</small>
         </div>
         
         <ul class="sidebar-nav">
@@ -431,10 +432,10 @@
 
         <div style="position: absolute; bottom: 2rem; left: 1.5rem; right: 1.5rem;">
             <div class="emergency-alert text-center">
-                <i class="fas fa-exclamation-circle mb-2" style="font-size: 1.5rem;"></i>
-                <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Emergency Alert System</div>
+                <i class="fas fa-exclamation-triangle mb-2" style="font-size: 1.5rem;"></i>
+                <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Emergency Response</div>
                 <button class="emergency-btn btn btn-sm w-100" onclick="triggerEmergencyAlert()">
-                    <i class="fas fa-bell me-1"></i>EMERGENCY ALERT
+                    <i class="fas fa-exclamation-triangle me-1"></i>REPORT DISASTER EMERGENCY
                 </button>
             </div>
         </div>
