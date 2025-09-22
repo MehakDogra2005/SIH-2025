@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Escape Room 🚨</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #2c3e50, #1a2530);
+            color: #ecf0f1;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .game-info {
+            flex: 1;
+            min-width: 340px;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-area {
+            flex: 2;
+            min-width: 650px;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #e74c3c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #2ecc71;
+            margin: 15px 0 10px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .stats {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #2c3e50;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #34495e;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .status-item {
+            text-align: center;
+            flex: 1;
+            padding: 12px;
+            margin: 0 5px;
+            background: #2c3e50;
+            border-radius: 5px;
+        }
+        
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .escape-room {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .scenario-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #e74c3c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-right: 20px;
+        }
+        
+        .scenario-details {
+            flex-grow: 1;
+        }
+        
+        .room-view {
+            height: 200px;
+            background: #2c3e50;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .puzzle-area {
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .puzzle-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .option {
+            padding: 12px;
+            background: #34495e;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            background: #3498db;
+            transform: translateY(-3px);
+        }
+        
+        .kit-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .kit-item {
+            padding: 10px;
+            background: #34495e;
+            border: 2px solid #f39c12;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        .kit-item.selected {
+            background: #f39c12;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .kit-item:hover {
+            transform: translateY(-3px);
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .danger {
+            background: #e74c3c;
+        }
+        
+        .success {
+            background: #2ecc71;
+        }
+        
+        .warning {
+            background: #f39c12;
+        }
+        
+        .log {
+            background: #2c3e50;
+            height: 180px;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #34495e;
+            line-height: 1.5;
+        }
+        
+        .success-text {
+            color: #2ecc71;
+        }
+        
+        .danger-text {
+            color: #e74c3c;
+        }
+        
+        .warning-text {
+            color: #f39c12;
+        }
+        
+        .info-text {
+            color: #3498db;
+        }
+        
+        .puzzle-text {
+            color: #9b59b6;
+        }
+        
+        .restart-btn {
+            width: 100%;
+            padding: 15px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .restart-btn:hover {
+            background: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .progress-container {
+            height: 20px;
+            background: #2c3e50;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .timer-warning {
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { background-color: #2c3e50; }
+            50% { background-color: #e74c3c; }
+            100% { background-color: #2c3e50; }
+        }
+        
+        @media (max-width: 1100px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .game-info, .game-area {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .actions, .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-info">
+            <header>
+                <h1>Disaster Escape Room 🚨</h1>
+                <p>Timed escape experience with simulated disasters</p>
+            </header>
+            
+            <h2>Game Rules</h2>
+            <ul class="rules-list">
+                <li>Solve puzzles to evacuate safely from disaster scenarios</li>
+                <li>Choose the right emergency kit items for each situation</li>
+                <li>Find safe exit routes before time runs out</li>
+                <li>Make decisions under pressure with limited information</li>
+                <li>Each correct choice earns points and advances your escape</li>
+                <li>Different scenario each time you play</li>
+            </ul>
+            
+            <h2>Scoring System</h2>
+            <ul class="points-list">
+                <li>+100 points for successful escape</li>
+                <li>+50 points for each correct puzzle solved</li>
+                <li>+25 points for each essential kit item selected</li>
+                <li>+75 points for time remaining when escaping</li>
+                <li>-30 points for incorrect choices</li>
+                <li>Bonus points for finding hidden safety items</li>
+            </ul>
+            
+            <div class="stats">
+                <h2>Your Statistics</h2>
+                <div class="stat-item">
+                    <span>Highest Score:</span>
+                    <span id="high-score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Escapes Completed:</span>
+                    <span id="escapes-completed">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Puzzles Solved:</span>
+                    <span id="puzzles-solved">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Average Time:</span>
+                    <span id="average-time">0s</span>
+                </div>
+            </div>
+            
+            <button class="restart-btn" onclick="initGame()">🔄 New Escape Room</button>
+        </div>
+        
+        <div class="game-area">
+            <div class="status-bar">
+                <div class="status-item">
+                    <div>Time Remaining</div>
+                    <div class="status-value" id="time">05:00</div>
+                </div>
+                <div class="status-item">
+                    <div>Puzzles Solved</div>
+                    <div class="status-value" id="puzzles">0/3</div>
+                </div>
+                <div class="status-item">
+                    <div>Safety Score</div>
+                    <div class="status-value" id="safety">100%</div>
+                </div>
+                <div class="status-item">
+                    <div>Total Score</div>
+                    <div class="status-value" id="score">0</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="escape-room">
+                <div class="scenario-header">
+                    <div class="scenario-icon" id="scenario-icon">🔥</div>
+                    <div class="scenario-details">
+                        <h3 id="scenario-name">Office Fire Emergency</h3>
+                        <p id="scenario-difficulty">Difficulty: Moderate</p>
+                    </div>
+                </div>
+                
+                <div class="room-view" id="room-view">
+                    12th Floor Office - Fire on South Side
+                </div>
+                
+                <div class="puzzle-area">
+                    <div class="puzzle-text" id="puzzle-text">
+                        The fire alarm is sounding and smoke is visible under the door. 
+                        Choose the most essential items from the emergency kit for this situation.
+                    </div>
+                    
+                    <div class="kit-items">
+                        <div class="kit-item" onclick="selectItem(0)">Fire Extinguisher</div>
+                        <div class="kit-item" onclick="selectItem(1)">Water Bottle</div>
+                        <div class="kit-item" onclick="selectItem(2)">Emergency Blanket</div>
+                        <div class="kit-item" onclick="selectItem(3)">Dust Mask</div>
+                    </div>
+                    
+                    <div class="options">
+                        <div class="option" onclick="solvePuzzle(0)">Exit through main hallway</div>
+                        <div class="option" onclick="solvePuzzle(1)">Use emergency staircase</div>
+                        <div class="option" onclick="solvePuzzle(2)">Wait by window for rescue</div>
+                        <div class="option" onclick="solvePuzzle(3)">Take elevator to ground floor</div>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="danger" onclick="useItem()">Use Selected Item</button>
+                    <button class="success" onclick="attemptEscape()">Attempt Escape</button>
+                </div>
+            </div>
+            
+            <div class="log" id="log">
+                <div class="log-entry info-text">Fire alarm activated! Emergency protocol initiated.</div>
+                <div class="log-entry warning-text">Smoke detected on the floor. Evacuation necessary.</div>
+                <div class="log-entry">Choose the right items and escape route to survive.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            time: 300, // 5 minutes in seconds
+            puzzlesSolved: 0,
+            totalPuzzles: 3,
+            safety: 100,
+            score: 0,
+            progress: 0,
+            gameOver: false,
+            timer: null,
+            scenario: null,
+            selectedItem: null,
+            currentPuzzle: 0,
+            highScore: parseInt(localStorage.getItem('highScore')) || 0,
+            escapesCompleted: parseInt(localStorage.getItem('escapesCompleted')) || 0,
+            puzzlesSolvedTotal: parseInt(localStorage.getItem('puzzlesSolvedTotal')) || 0,
+            totalTimePlayed: parseInt(localStorage.getItem('totalTimePlayed')) || 0
+        };
+        
+        // Escape room scenarios
+        const scenarios = [
+            {
+                name: "Office Fire Emergency",
+                icon: "🔥",
+                difficulty: "Moderate",
+                description: "Fire has broken out on the 12th floor of an office building. Smoke is spreading rapidly through ventilation systems.",
+                room: "12th Floor Office - Fire on South Side",
+                puzzles: [
+                    {
+                        question: "The fire alarm is sounding and smoke is visible under the door. Choose the most essential items from the emergency kit for this situation.",
+                        items: ["Fire Extinguisher", "Water Bottle", "Emergency Blanket", "Dust Mask"],
+                        correctItems: [0, 3], // Fire Extinguisher and Dust Mask
+                        options: [
+                            "Exit through main hallway",
+                            "Use emergency staircase",
+                            "Wait by window for rescue",
+                            "Take elevator to ground floor"
+                        ],
+                        correctOption: 1, // Use emergency staircase
+                        solution: "In a high-rise fire, always use emergency staircases instead of elevators which may fail or open on fire floors."
+                    },
+                    {
+                        question: "You encounter smoke filling the staircase. What should you do?",
+                        items: ["Wet Cloth", "Flashlight", "Whistle", "First Aid Kit"],
+                        correctItems: [0, 2], // Wet Cloth and Whistle
+                        options: [
+                            "Go back to your office",
+                            "Continue down through the smoke",
+                            "Crawl low under the smoke",
+                            "Break a window for air"
+                        ],
+                        correctOption: 2, // Crawl low under the smoke
+                        solution: "Smoke rises, so the cleanest air will be near the floor. Crawl to avoid smoke inhalation."
+                    },
+                    {
+                        question: "You've reached the lobby but the main exit is blocked by fire. Choose items to help you safely exit.",
+                        items: ["Emergency Hammer", "Phone Charger", "Fire Blanket", "Water Bottle"],
+                        correctItems: [0, 2], // Emergency Hammer and Fire Blanket
+                        options: [
+                            "Look for another exit",
+                            "Try to put out the fire",
+                            "Break a window to escape",
+                            "Hide in a bathroom"
+                        ],
+                        correctOption: 0, // Look for another exit
+                        solution: "Always look for alternative exits rather than attempting dangerous escapes through windows."
+                    }
+                ]
+            },
+            {
+                name: "Earthquake Survival",
+                icon: "🏚️",
+                difficulty: "High",
+                description: "A major earthquake has struck while you were in a supermarket. Structural damage and falling hazards everywhere.",
+                room: "Damaged Supermarket - Aftershocks Expected",
+                puzzles: [
+                    {
+                        question: "The shaking has stopped but aftershocks are likely. Choose protective items.",
+                        items: ["Hard Hat", "First Aid Kit", "Water Bottle", "Dust Mask"],
+                        correctItems: [0, 3], // Hard Hat and Dust Mask
+                        options: [
+                            "Run for the nearest exit",
+                            "Take cover under sturdy furniture",
+                            "Move to the center of the room",
+                            "Climb over debris to escape"
+                        ],
+                        correctOption: 1, // Take cover under sturdy furniture
+                        solution: "After an earthquake, protect yourself from aftershocks by taking cover under sturdy furniture."
+                    },
+                    {
+                        question: "You need to navigate through damaged aisles. Choose items to help you.",
+                        items: ["Flashlight", "Gloves", "Emergency Whistle", "Multi-tool"],
+                        correctItems: [0, 1], // Flashlight and Gloves
+                        options: [
+                            "Move quickly toward sunlight",
+                            "Test each step before moving",
+                            "Yell for help continuously",
+                            "Climb over shelves"
+                        ],
+                        correctOption: 1, // Test each step before moving
+                        solution: "After an earthquake, structures may be unstable. Move carefully and test surfaces before putting weight on them."
+                    },
+                    {
+                        question: "You're near an exit but it's partially blocked by collapsed debris. Choose items to help clear a path.",
+                        items: ["Crowbar", "Fire Extinguisher", "Rope", "Water Bottle"],
+                        correctItems: [0, 2], // Crowbar and Rope
+                        options: [
+                            "Start removing debris carefully",
+                            "Try to squeeze through the opening",
+                            "Look for another way out",
+                            "Wait for rescue teams"
+                        ],
+                        correctOption: 0, // Start removing debris carefully
+                        solution: "If safe to do so, carefully clear a path while being mindful of unstable structures that could collapse further."
+                    }
+                ]
+            },
+            {
+                name: "Flood Evacuation",
+                icon: "🌊",
+                difficulty: "Very High",
+                description: "Flash flooding has trapped you in a ground-level library. Water is rising rapidly with no signs of stopping.",
+                room: "Flooding Library - Water Rising Quickly",
+                puzzles: [
+                    {
+                        question: "Water is entering under the doors. Choose items to help you stay safe and dry.",
+                        items: ["Life Jacket", "Waterproof Bag", "Flashlight", "Emergency Blanket"],
+                        correctItems: [0, 1], // Life Jacket and Waterproof Bag
+                        options: [
+                            "Move to higher ground within the building",
+                            "Try to swim to safety",
+                            "Barricade the doors",
+                            "Break a window to escape"
+                        ],
+                        correctOption: 0, // Move to higher ground within the building
+                        solution: "In flooding situations, always move to higher ground rather than attempting to swim through unknown waters."
+                    },
+                    {
+                        question: "You've reached the second floor but water is still rising. Choose items to signal for help.",
+                        items: ["Flashlight", "Whistle", "Mirror", "Emergency Flares"],
+                        correctItems: [0, 1, 2, 3], // All items are useful for signaling
+                        options: [
+                            "Wait silently for rescue",
+                            "Make noise to attract attention",
+                            "Create a visible signal from window",
+                            "Try to reach the roof"
+                        ],
+                        correctOption: 2, // Create a visible signal from window
+                        solution: "In flood situations, make yourself visible to rescuers rather than attempting dangerous moves to higher areas."
+                    },
+                    {
+                        question: "Rescue boats are visible but distant. Choose items to help attract their attention.",
+                        items: ["Flashlight", "Colorful Clothing", "Whistle", "Water Bottle"],
+                        correctItems: [0, 1, 2], // Flashlight, Colorful Clothing, Whistle
+                        options: [
+                            "Jump into the water and swim toward them",
+                            "Wave and signal from your safe position",
+                            "Throw items to create splashes",
+                            "Break windows to make noise"
+                        ],
+                        correctOption: 1, // Wave and signal from your safe position
+                        solution: "Never enter floodwaters. Signal from safe ground as moving water can be deceptively powerful."
+                    }
+                ]
+            }
+        ];
+        
+        // Initialize the game
+        function initGame() {
+            // Clear previous timer
+            clearInterval(gameState.timer);
+            
+            // Select random scenario
+            gameState.scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            
+            // Reset game state
+            gameState.time = 300;
+            gameState.puzzlesSolved = 0;
+            gameState.safety = 100;
+            gameState.score = 0;
+            gameState.progress = 0;
+            gameState.gameOver = false;
+            gameState.selectedItem = null;
+            gameState.currentPuzzle = 0;
+            
+            // Update scenario display
+            document.getElementById('scenario-icon').textContent = gameState.scenario.icon;
+            document.getElementById('scenario-name').textContent = gameState.scenario.name;
+            document.getElementById('scenario-difficulty').textContent = `Difficulty: ${gameState.scenario.difficulty}`;
+            document.getElementById('room-view').textContent = gameState.scenario.room;
+            
+            // Load first puzzle
+            loadPuzzle(0);
+            
+            // Clear log and add initial message
+            const log = document.getElementById('log');
+            log.innerHTML = '';
+            addLog(`Emergency alert: ${gameState.scenario.name}`, 'info');
+            addLog(gameState.scenario.description, 'warning');
+            addLog("Solve puzzles to escape safely. Time is critical!", 'danger');
+            
+            // Update display
+            updateDisplay();
+            
+            // Update statistics
+            updateStatistics();
+            
+            // Start timer
+            startTimer();
+        }
+        
+        // Load a puzzle
+        function loadPuzzle(index) {
+            if (index >= gameState.scenario.puzzles.length) return;
+            
+            const puzzle = gameState.scenario.puzzles[index];
+            gameState.currentPuzzle = index;
+            
+            document.getElementById('puzzle-text').textContent = puzzle.question;
+            
+            // Create kit items
+            const kitItems = document.querySelector('.kit-items');
+            kitItems.innerHTML = '';
+            puzzle.items.forEach((item, i) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'kit-item';
+                itemElement.textContent = item;
+                itemElement.onclick = () => selectItem(i);
+                kitItems.appendChild(itemElement);
+            });
+            
+            // Create options
+            const options = document.querySelector('.options');
+            options.innerHTML = '';
+            puzzle.options.forEach((option, i) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => solvePuzzle(i);
+                options.appendChild(optionElement);
+            });
+            
+            // Reset selected item
+            gameState.selectedItem = null;
+        }
+        
+        // Update the game display
+        function updateDisplay() {
+            const minutes = Math.floor(gameState.time / 60);
+            const seconds = gameState.time % 60;
+            document.getElementById('time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Add warning animation when time is low
+            if (gameState.time < 60) {
+                document.getElementById('time').parentElement.classList.add('timer-warning');
+            } else {
+                document.getElementById('time').parentElement.classList.remove('timer-warning');
+            }
+            
+            document.getElementById('puzzles').textContent = `${gameState.puzzlesSolved}/${gameState.totalPuzzles}`;
+            document.getElementById('safety').textContent = `${gameState.safety}%`;
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('progress-bar').style.width = `${gameState.progress}%`;
+        }
+        
+        // Update statistics panel
+        function updateStatistics() {
+            document.getElementById('high-score').textContent = gameState.highScore;
+            document.getElementById('escapes-completed').textContent = gameState.escapesCompleted;
+            document.getElementById('puzzles-solved').textContent = gameState.puzzlesSolvedTotal;
+            
+            const avgTime = gameState.escapesCompleted > 0 
+                ? Math.round(gameState.totalTimePlayed / gameState.escapesCompleted) 
+                : 0;
+            document.getElementById('average-time').textContent = `${avgTime}s`;
+        }
+        
+        // Start the countdown timer
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                if (gameState.gameOver) {
+                    clearInterval(gameState.timer);
+                    return;
+                }
+                
+                gameState.time--;
+                
+                if (gameState.time <= 0) {
+                    addLog("Time has run out! Escape failed.", 'danger');
+                    endGame();
+                    return;
+                }
+                
+                // Random event chance
+                if (Math.random() > 0.97) {
+                    const events = [
+                        {msg: 'Structural integrity compromised! Safety decreasing.', safety: -10, type: 'danger'},
+                        {msg: 'Found a helpful item!', score: +25, type: 'success'},
+                        {msg: 'Aftershock! Time lost regrouping.', time: -30, type: 'warning'},
+                        {msg: 'Discovered a shortcut!', time: +20, type: 'info'},
+                    ];
+                    
+                    const event = events[Math.floor(Math.random() * events.length)];
+                    addLog(event.msg, event.type);
+                    
+                    if (event.safety) gameState.safety += event.safety;
+                    if (event.score) gameState.score += event.score;
+                    if (event.time) gameState.time += event.time;
+                }
+                
+                updateDisplay();
+            }, 1000);
+        }
+        
+        // Add a message to the log
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}-text`;
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Select an item from the kit
+        function selectItem(index) {
+            const items = document.querySelectorAll('.kit-item');
+            items.forEach(item => item.classList.remove('selected'));
+            items[index].classList.add('selected');
+            gameState.selectedItem = index;
+        }
+        
+        // Use the selected item
+        function useItem() {
+            if (gameState.selectedItem === null) {
+                addLog("Please select an item first.", 'warning');
+                return;
+            }
+            
+            const puzzle = gameState.scenario.puzzles[gameState.currentPuzzle];
+            const isCorrect = puzzle.correctItems.includes(gameState.selectedItem);
+            
+            if (isCorrect) {
+                addLog(`Good choice! The ${puzzle.items[gameState.selectedItem]} is useful in this situation.`, 'success');
+                gameState.score += 25;
+            } else {
+                addLog(`The ${puzzle.items[gameState.selectedItem]} isn't the best choice here.`, 'danger');
+                gameState.safety -= 10;
+                gameState.time -= 20;
+            }
+            
+            updateDisplay();
+        }
+        
+        // Solve the current puzzle
+        function solvePuzzle(optionIndex) {
+            const puzzle = gameState.scenario.puzzles[gameState.currentPuzzle];
+            const isCorrect = (optionIndex === puzzle.correctOption);
+            
+            if (isCorrect) {
+                addLog("Correct! " + puzzle.solution, 'success');
+                gameState.puzzlesSolved++;
+                gameState.score += 50;
+                gameState.progress = (gameState.puzzlesSolved / gameState.totalPuzzles) * 100;
+                
+                // Load next puzzle or end game if completed
+                if (gameState.puzzlesSolved >= gameState.totalPuzzles) {
+                    addLog("All puzzles solved! Ready to attempt escape.", 'success');
+                } else {
+                    loadPuzzle(gameState.currentPuzzle + 1);
+                }
+            } else {
+                addLog("Incorrect choice. Try again.", 'danger');
+                gameState.safety -= 15;
+                gameState.time -= 30;
+            }
+            
+            updateDisplay();
+        }
+        
+        // Attempt to escape
+        function attemptEscape() {
+            if (gameState.puzzlesSolved < gameState.totalPuzzles) {
+                addLog("You haven't solved all puzzles yet! Keep working.", 'warning');
+                return;
+            }
+            
+            addLog("Attempting escape...", 'info');
+            
+            // Simulate escape attempt
+            setTimeout(() => {
+                const escapeSuccess = gameState.safety > 50;
+                
+                if (escapeSuccess) {
+                    const timeBonus = gameState.time * 2;
+                    gameState.score += 100 + timeBonus;
+                    addLog(`Escape successful! Time bonus: +${timeBonus} points`, 'success');
+                    addLog("You've survived the disaster!", 'success');
+                } else {
+                    addLog("Escape failed! Safety level too low.", 'danger');
+                }
+                
+                endGame();
+            }, 2000);
+        }
+        
+        // End the game
+        function endGame() {
+            gameState.gameOver = true;
+            clearInterval(gameState.timer);
+            
+            // Update statistics
+            gameState.puzzlesSolvedTotal += gameState.puzzlesSolved;
+            gameState.totalTimePlayed += (300 - gameState.time);
+            
+            if (gameState.score > gameState.highScore) {
+                gameState.highScore = gameState.score;
+            }
+            
+            if (gameState.puzzlesSolved >= gameState.totalPuzzles && gameState.safety > 50) {
+                gameState.escapesCompleted++;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('highScore', gameState.highScore);
+            localStorage.setItem('escapesCompleted', gameState.escapesCompleted);
+            localStorage.setItem('puzzlesSolvedTotal', gameState.puzzlesSolvedTotal);
+            localStorage.setItem('totalTimePlayed', gameState.totalTimePlayed);
+            
+            // Display results
+            addLog(`GAME OVER! Final score: ${gameState.score}`, 'info');
+            addLog(`Puzzles solved: ${gameState.puzzlesSolved}/${gameState.totalPuzzles}`, 'info');
+            addLog(`Safety level: ${gameState.safety}%`, gameState.safety > 50 ? 'success' : 'danger');
+            
+            updateStatistics();
+        }
+        
+        // Initialize the game when page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>

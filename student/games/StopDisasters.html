@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop Disasters! (UNDRR) 🌍</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #1a2a6c, #2c3e50);
+            color: #ecf0f1;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .scenario-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .scenario-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn.active {
+            background: #e74c3c;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.7);
+        }
+        
+        .scenario-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #34495e;
+            padding: 10px;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            margin: 5px;
+            background: #2c3e50;
+            border-radius: 5px;
+            min-width: 120px;
+        }
+        
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .map-container {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .map {
+            flex: 1;
+            min-width: 300px;
+            height: 300px;
+            background: #34495e;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+        
+        .coastline {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40%;
+            background: #f1c40f;
+        }
+        
+        .ocean {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 60%;
+            background: #3498db;
+        }
+        
+        .buildings {
+            position: absolute;
+            bottom: 40%;
+            width: 80%;
+            height: 30%;
+            left: 10%;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+        
+        .building {
+            width: 40px;
+            background: #7f8c8d;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .building-1 { height: 60px; }
+        .building-2 { height: 90px; }
+        .building-3 { height: 120px; }
+        .building-4 { height: 80px; }
+        .building-5 { height: 100px; }
+        
+        .mangrove {
+            position: absolute;
+            bottom: 40%;
+            width: 30%;
+            height: 20px;
+            background: #2ecc71;
+            left: 35%;
+        }
+        
+        .evac-center {
+            position: absolute;
+            bottom: 40%;
+            width: 50px;
+            height: 40px;
+            background: #e74c3c;
+            left: 70%;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .danger {
+            background: #e74c3c;
+        }
+        
+        .success {
+            background: #2ecc71;
+        }
+        
+        .warning {
+            background: #f39c12;
+        }
+        
+        .community {
+            background: #9b59b6;
+        }
+        
+        .log {
+            background: #2c3e50;
+            height: 150px;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .success-text {
+            color: #2ecc71;
+        }
+        
+        .danger-text {
+            color: #e74c3c;
+        }
+        
+        .warning-text {
+            color: #f39c12;
+        }
+        
+        .info-text {
+            color: #3498db;
+        }
+        
+        .community-text {
+            color: #9b59b6;
+        }
+        
+        .upgrades {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .upgrade {
+            flex: 1;
+            min-width: 200px;
+            background: #34495e;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .upgrade-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        
+        .upgrade-desc {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #2c3e50;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #2ecc71;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .disaster-progress {
+            height: 20px;
+            background: #2c3e50;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .disaster-progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #2ecc71, #f39c12, #e74c3c);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        .disaster-progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        @media (max-width: 768px) {
+            .actions {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .map-container {
+                flex-direction: column;
+            }
+            
+            .scenario-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .scenario-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌍 Stop Disasters! (UNDRR)</h1>
+        <p>Act as a disaster risk manager building safer communities against multiple hazards</p>
+    </header>
+    
+    <div class="scenario-selector">
+        <button class="scenario-btn active" onclick="setScenario('tsunami')">🌊 Tsunami</button>
+        <button class="scenario-btn" onclick="setScenario('wildfire')">🔥 Wildfire</button>
+        <button class="scenario-btn" onclick="setScenario('hurricane')">🌀 Hurricane</button>
+        <button class="scenario-btn" onclick="setScenario('earthquake')">🏗️ Earthquake</button>
+        <button class="scenario-btn" onclick="setScenario('flood')">💧 Flood</button>
+    </div>
+    
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-item">
+                <div>Time Remaining</div>
+                <div class="status-value" id="time">15:00</div>
+            </div>
+            <div class="status-item">
+                <div>Resources</div>
+                <div class="status-value" id="resources">$50,000</div>
+            </div>
+            <div class="status-item">
+                <div>Population Safe</div>
+                <div class="status-value" id="population">0/500</div>
+            </div>
+            <div class="status-item">
+                <div>Disaster Preparedness</div>
+                <div class="status-value" id="preparedness">20%</div>
+            </div>
+        </div>
+        
+        <div class="disaster-progress">
+            <div class="disaster-progress-fill" id="disaster-progress"></div>
+            <div class="disaster-progress-text" id="disaster-text">Disaster Incoming: 15:00</div>
+        </div>
+        
+        <div class="map-container">
+            <div class="map">
+                <div class="ocean"></div>
+                <div class="coastline"></div>
+                <div class="buildings">
+                    <div class="building building-1"></div>
+                    <div class="building building-2"></div>
+                    <div class="building building-3"></div>
+                    <div class="building building-4"></div>
+                    <div class="building building-5"></div>
+                </div>
+                <div class="mangrove"></div>
+                <div class="evac-center">EVAC</div>
+            </div>
+            
+            <div class="upgrades">
+                <div class="upgrade">
+                    <div class="upgrade-title">🌊 Early Warning System</div>
+                    <div class="upgrade-desc">Install sirens and alert systems to warn residents</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="warning-progress" style="width: 30%"></div>
+                    </div>
+                    <button onclick="upgrade('warning')">Upgrade ($8,000)</button>
+                </div>
+                
+                <div class="upgrade">
+                    <div class="upgrade-title">🛣️ Evacuation Routes</div>
+                    <div class="upgrade-desc">Mark and clear evacuation paths to safe zones</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="evac-progress" style="width: 20%"></div>
+                    </div>
+                    <button onclick="upgrade('evac')">Upgrade ($5,000)</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="community" onclick="takeAction('drill')">🔄 Conduct Drill</button>
+            <button class="success" onclick="takeAction('mangrove')">🌿 Plant Mangroves</button>
+            <button class="warning" onclick="takeAction('warning')">⚠️ Issue Warning</button>
+            <button onclick="takeAction('evacuate')">🚸 Start Evacuation</button>
+            <button onclick="takeAction('shelter')">🏠 Build Shelter</button>
+            <button class="success" onclick="takeAction('education')">📚 Community Education</button>
+        </div>
+        
+        <div class="log" id="log">
+            <div class="log-entry info-text">Tsunami warning issued! You have 15 minutes to prepare.</div>
+            <div class="log-entry warning-text">500 residents need to be evacuated to safe zones.</div>
+            <div class="log-entry">Upgrade early warning systems and evacuation routes to improve preparedness.</div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            time: 900, // 15 minutes in seconds
+            resources: 50000,
+            population: 0,
+            totalPopulation: 500,
+            preparedness: 20,
+            warningLevel: 30,
+            evacLevel: 20,
+            scenario: 'tsunami',
+            gameOver: false,
+            timer: null
+        };
+        
+        // Initialize the game
+        function initGame() {
+            updateDisplay();
+            startTimer();
+        }
+        
+        // Set the disaster scenario
+        function setScenario(scenario) {
+            gameState.scenario = scenario;
+            
+            // Update active button
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Reset game state based on scenario
+            gameState.time = 900;
+            gameState.resources = 50000;
+            gameState.population = 0;
+            gameState.preparedness = 20;
+            gameState.warningLevel = 30;
+            gameState.evacLevel = 20;
+            gameState.gameOver = false;
+            
+            // Update log with scenario-specific message
+            const log = document.getElementById('log');
+            log.innerHTML = '';
+            
+            let scenarioMessage = '';
+            switch(scenario) {
+                case 'tsunami':
+                    scenarioMessage = 'Tsunami warning issued! You have 15 minutes to prepare.';
+                    gameState.totalPopulation = 500;
+                    break;
+                case 'wildfire':
+                    scenarioMessage = 'Wildfire approaching! You have 15 minutes to prepare.';
+                    gameState.totalPopulation = 300;
+                    break;
+                case 'hurricane':
+                    scenarioMessage = 'Hurricane approaching! You have 15 minutes to prepare.';
+                    gameState.totalPopulation = 700;
+                    break;
+                case 'earthquake':
+                    scenarioMessage = 'Earthquake predicted! You have 15 minutes to prepare.';
+                    gameState.totalPopulation = 600;
+                    break;
+                case 'flood':
+                    scenarioMessage = 'Major flooding expected! You have 15 minutes to prepare.';
+                    gameState.totalPopulation = 400;
+                    break;
+            }
+            
+            addLog(scenarioMessage, 'info');
+            addLog(`${gameState.totalPopulation} residents need protection.`, 'warning');
+            addLog('Upgrade infrastructure and conduct preparedness actions.', 'info');
+            
+            // Update map based on scenario
+            updateMap();
+            
+            // Restart timer
+            clearInterval(gameState.timer);
+            startTimer();
+            updateDisplay();
+        }
+        
+        // Update the map visualization based on scenario
+        function updateMap() {
+            // This would be expanded to change the map based on disaster type
+            const map = document.querySelector('.map');
+            map.innerHTML = '';
+            
+            // For simplicity, we're just changing the ocean color for tsunamis
+            if (gameState.scenario === 'tsunami') {
+                map.innerHTML = `
+                    <div class="ocean"></div>
+                    <div class="coastline"></div>
+                    <div class="buildings">
+                        <div class="building building-1"></div>
+                        <div class="building building-2"></div>
+                        <div class="building building-3"></div>
+                        <div class="building building-4"></div>
+                        <div class="building building-5"></div>
+                    </div>
+                    <div class="mangrove"></div>
+                    <div class="evac-center">EVAC</div>
+                `;
+            }
+        }
+        
+        // Update the game display
+        function updateDisplay() {
+            const minutes = Math.floor(gameState.time / 60);
+            const seconds = gameState.time % 60;
+            document.getElementById('time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('resources').textContent = `$${gameState.resources.toLocaleString()}`;
+            document.getElementById('population').textContent = `${gameState.population}/${gameState.totalPopulation}`;
+            document.getElementById('preparedness').textContent = `${gameState.preparedness}%`;
+            
+            document.getElementById('warning-progress').style.width = `${gameState.warningLevel}%`;
+            document.getElementById('evac-progress').style.width = `${gameState.evacLevel}%`;
+            
+            // Update disaster progress bar
+            const progressPercent = 100 - (gameState.time / 900 * 100);
+            document.getElementById('disaster-progress').style.width = `${progressPercent}%`;
+            document.getElementById('disaster-text').textContent = `Disaster Incoming: ${Math.floor(gameState.time/60)}:${(gameState.time%60).toString().padStart(2, '0')}`;
+        }
+        
+        // Start the countdown timer
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                if (gameState.gameOver) {
+                    clearInterval(gameState.timer);
+                    return;
+                }
+                
+                gameState.time--;
+                
+                if (gameState.time <= 0) {
+                    endGame();
+                    return;
+                }
+                
+                updateDisplay();
+            }, 1000);
+        }
+        
+        // Add a message to the log
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}-text`;
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Process player actions
+        function takeAction(action) {
+            if (gameState.gameOver) return;
+            
+            switch(action) {
+                case 'drill':
+                    if (gameState.resources >= 2000) {
+                        gameState.preparedness += 10;
+                        gameState.resources -= 2000;
+                        addLog('Emergency drill conducted. Preparedness increased.', 'success');
+                    } else {
+                        addLog('Not enough resources to conduct drill.', 'warning');
+                    }
+                    break;
+                    
+                case 'mangrove':
+                    if (gameState.resources >= 5000) {
+                        gameState.preparedness += 15;
+                        gameState.resources -= 5000;
+                        addLog('Mangrove barrier planted. Natural defense improved.', 'success');
+                    } else {
+                        addLog('Not enough resources for mangrove planting.', 'warning');
+                    }
+                    break;
+                    
+                case 'warning':
+                    if (gameState.warningLevel >= 50) {
+                        gameState.population += 50;
+                        addLog('Early warning issued. Residents moving to safety.', 'info');
+                    } else {
+                        addLog('Warning systems not sufficient yet. Upgrade needed.', 'warning');
+                    }
+                    break;
+                    
+                case 'evacuate':
+                    if (gameState.evacLevel >= 40) {
+                        const evacuated = Math.min(100, gameState.totalPopulation - gameState.population);
+                        gameState.population += evacuated;
+                        addLog(`Evacuation underway. ${evacuated} residents moved to safety.`, 'success');
+                    } else {
+                        addLog('Evacuation routes not sufficient yet. Upgrade needed.', 'warning');
+                    }
+                    break;
+                    
+                case 'shelter':
+                    if (gameState.resources >= 10000) {
+                        gameState.preparedness += 20;
+                        gameState.resources -= 10000;
+                        addLog('Emergency shelter built. Protection increased.', 'success');
+                    } else {
+                        addLog('Not enough resources to build shelter.', 'warning');
+                    }
+                    break;
+                    
+                case 'education':
+                    if (gameState.resources >= 3000) {
+                        gameState.preparedness += 12;
+                        gameState.resources -= 3000;
+                        addLog('Community education program conducted.', 'success');
+                    } else {
+                        addLog('Not enough resources for education program.', 'warning');
+                    }
+                    break;
+            }
+            
+            // Random event chance
+            if (Math.random() > 0.7) {
+                const events = [
+                    {msg: 'International aid arrived!', resources: +8000, type: 'success'},
+                    {msg: 'Secondary disaster threat!', preparedness: -5, type: 'danger'},
+                    {msg: 'Community volunteers are helping with preparations!', preparedness: +8, type: 'community'},
+                    {msg: 'Equipment failure!', resources: -3000, type: 'warning'},
+                    {msg: 'Weather conditions worsening!', time: -60, type: 'danger'},
+                    {msg: 'New forecasting technology available!', warningLevel: +10, type: 'info'}
+                ];
+                
+                const event = events[Math.floor(Math.random() * events.length)];
+                addLog(event.msg, event.type);
+                
+                if (event.resources) gameState.resources += event.resources;
+                if (event.preparedness) gameState.preparedness += event.preparedness;
+                if (event.time) gameState.time += event.time;
+                if (event.warningLevel) gameState.warningLevel += event.warningLevel;
+            }
+            
+            // Ensure values stay within bounds
+            gameState.preparedness = Math.min(100, Math.max(0, gameState.preparedness));
+            gameState.population = Math.min(gameState.totalPopulation, Math.max(0, gameState.population));
+            gameState.warningLevel = Math.min(100, Math.max(0, gameState.warningLevel));
+            gameState.evacLevel = Math.min(100, Math.max(0, gameState.evacLevel));
+            
+            updateDisplay();
+        }
+        
+        // Upgrade infrastructure
+        function upgrade(type) {
+            if (gameState.gameOver) return;
+            
+            let cost, increase;
+            
+            switch(type) {
+                case 'warning':
+                    cost = 8000;
+                    increase = 15;
+                    if (gameState.resources >= cost && gameState.warningLevel < 100) {
+                        gameState.resources -= cost;
+                        gameState.warningLevel += increase;
+                        gameState.preparedness += 5;
+                        addLog('Early warning system upgraded!', 'success');
+                    } else if (gameState.warningLevel >= 100) {
+                        addLog('Warning system already at maximum level.', 'info');
+                    } else {
+                        addLog('Not enough resources for warning system upgrade.', 'warning');
+                    }
+                    break;
+                    
+                case 'evac':
+                    cost = 5000;
+                    increase = 12;
+                    if (gameState.resources >= cost && gameState.evacLevel < 100) {
+                        gameState.resources -= cost;
+                        gameState.evacLevel += increase;
+                        gameState.preparedness += 5;
+                        addLog('Evacuation routes improved!', 'success');
+                    } else if (gameState.evacLevel >= 100) {
+                        addLog('Evacuation routes already at maximum level.', 'info');
+                    } else {
+                        addLog('Not enough resources for evacuation route upgrade.', 'warning');
+                    }
+                    break;
+            }
+            
+            updateDisplay();
+        }
+        
+        // End the game
+        function endGame() {
+            gameState.gameOver = true;
+            
+            // Calculate score based on preparedness and population saved
+            const preparednessScore = gameState.preparedness;
+            const populationScore = (gameState.population / gameState.totalPopulation) * 100;
+            const totalScore = Math.round((preparednessScore + populationScore) / 2);
+            
+            let message = '';
+            if (totalScore >= 80) {
+                message = `EXCELLENT WORK! You scored ${totalScore}%. The community is well prepared.`;
+            } else if (totalScore >= 50) {
+                message = `GOOD EFFORT! You scored ${totalScore}%. The community needs more preparation.`;
+            } else {
+                message = `DISASTER STRUCK! You scored ${totalScore}%. The community was not adequately prepared.`;
+            }
+            
+            addLog('TIME IS UP! ' + message, totalScore >= 50 ? 'success' : 'danger');
+            addLog(`Final stats: ${gameState.population}/${gameState.totalPopulation} residents safe, ${gameState.preparedness}% preparedness.`, 'info');
+        }
+        
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>

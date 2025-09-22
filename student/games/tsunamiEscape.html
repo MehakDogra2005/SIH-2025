@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tsunami Escape 🌊</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-panel {
+            flex: 1;
+            padding: 30px;
+            border-right: 2px solid #3498db;
+            background: #f8f9fa;
+        }
+        
+        .game-area {
+            flex: 2;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 700px;
+            background: #eef5ff;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        h1 {
+            color: #3498db;
+            margin-left: 15px;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: #2980b9;
+            margin: 20px 0 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            font-size: 22px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .score-board {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border: 2px solid #3498db;
+        }
+        
+        .current-score {
+            font-size: 24px;
+            text-align: center;
+            margin: 15px 0;
+            color: #2c3e50;
+        }
+        
+        .max-score {
+            font-size: 22px;
+            text-align: center;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #3498db;
+        }
+        
+        .game-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-size: 28px;
+        }
+        
+        .game-description {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .game-ui {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .game-canvas {
+            width: 100%;
+            height: 350px;
+            background: #d6eaf8;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #3498db;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .player {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #e74c3c;
+            border-radius: 50%;
+            bottom: 20px;
+            left: 50px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .obstacle {
+            position: absolute;
+            background: #95a5a6;
+            border: 1px solid #7f8c8d;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .high-ground {
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            background: #27ae60;
+            right: 50px;
+            bottom: 150px;
+            border-radius: 4px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .water {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            background: #3498db;
+            bottom: 0;
+            left: 0;
+            z-index: 2;
+            transition: height 0.5s ease;
+        }
+        
+        .puzzle-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: none;
+            width: 80%;
+            text-align: center;
+            border: 2px solid #3498db;
+        }
+        
+        .warning-sign {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #f1c40f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 8;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-btn {
+            background: #2ecc71;
+        }
+        
+        .action-btn:hover {
+            background: #27ae60;
+        }
+        
+        .warning-btn {
+            background: #f39c12;
+        }
+        
+        .warning-btn:hover {
+            background: #e67e22;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            display: none;
+        }
+        
+        .results h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .results p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #3498db;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .warning-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(243, 156, 18, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            z-index: 20;
+            max-width: 200px;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .info-panel {
+                border-right: none;
+                border-bottom: 2px solid #3498db;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-panel">
+            <div class="header">
+                <i class="fas fa-water fa-3x" style="color: #3498db;"></i>
+                <h1>Tsunami Escape 🌊</h1>
+            </div>
+            
+            <h2>Rules</h2>
+            <ul class="rules-list">
+                <li>Race against time to reach high ground before the tsunami hits</li>
+                <li>Solve puzzles to clear paths and remove obstacles</li>
+                <li>Click on warning signs to learn critical tsunami information</li>
+                <li>Reach safety before the water level rises too high</li>
+                <li>Use your knowledge to make smart decisions quickly</li>
+            </ul>
+            
+            <h2>Important Points</h2>
+            <ul class="points-list">
+                <li>Tsunamis can travel at speeds up to 500 mph</li>
+                <li>Natural warning signs include strong earthquakes and sudden sea level changes</li>
+                <li>Always move to higher ground immediately after a strong coastal earthquake</li>
+                <li>Never stay to watch an approaching tsunami</li>
+                <li>If you can see the wave, you are too close to escape</li>
+            </ul>
+            
+            <div class="score-board">
+                <h2>Your Scores</h2>
+                <div class="current-score">Current Score: <span id="current-score">0</span> points</div>
+                <div class="max-score">High Score: <span id="max-score">0</span> points</div>
+                <div class="current-score">Time Left: <span id="time-left">60</span>s</div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-container">
+                <h2 class="game-title">Tsunami Escape 🌊</h2>
+                <p class="game-description">Race against time to reach high ground before the tsunami hits!</p>
+                
+                <div class="game-ui">
+                    <div>Distance: <span id="distance">120m</span></div>
+                    <div>Water Level: <span id="water-level">Low</span></div>
+                    <div>Puzzles Solved: <span id="puzzles-solved">0</span>/3</div>
+                </div>
+                
+                <div class="game-canvas" id="game-canvas">
+                    <div class="water" id="water"></div>
+                    <div class="player" id="player"></div>
+                    <div class="high-ground">SAFETY</div>
+                    
+                    <div class="obstacle" style="width: 100px; height: 60px; bottom: 20px; left: 150px;">
+                        Debris
+                    </div>
+                    <div class="obstacle" style="width: 80px; height: 80px; bottom: 20px; left: 300px;">
+                        Fallen Tree
+                    </div>
+                    <div class="obstacle" style="width: 120px; height: 40px; bottom: 20px; left: 450px;">
+                        Flooded Area
+                    </div>
+                    
+                    <div class="warning-sign" style="bottom: 100px; left: 200px;" data-warning="1">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="warning-sign" style="bottom: 180px; left: 350px;" data-warning="2">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="warning-sign" style="bottom: 120px; left: 500px;" data-warning="3">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    
+                    <div class="puzzle-popup" id="puzzle-popup">
+                        <h3>Clear the Path</h3>
+                        <p id="puzzle-question">What is the first thing you should do when you feel a strong earthquake near the coast?</p>
+                        <div class="options-container" id="puzzle-options">
+                            <div class="option" data-correct="false">Check social media</div>
+                            <div class="option" data-correct="true">Move to higher ground immediately</div>
+                            <div class="option" data-correct="false">Go to the beach to check the water</div>
+                            <div class="option" data-correct="false">Wait for official instructions</div>
+                        </div>
+                        <p id="puzzle-feedback"></p>
+                    </div>
+                    
+                    <div class="warning-info" id="warning-info">
+                        <strong>Tsunami Warning Sign</strong>
+                        <p id="warning-text"></p>
+                    </div>
+                </div>
+                
+                <div class="results" id="results">
+                    <h3 id="result-title">Game Over</h3>
+                    <p id="result-message">You didn't reach safety in time.</p>
+                    <p id="result-score">Your score: 0 points</p>
+                </div>
+                
+                <div class="controls">
+                    <button class="action-btn" onclick="movePlayer()">
+                        <i class="fas fa-running"></i> Move Forward
+                    </button>
+                    <button class="warning-btn" onclick="showWarning(0)">
+                        <i class="fas fa-info-circle"></i> Tsunami Facts
+                    </button>
+                    <button onclick="startGame()">
+                        <i class="fas fa-play"></i> Start Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data and state
+        const gameData = {
+            currentScore: 0,
+            maxScore: parseInt(localStorage.getItem('tsunamiEscapeMaxScore')) || 0,
+            distance: 120,
+            waterLevel: 0,
+            playerPosition: 50,
+            gameActive: false,
+            timeLeft: 60,
+            puzzlesSolved: 0,
+            totalPuzzles: 3,
+            currentPuzzle: 0,
+            warnings: [
+                "If you feel a strong earthquake near the coast, move to higher ground immediately. Don't wait for an official warning!",
+                "A sudden rise or fall in sea level is a natural tsunami warning. If you see the ocean receding unusually far, it's a sign that a tsunami may be coming.",
+                "Tsunamis often arrive as a series of waves. The first wave may not be the largest. Stay on high ground until officials say it's safe to return."
+            ],
+            puzzles: [
+                {
+                    question: "What is the first thing you should do when you feel a strong earthquake near the coast?",
+                    options: [
+                        { text: "Check social media", correct: false },
+                        { text: "Move to higher ground immediately", correct: true },
+                        { text: "Go to the beach to check the water", correct: false },
+                        { text: "Wait for official instructions", correct: false }
+                    ],
+                    explanation: "When near the coast, always move to higher ground immediately after feeling a strong earthquake. Don't wait for an official tsunami warning."
+                },
+                {
+                    question: "If you see the ocean receding unusually far, what should you do?",
+                    options: [
+                        { text: "Investigate the exposed seafloor", correct: false },
+                        { text: "Run toward the water to get a better view", correct: false },
+                        { text: "Move immediately to higher ground", correct: true },
+                        { text: "Take pictures to post online", correct: false }
+                    ],
+                    explanation: "A suddenly receding ocean is a natural tsunami warning. Move to higher ground immediately as a dangerous wave may be coming."
+                },
+                {
+                    question: "How fast can tsunami waves travel in the open ocean?",
+                    options: [
+                        { text: "As fast as a car (60 mph)", correct: false },
+                        { text: "As fast as a speedboat (80 mph)", correct: false },
+                        { text: "As fast as a commercial jet (500 mph)", correct: true },
+                        { text: "As fast as a person can run (15 mph)", correct: false }
+                    ],
+                    explanation: "Tsunamis can travel as fast as 500 mph in the open ocean, as fast as a jet airplane. This is why they can cross entire oceans in just hours."
+                }
+            ]
+        };
+
+        // DOM elements
+        const playerEl = document.getElementById('player');
+        const waterEl = document.getElementById('water');
+        const puzzlePopup = document.getElementById('puzzle-popup');
+        const warningInfo = document.getElementById('warning-info');
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load max score from storage
+            document.getElementById('max-score').textContent = gameData.maxScore;
+            
+            // Set up warning sign click events
+            document.querySelectorAll('.warning-sign').forEach(sign => {
+                sign.addEventListener('click', function() {
+                    const warningId = parseInt(this.getAttribute('data-warning')) - 1;
+                    showWarning(warningId);
+                });
+            });
+            
+            // Set up obstacle click events (puzzles)
+            document.querySelectorAll('.obstacle').forEach(obstacle => {
+                obstacle.addEventListener('click', function() {
+                    if (gameData.gameActive) {
+                        showPuzzle();
+                    }
+                });
+            });
+            
+            // Set up puzzle option click events
+            document.querySelectorAll('#puzzle-options .option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+                    checkPuzzleAnswer(isCorrect);
+                });
+            });
+        });
+
+        // Start the game
+        function startGame() {
+            gameData.gameActive = true;
+            gameData.currentScore = 0;
+            gameData.distance = 120;
+            gameData.waterLevel = 0;
+            gameData.playerPosition = 50;
+            gameData.timeLeft = 60;
+            gameData.puzzlesSolved = 0;
+            
+            updateUI();
+            document.getElementById('results').style.display = 'none';
+            
+            // Start game timer
+            const gameTimer = setInterval(function() {
+                if (gameData.gameActive) {
+                    gameData.timeLeft--;
+                    document.getElementById('time-left').textContent = gameData.timeLeft;
+                    
+                    // Increase water level over time
+                    gameData.waterLevel += 0.5;
+                    waterEl.style.height = (40 + gameData.waterLevel) + 'px';
+                    
+                    // Check if player is safe or game over
+                    if (gameData.distance <= 0) {
+                        endGame(true);
+                        clearInterval(gameTimer);
+                    } else if (gameData.timeLeft <= 0 || gameData.waterLevel > 100) {
+                        endGame(false);
+                        clearInterval(gameTimer);
+                    }
+                } else {
+                    clearInterval(gameTimer);
+                }
+            }, 1000);
+        }
+
+        // Move player forward
+        function movePlayer() {
+            if (!gameData.gameActive) {
+                alert("Please start the game first!");
+                return;
+            }
+            
+            gameData.distance -= 10;
+            gameData.playerPosition += 40;
+            
+            if (gameData.playerPosition > 600) {
+                gameData.playerPosition = 50;
+            }
+            
+            playerEl.style.left = gameData.playerPosition + 'px';
+            updateUI();
+            
+            // Add points for moving
+            gameData.currentScore += 5;
+            updateUI();
+        }
+
+        // Show warning information
+        function showWarning(warningId) {
+            const warning = gameData.warnings[warningId];
+            document.getElementById('warning-text').textContent = warning;
+            warningInfo.style.display = 'block';
+            
+            // Hide warning after 5 seconds
+            setTimeout(function() {
+                warningInfo.style.display = 'none';
+            }, 5000);
+            
+            // Add points for learning
+            gameData.currentScore += 2;
+            updateUI();
+        }
+
+        // Show puzzle
+        function showPuzzle() {
+            if (gameData.currentPuzzle >= gameData.puzzles.length) return;
+            
+            const puzzle = gameData.puzzles[gameData.currentPuzzle];
+            document.getElementById('puzzle-question').textContent = puzzle.question;
+            
+            const optionsContainer = document.getElementById('puzzle-options');
+            optionsContainer.innerHTML = '';
+            
+            puzzle.options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                optionEl.textContent = option.text;
+                optionEl.setAttribute('data-correct', option.correct);
+                optionEl.addEventListener('click', function() {
+                    checkPuzzleAnswer(option.correct);
+                });
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            document.getElementById('puzzle-feedback').textContent = '';
+            puzzlePopup.style.display = 'block';
+        }
+
+        // Check puzzle answer
+        function checkPuzzleAnswer(isCorrect) {
+            const puzzle = gameData.puzzles[gameData.currentPuzzle];
+            
+            if (isCorrect) {
+                document.getElementById('puzzle-feedback').textContent = "Correct! " + puzzle.explanation;
+                document.getElementById('puzzle-feedback').style.color = '#27ae60';
+                
+                // Remove obstacle
+                document.querySelectorAll('.obstacle')[gameData.currentPuzzle].style.display = 'none';
+                
+                // Add points
+                gameData.currentScore += 20;
+                gameData.puzzlesSolved++;
+                
+                // Update UI
+                updateUI();
+                
+                // Close puzzle after delay
+                setTimeout(function() {
+                    puzzlePopup.style.display = 'none';
+                    gameData.currentPuzzle++;
+                }, 3000);
+            } else {
+                document.getElementById('puzzle-feedback').textContent = "Incorrect. Try again!";
+                document.getElementById('puzzle-feedback').style.color = '#e74c3c';
+                
+                // Penalize time
+                gameData.timeLeft -= 5;
+            }
+        }
+
+        // Update UI elements
+        function updateUI() {
+            document.getElementById('current-score').textContent = gameData.currentScore;
+            document.getElementById('distance').textContent = Math.max(0, gameData.distance) + 'm';
+            document.getElementById('puzzles-solved').textContent = gameData.puzzlesSolved + '/' + gameData.totalPuzzles;
+            
+            // Update water level text
+            let waterLevelText = 'Low';
+            if (gameData.waterLevel > 30) waterLevelText = 'Medium';
+            if (gameData.waterLevel > 60) waterLevelText = 'High';
+            if (gameData.waterLevel > 90) waterLevelText = 'DANGEROUS';
+            document.getElementById('water-level').textContent = waterLevelText;
+        }
+
+        // End the game
+        function endGame(success) {
+            gameData.gameActive = false;
+            const results = document.getElementById('results');
+            
+            if (success) {
+                document.getElementById('result-title').textContent = 'You Made It to Safety!';
+                document.getElementById('result-title').style.color = '#27ae60';
+                document.getElementById('result-message').textContent = 'You reached high ground before the tsunami hit.';
+                
+                // Bonus points for surviving
+                gameData.currentScore += 100;
+            } else {
+                document.getElementById('result-title').textContent = 'Game Over';
+                document.getElementById('result-title').style.color = '#e74c3c';
+                document.getElementById('result-message').textContent = 'The tsunami reached you before you could get to safety.';
+            }
+            
+            document.getElementById('result-score').textContent = 'Your score: ' + gameData.currentScore + ' points';
+            results.style.display = 'block';
+            
+            // Update high score if needed
+            if (gameData.currentScore > gameData.maxScore) {
+                gameData.maxScore = gameData.currentScore;
+                localStorage.setItem('tsunamiEscapeMaxScore', gameData.maxScore);
+                document.getElementById('max-score').textContent = gameData.maxScore;
+            }
+        }
+    </script>
+</body>
+</html>

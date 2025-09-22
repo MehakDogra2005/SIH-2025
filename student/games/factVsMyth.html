@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Detective (Myth vs Fact)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-panel {
+            flex: 1;
+            padding: 30px;
+            border-right: 2px solid #3498db;
+            background: #f8f9fa;
+        }
+        
+        .game-area {
+            flex: 2;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 700px;
+            background: #eef5ff;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        h1 {
+            color: #3498db;
+            margin-left: 15px;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: #2980b9;
+            margin: 20px 0 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            font-size: 22px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .score-board {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border: 2px solid #3498db;
+        }
+        
+        .current-score {
+            font-size: 24px;
+            text-align: center;
+            margin: 15px 0;
+            color: #2c3e50;
+        }
+        
+        .max-score {
+            font-size: 22px;
+            text-align: center;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #3498db;
+        }
+        
+        .game-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-size: 28px;
+        }
+        
+        .game-description {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .case-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .case-title {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        
+        .clues-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .clue {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            width: calc(50% - 15px);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #3498db;
+        }
+        
+        .clue:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .clue.revealed {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .statement-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px dashed #3498db;
+        }
+        
+        .statement {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .option-btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid;
+        }
+        
+        .myth-btn {
+            background: #fff;
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+        
+        .myth-btn:hover {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .fact-btn {
+            background: #fff;
+            color: #28a745;
+            border-color: #28a745;
+        }
+        
+        .fact-btn:hover {
+            background: #28a745;
+            color: white;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .next-case-btn {
+            background: #2ecc71;
+        }
+        
+        .next-case-btn:hover {
+            background: #27ae60;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            display: none;
+        }
+        
+        .results h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .results p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #3498db;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .info-panel {
+                border-right: none;
+                border-bottom: 2px solid #3498db;
+            }
+            
+            .clue {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-panel">
+            <div class="header">
+                <i class="fas fa-search fa-3x" style="color: #3498db;"></i>
+                <h1>Disaster Detective</h1>
+            </div>
+            
+            <h2>Rules</h2>
+            <ul class="rules-list">
+                <li>Investigate disaster rumors and misinformation</li>
+                <li>Examine clues to separate myths from facts</li>
+                <li>Correctly classify statements to solve cases</li>
+                <li>Earn points for each correct classification</li>
+                <li>Unlock new clues as you progress through cases</li>
+            </ul>
+            
+            <h2>Important Points</h2>
+            <ul class="points-list">
+                <li>Each case presents different disaster scenarios</li>
+                <li>Read clues carefully to identify factual information</li>
+                <li>Some myths contain partial truths</li>
+                <li>Your accuracy affects your detective ranking</li>
+                <li>Complete cases to unlock more challenging scenarios</li>
+            </ul>
+            
+            <div class="score-board">
+                <h2>Your Scores</h2>
+                <div class="current-score">Current Case: <span id="current-case">1</span></div>
+                <div class="current-score">Score: <span id="current-score">0</span> points</div>
+                <div class="max-score">High Score: <span id="max-score">0</span> points</div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-container">
+                <h2 class="game-title">Disaster Detective (Myth vs Fact)</h2>
+                <p class="game-description">Investigate disaster rumors and separate myths from facts to solve cases!</p>
+                
+                <div class="case-info">
+                    <div class="case-title">CASE #1: EARTHQUAKE EMERGENCY</div>
+                    <p>A devastating earthquake has struck the region, and misinformation is spreading rapidly. Determine which statements are myths and which are facts.</p>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+                
+                <div class="clues-container" id="clues-container">
+                    <div class="clue" onclick="revealClue(0)">
+                        <i class="fas fa-lock"></i> Clue #1: Safety Procedures
+                    </div>
+                    <div class="clue" onclick="revealClue(1)">
+                        <i class="fas fa-lock"></i> Clue #2: Structural Integrity
+                    </div>
+                    <div class="clue" onclick="revealClue(2)">
+                        <i class="fas fa-lock"></i> Clue #3: Emergency Response
+                    </div>
+                    <div class="clue" onclick="revealClue(3)">
+                        <i class="fas fa-lock"></i> Clue #4: Common Misconceptions
+                    </div>
+                </div>
+                
+                <div class="statement-container">
+                    <div class="statement" id="current-statement">During an earthquake, you should stand in a doorway for safety.</div>
+                    <div class="options">
+                        <div class="option-btn myth-btn" onclick="checkAnswer('myth')">
+                            <i class="fas fa-times-circle"></i> Myth
+                        </div>
+                        <div class="option-btn fact-btn" onclick="checkAnswer('fact')">
+                            <i class="fas fa-check-circle"></i> Fact
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="results" id="results">
+                    <h3>Explanation</h3>
+                    <p id="explanation">This is an outdated practice. In modern homes, doorways are no stronger than any other part of the house and do not protect you from flying debris or falling objects. It is safer to drop, cover, and hold on.</p>
+                    <p id="result-score">You earned 10 points!</p>
+                </div>
+                
+                <div class="controls">
+                    <button onclick="nextStatement()">
+                        <i class="fas fa-forward"></i> Next Statement
+                    </button>
+                    <button class="next-case-btn" onclick="nextCase()" id="next-case-btn" style="display: none;">
+                        <i class="fas fa-arrow-right"></i> Next Case
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data and state
+        const gameData = {
+            currentCase: 1,
+            currentScore: 0,
+            maxScore: parseInt(localStorage.getItem('disasterDetectiveMaxScore')) || 0,
+            currentStatement: 0,
+            revealedClues: [],
+            cases: [
+                {
+                    title: "EARTHQUAKE EMERGENCY",
+                    description: "A devastating earthquake has struck the region, and misinformation is spreading rapidly. Determine which statements are myths and which are facts.",
+                    clues: [
+                        "Safety Procedures: Modern safety guidelines recommend 'Drop, Cover, and Hold On' during earthquakes, not standing in doorways.",
+                        "Structural Integrity: Doorways in modern homes are no stronger than any other part of the structure and provide no additional protection.",
+                        "Emergency Response: After an earthquake, check for injuries and hazards before moving. Avoid damaged areas.",
+                        "Common Misconceptions: The idea of 'earthquake weather' is a myth; earthquakes cannot be predicted by weather conditions."
+                    ],
+                    statements: [
+                        {
+                            text: "During an earthquake, you should stand in a doorway for safety.",
+                            answer: "myth",
+                            explanation: "This is an outdated practice. In modern homes, doorways are no stronger than any other part of the house and do not protect you from flying debris or falling objects. It is safer to drop, cover, and hold on."
+                        },
+                        {
+                            text: "Earthquakes can be predicted by unusual animal behavior.",
+                            answer: "myth",
+                            explanation: "While there are anecdotal reports of animals behaving strangely before earthquakes, there's no scientific evidence that animals can predict seismic events. Earthquakes cannot be reliably predicted."
+                        },
+                        {
+                            text: "If you're indoors during an earthquake, stay there until shaking stops.",
+                            answer: "fact",
+                            explanation: "Correct! Moving during shaking can be dangerous due to falling debris. The safest approach is to drop, cover, and hold on where you are until the shaking stops."
+                        },
+                        {
+                            text: "Small earthquakes prevent big ones by releasing pressure.",
+                            answer: "myth",
+                            explanation: "Small earthquakes release only a tiny fraction of the energy of large ones. While they can temporarily relieve stress in a specific area, they don't prevent larger earthquakes."
+                        },
+                        {
+                            text: "After an earthquake, check for gas leaks and electrical damage.",
+                            answer: "fact",
+                            explanation: "Absolutely! Gas leaks and electrical hazards are common after earthquakes and can lead to fires and explosions. Use a flashlight (not matches or candles) to inspect for damage."
+                        }
+                    ]
+                },
+                {
+                    title: "HURRICANE PREPAREDNESS",
+                    description: "A major hurricane is approaching the coast, and rumors about preparation and safety are circulating. Separate fact from fiction.",
+                    clues: [
+                        "Evacuation: Always follow official evacuation orders. Never underestimate the danger of storm surge.",
+                        "Windows: Taping windows does not prevent breakage during hurricanes. It can create larger, more dangerous shards.",
+                        "Safety: The safest place during a hurricane is in an interior room on the lowest level, away from windows.",
+                        "Power: Using generators indoors can lead to carbon monoxide poisoning. Always operate them outside."
+                    ],
+                    statements: [
+                        {
+                            text: "Taping windows in a crisscross pattern will prevent them from breaking during a hurricane.",
+                            answer: "myth",
+                            explanation: "This is a dangerous myth. Taping windows doesn't prevent breakage and can create larger, more dangerous shards of glass. Proper shutters or boarding up are the only effective methods."
+                        },
+                        {
+                            text: "You should evacuate immediately if you're in a mandatory evacuation zone.",
+                            answer: "fact",
+                            explanation: "Correct! Mandatory evacuation orders are issued for areas most at risk. Never ignore these orders as storm surge and flooding can be life-threatening."
+                        },
+                        {
+                            text: "The eye of the hurricane is the most dangerous part of the storm.",
+                            answer: "myth",
+                            explanation: "Actually, the eye is the calm center. The most dangerous part is the eye wall, which surrounds the eye and contains the strongest winds and most intense weather."
+                        },
+                        {
+                            text: "You should fill your car's gas tank before a hurricane.",
+                            answer: "fact",
+                            explanation: "Yes! Gas stations may lose power or run out of fuel before and after the storm. Having a full tank ensures you can evacuate if necessary and use your car for power if needed."
+                        },
+                        {
+                            text: "Opening windows on the opposite side of the storm will equalize pressure and prevent roof damage.",
+                            answer: "myth",
+                            explanation: "This is completely false. Opening windows allows destructive wind and rain inside your home. Keep all windows and doors closed and secured during the storm."
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load max score from storage
+            document.getElementById('max-score').textContent = gameData.maxScore;
+            
+            // Initialize the game
+            initGame();
+        });
+
+        // Initialize the game
+        function initGame() {
+            // Reset revealed clues
+            gameData.revealedClues = [];
+            
+            // Update UI with current case info
+            const currentCase = gameData.cases[gameData.currentCase - 1];
+            document.querySelector('.case-title').textContent = `CASE #${gameData.currentCase}: ${currentCase.title}`;
+            document.querySelector('.case-info p').textContent = currentCase.description;
+            
+            // Reset clues UI
+            const cluesContainer = document.getElementById('clues-container');
+            cluesContainer.innerHTML = '';
+            
+            currentCase.clues.forEach((clue, index) => {
+                const clueElement = document.createElement('div');
+                clueElement.className = 'clue';
+                clueElement.innerHTML = `<i class="fas fa-lock"></i> Clue #${index + 1}`;
+                clueElement.onclick = () => revealClue(index);
+                cluesContainer.appendChild(clueElement);
+            });
+            
+            // Reset statement
+            gameData.currentStatement = 0;
+            showCurrentStatement();
+            
+            // Hide next case button
+            document.getElementById('next-case-btn').style.display = 'none';
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+
+        // Reveal a clue
+        function revealClue(index) {
+            if (gameData.revealedClues.includes(index)) return;
+            
+            gameData.revealedClues.push(index);
+            const currentCase = gameData.cases[gameData.currentCase - 1];
+            
+            const clueElements = document.querySelectorAll('.clue');
+            clueElements[index].innerHTML = currentCase.clues[index];
+            clueElements[index].classList.add('revealed');
+            
+            // Deduct points for using a clue
+            gameData.currentScore = Math.max(0, gameData.currentScore - 5);
+            document.getElementById('current-score').textContent = gameData.currentScore;
+        }
+
+        // Show current statement
+        function showCurrentStatement() {
+            const currentCase = gameData.cases[gameData.currentCase - 1];
+            document.getElementById('current-statement').textContent = currentCase.statements[gameData.currentStatement].text;
+            
+            // Hide results
+            document.getElementById('results').style.display = 'none';
+        }
+
+        // Check answer
+        function checkAnswer(answer) {
+            const currentCase = gameData.cases[gameData.currentCase - 1];
+            const currentStatement = currentCase.statements[gameData.currentStatement];
+            const results = document.getElementById('results');
+            
+            if (answer === currentStatement.answer) {
+                // Correct answer
+                results.style.borderLeftColor = '#28a745';
+                results.querySelector('h3').textContent = 'Correct!';
+                results.querySelector('h3').style.color = '#28a745';
+                
+                // Award points based on whether clues were used
+                const points = gameData.revealedClues.length > 0 ? 5 : 10;
+                gameData.currentScore += points;
+                document.getElementById('result-score').textContent = `You earned ${points} points!`;
+            } else {
+                // Incorrect answer
+                results.style.borderLeftColor = '#e74c3c';
+                results.querySelector('h3').textContent = 'Incorrect!';
+                results.querySelector('h3').style.color = '#e74c3c';
+                document.getElementById('result-score').textContent = 'Try to analyze the clues more carefully.';
+            }
+            
+            // Update score display
+            document.getElementById('current-score').textContent = gameData.currentScore;
+            if (gameData.currentScore > gameData.maxScore) {
+                gameData.maxScore = gameData.currentScore;
+                localStorage.setItem('disasterDetectiveMaxScore', gameData.maxScore);
+                document.getElementById('max-score').textContent = gameData.maxScore;
+            }
+            
+            // Show explanation
+            document.getElementById('explanation').textContent = currentStatement.explanation;
+            
+            // Show results
+            results.style.display = 'block';
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+
+        // Next statement
+        function nextStatement() {
+            const currentCase = gameData.cases[gameData.currentCase - 1];
+            
+            if (gameData.currentStatement < currentCase.statements.length - 1) {
+                gameData.currentStatement++;
+                showCurrentStatement();
+            } else {
+                // Show next case button if all statements are completed
+                document.getElementById('next-case-btn').style.display = 'block';
+            }
+        }
+
+        // Next case
+        function nextCase() {
+            if (gameData.currentCase < gameData.cases.length) {
+                gameData.currentCase++;
+                document.getElementById('current-case').textContent = gameData.currentCase;
+                initGame();
+            } else {
+                alert('Congratulations! You have completed all available cases. More will be added soon!');
+            }
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const currentCase = gameData.cases[gameData.currentCase - 1];
+            const progress = ((gameData.currentStatement + 1) / currentCase.statements.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+    </script>
+</body>
+</html>

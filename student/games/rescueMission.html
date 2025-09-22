@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rescue Mission Simulator 🚑</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c2461, #1e3799, #4a69bd);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .rules-panel {
+            flex: 1;
+            padding: 25px;
+            background: linear-gradient(to bottom, #2c3e50, #3498db);
+            color: white;
+        }
+        
+        .game-panel {
+            flex: 2;
+            padding: 25px;
+            background: #ecf0f1;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f1c40f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            margin: 15px 0 10px;
+            color: #f1c40f;
+            border-bottom: 2px solid #f1c40f;
+            padding-bottom: 5px;
+        }
+        
+        h3 {
+            margin: 15px 0 10px;
+            color: #3498db;
+        }
+        
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .role-selection {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .role {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 30%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .role:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .role.selected {
+            border: 3px solid #f1c40f;
+        }
+        
+        .firefighter {
+            background: linear-gradient(to bottom, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .paramedic {
+            background: linear-gradient(to bottom, #2ecc71, #27ae60);
+            color: white;
+        }
+        
+        .volunteer {
+            background: linear-gradient(to bottom, #9b59b6, #8e44ad);
+            color: white;
+        }
+        
+        .scenario {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .timer {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .task {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .task:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-color: #f1c40f;
+        }
+        
+        .task.selected {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .task.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .priority-indicator {
+            height: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .high-priority {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+        
+        .medium-priority {
+            background: linear-gradient(to right, #f39c12, #e67e22);
+        }
+        
+        .low-priority {
+            background: linear-gradient(to right, #3498db, #2980b9);
+        }
+        
+        .action-log {
+            background: white;
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 150px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .log-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .log-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .log-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #start-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        #start-btn:hover {
+            background: #27ae60;
+        }
+        
+        #submit-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        #submit-btn:hover {
+            background: #2980b9;
+        }
+        
+        #next-btn {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        #next-btn:hover {
+            background: #8e44ad;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+        
+        .result {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .high-score {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .rules-panel, .game-panel {
+                width: 100%;
+            }
+            
+            .role-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .role {
+                width: 80%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="rules-panel">
+            <h1>Rescue Mission Simulator 🚑</h1>
+            
+            <h2>Game Rules</h2>
+            <ul>
+                <li>Choose your responder role: Firefighter, Paramedic, or Volunteer</li>
+                <li>Each role has different abilities and limitations</li>
+                <li>Prioritize tasks based on urgency and your role's capabilities</li>
+                <li>Complete as many tasks as possible before time runs out</li>
+                <li>Earn more points for high-priority tasks</li>
+                <li>Wrong choices will cost time and points</li>
+            </ul>
+            
+            <h2>Important Points</h2>
+            <ul>
+                <li>Always prioritize life-threatening situations first</li>
+                <li>Some tasks require specific roles - know your limitations</li>
+                <li>Call for backup when overwhelmed</li>
+                <li>Manage your time efficiently</li>
+                <li>Coordinate with other responders when possible</li>
+            </ul>
+            
+            <h2>Outcomes</h2>
+            <ul>
+                <li><strong>Excellent Response:</strong> Saved all critical patients + bonus</li>
+                <li><strong>Good Response:</strong> Most critical tasks completed</li>
+                <li><strong>Fair Response:</strong> Some critical tasks missed</li>
+                <li><strong>Poor Response:</strong> Many casualties due to poor prioritization</li>
+                <li><strong>Failed Mission:</strong> Inadequate response leading to disaster</li>
+            </ul>
+            
+            <div class="high-score">
+                <h2>Your High Score</h2>
+                <p id="high-score">0 points</p>
+            </div>
+        </div>
+        
+        <div class="game-panel">
+            <h2>Emergency Response Center</h2>
+            
+            <div class="role-selection">
+                <div class="role firefighter" data-role="firefighter">
+                    <h3>Firefighter</h3>
+                    <p>Specializes in fire suppression and rescue</p>
+                </div>
+                <div class="role paramedic" data-role="paramedic">
+                    <h3>Paramedic</h3>
+                    <p>Specializes in medical emergencies</p>
+                </div>
+                <div class="role volunteer" data-role="volunteer">
+                    <h3>Volunteer</h3>
+                    <p>Jack-of-all-trades, master of none</p>
+                </div>
+            </div>
+            
+            <div class="scenario" id="scenario">
+                Select your role to begin
+            </div>
+            
+            <div class="timer" id="timer">
+                Time: 60 seconds
+            </div>
+            
+            <h3>Emergency Tasks</h3>
+            <div class="tasks-grid" id="tasks-container">
+                <!-- Tasks will be generated here -->
+            </div>
+            
+            <h3>Action Log</h3>
+            <div class="action-log" id="action-log">
+                <!-- Action log will appear here -->
+            </div>
+            
+            <div class="controls">
+                <button id="start-btn">Start Mission</button>
+                <button id="submit-btn" disabled>Call Backup</button>
+                <button id="next-btn" disabled>Next Mission</button>
+            </div>
+            
+            <div class="result" id="result"></div>
+            
+            <div class="score">
+                Current Score: <span id="score">0</span> points
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const scenarios = [
+            {
+                name: "Building Fire",
+                description: "A residential building is on fire with people trapped inside",
+                tasks: [
+                    { id: 1, name: "Rescue trapped children", priority: "high", time: 10, points: 50, roles: ["firefighter"] },
+                    { id: 2, name: "Extinguish kitchen fire", priority: "high", time: 8, points: 40, roles: ["firefighter"] },
+                    { id: 3, name: "Treat smoke inhalation", priority: "medium", time: 5, points: 30, roles: ["paramedic"] },
+                    { id: 4, name: "Evacuate elderly residents", priority: "medium", time: 7, points: 25, roles: ["firefighter", "volunteer"] },
+                    { id: 5, name: "Secure perimeter", priority: "low", time: 3, points: 15, roles: ["volunteer"] },
+                    { id: 6, name: "Rescue pets", priority: "low", time: 4, points: 10, roles: ["volunteer"] }
+                ]
+            },
+            {
+                name: "Multi-Vehicle Accident",
+                description: "Multiple vehicles collided on highway with injuries",
+                tasks: [
+                    { id: 1, name: "Extricate trapped driver", priority: "high", time: 12, points: 60, roles: ["firefighter"] },
+                    { id: 2, name: "Treat critical injuries", priority: "high", time: 8, points: 50, roles: ["paramedic"] },
+                    { id: 3, name: "Stop fuel leakage", priority: "high", time: 6, points: 40, roles: ["firefighter"] },
+                    { id: 4, name: "Set up triage area", priority: "medium", time: 5, points: 25, roles: ["paramedic", "volunteer"] },
+                    { id: 5, name: "Direct traffic", priority: "medium", time: 4, points: 20, roles: ["volunteer"] },
+                    { id: 6, name: "Comfort distressed witnesses", priority: "low", time: 3, points: 10, roles: ["volunteer"] }
+                ]
+            },
+            {
+                name: "Natural Disaster",
+                description: "Earthquake has caused widespread damage and injuries",
+                tasks: [
+                    { id: 1, name: "Search for survivors in rubble", priority: "high", time: 15, points: 70, roles: ["firefighter"] },
+                    { id: 2, name: "Treat crush injuries", priority: "high", time: 10, points: 60, roles: ["paramedic"] },
+                    { id: 3, name: "Stabilize collapsed structure", priority: "high", time: 12, points: 50, roles: ["firefighter"] },
+                    { id: 4, name: "Distribute emergency supplies", priority: "medium", time: 6, points: 25, roles: ["volunteer"] },
+                    { id: 5, name: "Set up temporary shelter", priority: "medium", time: 8, points: 30, roles: ["volunteer"] },
+                    { id: 6, name: "Document damage for insurance", priority: "low", time: 5, points: 15, roles: ["volunteer"] }
+                ]
+            },
+            {
+                name: "Industrial Accident",
+                description: "Chemical leak at factory with multiple exposures",
+                tasks: [
+                    { id: 1, name: "Contain chemical leak", priority: "high", time: 15, points: 80, roles: ["firefighter"] },
+                    { id: 2, name: "Decontaminate exposed workers", priority: "high", time: 10, points: 60, roles: ["paramedic", "firefighter"] },
+                    { id: 3, name: "Treat chemical burns", priority: "high", time: 8, points: 50, roles: ["paramedic"] },
+                    { id: 4, name: "Evacuate nearby buildings", priority: "medium", time: 7, points: 30, roles: ["firefighter", "volunteer"] },
+                    { id: 5, name: "Set up decontamination zone", priority: "medium", time: 6, points: 25, roles: ["volunteer"] },
+                    { id: 6, name: "Secure employee belongings", priority: "low", time: 4, points: 10, roles: ["volunteer"] }
+                ]
+            }
+        ];
+
+        // Game state
+        let currentScenarioIndex = 0;
+        let selectedRole = null;
+        let timeLeft = 60;
+        let score = 0;
+        let highScore = 0;
+        let gameActive = false;
+        let timerInterval = null;
+        let completedTasks = [];
+
+        // DOM elements
+        const scenarioElement = document.getElementById('scenario');
+        const timerElement = document.getElementById('timer');
+        const tasksContainer = document.getElementById('tasks-container');
+        const actionLogElement = document.getElementById('action-log');
+        const scoreElement = document.getElementById('score');
+        const highScoreElement = document.getElementById('high-score');
+        const resultElement = document.getElementById('result');
+        const startBtn = document.getElementById('start-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const roleElements = document.querySelectorAll('.role');
+
+        // Initialize the game
+        function initGame() {
+            // Reset game state
+            timeLeft = 60;
+            completedTasks = [];
+            
+            // Update UI
+            scenarioElement.textContent = `${scenarios[currentScenarioIndex].name}: ${scenarios[currentScenarioIndex].description}`;
+            timerElement.textContent = `Time: ${timeLeft} seconds`;
+            actionLogElement.innerHTML = '';
+            resultElement.className = 'result';
+            
+            // Generate tasks
+            generateTasks();
+            
+            // Update buttons
+            startBtn.disabled = false;
+            submitBtn.disabled = true;
+            nextBtn.disabled = true;
+        }
+
+        // Generate tasks for the current scenario
+        function generateTasks() {
+            tasksContainer.innerHTML = '';
+            
+            const scenario = scenarios[currentScenarioIndex];
+            
+            // Shuffle tasks for variety
+            const shuffledTasks = [...scenario.tasks];
+            shuffleArray(shuffledTasks);
+            
+            // Display tasks
+            shuffledTasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.dataset.id = task.id;
+                
+                // Check if task is available for selected role
+                if (selectedRole && !task.roles.includes(selectedRole)) {
+                    taskElement.classList.add('disabled');
+                }
+                
+                taskElement.innerHTML = `
+                    <div>${task.name}</div>
+                    <div class="priority-indicator ${task.priority}-priority"></div>
+                    <div>Time: ${task.time}s | Points: ${task.points}</div>
+                `;
+                
+                if (!taskElement.classList.contains('disabled')) {
+                    taskElement.addEventListener('click', () => {
+                        attemptTask(task, taskElement);
+                    });
+                }
+                
+                tasksContainer.appendChild(taskElement);
+            });
+        }
+
+        // Attempt a task
+        function attemptTask(task, element) {
+            if (!gameActive || timeLeft <= 0) return;
+            
+            // Check if task is already completed
+            if (completedTasks.includes(task.id)) {
+                addToLog("You've already completed this task!", "warning");
+                return;
+            }
+            
+            // Check if enough time is available
+            if (timeLeft < task.time) {
+                addToLog("Not enough time to complete this task!", "danger");
+                return;
+            }
+            
+            // Deduct time and complete task
+            timeLeft -= task.time;
+            completedTasks.push(task.id);
+            
+            // Update score
+            score += task.points;
+            
+            // Update UI
+            timerElement.textContent = `Time: ${timeLeft} seconds`;
+            scoreElement.textContent = score;
+            element.classList.add('selected');
+            element.style.pointerEvents = 'none';
+            
+            // Add to log
+            addToLog(`Completed: ${task.name} (+${task.points} points)`, "success");
+            
+            // Check if all tasks are completed
+            if (completedTasks.length === scenarios[currentScenarioIndex].tasks.length) {
+                endGame(true);
+            }
+        }
+
+        // Add entry to action log
+        function addToLog(message, type) {
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = message;
+            actionLogElement.appendChild(logEntry);
+            actionLogElement.scrollTop = actionLogElement.scrollHeight;
+        }
+
+        // Start the game
+        function startGame() {
+            if (!selectedRole) {
+                alert("Please select a role first!");
+                return;
+            }
+            
+            gameActive = true;
+            startBtn.disabled = true;
+            submitBtn.disabled = false;
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = `Time: ${timeLeft} seconds`;
+                
+                if (timeLeft <= 0) {
+                    endGame(false);
+                }
+            }, 1000);
+            
+            addToLog("Mission started! Good luck!", "success");
+        }
+
+        // End the game
+        function endGame(isSuccess) {
+            clearInterval(timerInterval);
+            gameActive = false;
+            submitBtn.disabled = true;
+            nextBtn.disabled = false;
+            
+            // Calculate final score
+            let bonus = 0;
+            if (isSuccess) {
+                bonus = timeLeft * 2; // Time bonus
+                score += bonus;
+                addToLog(`Time bonus: +${bonus} points!`, "success");
+            }
+            
+            // Update high score
+            if (score > highScore) {
+                highScore = score;
+                highScoreElement.textContent = `${highScore} points`;
+            }
+            
+            // Show result
+            if (isSuccess) {
+                resultElement.textContent = `Mission accomplished! Final score: ${score} points`;
+                resultElement.className = 'result success';
+            } else {
+                resultElement.textContent = `Mission failed! Time's up. Final score: ${score} points`;
+                resultElement.className = 'result fail';
+            }
+            
+            // Disable tasks
+            const taskElements = document.querySelectorAll('.task');
+            taskElements.forEach(element => {
+                element.style.pointerEvents = 'none';
+            });
+        }
+
+        // Move to next scenario
+        function nextScenario() {
+            currentScenarioIndex = (currentScenarioIndex + 1) % scenarios.length;
+            initGame();
+        }
+
+        // Utility function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        submitBtn.addEventListener('click', () => {
+            if (gameActive) {
+                addToLog("Backup called! Additional resources are on the way.", "success");
+                timeLeft += 15;
+                timerElement.textContent = `Time: ${timeLeft} seconds`;
+                submitBtn.disabled = true;
+            }
+        });
+        nextBtn.addEventListener('click', nextScenario);
+        
+        // Role selection
+        roleElements.forEach(role => {
+            role.addEventListener('click', () => {
+                roleElements.forEach(r => r.classList.remove('selected'));
+                role.classList.add('selected');
+                selectedRole = role.dataset.role;
+                addToLog(`Role selected: ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}`, "success");
+                initGame();
+            });
+        });
+
+        // Initialize the game on load
+        window.addEventListener('load', () => {
+            // Select a random scenario to start with
+            currentScenarioIndex = Math.floor(Math.random() * scenarios.length);
+            initGame();
+        });
+    </script>
+</body>
+</html>

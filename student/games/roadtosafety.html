@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road to Safety (Listos California) 🛣️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #1a2a6c, #2c3e50);
+            color: #ecf0f1;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1300px;
+            margin: 0 auto;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .game-info {
+            flex: 1;
+            min-width: 320px;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-area {
+            flex: 2;
+            min-width: 600px;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #3498db;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #2ecc71;
+            margin: 15px 0 10px;
+        }
+        
+        .rules-list, .points-list {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .stats {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #2c3e50;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #34495e;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .status-item {
+            text-align: center;
+            flex: 1;
+            padding: 12px;
+            margin: 0 5px;
+            background: #2c3e50;
+            border-radius: 5px;
+        }
+        
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f39c12;
+        }
+        
+        .scenario {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .avatar-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-right: 20px;
+        }
+        
+        .avatar-details {
+            flex-grow: 1;
+        }
+        
+        .scenario-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .danger {
+            background: #e74c3c;
+        }
+        
+        .success {
+            background: #2ecc71;
+        }
+        
+        .warning {
+            background: #f39c12;
+        }
+        
+        .community {
+            background: #9b59b6;
+        }
+        
+        .log {
+            background: #2c3e50;
+            height: 180px;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #34495e;
+            line-height: 1.5;
+        }
+        
+        .success-text {
+            color: #2ecc71;
+        }
+        
+        .danger-text {
+            color: #e74c3c;
+        }
+        
+        .warning-text {
+            color: #f39c12;
+        }
+        
+        .info-text {
+            color: #3498db;
+        }
+        
+        .empathy-text {
+            color: #9b59b6;
+        }
+        
+        .restart-btn {
+            width: 100%;
+            padding: 15px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .restart-btn:hover {
+            background: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .progress-container {
+            height: 20px;
+            background: #2c3e50;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 1000px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .game-info, .game-area {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-info">
+            <header>
+                <h1>Road to Safety 🛣️</h1>
+                <p>Navigate disaster scenarios with diverse avatars</p>
+            </header>
+            
+            <h2>Game Rules</h2>
+            <ul class="rules-list">
+                <li>Choose an avatar with unique circumstances</li>
+                <li>Make decisions based on your avatar's resources and limitations</li>
+                <li>Balance immediate safety with long-term preparedness</li>
+                <li>Each decision affects your safety score and resources</li>
+                <li>Learn how different circumstances affect disaster preparedness</li>
+                <li>Game changes every time you play with different scenarios</li>
+            </ul>
+            
+            <h2>Scoring System</h2>
+            <ul class="points-list">
+                <li>+100 points for reaching maximum safety</li>
+                <li>+50 points for helping others along the way</li>
+                <li>+25 points for making empathetic choices</li>
+                <li>+75 points for effective resource management</li>
+                <li>Bonus points for overcoming unique challenges</li>
+            </ul>
+            
+            <div class="stats">
+                <h2>Your Statistics</h2>
+                <div class="stat-item">
+                    <span>Highest Score:</span>
+                    <span id="high-score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Games Played:</span>
+                    <span id="games-played">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Avatars Helped:</span>
+                    <span id="avatars-helped">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Empathy Score:</span>
+                    <span id="empathy-score">0</span>
+                </div>
+            </div>
+            
+            <button class="restart-btn" onclick="initGame()">🔄 Start New Journey</button>
+        </div>
+        
+        <div class="game-area">
+            <div class="status-bar">
+                <div class="status-item">
+                    <div>Safety</div>
+                    <div class="status-value" id="safety">50%</div>
+                </div>
+                <div class="status-item">
+                    <div>Resources</div>
+                    <div class="status-value" id="resources">$500</div>
+                </div>
+                <div class="status-item">
+                    <div>Time</div>
+                    <div class="status-value" id="time">05:00</div>
+                </div>
+                <div class="status-item">
+                    <div>Score</div>
+                    <div class="status-value" id="score">0</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="scenario">
+                <div class="avatar-container">
+                    <div class="avatar-image" id="avatar-emoji">👨‍🦽</div>
+                    <div class="avatar-details">
+                        <h3 id="avatar-name">Carlos, 68</h3>
+                        <p id="avatar-desc">Retired veteran with mobility challenges</p>
+                    </div>
+                </div>
+                
+                <div class="scenario-text" id="scenario-text">
+                    A wildfire is approaching your neighborhood. You have limited mobility and live on a fixed income. 
+                    You need to decide how to prepare with your available resources and physical limitations.
+                </div>
+                
+                <div class="actions">
+                    <button class="danger" onclick="makeChoice('evacuate')">🚗 Evacuate Now</button>
+                    <button class="warning" onclick="makeChoice('prepare')">🛡️ Prepare Home</button>
+                    <button onclick="makeChoice('help')">🤝 Help Neighbors</button>
+                    <button class="success" onclick="makeChoice('supplies')">📦 Gather Supplies</button>
+                </div>
+            </div>
+            
+            <div class="log" id="log">
+                <div class="log-entry info-text">Welcome to Road to Safety! You'll be facing a disaster scenario.</div>
+                <div class="log-entry">Your choices will determine how well you can navigate the challenges ahead.</div>
+                <div class="log-entry empathy-text">Consider your avatar's circumstances when making decisions.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            safety: 50,
+            resources: 0,
+            time: 300, // 5 minutes in seconds
+            score: 0,
+            progress: 0,
+            gameOver: false,
+            timer: null,
+            avatar: null,
+            scenario: null,
+            highScore: parseInt(localStorage.getItem('highScore')) || 0,
+            gamesPlayed: parseInt(localStorage.getItem('gamesPlayed')) || 0,
+            avatarsHelped: parseInt(localStorage.getItem('avatarsHelped')) || 0,
+            empathyScore: parseInt(localStorage.getItem('empathyScore')) || 0
+        };
+        
+        // Avatar profiles
+        const avatars = [
+            {
+                name: "Carlos, 68",
+                emoji: "👨‍🦽",
+                description: "Retired veteran with mobility challenges",
+                resources: 500,
+                challenges: ["mobility", "fixed income"],
+                special: "Military experience provides disaster knowledge"
+            },
+            {
+                name: "Maria, 32",
+                emoji: "👩‍👧‍👦",
+                description: "Single mother with two young children",
+                resources: 300,
+                challenges: ["children", "limited time"],
+                special: "Resourceful and determined to protect her family"
+            },
+            {
+                name: "James, 19",
+                emoji: "👨‍🎓",
+                description: "College student with limited budget",
+                resources: 200,
+                challenges: ["limited funds", "no vehicle"],
+                special: "Tech-savvy and connected to community networks"
+            },
+            {
+                name: "Li, 71",
+                emoji: "👵",
+                description: "Non-English speaking elder",
+                resources: 400,
+                challenges: ["language barrier", "lives alone"],
+                special: "Traditional knowledge and resilience"
+            },
+            {
+                name: "The Johnson Family",
+                emoji: "👨‍👩‍👧‍👦",
+                description: "Family with special needs child",
+                resources: 600,
+                challenges: ["medical needs", "mobility equipment"],
+                special: "Strong community connections and support system"
+            }
+        ];
+        
+        // Disaster scenarios
+        const scenarios = [
+            {
+                type: "wildfire",
+                name: "Wildfire Approach",
+                description: "A fast-moving wildfire is heading toward your community with evacuation orders likely.",
+                challenges: ["smoke inhalation", "road closures", "panic"],
+                opportunities: ["community support", "emergency shelters"]
+            },
+            {
+                type: "earthquake",
+                name: "Major Earthquake",
+                description: "A 7.2 magnitude earthquake has struck your region, causing widespread damage.",
+                challenges: ["structural damage", "injuries", "utility outages"],
+                opportunities: ["neighbor cooperation", "emergency services"]
+            },
+            {
+                type: "flood",
+                name: "Flash Flooding",
+                description: "Torrential rains have caused severe flooding, with water levels rising rapidly.",
+                challenges: ["water contamination", "electrical hazards", "isolation"],
+                opportunities: ["high ground", "rescue services"]
+            },
+            {
+                type: "heatwave",
+                name: "Extreme Heatwave",
+                description: "A dangerous heatwave has settled over the region with temperatures exceeding 110°F.",
+                challenges: ["heat exhaustion", "power outages", "water shortages"],
+                opportunities: ["cooling centers", "community check-ins"]
+            }
+        ];
+        
+        // Initialize the game
+        function initGame() {
+            // Clear previous timer
+            clearInterval(gameState.timer);
+            
+            // Select random avatar and scenario
+            gameState.avatar = avatars[Math.floor(Math.random() * avatars.length)];
+            gameState.scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            
+            // Reset game state
+            gameState.safety = 50;
+            gameState.resources = gameState.avatar.resources;
+            gameState.time = 300;
+            gameState.score = 0;
+            gameState.progress = 0;
+            gameState.gameOver = false;
+            
+            // Update avatar display
+            document.getElementById('avatar-emoji').textContent = gameState.avatar.emoji;
+            document.getElementById('avatar-name').textContent = gameState.avatar.name;
+            document.getElementById('avatar-desc').textContent = gameState.avatar.description;
+            
+            // Update scenario display
+            document.getElementById('scenario-text').innerHTML = `
+                <strong>${gameState.scenario.name}:</strong> ${gameState.scenario.description}<br><br>
+                <strong>Your challenges:</strong> ${gameState.avatar.challenges.join(", ")}<br>
+                <strong>Your resources:</strong> $${gameState.resources}, ${gameState.avatar.special}
+            `;
+            
+            // Clear log and add initial message
+            const log = document.getElementById('log');
+            log.innerHTML = '';
+            addLog(`Welcome, ${gameState.avatar.name}. You're facing: ${gameState.scenario.name}`, 'info');
+            addLog(gameState.scenario.description, 'info');
+            addLog(`Your challenges: ${gameState.avatar.challenges.join(", ")}`, 'warning');
+            addLog(`Your special attribute: ${gameState.avatar.special}`, 'success');
+            addLog("Make choices that consider your circumstances and limitations.", 'empathy');
+            
+            // Update display
+            updateDisplay();
+            
+            // Update statistics
+            updateStatistics();
+            
+            // Start timer
+            startTimer();
+        }
+        
+        // Update the game display
+        function updateDisplay() {
+            document.getElementById('safety').textContent = `${gameState.safety}%`;
+            document.getElementById('resources').textContent = `$${gameState.resources}`;
+            
+            const minutes = Math.floor(gameState.time / 60);
+            const seconds = gameState.time % 60;
+            document.getElementById('time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('progress-bar').style.width = `${gameState.progress}%`;
+        }
+        
+        // Update statistics panel
+        function updateStatistics() {
+            document.getElementById('high-score').textContent = gameState.highScore;
+            document.getElementById('games-played').textContent = gameState.gamesPlayed;
+            document.getElementById('avatars-helped').textContent = gameState.avatarsHelped;
+            document.getElementById('empathy-score').textContent = gameState.empathyScore;
+        }
+        
+        // Start the countdown timer
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                if (gameState.gameOver) {
+                    clearInterval(gameState.timer);
+                    return;
+                }
+                
+                gameState.time--;
+                
+                if (gameState.time <= 0) {
+                    endGame();
+                    return;
+                }
+                
+                // Random event chance
+                if (Math.random() > 0.95) {
+                    const events = [
+                        {msg: 'Unexpected expense! Medical supplies needed.', resources: -50, type: 'danger'},
+                        {msg: 'Neighbor shares resources with you.', resources: +30, type: 'success'},
+                        {msg: 'Weather conditions are worsening!', safety: -10, type: 'warning'},
+                        {msg: 'Community center opens as emergency shelter.', safety: +15, type: 'info'},
+                        {msg: 'You help an elderly neighbor prepare.', empathy: +5, type: 'empathy'}
+                    ];
+                    
+                    const event = events[Math.floor(Math.random() * events.length)];
+                    addLog(event.msg, event.type);
+                    
+                    if (event.resources) gameState.resources += event.resources;
+                    if (event.safety) gameState.safety += event.safety;
+                    if (event.empathy) {
+                        gameState.empathyScore += event.empathy;
+                        gameState.score += event.empathy * 10;
+                    }
+                }
+                
+                updateDisplay();
+            }, 1000);
+        }
+        
+        // Add a message to the log
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}-text`;
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Process player choices
+        function makeChoice(choice) {
+            if (gameState.gameOver) return;
+            
+            let safetyChange = 0;
+            let resourceChange = 0;
+            let progressChange = 0;
+            let scoreChange = 0;
+            let empathyChange = 0;
+            let message = '';
+            
+            switch(choice) {
+                case 'evacuate':
+                    if (gameState.resources >= 100) {
+                        safetyChange = 25;
+                        resourceChange = -100;
+                        progressChange = 30;
+                        scoreChange = 50;
+                        message = 'You evacuated safely. Good choice given the circumstances.';
+                    } else {
+                        safetyChange = -10;
+                        message = 'Not enough resources for evacuation. Need to find another way.';
+                    }
+                    break;
+                    
+                case 'prepare':
+                    if (gameState.resources >= 70) {
+                        safetyChange = 20;
+                        resourceChange = -70;
+                        progressChange = 25;
+                        scoreChange = 40;
+                        message = 'You prepared your home. Better protection against the disaster.';
+                    } else {
+                        safetyChange = 5;
+                        message = 'Limited preparation due to resource constraints.';
+                    }
+                    break;
+                    
+                case 'help':
+                    if (gameState.resources >= 40) {
+                        safetyChange = 10;
+                        resourceChange = -40;
+                        progressChange = 20;
+                        scoreChange = 60;
+                        empathyChange = 10;
+                        message = 'You helped neighbors. Building community resilience.';
+                        gameState.avatarsHelped++;
+                    } else {
+                        safetyChange = 5;
+                        empathyChange = 5;
+                        message = 'You offered non-material help to neighbors. Community matters.';
+                    }
+                    break;
+                    
+                case 'supplies':
+                    if (gameState.resources >= 60) {
+                        safetyChange = 15;
+                        resourceChange = -60;
+                        progressChange = 15;
+                        scoreChange = 35;
+                        message = 'You gathered essential supplies. Better prepared for emergencies.';
+                    } else {
+                        safetyChange = 5;
+                        message = 'Could only gather limited supplies due to budget constraints.';
+                    }
+                    break;
+            }
+            
+            // Apply changes
+            gameState.safety = Math.min(100, Math.max(0, gameState.safety + safetyChange));
+            gameState.resources = Math.max(0, gameState.resources + resourceChange);
+            gameState.progress = Math.min(100, gameState.progress + progressChange);
+            gameState.score += scoreChange;
+            gameState.empathyScore += empathyChange;
+            
+            // Add log message
+            addLog(message, safetyChange > 0 ? 'success' : 'warning');
+            
+            // Check for game completion
+            if (gameState.progress >= 100) {
+                addLog('You successfully navigated the disaster scenario!', 'success');
+                endGame();
+            }
+            
+            updateDisplay();
+        }
+        
+        // End the game
+        function endGame() {
+            gameState.gameOver = true;
+            clearInterval(gameState.timer);
+            
+            // Calculate final score
+            const safetyBonus = gameState.safety * 2;
+            const resourceBonus = gameState.resources;
+            const timeBonus = gameState.time;
+            
+            gameState.score += safetyBonus + resourceBonus + timeBonus;
+            
+            // Update statistics
+            gameState.gamesPlayed++;
+            
+            if (gameState.score > gameState.highScore) {
+                gameState.highScore = gameState.score;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('highScore', gameState.highScore);
+            localStorage.setItem('gamesPlayed', gameState.gamesPlayed);
+            localStorage.setItem('avatarsHelped', gameState.avatarsHelped);
+            localStorage.setItem('empathyScore', gameState.empathyScore);
+            
+            // Display results
+            addLog(`JOURNEY COMPLETE! Final score: ${gameState.score}`, 'info');
+            addLog(`Safety achieved: ${gameState.safety}%`, gameState.safety > 70 ? 'success' : 'warning');
+            addLog(`Resources remaining: $${gameState.resources}`, 'info');
+            addLog(`Empathy demonstrated: ${gameState.empathyScore}`, 'empathy');
+            
+            updateStatistics();
+        }
+        
+        // Initialize the game when page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>
