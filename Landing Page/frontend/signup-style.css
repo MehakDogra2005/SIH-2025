@@ -48,7 +48,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80') no-repeat center center/cover;
+    background: url('../images/mock-drill-2.jpg') no-repeat center center/cover;
     opacity: 0.2;
 }
 
@@ -82,13 +82,8 @@ body {
 }
 
 .benefit i {
-    font-size: 1.8rem;
-    margin-top: 0.5rem;
-}
-
-.benefit h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    /* margin-top: 0.5rem; */
 }
 
 .benefit p {
