@@ -10,15 +10,19 @@ const auth = async (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.userId).select('-password');
+        console.log('🔑 Decoded token:', decoded); // Debug log
+
+        // Direct database se user check karo
+        const user = await User.findById(decoded.userId);
 
         if (!user) {
-            return res.status(401).json({ message: 'Token is not valid' });
+            return res.status(401).json({ message: 'Token is not valid - User not found' });
         }
 
-        req.user = user;
+        req.user = user; // Pure user object attach karo
         next();
     } catch (error) {
+        console.error('Auth middleware error:', error);
         res.status(401).json({ message: 'Token is not valid' });
     }
 };

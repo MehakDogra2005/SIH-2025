@@ -191,6 +191,146 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
+        /*Voice styles end here*/
+        /* Streak System Styles */
+        .streak-container {
+            position: fixed;
+            right: 20px;
+            top: 15px;
+            z-index: 1000;
+        }
+
+        .streak-button {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .streak-button:hover {
+            transform: scale(1.1);
+        }
+
+        .streak-points {
+            text-align: center;
+            margin-top: 5px;
+            background: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Daily Question Modal */
+        .daily-question-modal {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .question-title {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f8f9fa;
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #e3f2fd;
+        }
+
+        .option-btn.correct {
+            border-color: #34a853;
+            background: #e6f4ea;
+        }
+
+        .option-btn.incorrect {
+            border-color: #ea4335;
+            background: #fce8e6;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result-message {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .result-success {
+            background: #e6f4ea;
+            color: #34a853;
+        }
+
+        .result-error {
+            background: #fce8e6;
+            color: #ea4335;
+        }
+
+        /*Streak styles end here*/
+
         /* Layout */
         .dashboard-container {
             display: grid;
@@ -958,8 +1098,16 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="header-right">
-                <button class="emergency-button" id="emergencyBtn"><i class="fas fa-exclamation-triangle"></i>
-                    REPORT DISASTER EMERGENCY</button>
+                <button class="emergency-button" id="emergencyBtn">
+                    <i class="fas fa-exclamation-triangle"></i>REPORT DISASTER EMERGENCY
+                </button>
+                <!-- Streak System -->
+                <div class="streak-container">
+                    <button class="streak-button" id="streakBtn" title="Daily Disaster Question">
+                        <i class="fas fa-fire"></i>
+                    </button>
+                    <div class="streak-points" id="streakPoints">0 pts</div>
+                </div>
             </div>
 
             <br>
@@ -1135,6 +1283,578 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
+        /**********************
+     * DAILY STREAK SYSTEM
+     **********************/
+
+        // Daily Questions Database
+        const dailyQuestions = [
+            {
+                id: 1,
+                question: "During an earthquake, what is the safest action to take if you are indoors?",
+                options: [
+                    "Run outside immediately",
+                    "Stand in a doorway",
+                    "Get under a sturdy table and hold on",
+                    "Go to the highest floor of the building"
+                ],
+                correctAnswer: 2,
+                points: 5,
+                explanation: "Getting under a sturdy table and holding on provides protection from falling objects."
+            },
+            {
+                id: 2,
+                question: "What should you do if you are caught in a flood while driving?",
+                options: [
+                    "Drive through the water quickly",
+                    "Abandon the vehicle and move to higher ground",
+                    "Wait inside the car for rescue",
+                    "Try to push the car to safety"
+                ],
+                correctAnswer: 1,
+                points: 5,
+                explanation: "Abandon the vehicle immediately as flood waters can rise rapidly and sweep vehicles away."
+            },
+            {
+                id: 3,
+                question: "In case of a fire, what is the proper way to use a fire extinguisher?",
+                options: [
+                    "PASS - Pull, Aim, Squeeze, Sweep",
+                    "STOP - Spray, Target, Open, Push",
+                    "FIRE - Find, Ignite, Remove, Escape",
+                    "HELP - Hold, Extinguish, Lift, Pull"
+                ],
+                correctAnswer: 0,
+                points: 5,
+                explanation: "PASS technique: Pull the pin, Aim at base of fire, Squeeze handle, Sweep side to side."
+            },
+            {
+                id: 4,
+                question: "What is the recommended emergency kit supply duration?",
+                options: [
+                    "24 hours",
+                    "3 days",
+                    "1 week",
+                    "2 weeks"
+                ],
+                correctAnswer: 1,
+                points: 5,
+                explanation: "FEMA recommends having supplies to last at least 3 days for most emergencies."
+            },
+            {
+                id: 5,
+                question: "During a thunderstorm, what is the safest place to be?",
+                options: [
+                    "Under a tall tree",
+                    "Inside a metal shed",
+                    "In a substantial building with plumbing",
+                    "In an open field"
+                ],
+                correctAnswer: 2,
+                points: 5,
+                explanation: "Substantial buildings with plumbing provide protection from lightning strikes."
+            },
+            {
+                id: 6,
+                question: "What should you do if you smell gas in your building?",
+                options: [
+                    "Light a match to check",
+                    "Turn on lights to see better",
+                    "Evacuate immediately and call for help",
+                    "Open windows and stay inside"
+                ],
+                correctAnswer: 2,
+                points: 5,
+                explanation: "Evacuate immediately as gas leaks can lead to explosions. Don't operate electrical switches."
+            },
+            {
+                id: 7,
+                question: "How often should you practice your family emergency plan?",
+                options: [
+                    "Once a year",
+                    "Every 6 months",
+                    "Every 3 months",
+                    "Monthly"
+                ],
+                correctAnswer: 1,
+                points: 5,
+                explanation: "Practice every 6 months to ensure everyone remembers what to do in an emergency."
+            },
+            {
+                id: 8,
+                question: "What is the most important item in an emergency evacuation bag?",
+                options: [
+                    "Jewelry and valuables",
+                    "Important documents",
+                    "Water and non-perishable food",
+                    "Entertainment devices"
+                ],
+                correctAnswer: 2,
+                points: 5,
+                explanation: "Water and food are essential for survival during evacuation."
+            },
+            {
+                id: 9,
+                question: "During a heatwave, what is the best way to stay cool?",
+                options: [
+                    "Drink alcoholic beverages",
+                    "Take cold showers frequently",
+                    "Stay in air-conditioned spaces",
+                    "Exercise vigorously to sweat"
+                ],
+                correctAnswer: 2,
+                points: 5,
+                explanation: "Staying in air-conditioned spaces is the most effective way to prevent heat-related illness."
+            },
+            {
+                id: 10,
+                question: "What should you do if you encounter a downed power line?",
+                options: [
+                    "Move it aside with a wooden stick",
+                    "Assume it's safe and step over it",
+                    "Stay away and report it immediately",
+                    "Check if it's live with a metal object"
+                ],
+                correctAnswer: 2,
+                points: 5,
+                explanation: "Always assume downed power lines are live and dangerous. Stay at least 30 feet away."
+            }
+        ];
+
+
+        // Global variables
+        let userStreakData = null;
+        let todayQuestionCompleted = false;
+
+        // Initialize Streak System - FIXED
+        async function initializeStreakSystem() {
+            console.log('🚀 Initializing streak system...');
+            await loadStreakData();
+            updateStreakDisplay();
+        }
+
+        // Load streak data from backend - FIXED
+        async function loadStreakData() {
+            try {
+                const token = localStorage.getItem('token');
+                console.log('🔑 Token exists:', !!token);
+
+                if (!token) {
+                    console.log('❌ No token found, using default');
+                    initializeDefaultStreak();
+                    return;
+                }
+
+                console.log('🔄 Fetching streak data...');
+                const response = await fetch('http://localhost:5000/api/streak/user-streak', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('📡 Response status:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    userStreakData = data;
+                    todayQuestionCompleted = isTodayQuestionCompleted();
+
+                    console.log('✅ Streak data loaded:', userStreakData);
+                    console.log('📅 Today completed:', todayQuestionCompleted);
+
+                    updateStreakDisplay();
+
+                    if (!todayQuestionCompleted) {
+                        showStreakNotification();
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.log('❌ Server error:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('❌ Error loading streak:', error);
+                initializeDefaultStreak();
+            }
+        }
+
+        // Initialize default streak data
+        function initializeDefaultStreak() {
+            userStreakData = {
+                currentStreak: 0,
+                totalPoints: 0,
+                lastCompletedDate: null,
+                completedQuestions: []
+            };
+            todayQuestionCompleted = false;
+            console.log('🆕 Default streak initialized');
+        }
+
+        // Save streak data to backend - FIXED
+        async function saveStreakData() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.log('⚠️ No token, using localStorage');
+                    localStorage.setItem('userStreakData', JSON.stringify(userStreakData));
+                    return;
+                }
+
+                console.log('💾 Saving streak data:', userStreakData);
+                const response = await fetch('http://localhost:5000/api/streak/update-streak', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userStreakData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    console.log('✅ Streak data saved successfully');
+                    // Refresh user points from server
+                    await refreshUserPoints();
+                } else {
+                    throw new Error(result.message || 'Failed to save streak');
+                }
+            } catch (error) {
+                console.error('❌ Error saving streak data:', error);
+                // Fallback to localStorage
+                localStorage.setItem('userStreakData', JSON.stringify(userStreakData));
+            }
+        }
+
+        // Refresh user points from server
+        async function refreshUserPoints() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const response = await fetch('http://localhost:5000/api/auth/current', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    console.log('🔄 User points refreshed:', userData.points);
+                }
+            } catch (error) {
+                console.error('⚠️ Failed to refresh points:', error);
+            }
+        }
+
+        // Check if today's question is completed
+        function isTodayQuestionCompleted() {
+            if (!userStreakData || !userStreakData.lastCompletedDate) {
+                return false;
+            }
+
+            const lastDate = new Date(userStreakData.lastCompletedDate);
+            const today = new Date();
+
+            return lastDate.toDateString() === today.toDateString();
+        }
+
+        // Get today's question
+        function getTodaysQuestion() {
+            const today = new Date();
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+            const questionIndex = dayOfYear % dailyQuestions.length;
+
+            return {
+                ...dailyQuestions[questionIndex],
+                questionIndex: questionIndex
+            };
+        }
+
+        // Show streak notification
+        function showStreakNotification() {
+            const streakBtn = document.getElementById('streakBtn');
+            if (!streakBtn) return;
+
+            streakBtn.style.animation = 'pulse 2s infinite';
+
+            if (!document.querySelector('.streak-notification')) {
+                const notification = document.createElement('div');
+                notification.className = 'streak-notification';
+                notification.innerHTML = '!';
+                notification.style.cssText = `
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        `;
+                streakBtn.style.position = 'relative';
+                streakBtn.appendChild(notification);
+            }
+        }
+
+        // Update streak display - FIXED
+        function updateStreakDisplay() {
+            const pointsElement = document.getElementById('streakPoints');
+            const streakBtn = document.getElementById('streakBtn');
+
+            if (!pointsElement || !streakBtn) {
+                console.log('❌ Streak elements not found');
+                return;
+            }
+
+            if (!userStreakData) {
+                pointsElement.textContent = '0 pts';
+                streakBtn.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
+                streakBtn.innerHTML = `<i class="fas fa-fire" style="color: white"></i>`;
+                return;
+            }
+
+            pointsElement.textContent = `${userStreakData.totalPoints} pts`;
+
+            if (todayQuestionCompleted) {
+                // Green button with white fire icon when completed
+                streakBtn.style.background = 'linear-gradient(135deg, #34a853, #2e8b47)';
+                streakBtn.innerHTML = `<i class="fas fa-fire" style="color: white"></i>`;
+                streakBtn.style.animation = 'none';
+            } else {
+                // Red button with white fire icon when not completed
+                streakBtn.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
+                streakBtn.innerHTML = `<i class="fas fa-fire" style="color: white"></i>`;
+            }
+        }
+
+        // Show daily question modal
+        function showDailyQuestion() {
+            if (!userStreakData) {
+                alert('❌ Please wait, loading user data...');
+                return;
+            }
+
+            if (todayQuestionCompleted) {
+                alert('🎉 You have already completed today\'s question! Come back tomorrow for a new challenge!');
+                return;
+            }
+
+            const questionData = getTodaysQuestion();
+            const question = questionData;
+
+            const modalHTML = `
+        <div class="modal-overlay" id="questionOverlay">
+            <div class="modal daily-question-modal">
+                <div class="modal-header">
+                    <h2 class="question-title">🔥 Daily Disaster Question</h2>
+                    <button class="modal-close" id="closeQuestion">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="question-text">${question.question}</div>
+                    
+                    <div class="options-container" id="optionsContainer">
+                        ${question.options.map((option, index) => `
+                            <button class="option-btn" data-index="${index}">
+                                ${String.fromCharCode(65 + index)}. ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                    
+                    <div id="resultMessage" style="display: none;"></div>
+                    
+                    <button class="submit-btn" id="submitAnswer" disabled>
+                        Submit Answer
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            // Wire up event listeners
+            const overlay = document.getElementById('questionOverlay');
+            const closeBtn = document.getElementById('closeQuestion');
+            const optionBtns = document.querySelectorAll('.option-btn');
+            const submitBtn = document.getElementById('submitAnswer');
+            const resultMessage = document.getElementById('resultMessage');
+
+            let selectedOption = null;
+
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    optionBtns.forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedOption = parseInt(btn.dataset.index);
+                    submitBtn.disabled = false;
+                });
+            });
+
+            submitBtn.addEventListener('click', () => {
+                if (selectedOption === null) return;
+
+                const isCorrect = selectedOption === question.correctAnswer;
+
+                // Show result with green correct answers
+                optionBtns.forEach(btn => {
+                    btn.disabled = true;
+                    if (parseInt(btn.dataset.index) === question.correctAnswer) {
+                        btn.classList.add('correct');
+                    } else if (parseInt(btn.dataset.index) === selectedOption && !isCorrect) {
+                        btn.classList.add('incorrect');
+                    }
+                });
+
+                resultMessage.style.display = 'block';
+                resultMessage.className = `result-message ${isCorrect ? 'result-success' : 'result-error'}`;
+                resultMessage.innerHTML = isCorrect
+                    ? `✅ Correct! +${question.points} points<br><small>${question.explanation}</small>`
+                    : `❌ Incorrect! The correct answer is: ${String.fromCharCode(65 + question.correctAnswer)}<br><small>${question.explanation}</small>`;
+
+                submitBtn.textContent = 'Close';
+                submitBtn.onclick = async () => {
+                    if (isCorrect) {
+                        await updateStreak(question.points, questionData.questionIndex);
+                    }
+                    overlay.remove();
+                };
+
+                // Remove notification
+                const notification = document.querySelector('.streak-notification');
+                if (notification) notification.remove();
+            });
+
+            closeBtn.addEventListener('click', () => {
+                overlay.remove();
+            });
+
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
+                }
+            });
+        }
+
+        // Update streak when question is answered correctly - FIXED
+        async function updateStreak(points, questionId) {
+            try {
+                console.log('🔥 Updating streak with points:', points);
+
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+
+                // Initialize if null
+                if (!userStreakData) {
+                    userStreakData = {
+                        currentStreak: 0,
+                        totalPoints: 0,
+                        lastCompletedDate: null,
+                        completedQuestions: []
+                    };
+                }
+
+                // Check if streak continues
+                if (userStreakData.lastCompletedDate) {
+                    const lastDate = new Date(userStreakData.lastCompletedDate);
+
+                    if (lastDate.toDateString() === yesterday.toDateString()) {
+                        userStreakData.currentStreak++;
+                        console.log('↗️ Streak continued:', userStreakData.currentStreak);
+                    } else if (lastDate.toDateString() !== today.toDateString()) {
+                        userStreakData.currentStreak = 1;
+                        console.log('🔄 Streak reset to 1');
+                    }
+                } else {
+                    userStreakData.currentStreak = 1;
+                    console.log('🎯 New streak started');
+                }
+
+                userStreakData.totalPoints += points;
+                userStreakData.lastCompletedDate = today.toISOString();
+                userStreakData.completedQuestions.push({
+                    date: today.toISOString(),
+                    points: points,
+                    questionId: questionId
+                });
+
+                // Mark today's question as completed
+                todayQuestionCompleted = true;
+
+                console.log('💾 Final streak data:', userStreakData);
+
+                // Save to backend
+                await saveStreakData();
+                updateStreakDisplay();
+
+                // Show celebration for streaks
+                if (userStreakData.currentStreak % 7 === 0) {
+                    showStreakCelebration();
+                }
+            } catch (error) {
+                console.error('❌ Error updating streak:', error);
+            }
+        }
+
+        // Show streak celebration
+        function showStreakCelebration() {
+            if (userStreakData && userStreakData.currentStreak > 0) {
+                alert(`🎉 Amazing! You've maintained a ${userStreakData.currentStreak}-day streak! Keep going!`);
+            }
+        }
+
+        // Initialize when DOM loads - FIXED
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     // Wait a bit for page to fully load
+        //     setTimeout(() => {
+        //         initializeStreakSystem();
+
+        //         // Add click event to streak button
+        //         const streakBtn = document.getElementById('streakBtn');
+        //         if (streakBtn) {
+        //             streakBtn.addEventListener('click', showDailyQuestion);
+        //         }
+        //     }, 1000);
+        // });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize everything in proper order
+            console.log('🚀 Initializing dashboard...');
+
+            // 1. First load user info
+            loadUserInfo();
+
+            // 2. Then initialize streak system
+            setTimeout(() => {
+                initializeStreakSystem();
+
+                // Add click event to streak button
+                const streakBtn = document.getElementById('streakBtn');
+                if (streakBtn) {
+                    streakBtn.addEventListener('click', showDailyQuestion);
+                }
+            }, 500);
+
+            // 3. Initialize navigation
+            initializeMenuNavigation();
+            initializeKeyboardNavigation();
+
+            // 4. Initialize map and other components
+            initializeMap();
+
+            console.log('✅ Dashboard initialized successfully');
+        });
+
+        /*Streak system ends here JS*/
+
         /**********************
      * SIMPLE VOICE RECOGNITION (WORKING VERSION)
      **********************/
@@ -1968,6 +2688,7 @@
         closeEmergency.addEventListener('click', () => emergencyOverlay.style.display = 'none');
         cancelEmergency.addEventListener('click', () => emergencyOverlay.style.display = 'none');
 
+        // ✅ REPLACE THE ENTIRE confirmEmergency EVENT LISTENER WITH THIS:
         confirmEmergency.addEventListener('click', () => {
             if (!selectedDisasterType) {
                 alert('Please select a disaster type or use voice recognition');
@@ -1985,12 +2706,16 @@
 
             // Add to alerts
             addNewAlert('emergency', selectedDisasterType.toUpperCase() + ' Alert', alertMessage, 'just now');
-            emergencyOverlay.style.display = 'none';
+
+            // ✅ FORCE CLOSE THE MODAL
+            document.getElementById('emergencyOverlay').style.display = 'none';
 
             // Update status
             document.querySelector('.status-indicator').className = 'status-indicator help';
             document.querySelector('.status-indicator').innerHTML =
                 '<i class="fas fa-exclamation-triangle"></i><span>EMERGENCY - ' + selectedDisasterType.toUpperCase() + '</span>';
+
+            alert('✅ Emergency alert sent successfully!');
         });
 
         // make emergency modal draggable
