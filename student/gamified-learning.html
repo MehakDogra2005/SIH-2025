@@ -962,6 +962,7 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -972,6 +973,7 @@
             0% {
                 transform: translateX(-100%);
             }
+
             100% {
                 transform: translateX(100%);
             }
@@ -1007,7 +1009,7 @@
         <aside class="sidebar">
             <div class="logo">
                 <i class="fas fa-shield-alt"></i>
-                <h1>ResQ</h1>
+                <h1>JeevanSetu</h1>
             </div>
             <div class="menu-items">
                 <div class="menu-item"><i class="fas fa-home"></i><span>Dashboard</span></div>
@@ -1058,7 +1060,7 @@
                             <div class="rating-label" id="ratingLabel">Getting Started</div>
                         </div>
                     </div>
-                    
+
                     <div class="performance-categories">
                         <div class="category-item">
                             <i class="fas fa-earthquake"></i>
@@ -1070,7 +1072,7 @@
                                 <span class="progress-text" id="naturalDisasterText">0%</span>
                             </div>
                         </div>
-                        
+
                         <div class="category-item">
                             <i class="fas fa-users"></i>
                             <span class="category-name">Emergency Response</span>
@@ -1081,7 +1083,7 @@
                                 <span class="progress-text" id="responseText">0%</span>
                             </div>
                         </div>
-                        
+
                         <div class="category-item">
                             <i class="fas fa-toolbox"></i>
                             <span class="category-name">Preparedness</span>
@@ -1092,7 +1094,7 @@
                                 <span class="progress-text" id="preparednessText">0%</span>
                             </div>
                         </div>
-                        
+
                         <div class="category-item">
                             <i class="fas fa-brain"></i>
                             <span class="category-name">Decision Making</span>
@@ -1144,7 +1146,8 @@
                         Multiplayer
                     </div>
                     <!-- Demo Test Button -->
-                    <div class="filter-option" onclick="quickTestAssessment()" style="background: var(--accent); color: white; cursor: pointer;">
+                    <div class="filter-option" onclick="quickTestAssessment()"
+                        style="background: var(--accent); color: white; cursor: pointer;">
                         <i class="fas fa-vial"></i>
                         Test Assessment
                     </div>
@@ -1764,13 +1767,13 @@
 
                 const gameResult = this.data.gameResults[gameId];
                 const previousBest = gameResult.bestScore;
-                
+
                 gameResult.timesPlayed++;
                 gameResult.totalScore += score;
                 gameResult.totalTime += timeSpent;
                 gameResult.averageScore = gameResult.totalScore / gameResult.timesPlayed;
                 gameResult.lastPlayed = new Date().toISOString();
-                
+
                 if (score > gameResult.bestScore) {
                     gameResult.bestScore = score;
                     gameResult.improvement = score - previousBest;
@@ -1778,7 +1781,7 @@
 
                 // Update category scores
                 this.updateCategoryScores(gameData, score, skillsAssessed);
-                
+
                 // Update overall statistics
                 this.data.totalGamesPlayed++;
                 this.data.totalScore += score;
@@ -1813,12 +1816,12 @@
 
                 for (const [category, keywords] of Object.entries(categoryMappings)) {
                     let relevanceScore = 0;
-                    
+
                     // Check disaster type relevance
                     if (keywords.includes(gameData.disasterType)) {
                         relevanceScore += 0.4;
                     }
-                    
+
                     // Check feature relevance
                     gameData.features.forEach(feature => {
                         if (keywords.some(keyword => feature.toLowerCase().includes(keyword.toLowerCase()))) {
@@ -1993,7 +1996,7 @@
                         preparedness: "disaster preparedness",
                         decision: "decision making under pressure"
                     };
-                    
+
                     insights.push({
                         type: 'strength',
                         icon: 'fas fa-check-circle',
@@ -2004,11 +2007,11 @@
                 if (weakCategories.length > 0) {
                     const categoryNames = {
                         naturalDisaster: "natural disaster response",
-                        response: "emergency response", 
+                        response: "emergency response",
                         preparedness: "disaster preparedness",
                         decision: "decision making under pressure"
                     };
-                    
+
                     insights.push({
                         type: 'improvement',
                         icon: 'fas fa-lightbulb',
@@ -2017,7 +2020,7 @@
                 }
 
                 // Personality trait insights
-                const topTrait = Object.entries(traits).reduce((max, [key, value]) => 
+                const topTrait = Object.entries(traits).reduce((max, [key, value]) =>
                     value > max.value ? { key, value } : max, { key: '', value: 0 });
 
                 if (topTrait.value >= 50) {
@@ -2028,7 +2031,7 @@
                         knowledgeRetention: "disaster knowledge retention",
                         stressManagement: "stress management during crises"
                     };
-                    
+
                     insights.push({
                         type: 'strength',
                         icon: 'fas fa-star',
@@ -2072,7 +2075,7 @@
                 if (!lastPlayed) return false;
 
                 const daysSinceLastPlay = (new Date() - new Date(lastPlayed)) / (1000 * 60 * 60 * 24);
-                
+
                 // Show notification if returning after a break or if there are improvements
                 return daysSinceLastPlay > 1 || this.sessionData.gamesPlayedThisSession.some(g => g.improved);
             }
@@ -2080,20 +2083,20 @@
             getReturnNotification() {
                 const recentImprovements = this.sessionData.gamesPlayedThisSession.filter(g => g.improved);
                 const overallRating = this.getOverallRating();
-                
+
                 if (recentImprovements.length > 0) {
                     const gameNames = recentImprovements.map(g => {
                         const game = gamesData.find(game => game.id === g.gameId);
                         return game ? game.title : g.gameId;
                     });
-                    
+
                     return {
                         type: 'improvement',
                         title: 'Excellent Progress!',
                         content: `Welcome back! You've improved your performance in ${gameNames.join(', ')}. Your disaster preparedness rating is now ${overallRating.score}/10 (${overallRating.label}). ${overallRating.description}`
                     };
                 }
-                
+
                 if (this.data.totalGamesPlayed > 0) {
                     return {
                         type: 'welcome',
@@ -2101,7 +2104,7 @@
                         content: `Your current disaster preparedness rating is ${overallRating.score}/10 (${overallRating.label}). Continue playing games to improve your skills and knowledge.`
                     };
                 }
-                
+
                 return null;
             }
 
@@ -2111,7 +2114,7 @@
                 const timeSpent = Math.floor(Math.random() * 30) + 10; // Random time between 10-40 minutes
                 const skills = ['problem solving', 'emergency response', 'critical thinking', 'planning'];
                 const skillsAssessed = skills.slice(0, Math.floor(Math.random() * 3) + 1);
-                
+
                 this.recordGameResult(gameId, score, timeSpent, skillsAssessed);
                 return { score, timeSpent, skillsAssessed };
             }
@@ -2149,7 +2152,7 @@
             Object.entries(categoryProgress).forEach(([category, data]) => {
                 const progressElement = document.getElementById(`${category}Progress`);
                 const textElement = document.getElementById(`${category}Text`);
-                
+
                 if (progressElement && textElement) {
                     progressElement.style.width = `${data.percentage}%`;
                     textElement.textContent = `${data.percentage}%`;
@@ -2166,7 +2169,7 @@
         // Update insights display
         function updateInsights(insights) {
             const insightsContent = document.getElementById('insightsContent');
-            
+
             if (insights.length === 0) {
                 insightsContent.innerHTML = '<p>Play games to receive personalized insights about your disaster preparedness skills!</p>';
                 return;
@@ -2192,7 +2195,7 @@
         // Update rating circle color
         function updateRatingCircleColor(score) {
             const ratingCircle = document.querySelector('.rating-circle');
-            
+
             if (score >= 8) {
                 ratingCircle.style.background = 'linear-gradient(135deg, var(--secondary), #2e7d32)';
             } else if (score >= 6) {
@@ -2212,7 +2215,7 @@
             const dashboardElement = document.getElementById('assessmentDashboard');
             const notificationElement = document.createElement('div');
             notificationElement.className = `assessment-notification ${notification.type}`;
-            
+
             notificationElement.innerHTML = `
                 <div class="notification-header">
                     <i class="${getNotificationIcon(notification.type)}"></i>
@@ -2250,7 +2253,7 @@
         function playGame(gameId) {
             // Show assessment notification
             showGameAssessmentNotification(gameId);
-            
+
             // Create a comprehensive game launcher with all available games
             const gameUrls = {
                 'simcity-disaster': 'games/simCity.html',
@@ -2278,13 +2281,13 @@
                 // For demonstration, simulate a game result before navigation
                 // In production, this would be handled by the actual game
                 const result = performanceTracker.simulateGameResult(gameId);
-                
+
                 // Update the dashboard immediately to show changes
                 setTimeout(() => {
                     updatePerformanceDashboard();
                     showGameCompletionNotification(gameId, result);
                 }, 1000);
-                
+
                 // Navigate to game
                 window.location.href = gameUrls[gameId];
             } else {
@@ -2302,7 +2305,7 @@
                 const dashboardElement = document.getElementById('assessmentDashboard');
                 const notificationElement = document.createElement('div');
                 notificationElement.className = 'assessment-notification improvement';
-                
+
                 notificationElement.innerHTML = `
                     <div class="notification-header">
                         <i class="fas fa-gamepad"></i>
@@ -2336,9 +2339,9 @@
             const dashboardElement = document.getElementById('assessmentDashboard');
             const notificationElement = document.createElement('div');
             notificationElement.className = 'assessment-notification improvement';
-            
+
             const overallRating = performanceTracker.getOverallRating();
-            
+
             notificationElement.innerHTML = `
                 <div class="notification-header">
                     <i class="fas fa-trophy"></i>
@@ -2368,12 +2371,12 @@
         function quickTestAssessment() {
             // Simulate playing several games with different results
             const testGames = ['simcity-disaster', 'tsunamiescape', 'hurricanehero', 'disastertrivia', 'survivalkit'];
-            
+
             testGames.forEach((gameId, index) => {
                 setTimeout(() => {
                     performanceTracker.simulateGameResult(gameId);
                     updatePerformanceDashboard();
-                    
+
                     if (index === testGames.length - 1) {
                         const notification = document.createElement('div');
                         notification.className = 'assessment-notification improvement';
@@ -2387,9 +2390,9 @@
                                 Your rating has been updated based on the simulated performance!
                             </div>
                         `;
-                        
+
                         document.getElementById('assessmentDashboard').appendChild(notification);
-                        
+
                         setTimeout(() => {
                             notification.style.opacity = '0';
                             setTimeout(() => {
@@ -2404,7 +2407,7 @@
         }
 
         // Add keyboard shortcut for testing (Ctrl+T)
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.ctrlKey && e.key === 't') {
                 e.preventDefault();
                 quickTestAssessment();
