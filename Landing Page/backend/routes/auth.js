@@ -52,6 +52,7 @@ router.post('/signup', async (req, res) => {
 });
 
 // Login API
+// Login API - Return redirectUrl
 router.post('/login', async (req, res) => {
     try {
         const { email, password, userType } = req.body;
@@ -80,6 +81,14 @@ router.post('/login', async (req, res) => {
             { expiresIn: '7d' }
         );
 
+        // ✅ Determine redirect URL based on user type
+        let redirectUrl;
+        if (user.userType === 'admin') {
+            redirectUrl = 'http://localhost:5001/dashboard'; // Flask admin dashboard
+        } else {
+            redirectUrl = '/student/dashboard-student.html'; // Student dashboard
+        }
+
         res.json({
             message: 'Login successful',
             token,
@@ -90,9 +99,11 @@ router.post('/login', async (req, res) => {
                 email: user.email,
                 userType: user.userType,
                 institution: user.institution,
-                points: user.points // fetches the current points
-            }
+                points: user.points
+            },
+            redirectUrl: redirectUrl // ✅ This is what the frontend will use
         });
+
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }

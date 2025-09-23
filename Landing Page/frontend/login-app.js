@@ -27,17 +27,27 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (response.ok) {
-                // Store token and user data
-                localStorage.setItem('resq_token', data.token);
-                localStorage.setItem('resq_user', JSON.stringify(data.user));
+                // ✅ UPDATED: Use the redirectUrl from server response
+                if (data.redirectUrl) {
+                    // Store token and user data
+                    localStorage.setItem('resq_token', data.token);
+                    localStorage.setItem('resq_user', JSON.stringify(data.user));
 
-                alert('Login successful! Redirecting to dashboard...');
+                    alert('Login successful! Redirecting to dashboard...');
 
-                // Redirect based on user type
-                if (userType === 'student') {
-                    window.location.href = '/student/dashboard-student.html';
+                    // Redirect to the URL provided by server
+                    window.location.href = data.redirectUrl;
                 } else {
-                    // window.location.href = '/administrator';
+                    // Fallback for old response format
+                    localStorage.setItem('resq_token', data.token);
+                    localStorage.setItem('resq_user', JSON.stringify(data.user));
+                    alert('Login successful! Redirecting to dashboard...');
+
+                    if (userType === 'student') {
+                        window.location.href = '/student/dashboard-student.html';
+                    } else {
+                        window.location.href = 'http://localhost:5001/dashboard';
+                    }
                 }
             } else {
                 alert(data.message || 'Login failed');
