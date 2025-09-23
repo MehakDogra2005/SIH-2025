@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Campus Evacuation Simulator - ResQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+            --success: #4caf50;
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-dark);
+            font-family: "Ubuntu", sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* AR Header */
+        .ar-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ar-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .ar-title i {
+            color: #64b5f6;
+            font-size: 1.5rem;
+        }
+
+        .ar-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ar-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .ar-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .ar-btn.exit {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .ar-btn.exit:hover {
+            background: #d32f2f;
+        }
+
+        /* AR Sandbox Container */
+        .ar-sandbox {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(45deg, #0f4c75, #3282b8, #bbe1fa);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Campus Environment */
+        .campus-environment {
+            position: relative;
+            width: 90%;
+            height: 80%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Campus Map Overlay */
+        .campus-map {
+            position: relative;
+            flex: 1;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNmNWY1ZjUiLz4KPHJlY3QgeD0iMTAiIHk9IjIwIiB3aWR0aD0iMjAiIGhlaWdodD0iMzAiIGZpbGw9IiMzZjUxYjUiLz4KPHJlY3QgeD0iNDAiIHk9IjEwIiB3aWR0aD0iMzAiIGhlaWdodD0iMjAiIGZpbGw9IiMzZjUxYjUiLz4KPHJlY3QgeD0iNzAiIHk9IjQwIiB3aWR0aD0iMjUiIGhlaWdodD0iMzUiIGZpbGw9IiMzZjUxYjUiLz4KPHJlY3QgeD0iMTUiIHk9IjcwIiB3aWR0aD0iNDAiIGhlaWdodD0iMjAiIGZpbGw9IiMzZjUxYjUiLz4KPHBhdGggZD0iTTUgNTUgTDk1IDU1IiBzdHJva2U9IiM2MDY0NzgiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSJNNTUgNSBMNTUgOTUiIHN0cm9rZT0iIzYwNjQ3OCIgc3Ryb2tlLXdpZHRoPSIyIi8+CjwvI3N2Zz4K') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* AR Interface Elements */
+        .ar-interface {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Evacuation Routes */
+        .evacuation-route {
+            position: absolute;
+            height: 4px;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+            animation: pulse-route 2s infinite;
+            border-radius: 2px;
+        }
+
+        .route-1 {
+            top: 30%;
+            left: 15%;
+            width: 70%;
+            transform: rotate(-5deg);
+        }
+
+        .route-2 {
+            top: 60%;
+            left: 10%;
+            width: 60%;
+            transform: rotate(3deg);
+        }
+
+        @keyframes pulse-route {
+            0%, 100% { opacity: 0.7; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.5); }
+        }
+
+        /* Safe Zones */
+        .safe-zone {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(76, 175, 80, 0.3), rgba(76, 175, 80, 0.1));
+            border: 3px solid var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-safe 3s infinite;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .safe-zone i {
+            color: var(--success);
+            font-size: 1.5rem;
+        }
+
+        @keyframes pulse-safe {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
+            50% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(76, 175, 80, 0); }
+        }
+
+        .zone-1 {
+            top: 10%;
+            right: 15%;
+        }
+
+        .zone-2 {
+            bottom: 15%;
+            left: 20%;
+        }
+
+        .zone-3 {
+            top: 40%;
+            right: 25%;
+        }
+
+        /* AR Markers */
+        .ar-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: rgba(26, 115, 232, 0.9);
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            animation: float 2s ease-in-out infinite;
+            pointer-events: auto;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(26, 115, 232, 0.4);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .marker-1 {
+            top: 25%;
+            left: 25%;
+        }
+
+        .marker-2 {
+            top: 50%;
+            left: 60%;
+        }
+
+        .marker-3 {
+            bottom: 30%;
+            right: 30%;
+        }
+
+        /* People Icons */
+        .person-icon {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--warning);
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            animation: blink 1.5s infinite;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.6; }
+        }
+
+        .person-1 { top: 35%; left: 30%; }
+        .person-2 { top: 45%; left: 70%; }
+        .person-3 { bottom: 40%; left: 40%; }
+        .person-4 { top: 55%; right: 40%; }
+
+        /* AR HUD */
+        .ar-hud {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hud-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hud-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .hud-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* AR Instructions */
+        .ar-instructions {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            max-width: 300px;
+            animation: slideDown 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .instruction-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #64b5f6;
+        }
+
+        .instruction-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        /* AR Interaction Effects */
+        .interaction-ripple {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 1s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* AR Distance Indicator */
+        .distance-indicator {
+            position: absolute;
+            background: rgba(26, 115, 232, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        /* Scenario Alert */
+        .scenario-alert {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(244, 67, 54, 0.95);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            animation: alertPulse 2s infinite;
+            z-index: 100;
+            border: 2px solid white;
+            box-shadow: 0 8px 32px rgba(244, 67, 54, 0.6);
+        }
+
+        @keyframes alertPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        /* AR Success Animation */
+        .success-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(76, 175, 80, 0.95);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            animation: successBounce 1s ease-out;
+            z-index: 100;
+            border: 3px solid white;
+            box-shadow: 0 8px 32px rgba(76, 175, 80, 0.6);
+            display: none;
+        }
+
+        @keyframes successBounce {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            60% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .ar-header {
+                padding: 10px 15px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .ar-title {
+                font-size: 1rem;
+            }
+
+            .campus-environment {
+                width: 95%;
+                height: 85%;
+            }
+
+            .ar-instructions {
+                position: static;
+                margin: 10px;
+                max-width: none;
+            }
+
+            .ar-hud {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                padding: 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .hud-section {
+                flex: 1;
+                min-width: 80px;
+            }
+
+            .safe-zone {
+                width: 50px;
+                height: 50px;
+            }
+
+            .ar-marker {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .ar-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #64b5f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .loading-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #64b5f6, #42a5f5);
+            width: 0%;
+            animation: loadProgress 3s ease-out forwards;
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="ar-loading" id="arLoading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Initializing AR Environment</div>
+        <div class="loading-progress">
+            <div class="loading-bar"></div>
+        </div>
+        <p style="margin-top: 15px; opacity: 0.7; font-size: 0.9rem;">Setting up campus mapping and evacuation routes...</p>
+    </div>
+
+    <!-- AR Header -->
+    <header class="ar-header">
+        <div class="ar-title">
+            <i class="fas fa-eye"></i>
+            <span>AR Campus Evacuation Simulator</span>
+        </div>
+        <div class="ar-controls">
+            <button class="ar-btn" onclick="resetSimulation()">
+                <i class="fas fa-redo"></i> Reset
+            </button>
+            <button class="ar-btn" onclick="pauseSimulation()">
+                <i class="fas fa-pause"></i> Pause
+            </button>
+            <button class="ar-btn" onclick="toggleInstructions()">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="ar-btn exit" onclick="exitARMode()">
+                <i class="fas fa-times"></i> Exit AR
+            </button>
+        </div>
+    </header>
+
+    <!-- AR Sandbox -->
+    <div class="ar-sandbox">
+        <!-- Campus Environment -->
+        <div class="campus-environment">
+            <div class="campus-map">
+                <!-- AR Interface Overlay -->
+                <div class="ar-interface">
+                    <!-- Evacuation Routes -->
+                    <div class="evacuation-route route-1"></div>
+                    <div class="evacuation-route route-2"></div>
+
+                    <!-- Safe Zones -->
+                    <div class="safe-zone zone-1" onclick="interactWithSafeZone(1)">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="distance-indicator">45m</div>
+                    </div>
+                    <div class="safe-zone zone-2" onclick="interactWithSafeZone(2)">
+                        <i class="fas fa-home"></i>
+                        <div class="distance-indicator">120m</div>
+                    </div>
+                    <div class="safe-zone zone-3" onclick="interactWithSafeZone(3)">
+                        <i class="fas fa-hospital"></i>
+                        <div class="distance-indicator">85m</div>
+                    </div>
+
+                    <!-- AR Markers -->
+                    <div class="ar-marker marker-1" onclick="interactWithMarker(1)">
+                        <i class="fas fa-exclamation"></i>
+                    </div>
+                    <div class="ar-marker marker-2" onclick="interactWithMarker(2)">
+                        <i class="fas fa-info"></i>
+                    </div>
+                    <div class="ar-marker marker-3" onclick="interactWithMarker(3)">
+                        <i class="fas fa-map-signs"></i>
+                    </div>
+
+                    <!-- People to Evacuate -->
+                    <div class="person-icon person-1" onclick="evacuatePerson(1)">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="person-icon person-2" onclick="evacuatePerson(2)">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="person-icon person-3" onclick="evacuatePerson(3)">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="person-icon person-4" onclick="evacuatePerson(4)">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+                <!-- Scenario Alert -->
+                <div class="scenario-alert" id="scenarioAlert">
+                    <i class="fas fa-fire" style="margin-right: 10px; font-size: 1.3rem;"></i>
+                    FIRE EMERGENCY: Evacuate Building Immediately!
+                </div>
+
+                <!-- Success Animation -->
+                <div class="success-animation" id="successAnimation">
+                    <i class="fas fa-check-circle" style="margin-right: 10px; font-size: 1.5rem;"></i>
+                    Evacuation Complete! All Personnel Safe!
+                </div>
+            </div>
+
+            <!-- AR HUD -->
+            <div class="ar-hud">
+                <div class="hud-section">
+                    <div class="hud-value" id="peopleEvacuated">0</div>
+                    <div class="hud-label">People Evacuated</div>
+                </div>
+                <div class="hud-section">
+                    <div class="hud-value" id="timeElapsed">00:00</div>
+                    <div class="hud-label">Time Elapsed</div>
+                </div>
+                <div class="hud-section">
+                    <div class="hud-value" id="safeZonesFound">0/3</div>
+                    <div class="hud-label">Safe Zones Found</div>
+                </div>
+                <div class="hud-section">
+                    <div class="hud-value" id="efficiency">0%</div>
+                    <div class="hud-label">Efficiency</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AR Instructions -->
+        <div class="ar-instructions" id="arInstructions">
+            <div class="instruction-title">AR Navigation Guide</div>
+            <div class="instruction-text">
+                • Tap <span style="color: #64b5f6;">blue markers</span> for evacuation info<br>
+                • Guide <span style="color: #f9a825;">yellow people</span> to <span style="color: #4caf50;">green safe zones</span><br>
+                • Follow the <span style="color: #4caf50;">green evacuation routes</span><br>
+                • Complete evacuation within time limit
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // AR Simulation State
+        let simulationActive = false;
+        let startTime = null;
+        let timer = null;
+        let peopleEvacuated = 0;
+        let safeZonesDiscovered = 0;
+        let totalPeople = 4;
+        let evacuatedPeople = new Set();
+        let discoveredZones = new Set();
+
+        // Initialize AR Mode
+        function initializeAR() {
+            // Hide loading screen after 3 seconds
+            setTimeout(() => {
+                document.getElementById('arLoading').style.display = 'none';
+                startSimulation();
+            }, 3000);
+        }
+
+        // Start Simulation
+        function startSimulation() {
+            simulationActive = true;
+            startTime = Date.now();
+            
+            // Start timer
+            timer = setInterval(updateTimer, 1000);
+            
+            // Hide scenario alert after 5 seconds
+            setTimeout(() => {
+                const alert = document.getElementById('scenarioAlert');
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.style.display = 'none', 500);
+            }, 5000);
+            
+            // Hide instructions after 10 seconds
+            setTimeout(() => {
+                const instructions = document.getElementById('arInstructions');
+                instructions.style.transition = 'opacity 0.5s ease';
+                instructions.style.opacity = '0';
+                setTimeout(() => instructions.style.display = 'none', 500);
+            }, 10000);
+        }
+
+        // Update Timer
+        function updateTimer() {
+            if (!simulationActive || !startTime) return;
+            
+            const elapsed = Date.now() - startTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            document.getElementById('timeElapsed').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            updateEfficiency();
+        }
+
+        // Update Efficiency
+        function updateEfficiency() {
+            const timeElapsed = (Date.now() - startTime) / 1000;
+            const maxTime = 300; // 5 minutes
+            const timeScore = Math.max(0, (maxTime - timeElapsed) / maxTime);
+            const evacuationScore = peopleEvacuated / totalPeople;
+            const zoneScore = safeZonesDiscovered / 3;
+            
+            const efficiency = Math.round((timeScore * 0.4 + evacuationScore * 0.4 + zoneScore * 0.2) * 100);
+            document.getElementById('efficiency').textContent = `${Math.max(0, efficiency)}%`;
+        }
+
+        // Interact with Safe Zone
+        function interactWithSafeZone(zoneId) {
+            if (!simulationActive) return;
+            
+            createRippleEffect(event);
+            
+            if (!discoveredZones.has(zoneId)) {
+                discoveredZones.add(zoneId);
+                safeZonesDiscovered++;
+                document.getElementById('safeZonesFound').textContent = `${safeZonesDiscovered}/3`;
+                
+                // Show feedback
+                showARFeedback(`Safe Zone ${zoneId} Discovered!`, 'success');
+                
+                // Check completion
+                checkCompletion();
+            } else {
+                showARFeedback(`Safe Zone ${zoneId} already discovered`, 'info');
+            }
+        }
+
+        // Interact with AR Marker
+        function interactWithMarker(markerId) {
+            if (!simulationActive) return;
+            
+            createRippleEffect(event);
+            
+            const markerInfo = {
+                1: "Emergency Exit: 25m straight ahead. Capacity: 50 people",
+                2: "Assembly Point: Turn right and proceed 100m to open courtyard",
+                3: "Alternative Route: Stairs blocked, use elevator or west exit"
+            };
+            
+            showARFeedback(markerInfo[markerId], 'info');
+        }
+
+        // Evacuate Person
+        function evacuatePerson(personId) {
+            if (!simulationActive) return;
+            
+            createRippleEffect(event);
+            
+            if (!evacuatedPeople.has(personId)) {
+                evacuatedPeople.add(personId);
+                peopleEvacuated++;
+                document.getElementById('peopleEvacuated').textContent = peopleEvacuated;
+                
+                // Hide the person
+                const personElement = document.querySelector(`.person-${personId}`);
+                personElement.style.transition = 'all 0.5s ease';
+                personElement.style.transform = 'scale(0)';
+                personElement.style.opacity = '0';
+                
+                setTimeout(() => {
+                    personElement.style.display = 'none';
+                }, 500);
+                
+                showARFeedback(`Person ${personId} evacuated safely!`, 'success');
+                
+                // Check completion
+                checkCompletion();
+            }
+        }
+
+        // Create Ripple Effect
+        function createRippleEffect(event) {
+            const ripple = document.createElement('div');
+            ripple.className = 'interaction-ripple';
+            
+            const rect = event.target.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+            
+            event.target.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        }
+
+        // Show AR Feedback
+        function showARFeedback(message, type) {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${type === 'success' ? 'rgba(76, 175, 80, 0.9)' : 
+                            type === 'warning' ? 'rgba(255, 152, 0, 0.9)' : 
+                            'rgba(33, 150, 243, 0.9)'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 25px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                max-width: 300px;
+                text-align: center;
+            `;
+            
+            feedback.textContent = message;
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => feedback.remove(), 300);
+            }, 3000);
+        }
+
+        // Check Completion
+        function checkCompletion() {
+            if (peopleEvacuated === totalPeople && safeZonesDiscovered === 3) {
+                completeSimulation();
+            }
+        }
+
+        // Complete Simulation
+        function completeSimulation() {
+            simulationActive = false;
+            clearInterval(timer);
+            
+            // Show success animation
+            const successAnim = document.getElementById('successAnimation');
+            successAnim.style.display = 'block';
+            
+            // Calculate final score
+            const timeElapsed = (Date.now() - startTime) / 1000;
+            const finalEfficiency = document.getElementById('efficiency').textContent;
+            
+            setTimeout(() => {
+                alert(`🎉 MISSION ACCOMPLISHED! 🎉
+
+✅ All ${totalPeople} people evacuated safely
+✅ All 3 safe zones discovered
+⏱️ Time: ${document.getElementById('timeElapsed').textContent}
+📊 Efficiency: ${finalEfficiency}
+
+Excellent work! You've successfully completed the AR Campus Evacuation Simulation.
+
+Your performance will be saved to your profile.`);
+                
+                // Ask if user wants to try again or return
+                if (confirm('Would you like to try again with a different scenario?')) {
+                    resetSimulation();
+                } else {
+                    exitARMode();
+                }
+            }, 2000);
+        }
+
+        // Reset Simulation
+        function resetSimulation() {
+            simulationActive = false;
+            if (timer) clearInterval(timer);
+            
+            // Reset counters
+            peopleEvacuated = 0;
+            safeZonesDiscovered = 0;
+            evacuatedPeople.clear();
+            discoveredZones.clear();
+            
+            // Reset UI
+            document.getElementById('peopleEvacuated').textContent = '0';
+            document.getElementById('timeElapsed').textContent = '00:00';
+            document.getElementById('safeZonesFound').textContent = '0/3';
+            document.getElementById('efficiency').textContent = '0%';
+            
+            // Show all people again
+            document.querySelectorAll('.person-icon').forEach(person => {
+                person.style.display = 'flex';
+                person.style.transform = 'scale(1)';
+                person.style.opacity = '1';
+                person.style.transition = 'none';
+            });
+            
+            // Hide success animation
+            document.getElementById('successAnimation').style.display = 'none';
+            
+            // Show scenario alert again
+            const alert = document.getElementById('scenarioAlert');
+            alert.style.display = 'block';
+            alert.style.opacity = '1';
+            alert.style.transition = 'none';
+            
+            // Show instructions again
+            const instructions = document.getElementById('arInstructions');
+            instructions.style.display = 'block';
+            instructions.style.opacity = '1';
+            instructions.style.transition = 'none';
+            
+            // Restart simulation
+            setTimeout(() => {
+                startSimulation();
+            }, 1000);
+        }
+
+        // Pause Simulation
+        function pauseSimulation() {
+            if (simulationActive) {
+                simulationActive = false;
+                clearInterval(timer);
+                showARFeedback('Simulation Paused', 'info');
+                
+                // Change pause button to resume
+                const pauseBtn = document.querySelector('[onclick="pauseSimulation()"]');
+                pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+                pauseBtn.setAttribute('onclick', 'resumeSimulation()');
+            }
+        }
+
+        // Resume Simulation
+        function resumeSimulation() {
+            simulationActive = true;
+            timer = setInterval(updateTimer, 1000);
+            showARFeedback('Simulation Resumed', 'success');
+            
+            // Change resume button back to pause
+            const resumeBtn = document.querySelector('[onclick="resumeSimulation()"]');
+            resumeBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+            resumeBtn.setAttribute('onclick', 'pauseSimulation()');
+        }
+
+        // Toggle Instructions
+        function toggleInstructions() {
+            const instructions = document.getElementById('arInstructions');
+            if (instructions.style.display === 'none') {
+                instructions.style.display = 'block';
+                instructions.style.opacity = '1';
+            } else {
+                instructions.style.opacity = '0';
+                setTimeout(() => instructions.style.display = 'none', 500);
+            }
+        }
+
+        // Exit AR Mode
+        function exitARMode() {
+            if (confirm('Are you sure you want to exit AR mode? Your progress will be saved.')) {
+                // Stop simulation
+                simulationActive = false;
+                if (timer) clearInterval(timer);
+                
+                // Navigate back to sandbox simulator
+                window.location.href = 'sandbox-simulator.html';
+            }
+        }
+
+        // Add CSS animations
+        const additionalCSS = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = additionalCSS;
+        document.head.appendChild(style);
+
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', initializeAR);
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && simulationActive) {
+                pauseSimulation();
+            }
+        });
+
+        // Prevent accidental navigation
+        window.addEventListener('beforeunload', function(e) {
+            if (simulationActive) {
+                e.preventDefault();
+                e.returnValue = 'You have an active AR simulation. Are you sure you want to leave?';
+                return e.returnValue;
+            }
+        });
+    </script>
+</body>
+</html>

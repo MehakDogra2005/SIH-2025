@@ -4,37 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wildfire Watch 🔥</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
-            color: #2c3e50;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Top Navigation Bar */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-score {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
         }
         
         .container {
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .info-panel {
             flex: 1;
             padding: 30px;
-            border-right: 2px solid #ff5722;
-            background: #fef5e7;
+            border-right: 2px solid var(--primary);
+            background: linear-gradient(180deg, #fff, #fbfdff);
         }
         
         .game-area {
@@ -45,7 +135,7 @@
             align-items: center;
             justify-content: center;
             min-height: 700px;
-            background: #fff8e1;
+            background: var(--card-bg);
         }
         
         .header {
@@ -55,17 +145,19 @@
         }
         
         h1 {
-            color: #ff5722;
+            color: var(--primary);
             margin-left: 15px;
             font-size: 32px;
+            font-weight: 700;
         }
         
         h2 {
-            color: #e65100;
+            color: var(--primary-dark);
             margin: 20px 0 15px;
-            border-bottom: 2px solid #ff5722;
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 8px;
             font-size: 22px;
+            font-weight: 600;
         }
         
         .rules-list, .points-list {
@@ -79,48 +171,51 @@
         }
         
         .score-board {
-            background: #ffebee;
+            background: linear-gradient(180deg, rgba(26, 115, 232, 0.05), rgba(48, 154, 212, 0.08));
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-top: 25px;
-            border: 2px solid #ff5722;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.1);
         }
         
         .current-score {
             font-size: 24px;
             text-align: center;
             margin: 15px 0;
-            color: #2c3e50;
+            color: var(--text-dark);
+            font-weight: 600;
         }
         
         .max-score {
             font-size: 22px;
             text-align: center;
-            color: #d32f2f;
-            font-weight: bold;
+            color: var(--primary);
+            font-weight: 700;
         }
         
         .game-container {
             width: 100%;
             max-width: 700px;
-            background: white;
+            background: var(--card-bg);
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 2px solid #ff5722;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary);
         }
         
         .game-title {
             text-align: center;
             margin-bottom: 20px;
-            color: #ff5722;
+            color: var(--primary);
             font-size: 28px;
+            font-weight: 700;
         }
         
         .game-description {
             text-align: center;
             margin-bottom: 20px;
-            color: #7f8c8d;
+            color: #6c757d;
             font-style: italic;
         }
         
@@ -128,21 +223,24 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
-            padding: 10px 15px;
-            background: #ffebee;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--p6), rgba(200, 229, 243, 0.5));
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
+            border: 1px solid rgba(26, 115, 232, 0.2);
         }
         
         .map-container {
             width: 100%;
             height: 300px;
-            background: #f5f5f5;
-            border-radius: 8px;
+            background: #f8f9fa;
+            border-radius: 10px;
             margin-bottom: 20px;
-            border: 1px solid #ff5722;
+            border: 2px solid var(--primary);
             position: relative;
             overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         
         .terrain {
@@ -154,68 +252,110 @@
             color: white;
             font-size: 12px;
             cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .terrain:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
         .forest {
-            background: #4caf50;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
         }
         
         .grassland {
-            background: #cddc39;
+            background: linear-gradient(135deg, #cddc39, #9e9d24);
         }
         
         .mountain {
-            background: #795548;
+            background: linear-gradient(135deg, #795548, #5d4037);
         }
         
         .water {
-            background: #2196f3;
+            background: linear-gradient(135deg, #2196f3, #1565c0);
         }
         
         .fire {
             position: absolute;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23ff5722" d="M50 10C30 30 20 50 20 70a30 30 0 0060 0C80 50 70 30 50 10z"/></svg>');
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23f25c54" d="M50 10C30 30 20 50 20 70a30 30 0 0060 0C80 50 70 30 50 10z"/></svg>');
             background-size: cover;
             width: 20px;
             height: 20px;
             animation: flicker 0.5s infinite alternate;
+            filter: drop-shadow(0 2px 4px rgba(242, 92, 84, 0.3));
         }
         
         @keyframes flicker {
             0% { opacity: 0.7; transform: scale(1); }
             100% { opacity: 1; transform: scale(1.1); }
         }
+
+        @keyframes highlightSuccess {
+            0% { background: rgba(52, 168, 83, 0.1); }
+            50% { background: rgba(52, 168, 83, 0.3); }
+            100% { background: rgba(52, 168, 83, 0.1); }
+        }
+
+        @keyframes highlightCost {
+            0% { background: rgba(242, 92, 84, 0.1); }
+            50% { background: rgba(242, 92, 84, 0.3); }
+            100% { background: rgba(242, 92, 84, 0.1); }
+        }
+
+        .highlight-success {
+            animation: highlightSuccess 0.6s ease;
+        }
+
+        .highlight-cost {
+            animation: highlightCost 0.6s ease;
+        }
         
         .firefighter {
             position: absolute;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%233496DB"/><path fill="white" d="M30 40h40v20H30z"/></svg>');
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23309ad4"/><path fill="white" d="M30 40h40v20H30z"/></svg>');
             background-size: cover;
             width: 24px;
             height: 24px;
             z-index: 10;
             transition: all 0.5s ease;
+            filter: drop-shadow(0 2px 4px rgba(48, 154, 212, 0.3));
         }
         
         .resources-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 20px;
         }
         
         .resource {
-            background: #ffebee;
-            padding: 10px;
-            border-radius: 8px;
+            background: linear-gradient(180deg, #fff, #fbfdff);
+            padding: 15px;
+            border-radius: 12px;
             text-align: center;
-            border: 1px solid #ff5722;
+            border: 2px solid var(--p1);
+            box-shadow: 0 4px 12px rgba(48, 154, 212, 0.1);
+            transition: var(--transition);
+        }
+
+        .resource:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(48, 154, 212, 0.15);
+        }
+        
+        .resource h3 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 600;
         }
         
         .resource-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #d32f2f;
-            margin: 5px 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 8px 0;
         }
         
         .controls {
@@ -227,23 +367,24 @@
         }
         
         button {
-            padding: 10px 20px;
-            background: #ff5722;
+            padding: 12px 20px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: var(--transition);
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            font-size: 0.9rem;
         }
         
         button:hover {
-            background: #e64a19;
             transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 18px rgba(26, 115, 232, 0.3);
         }
         
         button:disabled {
@@ -254,78 +395,92 @@
         }
         
         .action-btn {
-            background: #4caf50;
+            background: linear-gradient(90deg, var(--secondary), #2e7d32);
         }
         
         .action-btn:hover {
-            background: #388e3c;
+            box-shadow: 0 6px 18px rgba(52, 168, 83, 0.3);
         }
         
         .weather-container {
             display: flex;
             justify-content: space-between;
             margin-bottom: 15px;
-            padding: 10px;
-            background: #e3f2fd;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--p7), rgba(250, 232, 199, 0.5));
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
+            border: 1px solid rgba(230, 156, 66, 0.3);
         }
         
         .progress-bar {
-            height: 10px;
+            height: 12px;
             background: #e0e0e0;
-            border-radius: 5px;
+            border-radius: 6px;
             margin: 15px 0;
             overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
         }
         
         .progress {
             height: 100%;
-            background: #4caf50;
-            border-radius: 5px;
+            background: linear-gradient(90deg, var(--secondary), #2e7d32);
+            border-radius: 6px;
             width: 0%;
-            transition: width 0.5s;
+            transition: width 0.5s ease;
+            box-shadow: 0 1px 3px rgba(52, 168, 83, 0.3);
         }
         
         .results {
             margin-top: 20px;
-            padding: 15px;
-            background: #e8f4fc;
-            border-radius: 8px;
-            border-left: 4px solid #ff5722;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.05), rgba(200, 229, 243, 0.1));
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
             display: none;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.1);
         }
         
         .results h3 {
-            color: #ff5722;
+            color: var(--primary);
             margin-bottom: 10px;
+            font-weight: 700;
         }
         
         .results p {
             margin: 8px 0;
-            line-height: 1.5;
+            line-height: 1.6;
+            color: var(--text-dark);
         }
         
         .command-center {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
         }
         
         .command-btn {
-            padding: 12px;
-            background: #ffccbc;
-            border: 1px solid #ff5722;
-            border-radius: 6px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(48, 154, 212, 0.05), rgba(200, 229, 243, 0.1));
+            border: 2px solid var(--p1);
+            border-radius: 10px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.3s;
+            transition: var(--transition);
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .command-btn:hover {
-            background: #ffab91;
+            background: linear-gradient(135deg, rgba(48, 154, 212, 0.1), rgba(200, 229, 243, 0.2));
             transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(48, 154, 212, 0.15);
         }
         
         @media (max-width: 1024px) {
@@ -335,7 +490,7 @@
             
             .info-panel {
                 border-right: none;
-                border-bottom: 2px solid #ff5722;
+                border-bottom: 2px solid var(--primary);
             }
             
             .resources-container {
@@ -345,14 +500,63 @@
             .command-center {
                 grid-template-columns: 1fr;
             }
+
+            .nav-left, .nav-right {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .top-nav {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                margin: 0;
+            }
+
+            .nav-title {
+                font-size: 1.2rem;
+            }
+
+            .back-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="../gamified-learning.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Gamified Learning</span>
+            </a>
+            <div class="nav-title">
+                <i class="fas fa-fire"></i>
+                <span>Wildfire Watch</span>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="nav-score">
+                <i class="fas fa-trophy"></i>
+                Score: <span id="nav-current-score">0</span>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="info-panel">
             <div class="header">
-                <i class="fas fa-fire fa-3x" style="color: #ff5722;"></i>
+                <i class="fas fa-fire fa-3x" style="color: var(--accent);"></i>
                 <h1>Wildfire Watch 🔥</h1>
             </div>
             
@@ -367,11 +571,21 @@
             
             <h2>Important Points</h2>
             <ul class="points-list">
-                <li>Different terrain types burn at different rates</li>
-                <li>Weather conditions greatly affect fire spread</li>
-                <li>Resources are limited - use them wisely</li>
-                <li>Create firebreaks to contain the spread</li>
-                <li>Evacuate areas when necessary for safety</li>
+                <li>💧 Different terrain types burn at different rates</li>
+                <li>🌪️ Weather conditions greatly affect fire spread</li>
+                <li>💰 Resources are limited - use them wisely</li>
+                <li>🛡️ Create firebreaks to contain the spread</li>
+                <li>🚁 Evacuate areas when necessary for safety</li>
+                <li>⏰ Time is critical - act quickly but strategically</li>
+            </ul>
+
+            <h2>Pro Tips</h2>
+            <ul class="points-list">
+                <li>🎯 Click on terrain to start fires manually</li>
+                <li>📊 Monitor weather changes closely</li>
+                <li>🔥 Forest fires spread faster than grassland</li>
+                <li>💡 Use water drops for quick containment</li>
+                <li>👥 Deploy teams early in fire development</li>
             </ul>
             
             <div class="score-board">
@@ -458,6 +672,12 @@
                     <button class="action-btn" onclick="startGame()">
                         <i class="fas fa-play"></i> Start Game
                     </button>
+                    <button onclick="pauseGame()" id="pauseBtn" style="display: none;">
+                        <i class="fas fa-pause"></i> Pause Game
+                    </button>
+                    <button onclick="resetGame()" style="background: linear-gradient(90deg, var(--accent), #d32f2f);">
+                        <i class="fas fa-redo"></i> Reset Game
+                    </button>
                 </div>
             </div>
         </div>
@@ -476,7 +696,9 @@
             containment: 0,
             fireIntensity: 2, // 1-5 scale
             gameActive: false,
+            gamePaused: false,
             timeElapsed: 0,
+            fireTimer: null,
             weather: {
                 windSpeed: 10,
                 windDirection: 'NE',
@@ -585,6 +807,13 @@
             // Clear existing fires
             document.querySelectorAll('.fire').forEach(fire => fire.remove());
             
+            // Reset terrain
+            gameData.terrain.forEach(terrain => {
+                terrain.burned = false;
+                terrain.element.style.backgroundColor = '';
+                terrain.element.style.opacity = '1';
+            });
+            
             // Start with one fire
             startFire(100, 100, 'forest');
             
@@ -592,9 +821,16 @@
             updateUI();
             document.getElementById('results').style.display = 'none';
             
+            // Show pause button, hide start button
+            document.querySelector('button[onclick="startGame()"]').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'inline-flex';
+            
+            // Show success message
+            showResult('Game Started', 'Wildfire Watch has begun! Click on terrain to start fires and manage your resources wisely.');
+            
             // Start random fire events
-            const fireTimer = setInterval(function() {
-                if (gameData.gameActive) {
+            gameData.fireTimer = setInterval(function() {
+                if (gameData.gameActive && !gameData.gamePaused) {
                     // Random chance of new fire starting
                     if (Math.random() < 0.2) {
                         const randomTerrain = gameData.terrain[Math.floor(Math.random() * gameData.terrain.length)];
@@ -612,10 +848,80 @@
                     if (Math.random() < 0.3) {
                         changeWeather();
                     }
-                } else {
-                    clearInterval(fireTimer);
+                } else if (!gameData.gameActive) {
+                    clearInterval(gameData.fireTimer);
                 }
             }, 5000);
+        }
+
+        // Pause the game
+        function pauseGame() {
+            gameData.gamePaused = !gameData.gamePaused;
+            const pauseBtn = document.getElementById('pauseBtn');
+            
+            if (gameData.gamePaused) {
+                pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume Game';
+                showResult('Game Paused', 'The game has been paused. Click Resume to continue.');
+            } else {
+                pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Game';
+                showResult('Game Resumed', 'The game has been resumed. Continue managing the wildfire!');
+            }
+        }
+
+        // Reset the game
+        function resetGame() {
+            if (confirm('Are you sure you want to reset the game? All progress will be lost.')) {
+                gameData.gameActive = false;
+                gameData.gamePaused = false;
+                
+                // Clear timers
+                if (gameData.fireTimer) {
+                    clearInterval(gameData.fireTimer);
+                }
+                
+                // Reset UI buttons
+                document.querySelector('button[onclick="startGame()"]').style.display = 'inline-flex';
+                document.getElementById('pauseBtn').style.display = 'none';
+                
+                // Clear fires and reset terrain
+                document.querySelectorAll('.fire').forEach(fire => fire.remove());
+                gameData.fires = [];
+                
+                gameData.terrain.forEach(terrain => {
+                    terrain.burned = false;
+                    terrain.element.style.backgroundColor = '';
+                    terrain.element.style.opacity = '1';
+                });
+                
+                // Reset game data
+                gameData.currentScore = 0;
+                gameData.money = 5000;
+                gameData.firefighters = 5;
+                gameData.waterUnits = 3;
+                gameData.airSupport = 1;
+                gameData.teamsAvailable = 3;
+                gameData.containment = 0;
+                gameData.fireIntensity = 2;
+                gameData.timeElapsed = 0;
+                
+                // Reset weather
+                gameData.weather = {
+                    windSpeed: 10,
+                    windDirection: 'NE',
+                    humidity: 35
+                };
+                
+                // Update UI
+                updateUI();
+                updateFireIntensity();
+                document.getElementById('wind-speed').textContent = gameData.weather.windSpeed;
+                document.getElementById('wind-direction').textContent = gameData.weather.windDirection;
+                document.getElementById('humidity').textContent = gameData.weather.humidity;
+                
+                document.getElementById('results').style.display = 'none';
+                
+                showResult('Game Reset', 'The game has been reset. Click Start Game to begin a new session.');
+            }
         }
 
         // Spread existing fires
@@ -715,46 +1021,85 @@
 
         // Hire more firefighters
         function hireFirefighters() {
-            if (!gameData.gameActive) return;
+            if (!gameData.gameActive) {
+                showResult('Game Not Started', 'Please start the game first!');
+                return;
+            }
             
             if (gameData.money >= 500) {
                 gameData.money -= 500;
                 gameData.firefighters += 1;
                 gameData.currentScore += 10;
+                
+                // Visual feedback
+                const firefightersEl = document.querySelector('.resource:nth-child(1)');
+                firefightersEl.classList.add('highlight-success');
+                setTimeout(() => firefightersEl.classList.remove('highlight-success'), 600);
+                
                 updateUI();
-                showResult('Recruitment', 'Hired additional firefighters');
+                showResult('Recruitment Successful', 'Hired additional firefighters (+1)');
             } else {
-                showResult('Budget Issue', 'Not enough funds to hire firefighters');
+                const firefightersEl = document.querySelector('.resource:nth-child(1)');
+                firefightersEl.classList.add('highlight-cost');
+                setTimeout(() => firefightersEl.classList.remove('highlight-cost'), 600);
+                
+                showResult('Insufficient Funds', 'Not enough funds to hire firefighters (Need $500)');
             }
         }
 
         // Buy water units
         function buyWaterUnits() {
-            if (!gameData.gameActive) return;
+            if (!gameData.gameActive) {
+                showResult('Game Not Started', 'Please start the game first!');
+                return;
+            }
             
             if (gameData.money >= 300) {
                 gameData.money -= 300;
                 gameData.waterUnits += 1;
                 gameData.currentScore += 5;
+                
+                // Visual feedback
+                const waterEl = document.querySelector('.resource:nth-child(2)');
+                waterEl.classList.add('highlight-success');
+                setTimeout(() => waterEl.classList.remove('highlight-success'), 600);
+                
                 updateUI();
-                showResult('Resources', 'Added water unit');
+                showResult('Resource Added', 'Added water unit (+1)');
             } else {
-                showResult('Budget Issue', 'Not enough funds for water units');
+                const waterEl = document.querySelector('.resource:nth-child(2)');
+                waterEl.classList.add('highlight-cost');
+                setTimeout(() => waterEl.classList.remove('highlight-cost'), 600);
+                
+                showResult('Insufficient Funds', 'Not enough funds for water units (Need $300)');
             }
         }
 
         // Add air support
         function addAirSupport() {
-            if (!gameData.gameActive) return;
+            if (!gameData.gameActive) {
+                showResult('Game Not Started', 'Please start the game first!');
+                return;
+            }
             
             if (gameData.money >= 1000) {
                 gameData.money -= 1000;
                 gameData.airSupport += 1;
                 gameData.currentScore += 20;
+                
+                // Visual feedback
+                const airEl = document.querySelector('.resource:nth-child(3)');
+                airEl.classList.add('highlight-success');
+                setTimeout(() => airEl.classList.remove('highlight-success'), 600);
+                
                 updateUI();
-                showResult('Air Support', 'Added aerial firefighting capability');
+                showResult('Air Support Added', 'Added aerial firefighting capability (+1)');
             } else {
-                showResult('Budget Issue', 'Not enough funds for air support');
+                const airEl = document.querySelector('.resource:nth-child(3)');
+                airEl.classList.add('highlight-cost');
+                setTimeout(() => airEl.classList.remove('highlight-cost'), 600);
+                
+                showResult('Insufficient Funds', 'Not enough funds for air support (Need $1000)');
             }
         }
 
@@ -894,21 +1239,37 @@
             updateUI();
         }
 
-        // Show result message
+        // Show result message with better styling
         function showResult(title, message) {
             document.getElementById('result-title').textContent = title;
             document.getElementById('result-message').textContent = message;
-            document.getElementById('results').style.display = 'block';
+            const resultsEl = document.getElementById('results');
+            resultsEl.style.display = 'block';
             
-            // Hide after 3 seconds
+            // Add animation
+            resultsEl.style.opacity = '0';
+            resultsEl.style.transform = 'translateY(-10px)';
             setTimeout(() => {
-                document.getElementById('results').style.display = 'none';
-            }, 3000);
+                resultsEl.style.transition = 'all 0.3s ease';
+                resultsEl.style.opacity = '1';
+                resultsEl.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Hide after 4 seconds
+            setTimeout(() => {
+                resultsEl.style.opacity = '0';
+                resultsEl.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    resultsEl.style.display = 'none';
+                    resultsEl.style.transition = '';
+                }, 300);
+            }, 4000);
         }
 
         // Update UI elements
         function updateUI() {
             document.getElementById('current-score').textContent = gameData.currentScore;
+            document.getElementById('nav-current-score').textContent = gameData.currentScore; // Update nav score
             document.getElementById('money').textContent = gameData.money;
             document.getElementById('firefighters-value').textContent = gameData.firefighters;
             document.getElementById('water-units-value').textContent = gameData.waterUnits;

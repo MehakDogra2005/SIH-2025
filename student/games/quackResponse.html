@@ -4,80 +4,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quake Response 🏗️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Ubuntu", sans-serif;
         }
         
         body {
-            background: linear-gradient(to bottom, #2c3e50, #1a2530);
-            color: #ecf0f1;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
-            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Navigation Header */
+        .nav-header {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px 20px;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 24px;
+            color: var(--p6);
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .game-title-nav {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
         }
         
         .container {
             max-width: 900px;
             width: 100%;
-            background: rgba(44, 62, 80, 0.9);
+            background: var(--card-bg);
             border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            margin-top: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin: 20px auto;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #e74c3c;
+            border-bottom: 2px solid var(--primary);
         }
         
         h1 {
             font-size: 2.5rem;
-            color: #e74c3c;
+            color: var(--primary);
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+        }
+
+        header p {
+            color: #6c757d;
+            font-size: 1.1rem;
         }
         
         .status-bar {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
-            background: #34495e;
-            padding: 10px;
-            border-radius: 8px;
+            margin-bottom: 25px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.3));
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
         }
         
         .status-item {
             text-align: center;
             flex: 1;
-            padding: 10px;
-            margin: 0 5px;
-            background: #2c3e50;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 0 8px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .status-item:hover {
+            transform: translateY(-2px);
         }
         
         .status-value {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #3498db;
+            color: var(--primary-dark);
+            margin: 5px 0;
+        }
+
+        .status-item div:first-child {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
         }
         
         .scene {
-            background: #34495e;
-            height: 200px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.2));
+            height: 220px;
+            border-radius: 12px;
+            margin-bottom: 25px;
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary);
         }
         
         .building {
@@ -85,36 +196,39 @@
             bottom: 0;
             width: 100%;
             height: 80%;
-            background: #7f8c8d;
+            background: linear-gradient(to bottom, #95a5a6, #7f8c8d);
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.2);
         }
         
         .crack {
             position: absolute;
-            background: #e74c3c;
-            width: 5px;
+            background: var(--accent);
+            width: 6px;
             height: 40%;
             left: 30%;
             top: 30%;
+            box-shadow: 0 0 5px rgba(242, 92, 84, 0.5);
         }
         
         .crack::after {
             content: '';
             position: absolute;
-            background: #e74c3c;
-            width: 5px;
+            background: var(--accent);
+            width: 6px;
             height: 30%;
             transform: rotate(30deg);
             top: 20%;
             left: 5px;
+            box-shadow: 0 0 5px rgba(242, 92, 84, 0.5);
         }
         
         .survivor {
             position: absolute;
-            width: 30px;
-            height: 30px;
-            background: #3498db;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--warning), var(--p2));
             border-radius: 50%;
             bottom: 40px;
             left: 45%;
@@ -123,79 +237,177 @@
             align-items: center;
             color: white;
             font-weight: bold;
+            font-size: 18px;
+            box-shadow: var(--shadow);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(249, 168, 37, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(249, 168, 37, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(249, 168, 37, 0); }
         }
         
         .actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         button {
-            padding: 15px;
+            padding: 16px 20px;
             border: none;
-            border-radius: 8px;
-            background: #3498db;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(18, 38, 63, 0.15);
         }
         
         button:active {
-            transform: translateY(1px);
+            transform: translateY(0px);
         }
         
         .danger {
-            background: #e74c3c;
+            background: linear-gradient(90deg, var(--accent), #d32f2f);
         }
         
         .success {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2e7d32);
         }
         
         .warning {
-            background: #f39c12;
+            background: linear-gradient(90deg, var(--warning), var(--p2));
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
         }
         
         .log {
-            background: #2c3e50;
-            height: 150px;
-            border-radius: 10px;
-            padding: 15px;
+            background: linear-gradient(180deg, #fff, var(--light-bg));
+            height: 160px;
+            border-radius: 12px;
+            padding: 18px;
             overflow-y: auto;
             margin-bottom: 20px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .log-entry {
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #34495e;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(16, 24, 32, 0.05);
+            line-height: 1.5;
         }
         
         .success-text {
-            color: #2ecc71;
+            color: var(--secondary);
+            font-weight: 600;
         }
         
         .danger-text {
-            color: #e74c3c;
+            color: var(--accent);
+            font-weight: 600;
         }
         
         .warning-text {
-            color: #f39c12;
+            color: var(--warning);
+            font-weight: 600;
         }
         
         .info-text {
-            color: #3498db;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Custom scrollbar */
+        .log::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .log::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .log::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .log::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            transform: translateX(300px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.success {
+            background: var(--secondary);
+        }
+
+        .notification.error {
+            background: var(--accent);
+        }
+
+        .notification.warning {
+            background: var(--warning);
+        }
+
+        .notification.info {
+            background: var(--primary);
         }
         
         @media (max-width: 600px) {
@@ -206,10 +418,65 @@
             h1 {
                 font-size: 2rem;
             }
+
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            .nav-header {
+                padding: 12px 15px;
+            }
+
+            .nav-left {
+                gap: 15px;
+            }
+
+            .logo h1 {
+                font-size: 18px;
+            }
+
+            .game-title-nav {
+                font-size: 16px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .status-item {
+                margin: 0;
+            }
+
+            button {
+                padding: 14px 16px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation Header -->
+    <div class="nav-header">
+        <div class="nav-left">
+            <div class="logo">
+                <h1>ResQ</h1>
+            </div>
+            <div class="nav-separator"></div>
+            <div class="game-title-nav">Quack Response: Earthquake Rescue</div>
+        </div>
+        <a href="../gamified-learning.html" class="back-button">
+            <span class="back-icon">←</span>
+            Back to Learning Games
+        </a>
+    </div>
+
     <header>
         <h1>🌋 Quake Response 🏗️</h1>
         <p>Search and rescue survivors after a major earthquake</p>
@@ -239,12 +506,12 @@
         </div>
         
         <div class="actions">
-            <button class="danger" onclick="takeAction('evacuate')">🚨 Evacuate Immediately</button>
-            <button class="success" onclick="takeAction('stabilize')">🔧 Stabilize Structure</button>
-            <button class="warning" onclick="takeAction('assess')">📋 Assess Damage</button>
-            <button onclick="takeAction('rescue')">🆘 Rescue Survivor</button>
-            <button onclick="takeAction('treat')">💉 Provide First Aid</button>
-            <button class="success" onclick="takeAction('search')">🔍 Search Area</button>
+            <button class="danger" onclick="takeAction('evacuate')" title="Immediately evacuate people from unstable buildings and dangerous areas">🚨 Evacuate Immediately</button>
+            <button class="success" onclick="takeAction('stabilize')" title="Deploy engineering teams to stabilize damaged structures and prevent collapse">🔧 Stabilize Structure</button>
+            <button class="warning" onclick="takeAction('assess')" title="Conduct structural assessments to determine building safety and damage levels">📋 Assess Damage</button>
+            <button onclick="takeAction('rescue')" title="Deploy search and rescue teams to locate and extract trapped survivors">🆘 Rescue Survivor</button>
+            <button onclick="takeAction('treat')" title="Provide immediate medical treatment and first aid to injured survivors">💉 Provide First Aid</button>
+            <button class="success" onclick="takeAction('search')" title="Systematically search collapsed and damaged areas for signs of life">🔍 Search Area</button>
         </div>
         
         <div class="log" id="log">
@@ -255,6 +522,30 @@
     </div>
 
     <script>
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Hide and remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(300px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
         // Game state
         const gameState = {
             time: 1200, // 12:00 in 24h format without colon
@@ -302,9 +593,11 @@
                 case 'evacuate':
                     if (gameState.integrity < 30) {
                         addLog('Evacuated successfully! Saved all found survivors.', 'success');
+                        showNotification('Emergency evacuation completed!', 'success');
                         gameState.survivors = gameState.foundSurvivors;
                     } else {
                         addLog('Evacuated but structure was still stable enough to continue.', 'warning');
+                        showNotification('Area evacuated - consider continuing rescue operations', 'warning');
                     }
                     break;
                     
@@ -325,8 +618,10 @@
                     if (gameState.foundSurvivors > gameState.survivors) {
                         gameState.survivors++;
                         addLog('Survivor rescued!', 'success');
+                        showNotification('Survivor safely rescued!', 'success');
                     } else {
                         addLog('No survivors found in this area. Try searching.', 'warning');
+                        showNotification('Search for survivors first', 'warning');
                     }
                     break;
                     
@@ -342,8 +637,10 @@
                     if (gameState.foundSurvivors < gameState.totalSurvivors) {
                         gameState.foundSurvivors++;
                         addLog('Found a survivor! Needs rescue.', 'info');
+                        showNotification('Survivor located!', 'info');
                     } else {
                         addLog('No additional survivors found in this area.', 'info');
+                        showNotification('Search complete for this area', 'info');
                     }
                     break;
             }
@@ -370,15 +667,19 @@
             // Check win/lose conditions
             if (gameState.integrity <= 0) {
                 addLog('STRUCTURE COLLAPSED! MISSION FAILED.', 'danger');
+                showNotification('MISSION FAILED - Structure Collapsed!', 'error');
                 gameState.gameOver = true;
             } else if (gameState.integrity < 20) {
                 addLog('WARNING: Structure extremely unstable!', 'danger');
+                showNotification('CRITICAL: Structure about to collapse!', 'error');
             } else if (gameState.integrity < 50) {
                 addLog('Caution: Structure weakening.', 'warning');
+                showNotification('Structure integrity compromised', 'warning');
             }
             
             if (gameState.survivors >= gameState.totalSurvivors) {
                 addLog('ALL SURVIVORS RESCUED! MISSION ACCOMPLISHED.', 'success');
+                showNotification('MISSION ACCOMPLISHED - All survivors rescued!', 'success');
                 gameState.gameOver = true;
             }
             

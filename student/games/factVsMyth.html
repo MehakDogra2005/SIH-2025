@@ -4,37 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disaster Detective (Myth vs Fact)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
-            color: #2c3e50;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .container {
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .info-panel {
             flex: 1;
             padding: 30px;
-            border-right: 2px solid #3498db;
-            background: #f8f9fa;
+            border-right: 2px solid var(--primary);
+            background: linear-gradient(180deg, var(--card-bg), #fbfdff);
         }
         
         .game-area {
@@ -45,7 +75,7 @@
             align-items: center;
             justify-content: center;
             min-height: 700px;
-            background: #eef5ff;
+            background: linear-gradient(180deg, var(--card-bg), var(--light-bg));
         }
         
         .header {
@@ -55,17 +85,19 @@
         }
         
         h1 {
-            color: #3498db;
+            color: var(--primary);
             margin-left: 15px;
             font-size: 32px;
+            font-weight: 700;
         }
         
         h2 {
-            color: #2980b9;
+            color: var(--primary-dark);
             margin: 20px 0 15px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.08);
             padding-bottom: 8px;
             font-size: 22px;
+            font-weight: 600;
         }
         
         .rules-list, .points-list {
@@ -79,63 +111,69 @@
         }
         
         .score-board {
-            background: #e3f2fd;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.3));
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-top: 25px;
-            border: 2px solid #3498db;
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow);
         }
         
         .current-score {
             font-size: 24px;
             text-align: center;
             margin: 15px 0;
-            color: #2c3e50;
+            color: var(--text-dark);
+            font-weight: 600;
         }
         
         .max-score {
             font-size: 22px;
             text-align: center;
-            color: #e74c3c;
-            font-weight: bold;
+            color: var(--accent);
+            font-weight: 700;
         }
         
         .game-container {
             width: 100%;
             max-width: 700px;
-            background: white;
+            background: var(--card-bg);
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 2px solid #3498db;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .game-title {
             text-align: center;
             margin-bottom: 20px;
-            color: #3498db;
+            color: var(--primary);
             font-size: 28px;
+            font-weight: 700;
         }
         
         .game-description {
             text-align: center;
             margin-bottom: 20px;
-            color: #7f8c8d;
+            color: #6c757d;
             font-style: italic;
+            line-height: 1.5;
         }
         
         .case-info {
-            background: #e3f2fd;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.3));
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
         }
         
         .case-title {
-            font-weight: bold;
-            color: #2980b9;
+            font-weight: 700;
+            color: var(--primary-dark);
             margin-bottom: 10px;
+            font-size: 16px;
         }
         
         .clues-container {
@@ -147,78 +185,126 @@
         }
         
         .clue {
-            background: #e8f4fc;
+            background: linear-gradient(180deg, var(--p7), rgba(250, 232, 199, 0.3));
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
             width: calc(50% - 15px);
             cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid #3498db;
+            transition: var(--transition);
+            border: 1px solid var(--p2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .clue::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
         }
         
         .clue:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .clue:hover::before {
+            left: 100%;
         }
         
         .clue.revealed {
-            background: #d4edda;
-            border-color: #28a745;
+            background: linear-gradient(180deg, #d4edda, rgba(212, 237, 218, 0.3));
+            border-color: var(--secondary);
+            transform: scale(1.02);
         }
         
         .statement-container {
-            background: #f8f9fa;
+            background: linear-gradient(180deg, var(--card-bg), #fbfdff);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            border: 1px dashed #3498db;
+            border: 2px dashed var(--primary);
+            box-shadow: var(--shadow);
         }
         
         .statement {
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
+            color: var(--text-dark);
         }
         
         .options {
             display: flex;
             justify-content: center;
             gap: 20px;
+            flex-wrap: wrap;
         }
         
         .option-btn {
-            padding: 12px 25px;
-            border-radius: 6px;
+            padding: 14px 28px;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
+            font-weight: 700;
+            transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             border: 2px solid;
+            font-size: 16px;
+            min-width: 120px;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .option-btn:hover::before {
+            left: 100%;
         }
         
         .myth-btn {
-            background: #fff;
-            color: #e74c3c;
-            border-color: #e74c3c;
+            background: linear-gradient(135deg, #fff, #ffeaea);
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(242, 92, 84, 0.15);
         }
         
         .myth-btn:hover {
-            background: #e74c3c;
+            background: linear-gradient(135deg, var(--accent), #e74c3c);
             color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(242, 92, 84, 0.25);
         }
         
         .fact-btn {
-            background: #fff;
-            color: #28a745;
-            border-color: #28a745;
+            background: linear-gradient(135deg, #fff, #eafaf1);
+            color: var(--secondary);
+            border-color: var(--secondary);
+            box-shadow: 0 4px 12px rgba(52, 168, 83, 0.15);
         }
         
         .fact-btn:hover {
-            background: #28a745;
+            background: linear-gradient(135deg, var(--secondary), #27ae60);
             color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 168, 83, 0.25);
         }
         
         .controls {
@@ -231,65 +317,91 @@
         
         button {
             padding: 12px 25px;
-            background: #3498db;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
+            font-weight: 700;
+            transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
         }
         
         button:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--primary-dark), #1565c0);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(26, 115, 232, 0.25);
         }
         
         .next-case-btn {
-            background: #2ecc71;
+            background: linear-gradient(135deg, var(--secondary), #2ea044);
+            box-shadow: 0 4px 12px rgba(52, 168, 83, 0.15);
         }
         
         .next-case-btn:hover {
-            background: #27ae60;
+            background: linear-gradient(135deg, #2ea044, #27ae60);
+            box-shadow: 0 8px 20px rgba(52, 168, 83, 0.25);
         }
         
         .results {
             margin-top: 20px;
-            padding: 15px;
-            background: #e8f4fc;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
+            padding: 18px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.3));
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
             display: none;
+            box-shadow: var(--shadow);
         }
         
         .results h3 {
-            color: #3498db;
-            margin-bottom: 10px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 700;
         }
         
         .results p {
-            margin: 8px 0;
-            line-height: 1.5;
+            margin: 10px 0;
+            line-height: 1.6;
+            color: var(--text-dark);
         }
         
         .progress-bar {
-            height: 10px;
-            background: #e0e0e0;
-            border-radius: 5px;
+            height: 12px;
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 6px;
             margin: 15px 0;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .progress {
             height: 100%;
-            background: #3498db;
-            border-radius: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--p1));
+            border-radius: 6px;
             width: 0%;
-            transition: width 0.5s;
+            transition: width 0.8s ease;
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
         }
         
         @media (max-width: 1024px) {
@@ -299,12 +411,141 @@
             
             .info-panel {
                 border-right: none;
-                border-bottom: 2px solid #3498db;
+                border-bottom: 2px solid var(--primary);
             }
             
             .clue {
                 width: 100%;
             }
+
+            .options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .option-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                margin: 0;
+            }
+
+            .info-panel, .game-area {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .game-title {
+                font-size: 24px;
+            }
+
+            .statement {
+                font-size: 16px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success/Error feedback animations */
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .bounce {
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .tooltip:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Enhanced focus states for accessibility */
+        .clue:focus,
+        .option-btn:focus,
+        button:focus {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Score celebration animation */
+        .score-celebration {
+            animation: celebration 0.8s ease-in-out;
+        }
+
+        @keyframes celebration {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); color: var(--secondary); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -312,7 +553,7 @@
     <div class="container">
         <div class="info-panel">
             <div class="header">
-                <i class="fas fa-search fa-3x" style="color: #3498db;"></i>
+                <i class="fas fa-search fa-3x" style="color: var(--primary);"></i>
                 <h1>Disaster Detective</h1>
             </div>
             
@@ -494,9 +735,94 @@
             
             // Initialize the game
             initGame();
+            
+            // Add keyboard navigation
+            initKeyboardNavigation();
         });
 
-        // Initialize the game
+        // Show tooltip function
+        function showTooltip(element, message) {
+            const tooltip = document.createElement('div');
+            tooltip.textContent = message;
+            tooltip.style.cssText = `
+                position: absolute;
+                background: var(--text-dark);
+                color: white;
+                padding: 8px 12px;
+                border-radius: 8px;
+                font-size: 14px;
+                z-index: 1000;
+                top: -40px;
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+                white-space: nowrap;
+            `;
+            
+            element.style.position = 'relative';
+            element.appendChild(tooltip);
+            
+            setTimeout(() => tooltip.style.opacity = '1', 100);
+            
+            setTimeout(() => {
+                tooltip.style.opacity = '0';
+                setTimeout(() => {
+                    if (tooltip.parentNode) {
+                        tooltip.parentNode.removeChild(tooltip);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
+        // Keyboard navigation
+        function initKeyboardNavigation() {
+            document.addEventListener('keydown', function(e) {
+                // Space or Enter to reveal clues
+                if (e.code === 'Space' || e.code === 'Enter') {
+                    const focusedClue = document.querySelector('.clue:focus');
+                    if (focusedClue) {
+                        e.preventDefault();
+                        const clues = Array.from(document.querySelectorAll('.clue'));
+                        const index = clues.indexOf(focusedClue);
+                        if (index >= 0) revealClue(index);
+                    }
+                }
+                
+                // Number keys for quick answers
+                if (e.code === 'Digit1' || e.code === 'KeyM') {
+                    checkAnswer('myth');
+                }
+                if (e.code === 'Digit2' || e.code === 'KeyF') {
+                    checkAnswer('fact');
+                }
+                
+                // Arrow keys for clue navigation
+                if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+                    const clues = document.querySelectorAll('.clue');
+                    const focusedIndex = Array.from(clues).findIndex(clue => clue === document.activeElement);
+                    
+                    if (focusedIndex >= 0) {
+                        e.preventDefault();
+                        let nextIndex;
+                        if (e.code === 'ArrowLeft') {
+                            nextIndex = focusedIndex > 0 ? focusedIndex - 1 : clues.length - 1;
+                        } else {
+                            nextIndex = focusedIndex < clues.length - 1 ? focusedIndex + 1 : 0;
+                        }
+                        clues[nextIndex].focus();
+                    }
+                }
+            });
+            
+            // Make clues focusable
+            document.querySelectorAll('.clue').forEach(clue => {
+                clue.tabIndex = 0;
+            });
+        }
+
+        // Initialize the game with enhanced feedback
         function initGame() {
             // Reset revealed clues
             gameData.revealedClues = [];
@@ -506,15 +832,17 @@
             document.querySelector('.case-title').textContent = `CASE #${gameData.currentCase}: ${currentCase.title}`;
             document.querySelector('.case-info p').textContent = currentCase.description;
             
-            // Reset clues UI
+            // Reset clues UI with enhanced styling
             const cluesContainer = document.getElementById('clues-container');
             cluesContainer.innerHTML = '';
             
             currentCase.clues.forEach((clue, index) => {
                 const clueElement = document.createElement('div');
                 clueElement.className = 'clue';
-                clueElement.innerHTML = `<i class="fas fa-lock"></i> Clue #${index + 1}`;
+                clueElement.innerHTML = `<i class="fas fa-lock" style="margin-right: 8px; color: var(--p2);"></i> Clue #${index + 1}: ${clue.split(':')[0]}`;
                 clueElement.onclick = () => revealClue(index);
+                clueElement.tabIndex = 0;
+                clueElement.setAttribute('data-tooltip', 'Click to reveal clue (-5 points)');
                 cluesContainer.appendChild(clueElement);
             });
             
@@ -527,9 +855,20 @@
             
             // Update progress bar
             updateProgressBar();
+            
+            // Add case transition animation
+            const gameContainer = document.querySelector('.game-container');
+            gameContainer.style.opacity = '0';
+            gameContainer.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                gameContainer.style.transition = 'all 0.5s ease';
+                gameContainer.style.opacity = '1';
+                gameContainer.style.transform = 'translateY(0)';
+            }, 100);
         }
 
-        // Reveal a clue
+        // Reveal a clue with enhanced feedback
         function revealClue(index) {
             if (gameData.revealedClues.includes(index)) return;
             
@@ -537,12 +876,35 @@
             const currentCase = gameData.cases[gameData.currentCase - 1];
             
             const clueElements = document.querySelectorAll('.clue');
-            clueElements[index].innerHTML = currentCase.clues[index];
-            clueElements[index].classList.add('revealed');
+            const clueElement = clueElements[index];
             
-            // Deduct points for using a clue
-            gameData.currentScore = Math.max(0, gameData.currentScore - 5);
-            document.getElementById('current-score').textContent = gameData.currentScore;
+            // Add loading animation
+            clueElement.classList.add('loading');
+            
+            setTimeout(() => {
+                clueElement.classList.remove('loading');
+                clueElement.innerHTML = `<i class="fas fa-unlock" style="color: var(--secondary); margin-right: 8px;"></i>${currentCase.clues[index]}`;
+                clueElement.classList.add('revealed');
+                clueElement.classList.add('bounce');
+                
+                // Remove bounce animation after completion
+                setTimeout(() => clueElement.classList.remove('bounce'), 600);
+                
+                // Deduct points for using a clue with visual feedback
+                const oldScore = gameData.currentScore;
+                gameData.currentScore = Math.max(0, gameData.currentScore - 5);
+                
+                const scoreElement = document.getElementById('current-score');
+                if (oldScore !== gameData.currentScore) {
+                    scoreElement.classList.add('shake');
+                    setTimeout(() => scoreElement.classList.remove('shake'), 500);
+                }
+                
+                scoreElement.textContent = gameData.currentScore;
+                
+                // Show helpful tip
+                showTooltip(clueElement, 'Clue revealed! -5 points');
+            }, 800);
         }
 
         // Show current statement
@@ -554,46 +916,97 @@
             document.getElementById('results').style.display = 'none';
         }
 
-        // Check answer
+        // Check answer with enhanced feedback
         function checkAnswer(answer) {
             const currentCase = gameData.cases[gameData.currentCase - 1];
             const currentStatement = currentCase.statements[gameData.currentStatement];
             const results = document.getElementById('results');
+            const isCorrect = answer === currentStatement.answer;
             
-            if (answer === currentStatement.answer) {
-                // Correct answer
-                results.style.borderLeftColor = '#28a745';
-                results.querySelector('h3').textContent = 'Correct!';
-                results.querySelector('h3').style.color = '#28a745';
+            // Disable option buttons to prevent multiple clicks
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                btn.style.opacity = '0.7';
+            });
+            
+            // Add visual feedback to selected button
+            const selectedBtn = answer === 'myth' ? 
+                document.querySelector('.myth-btn') : 
+                document.querySelector('.fact-btn');
+            
+            selectedBtn.classList.add(isCorrect ? 'bounce' : 'shake');
+            
+            setTimeout(() => {
+                if (isCorrect) {
+                    // Correct answer
+                    results.style.borderLeftColor = '#34a853';
+                    results.querySelector('h3').textContent = '✅ Correct!';
+                    results.querySelector('h3').style.color = 'var(--secondary)';
+                    results.style.background = 'linear-gradient(180deg, #d4edda, rgba(212, 237, 218, 0.3))';
+                    
+                    // Award points based on whether clues were used
+                    const points = gameData.revealedClues.length > 0 ? 5 : 10;
+                    gameData.currentScore += points;
+                    
+                    // Show celebration animation for score
+                    const scoreElement = document.getElementById('current-score');
+                    scoreElement.classList.add('score-celebration');
+                    setTimeout(() => scoreElement.classList.remove('score-celebration'), 800);
+                    
+                    document.getElementById('result-score').innerHTML = `<i class="fas fa-star" style="color: var(--warning);"></i> You earned ${points} points!`;
+                } else {
+                    // Incorrect answer
+                    results.style.borderLeftColor = '#f25c54';
+                    results.querySelector('h3').textContent = '❌ Incorrect!';
+                    results.querySelector('h3').style.color = 'var(--accent)';
+                    results.style.background = 'linear-gradient(180deg, #f8d7da, rgba(248, 215, 218, 0.3))';
+                    document.getElementById('result-score').innerHTML = '<i class="fas fa-lightbulb" style="color: var(--warning);"></i> Try to analyze the clues more carefully.';
+                }
                 
-                // Award points based on whether clues were used
-                const points = gameData.revealedClues.length > 0 ? 5 : 10;
-                gameData.currentScore += points;
-                document.getElementById('result-score').textContent = `You earned ${points} points!`;
-            } else {
-                // Incorrect answer
-                results.style.borderLeftColor = '#e74c3c';
-                results.querySelector('h3').textContent = 'Incorrect!';
-                results.querySelector('h3').style.color = '#e74c3c';
-                document.getElementById('result-score').textContent = 'Try to analyze the clues more carefully.';
-            }
-            
-            // Update score display
-            document.getElementById('current-score').textContent = gameData.currentScore;
-            if (gameData.currentScore > gameData.maxScore) {
-                gameData.maxScore = gameData.currentScore;
-                localStorage.setItem('disasterDetectiveMaxScore', gameData.maxScore);
-                document.getElementById('max-score').textContent = gameData.maxScore;
-            }
-            
-            // Show explanation
-            document.getElementById('explanation').textContent = currentStatement.explanation;
-            
-            // Show results
-            results.style.display = 'block';
-            
-            // Update progress bar
-            updateProgressBar();
+                // Update score display
+                document.getElementById('current-score').textContent = gameData.currentScore;
+                
+                // Update high score if necessary
+                if (gameData.currentScore > gameData.maxScore) {
+                    gameData.maxScore = gameData.currentScore;
+                    localStorage.setItem('disasterDetectiveMaxScore', gameData.maxScore);
+                    const maxScoreElement = document.getElementById('max-score');
+                    maxScoreElement.textContent = gameData.maxScore;
+                    maxScoreElement.classList.add('score-celebration');
+                    setTimeout(() => maxScoreElement.classList.remove('score-celebration'), 800);
+                    
+                    // Show new high score message
+                    setTimeout(() => {
+                        showTooltip(maxScoreElement, '🎉 New High Score!');
+                    }, 500);
+                }
+                
+                // Show explanation
+                document.getElementById('explanation').textContent = currentStatement.explanation;
+                
+                // Show results with fade-in effect
+                results.style.display = 'block';
+                results.style.opacity = '0';
+                results.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    results.style.transition = 'all 0.5s ease';
+                    results.style.opacity = '1';
+                    results.style.transform = 'translateY(0)';
+                }, 100);
+                
+                // Update progress bar
+                updateProgressBar();
+                
+                // Re-enable buttons after animation
+                setTimeout(() => {
+                    document.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.style.pointerEvents = 'auto';
+                        btn.style.opacity = '1';
+                        btn.classList.remove('bounce', 'shake');
+                    });
+                }, 1000);
+            }, 600);
         }
 
         // Next statement
@@ -620,11 +1033,27 @@
             }
         }
 
-        // Update progress bar
+        // Update progress bar with enhanced animation
         function updateProgressBar() {
             const currentCase = gameData.cases[gameData.currentCase - 1];
             const progress = ((gameData.currentStatement + 1) / currentCase.statements.length) * 100;
-            document.getElementById('progress-bar').style.width = `${progress}%`;
+            const progressBar = document.getElementById('progress-bar');
+            
+            // Smooth progress animation
+            progressBar.style.width = `${progress}%`;
+            
+            // Add pulse effect when progress updates
+            progressBar.style.transform = 'scaleY(1.2)';
+            setTimeout(() => {
+                progressBar.style.transform = 'scaleY(1)';
+            }, 200);
+            
+            // Show completion message
+            if (progress === 100) {
+                setTimeout(() => {
+                    showTooltip(document.querySelector('.progress-bar'), 'Case completed! 🎉');
+                }, 500);
+            }
         }
     </script>
 </body>

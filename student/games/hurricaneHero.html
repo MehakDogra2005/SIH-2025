@@ -4,37 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hurricane Hero: Resource Dash 🌀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Ubuntu", sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
-            color: #2c3e50;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
-            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
-        .container {
+        /* Navigation Header */
+        .nav-header {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 24px;
+            color: var(--p6);
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .game-title-nav {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .game-container-wrapper {
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .info-panel {
             flex: 1;
             padding: 30px;
-            border-right: 2px solid #3498db;
-            background: #f8f9fa;
+            border-right: 2px solid var(--primary);
+            background: linear-gradient(180deg, #fff, var(--light-bg));
         }
         
         .game-area {
@@ -45,7 +138,7 @@
             align-items: center;
             justify-content: center;
             min-height: 700px;
-            background: #eef5ff;
+            background: var(--light-bg);
         }
         
         .header {
@@ -55,15 +148,16 @@
         }
         
         h1 {
-            color: #3498db;
+            color: var(--primary);
             margin-left: 15px;
             font-size: 32px;
+            font-weight: 700;
         }
         
         h2 {
-            color: #2980b9;
+            color: var(--primary-dark);
             margin: 20px 0 15px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 8px;
             font-size: 22px;
         }
@@ -79,48 +173,51 @@
         }
         
         .score-board {
-            background: #e3f2fd;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.3));
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-top: 25px;
-            border: 2px solid #3498db;
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow);
         }
         
         .current-score {
             font-size: 24px;
             text-align: center;
             margin: 15px 0;
-            color: #2c3e50;
+            color: var(--text-dark);
+            font-weight: 600;
         }
         
         .max-score {
             font-size: 22px;
             text-align: center;
-            color: #e74c3c;
+            color: var(--accent);
             font-weight: bold;
         }
         
         .game-container {
             width: 100%;
             max-width: 700px;
-            background: white;
+            background: var(--card-bg);
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 2px solid #3498db;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .game-title {
             text-align: center;
             margin-bottom: 20px;
-            color: #3498db;
+            color: var(--primary);
             font-size: 28px;
+            font-weight: 700;
         }
         
         .game-description {
             text-align: center;
             margin-bottom: 20px;
-            color: #7f8c8d;
+            color: #6c757d;
             font-style: italic;
         }
         
@@ -128,10 +225,11 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
-            padding: 10px 15px;
-            background: #e3f2fd;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 12px 16px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.3));
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
         }
         
         .resources-container {
@@ -142,17 +240,23 @@
         }
         
         .resource {
-            background: #e8f4fc;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.2));
             padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #3498db;
+            border-radius: 10px;
+            border: 1px solid var(--primary);
             text-align: center;
+            transition: var(--transition);
+        }
+
+        .resource:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
         }
         
         .resource-value {
             font-size: 24px;
             font-weight: bold;
-            color: #2980b9;
+            color: var(--primary-dark);
             margin: 5px 0;
         }
         
@@ -164,52 +268,59 @@
         }
         
         .resource-btn {
-            padding: 5px 10px;
-            background: #3498db;
+            padding: 8px 12px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
+            font-weight: 600;
         }
         
         .resource-btn:hover {
-            background: #2980b9;
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
         
         .decision-container {
-            background: #f8f9fa;
+            background: linear-gradient(180deg, #fff, var(--light-bg));
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow);
         }
         
         .decision-title {
             font-weight: bold;
-            color: #2980b9;
+            color: var(--primary-dark);
             margin-bottom: 10px;
+            font-size: 18px;
         }
         
         .decision-options {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
+            gap: 12px;
             margin-top: 15px;
         }
         
         .decision-option {
-            padding: 12px;
-            background: #e8f4fc;
-            border-radius: 6px;
+            padding: 14px 16px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.2));
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid #3498db;
+            transition: var(--transition);
+            border: 1px solid var(--primary);
+            font-weight: 500;
         }
         
         .decision-option:hover {
-            background: #d4e6f1;
+            background: linear-gradient(180deg, var(--p1), var(--p6));
+            color: white;
             transform: translateY(-2px);
+            box-shadow: var(--shadow);
         }
         
         .community-status {
@@ -220,32 +331,38 @@
         }
         
         .status-item {
-            background: #e8f4fc;
-            padding: 10px;
-            border-radius: 6px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.2));
+            padding: 12px;
+            border-radius: 8px;
             text-align: center;
-            border: 1px solid #3498db;
+            border: 1px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .status-item:hover {
+            transform: translateY(-1px);
         }
         
         .status-value {
             font-weight: bold;
-            color: #2980b9;
+            color: var(--primary-dark);
         }
         
         .progress-bar {
-            height: 10px;
+            height: 12px;
             background: #e0e0e0;
-            border-radius: 5px;
+            border-radius: 6px;
             margin: 15px 0;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .progress {
             height: 100%;
-            background: #3498db;
-            border-radius: 5px;
+            background: linear-gradient(90deg, var(--p1), var(--secondary));
+            border-radius: 6px;
             width: 0%;
-            transition: width 0.5s;
+            transition: width 0.5s ease;
         }
         
         .controls {
@@ -258,73 +375,76 @@
         
         button {
             padding: 12px 25px;
-            background: #3498db;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
         button:hover {
-            background: #2980b9;
+            background: linear-gradient(90deg, var(--primary-dark), #0a3d91);
             transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
         }
         
         .action-btn {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2e7d32);
         }
         
         .action-btn:hover {
-            background: #27ae60;
+            background: linear-gradient(90deg, #2e7d32, #1b5e20);
         }
         
         .warning-btn {
-            background: #f39c12;
+            background: linear-gradient(90deg, var(--warning), var(--p2));
         }
         
         .warning-btn:hover {
-            background: #e67e22;
+            background: linear-gradient(90deg, var(--p2), #e67e22);
         }
         
         .results {
             margin-top: 20px;
-            padding: 15px;
-            background: #e8f4fc;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
+            padding: 18px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.3));
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
             display: none;
+            box-shadow: var(--shadow);
         }
         
         .results h3 {
-            color: #3498db;
-            margin-bottom: 10px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 700;
         }
         
         .results p {
             margin: 8px 0;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
         .hurricane-tracker {
             height: 100px;
-            background: #e8f4fc;
-            border-radius: 8px;
+            background: linear-gradient(180deg, var(--p6), rgba(200, 229, 243, 0.2));
+            border-radius: 10px;
             margin-bottom: 20px;
             position: relative;
-            border: 1px solid #3498db;
+            border: 2px solid var(--primary);
             overflow: hidden;
+            box-shadow: var(--shadow);
         }
         
         .storm-icon {
             position: absolute;
             font-size: 30px;
-            color: #e74c3c;
+            color: var(--accent);
             top: 35px;
             transition: left 1s ease;
         }
@@ -335,28 +455,28 @@
             top: 0;
             height: 100%;
             width: 30px;
-            background: #27ae60;
+            background: var(--secondary);
         }
         
         .category-display {
             position: absolute;
             top: 10px;
             left: 10px;
-            background: rgba(231, 76, 60, 0.8);
+            background: rgba(242, 92, 84, 0.9);
             color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-weight: bold;
         }
         
         @media (max-width: 1024px) {
-            .container {
+            .game-container-wrapper {
                 flex-direction: column;
             }
             
             .info-panel {
                 border-right: none;
-                border-bottom: 2px solid #3498db;
+                border-bottom: 2px solid var(--primary);
             }
             
             .resources-container {
@@ -366,14 +486,160 @@
             .community-status {
                 grid-template-columns: 1fr;
             }
+
+            .nav-header {
+                padding: 12px 15px;
+            }
+
+            .nav-left {
+                gap: 15px;
+            }
+
+            .logo h1 {
+                font-size: 18px;
+            }
+
+            .game-title-nav {
+                font-size: 16px;
+            }
+        }
+
+        /* Additional user-friendly improvements */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(26, 115, 232, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(26, 115, 232, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(26, 115, 232, 0); }
+        }
+
+        .success-animation {
+            animation: successBounce 0.6s ease;
+        }
+
+        @keyframes successBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .game-tip {
+            background: linear-gradient(90deg, var(--secondary), #2e7d32);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-tip i {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .game-container {
+                padding: 20px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .decision-options {
+                gap: 8px;
+            }
+
+            .decision-option {
+                padding: 12px;
+            }
+
+            .controls {
+                gap: 10px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation Header -->
+    <div class="nav-header">
+        <div class="nav-left">
+            <a href="../gamified-learning.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Games
+            </a>
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>ResQ</h1>
+            </div>
+        </div>
+        <div class="game-title-nav">
+            <i class="fas fa-wind"></i>
+            Hurricane Hero
+        </div>
+    </div>
+
     <div class="container">
+        <div class="game-container-wrapper">
         <div class="info-panel">
             <div class="header">
-                <i class="fas fa-wind fa-3x" style="color: #3498db;"></i>
+                <i class="fas fa-wind fa-3x" style="color: var(--primary);"></i>
                 <h1>Hurricane Hero 🌀</h1>
             </div>
             
@@ -408,6 +674,11 @@
                 <h2 class="game-title">Hurricane Hero: Resource Dash 🌀</h2>
                 <p class="game-description">Prepare your home and community for an approaching hurricane</p>
                 
+                <div class="game-tip">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Tip: Balance personal safety with community support for the best outcomes!</span>
+                </div>
+                
                 <div class="game-ui">
                     <div>Resources: $<span id="money">1000</span></div>
                     <div>Hurricane Category: <span id="hurricane-category">1</span></div>
@@ -421,7 +692,7 @@
                 </div>
                 
                 <div class="resources-container">
-                    <div class="resource">
+                    <div class="resource tooltip" data-tooltip="Stock up on food and water for emergency situations">
                         <h3>Food & Water</h3>
                         <div class="resource-value" id="food-value">0</div>
                         <p>Days worth of supplies</p>
@@ -429,7 +700,7 @@
                             <button class="resource-btn" onclick="buyResource('food', 1)">+1 Day ($50)</button>
                         </div>
                     </div>
-                    <div class="resource">
+                    <div class="resource tooltip" data-tooltip="Strengthen your home against hurricane damage">
                         <h3>Home Protection</h3>
                         <div class="resource-value" id="protection-value">0</div>
                         <p>Reinforcement level</p>
@@ -437,7 +708,7 @@
                             <button class="resource-btn" onclick="buyResource('protection', 1)">+1 Level ($100)</button>
                         </div>
                     </div>
-                    <div class="resource">
+                    <div class="resource tooltip" data-tooltip="Prepare essential emergency supplies and tools">
                         <h3>Emergency Kit</h3>
                         <div class="resource-value" id="kit-value">0</div>
                         <p>Completeness</p>
@@ -445,7 +716,7 @@
                             <button class="resource-btn" onclick="buyResource('kit', 1)">+10% ($75)</button>
                         </div>
                     </div>
-                    <div class="resource">
+                    <div class="resource tooltip" data-tooltip="Help neighbors and build community resilience">
                         <h3>Community Help</h3>
                         <div class="resource-value" id="community-value">0</div>
                         <p>Support level</p>
@@ -494,19 +765,20 @@
                 </div>
                 
                 <div class="controls">
-                    <button class="action-btn" onclick="advanceTime()">
+                    <button class="action-btn tooltip" onclick="advanceTime()" data-tooltip="Advance time and trigger random events">
                         <i class="fas fa-forward"></i> Advance Time (6 hours)
                     </button>
-                    <button class="warning-btn" onclick="evacuate()">
+                    <button class="warning-btn tooltip" onclick="evacuate()" data-tooltip="Evacuate to safety when prepared">
                         <i class="fas fa-car"></i> Evacuate Now
                     </button>
-                    <button onclick="startGame()">
+                    <button class="tooltip" onclick="startGame()" data-tooltip="Begin your hurricane preparation challenge">
                         <i class="fas fa-play"></i> Start Game
                     </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <script>
         // Game data and state
@@ -584,6 +856,14 @@
             // Position storm icon
             document.getElementById('storm-icon').style.left = '10%';
             
+            // Show start notification
+            showNotification("Hurricane Hero started! Prepare wisely!", "success");
+            
+            // Add pulse animation to start button
+            const startButton = event.target;
+            startButton.classList.add('pulse-animation');
+            setTimeout(() => startButton.classList.remove('pulse-animation'), 2000);
+            
             // Start hurricane intensification
             const hurricaneTimer = setInterval(function() {
                 if (gameData.gameActive) {
@@ -599,6 +879,9 @@
                         if (gameData.hurricaneCategory >= 4) severity = "High";
                         if (gameData.hurricaneCategory >= 5) severity = "EXTREME";
                         document.getElementById('severity-value').textContent = severity;
+                        
+                        // Show notification for category increase
+                        showNotification(`Hurricane intensified to Category ${gameData.hurricaneCategory}!`, "warning");
                     }
                     
                     // Move storm closer
@@ -620,7 +903,7 @@
         // Buy a resource
         function buyResource(type, amount) {
             if (!gameData.gameActive) {
-                alert("Please start the game first!");
+                showNotification("Please start the game first!", "warning");
                 return;
             }
             
@@ -650,10 +933,53 @@
                 // Add points
                 gameData.currentScore += 10 * amount;
                 
+                // Visual feedback
+                const resourceElement = document.querySelector(`#${type}-value`).parentElement;
+                resourceElement.classList.add('success-animation');
+                setTimeout(() => resourceElement.classList.remove('success-animation'), 600);
+                
                 updateUI();
+                showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} purchased successfully!`, "success");
             } else {
-                alert("Not enough money!");
+                showNotification("Not enough money!", "error");
             }
+        }
+
+        // Show notification function
+        function showNotification(message, type = "info") {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--secondary)' : type === 'error' ? 'var(--accent)' : 'var(--primary)'};
+                color: white;
+                padding: 12px 16px;
+                border-radius: 8px;
+                box-shadow: var(--shadow);
+                z-index: 1001;
+                transform: translateX(300px);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Slide in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(300px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
         }
 
         // Make a decision
@@ -704,7 +1030,7 @@
         // Advance time
         function advanceTime() {
             if (!gameData.gameActive) {
-                alert("Please start the game first!");
+                showNotification("Please start the game first!", "warning");
                 return;
             }
             
@@ -728,6 +1054,9 @@
                 document.getElementById('result-title').textContent = "Event Occurred";
                 document.getElementById('result-message').textContent = event.message;
                 document.getElementById('results').style.display = 'block';
+                
+                // Show notification
+                showNotification(event.message, event.money > 0 ? "success" : "warning");
             }
             
             // Update evacuation readiness based on preparation
@@ -742,6 +1071,7 @@
             }
             
             updateUI();
+            showNotification("Time advanced 6 hours", "info");
         }
 
         // Evacuate

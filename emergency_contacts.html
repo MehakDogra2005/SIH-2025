@@ -1,159 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevansetu - Emergency Contacts</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         :root {
             --primary: #1a73e8;
-            --secondary: #0b4fa3;
-            --accent: #ff6b35;
-            --light: #f5f7f9;
-            --dark: #2c3e50;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
-            --info: #17a2b8;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
+            /* original blue navbar */
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            /* user palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            background-color: #f0f2f5;
-            color: #333;
-            display: flex;
-            min-height: 100vh;
-            line-height: 1.6;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
         }
 
-        /* Sidebar Styles */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
         .sidebar {
-            width: 260px;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px 0;
-            height: 100vh;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
             position: fixed;
+            width: 240px;
+            height: 100%;
             overflow-y: auto;
-            transition: var(--transition);
-            z-index: 1000;
+            box-shadow: var(--shadow);
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logo {
-            padding: 0 20px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .logo i {
+            font-size: 22px;
+            color: var(--p6)
         }
 
         .logo h1 {
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo span {
-            color: var(--accent);
-        }
-
-        .nav-menu {
-            list-style: none;
-            padding: 0;
-        }
-
-        .nav-item {
-            margin-bottom: 5px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: var(--transition);
-            font-size: 16px;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-left: 4px solid var(--accent);
-        }
-
-        .nav-link i {
-            margin-right: 12px;
             font-size: 18px;
-            width: 24px;
-            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.2px
         }
 
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: 20px;
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .menu-item {
+            /* font-weight: bold; */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
             transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95)
         }
 
+        .menu-item i {
+            width: 20px;
+            text-align: center
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06)
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08)
+        }
+
+        .new-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #fff;
+            margin-left: auto
+        }
+
+        /* Main content */
+        .main-content {
+            grid-column: 2;
+            padding: 20px;
+            min-height: 100vh
+        }
+
+        /* padding-left accounts for fixed sidebar */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            background-color: white;
-            padding: 20px 25px;
+            padding: 14px;
             border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
+            /* background: linear-gradient(90deg, var(--primary), var(--primary-dark)); */
+            background: transparent;
+            color: white;
+            box-shadow: var(--shadow);
+            gap: 12px;
+            flex-wrap: wrap
         }
 
-        .welcome h2 {
-            color: var(--dark);
-            margin-bottom: 5px;
-            font-size: 1.5rem;
-        }
-
-        .welcome p {
-            color: var(--gray);
-            font-size: 0.95rem;
-        }
-
-        .user-info {
+        .search-bar {
             display: flex;
             align-items: center;
-            gap: 15px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 8px 12px;
+            border-radius: 999px;
+            width: 42%;
+            min-width: 220px;
+            gap: 10px
         }
 
-        .user-img {
-            width: 45px;
-            height: 45px;
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%
+        }
+
+        .search-bar .search-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .user-profile img {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.15)
+        }
+
+        .user-profile h4 {
+            font-size: 16px;
+            margin-bottom: 2px
+        }
+
+        .user-profile p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85)
+        }
+
+        /* language selector aligned right and won't overlap due to header spacing */
+        .header-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* Sidebar User Profile */
+        .sidebar-user-profile {
+            margin-top: auto;
+            padding: 12px;
+            margin: 0 -12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .sidebar-user-profile:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--p6), var(--p1));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: var(--transition);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
 
-        .user-img:hover {
-            transform: scale(1.05);
+        .user-info {
+            flex: 1;
+            min-width: 0;
         }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+        }
+
 
         /* Page Title */
         .page-title {
@@ -424,13 +566,16 @@
             .sidebar {
                 width: 70px;
             }
-            .sidebar .logo h1 span, 
+
+            .sidebar .logo h1 span,
             .sidebar .nav-link span {
                 display: none;
             }
+
             .sidebar .logo h1 {
                 justify-content: center;
             }
+
             .main-content {
                 margin-left: 70px;
             }
@@ -440,17 +585,21 @@
             .quick-actions {
                 grid-template-columns: 1fr;
             }
+
             .contacts-grid {
                 grid-template-columns: 1fr;
             }
+
             .header {
                 flex-direction: column;
                 text-align: center;
                 gap: 15px;
             }
+
             .user-info {
                 justify-content: center;
             }
+
             .page-title {
                 flex-direction: column;
                 text-align: center;
@@ -462,16 +611,21 @@
             .main-content {
                 padding: 15px;
             }
+
             .header {
                 padding: 15px;
             }
-            .contacts-section, .procedures-section {
+
+            .contacts-section,
+            .procedures-section {
                 padding: 20px;
             }
+
             .contact-card {
                 flex-direction: column;
                 text-align: center;
             }
+
             .contact-actions {
                 justify-content: center;
                 margin-top: 10px;
@@ -479,302 +633,510 @@
         }
     </style>
 </head>
+
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">
-            <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-list-check"></i>
-                    <span>Do's & Don'ts</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <span>Evacuation Plan</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link active">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>Emergency Contacts</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span>Education Modules</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Drill Scheduling</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </li>
-        </ul>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="header">
-            <div class="welcome">
-                <h2>Welcome back, Priya!</h2>
-                <p>Quick access to emergency contacts and procedures</p>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>JeevanSetu</h1>
             </div>
-            <div class="user-info">
-                <div class="user-img">P</div>
+            <div class="menu-items">
+                <div class="menu-item active"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
+                <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item"><i class="fa-solid fa-book-open"></i><span>Do's & Dont's</span></div>
+                <div class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
+                <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
-        </div>
 
-        <div class="page-title">
-            <div>
-                <h2>Emergency Contacts</h2>
-                <p>Important contacts for emergency situations at IGDTUW</p>
-            </div>
-            <button class="btn btn-primary">
-                <i class="fas fa-download"></i> Download Contacts
-            </button>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <div class="action-card" id="emergencyCall">
-                <div class="action-icon action-emergency">
-                    <i class="fas fa-phone"></i>
+            <!-- User Profile at Bottom -->
+            <div class="sidebar-user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h4 id="sidebarUserName">User</h4>
+                    <p>Student</p>
                 </div>
-                <h3>Emergency Call</h3>
-                <p>Immediate emergency response</p>
             </div>
-            <div class="action-card" id="medicalEmergency">
-                <div class="action-icon action-medical">
-                    <i class="fas fa-first-aid"></i>
-                </div>
-                <h3>Medical Emergency</h3>
-                <p>Campus medical services</p>
-            </div>
-            <div class="action-card" id="campusSecurity">
-                <div class="action-icon action-security">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3>Campus Security</h3>
-                <p>24/7 security services</p>
-            </div>
-            <div class="action-card" id="campusServices">
-                <div class="action-icon action-campus">
-                    <i class="fas fa-university"></i>
-                </div>
-                <h3>Campus Services</h3>
-                <p>Administrative contacts</p>
-            </div>
-        </div>
+        </aside>
 
-        <!-- Emergency Contacts -->
-        <div class="contacts-section">
-            <div class="section-header">
-                <h3 class="section-title">Emergency Contacts</h3>
-                <p class="section-subtitle">Important contacts for immediate assistance</p>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 data-translate="title">Emergency Contacts</h1>
+                <p data-translate="subtitle">Important Contacts for Emergency Situations at IGDTUW</p>
             </div>
 
-            <div class="contacts-grid">
-                <div class="contact-card">
-                    <div class="contact-icon action-emergency">
+            <!-- <div class="page-title">
+                <div>
+                    <h2>Emergency Contacts</h2>
+                    <p>Important contacts for emergency situations at IGDTUW</p>
+                </div>
+                <button class="btn btn-primary">
+                    <i class="fas fa-download"></i> Download Contacts
+                </button>
+            </div> -->
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="action-card" id="emergencyCall">
+                    <div class="action-icon action-emergency">
                         <i class="fas fa-phone"></i>
                     </div>
-                    <div class="contact-info">
-                        <div class="contact-name">Emergency Helpline</div>
-                        <div class="contact-role">24/7 Emergency Response</div>
-                        <div class="contact-phone">
-                            <i class="fas fa-phone"></i> 112 / 100
-                        </div>
-                    </div>
-                    <div class="contact-actions">
-                        <button class="btn btn-primary call-btn" data-number="112">
-                            <i class="fas fa-phone"></i> Call
-                        </button>
-                    </div>
+                    <h3>Emergency Call</h3>
+                    <p>Immediate emergency response</p>
                 </div>
-
-                <div class="contact-card">
-                    <div class="contact-icon action-medical">
-                        <i class="fas fa-ambulance"></i>
+                <div class="action-card" id="medicalEmergency">
+                    <div class="action-icon action-medical">
+                        <i class="fas fa-first-aid"></i>
                     </div>
-                    <div class="contact-info">
-                        <div class="contact-name">Medical Emergency</div>
-                        <div class="contact-role">Ambulance & Medical Help</div>
-                        <div class="contact-phone">
-                            <i class="fas fa-phone"></i> 102 / 108
-                        </div>
-                    </div>
-                    <div class="contact-actions">
-                        <button class="btn btn-primary call-btn" data-number="102">
-                            <i class="fas fa-phone"></i> Call
-                        </button>
-                    </div>
+                    <h3>Medical Emergency</h3>
+                    <p>Campus medical services</p>
                 </div>
-
-                <div class="contact-card">
-                    <div class="contact-icon action-emergency">
-                        <i class="fas fa-fire"></i>
-                    </div>
-                    <div class="contact-info">
-                        <div class="contact-name">Fire Department</div>
-                        <div class="contact-role">Fire Emergency</div>
-                        <div class="contact-phone">
-                            <i class="fas fa-phone"></i> 101
-                        </div>
-                    </div>
-                    <div class="contact-actions">
-                        <button class="btn btn-primary call-btn" data-number="101">
-                            <i class="fas fa-phone"></i> Call
-                        </button>
-                    </div>
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-icon action-security">
+                <div class="action-card" id="campusSecurity">
+                    <div class="action-icon action-security">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <div class="contact-info">
-                        <div class="contact-name">Campus Security</div>
-                        <div class="contact-role">IGDTUW Security Control Room</div>
-                        <div class="contact-phone">
-                            <i class="fas fa-phone"></i> +91-11-2390-0156
+                    <h3>Campus Security</h3>
+                    <p>24/7 security services</p>
+                </div>
+                <div class="action-card" id="campusServices">
+                    <div class="action-icon action-campus">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3>Campus Services</h3>
+                    <p>Administrative contacts</p>
+                </div>
+            </div>
+
+            <!-- Emergency Contacts -->
+            <div class="contacts-section">
+                <div class="section-header">
+                    <h3 class="section-title">Emergency Contacts</h3>
+                    <p class="section-subtitle">Important contacts for immediate assistance</p>
+                </div>
+
+                <div class="contacts-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon action-emergency">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-info">
+                            <div class="contact-name">Emergency Helpline</div>
+                            <div class="contact-role">24/7 Emergency Response</div>
+                            <div class="contact-phone">
+                                <i class="fas fa-phone"></i> 112 / 100
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="btn btn-primary call-btn" data-number="112">
+                                <i class="fas fa-phone"></i> Call
+                            </button>
                         </div>
                     </div>
-                    <div class="contact-actions">
-                        <button class="btn btn-primary call-btn" data-number="+911123900156">
-                            <i class="fas fa-phone"></i> Call
-                        </button>
-                    </div>
-                </div>
 
-                <div class="contact-card">
-                    <div class="contact-icon action-medical">
-                        <i class="fas fa-hospital"></i>
-                    </div>
-                    <div class="contact-info">
-                        <div class="contact-name">Campus Medical Center</div>
-                        <div class="contact-role">IGDTUW Health Services</div>
-                        <div class="contact-phone">
-                            <i class="fas fa-phone"></i> +91-11-2390-0157
+                    <div class="contact-card">
+                        <div class="contact-icon action-medical">
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                        <div class="contact-info">
+                            <div class="contact-name">Medical Emergency</div>
+                            <div class="contact-role">Ambulance & Medical Help</div>
+                            <div class="contact-phone">
+                                <i class="fas fa-phone"></i> 102 / 108
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="btn btn-primary call-btn" data-number="102">
+                                <i class="fas fa-phone"></i> Call
+                            </button>
                         </div>
                     </div>
-                    <div class="contact-actions">
-                        <button class="btn btn-primary call-btn" data-number="+911123900157">
-                            <i class="fas fa-phone"></i> Call
-                        </button>
-                    </div>
-                </div>
 
-                <div class="contact-card">
-                    <div class="contact-icon action-campus">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div class="contact-info">
-                        <div class="contact-name">Principal's Office</div>
-                        <div class="contact-role">IGDTUW Administration</div>
-                        <div class="contact-phone">
-                            <i class="fas fa-phone"></i> +91-11-2390-0158
+                    <div class="contact-card">
+                        <div class="contact-icon action-emergency">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="contact-info">
+                            <div class="contact-name">Fire Department</div>
+                            <div class="contact-role">Fire Emergency</div>
+                            <div class="contact-phone">
+                                <i class="fas fa-phone"></i> 101
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="btn btn-primary call-btn" data-number="101">
+                                <i class="fas fa-phone"></i> Call
+                            </button>
                         </div>
                     </div>
-                    <div class="contact-actions">
-                        <button class="btn btn-primary call-btn" data-number="+911123900158">
-                            <i class="fas fa-phone"></i> Call
-                        </button>
+
+                    <div class="contact-card">
+                        <div class="contact-icon action-security">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="contact-info">
+                            <div class="contact-name">Campus Security</div>
+                            <div class="contact-role">IGDTUW Security Control Room</div>
+                            <div class="contact-phone">
+                                <i class="fas fa-phone"></i> +91-11-2390-0156
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="btn btn-primary call-btn" data-number="+911123900156">
+                                <i class="fas fa-phone"></i> Call
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon action-medical">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="contact-info">
+                            <div class="contact-name">Campus Medical Center</div>
+                            <div class="contact-role">IGDTUW Health Services</div>
+                            <div class="contact-phone">
+                                <i class="fas fa-phone"></i> +91-11-2390-0157
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="btn btn-primary call-btn" data-number="+911123900157">
+                                <i class="fas fa-phone"></i> Call
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon action-campus">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="contact-info">
+                            <div class="contact-name">Principal's Office</div>
+                            <div class="contact-role">IGDTUW Administration</div>
+                            <div class="contact-phone">
+                                <i class="fas fa-phone"></i> +91-11-2390-0158
+                            </div>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="btn btn-primary call-btn" data-number="+911123900158">
+                                <i class="fas fa-phone"></i> Call
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Emergency Procedures -->
-        <div class="procedures-section">
-            <div class="section-header">
-                <h3 class="section-title">Emergency Procedures</h3>
-                <p class="section-subtitle">What to do in case of an emergency</p>
+            <!-- Emergency Procedures -->
+            <div class="procedures-section">
+                <div class="section-header">
+                    <h3 class="section-title">Emergency Procedures</h3>
+                    <p class="section-subtitle">What to do in case of an emergency</p>
+                </div>
+
+                <div class="procedure-item">
+                    <div class="procedure-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="procedure-content">
+                        <h4>Call for Help</h4>
+                        <p>Dial the appropriate emergency number based on the situation. Stay calm and provide clear
+                            information about your location and the emergency.</p>
+                    </div>
+                </div>
+
+                <div class="procedure-item">
+                    <div class="procedure-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="procedure-content">
+                        <h4>Provide Location Details</h4>
+                        <p>Clearly state your exact location on campus, including building name, floor, and room number
+                            if possible.</p>
+                    </div>
+                </div>
+
+                <div class="procedure-item">
+                    <div class="procedure-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="procedure-content">
+                        <h4>Alert Others</h4>
+                        <p>If safe to do so, alert people nearby about the emergency and follow established evacuation
+                            procedures.</p>
+                    </div>
+                </div>
+
+                <div class="procedure-item">
+                    <div class="procedure-icon">
+                        <i class="fas fa-first-aid"></i>
+                    </div>
+                    <div class="procedure-content">
+                        <h4>First Aid</h4>
+                        <p>If trained, provide basic first aid while waiting for professional medical help to arrive.
+                        </p>
+                    </div>
+                </div>
             </div>
-
-            <div class="procedure-item">
-                <div class="procedure-icon">
-                    <i class="fas fa-phone"></i>
-                </div>
-                <div class="procedure-content">
-                    <h4>Call for Help</h4>
-                    <p>Dial the appropriate emergency number based on the situation. Stay calm and provide clear information about your location and the emergency.</p>
-                </div>
-            </div>
-
-            <div class="procedure-item">
-                <div class="procedure-icon">
-                    <i class="fas fa-map-marker-alt"></i>
-                </div>
-                <div class="procedure-content">
-                    <h4>Provide Location Details</h4>
-                    <p>Clearly state your exact location on campus, including building name, floor, and room number if possible.</p>
-                </div>
-            </div>
-
-            <div class="procedure-item">
-                <div class="procedure-icon">
-                    <i class="fas fa-user-friends"></i>
-                </div>
-                <div class="procedure-content">
-                    <h4>Alert Others</h4>
-                    <p>If safe to do so, alert people nearby about the emergency and follow established evacuation procedures.</p>
-                </div>
-            </div>
-
-            <div class="procedure-item">
-                <div class="procedure-icon">
-                    <i class="fas fa-first-aid"></i>
-                </div>
-                <div class="procedure-content">
-                    <h4>First Aid</h4>
-                    <p>If trained, provide basic first aid while waiting for professional medical help to arrive.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>Jeevansetu © 2023 | Emergency Contacts - IGDTUW</p>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        /**********************
+            * Menu Navigation
+            *********************/
+
+        function initializeMenuNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            // Define page mappings for each menu item
+            const pageMapping = {
+                'Dashboard': '/student/dashboard-student.html',
+                'Education Modules': '/student/education-modules.html',
+                'Sandbox Simulator': '/student/sandbox-simulator.html',
+                'Emergency Contacts': '../emergency_contacts.html',
+                "Do's & Dont's": '../dos&donts.html',
+                'Drill Schedule': '../drill_schedule.html',
+                'Disaster Map': '../advanced-map.html',
+                'AI Helper': '/student/chatbot.html',
+                'Gamified Learning': '/student/gamified-learning.html',
+                'Profile & Badges': 'profile-badges.html',
+                'Settings': '/student/settings.html'
+            };
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Update active state
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Get the menu item text
+                    const menuText = this.querySelector('span').textContent.trim();
+                    const targetPage = pageMapping[menuText];
+
+                    if (targetPage) {
+                        if (targetPage.startsWith('#')) {
+                            // Handle anchor links (scroll to section)
+                            if (targetPage === '#emergency-contacts') {
+                                document.querySelector('.emergency-contacts-section').scrollIntoView({
+                                    behavior: 'smooth'
+                                });
+                            }
+                        } else {
+                            // Navigate to page
+                            navigateToPage(targetPage, menuText);
+                        }
+                    }
+                });
+
+                // Add hover effect
+                item.addEventListener('mouseenter', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                    }
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        }
+
+        function navigateToPage(targetPage, menuText) {
+            // Show loading indicator
+            showLoadingIndicator();
+
+            // Add smooth transition
+            document.body.style.opacity = '0.8';
+            document.body.style.transition = 'opacity 0.3s ease';
+
+            setTimeout(() => {
+                try {
+                    window.location.href = targetPage;
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    hideLoadingIndicator();
+                    showNavigationError(menuText);
+                    document.body.style.opacity = '1';
+                }
+            }, 300);
+        }
+
+        function showLoadingIndicator() {
+            // Create loading overlay if it doesn't exist
+            if (!document.getElementById('loadingOverlay')) {
+                const loadingHTML = `
+                    <div id="loadingOverlay" style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(26, 115, 232, 0.9);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                        color: white;
+                    ">
+                        <div style="
+                            width: 50px;
+                            height: 50px;
+                            border: 3px solid rgba(255, 255, 255, 0.3);
+                            border-top: 3px solid white;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            margin-bottom: 20px;
+                        "></div>
+                        <h3>Loading...</h3>
+                        <p>Navigating to your selected page</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+                document.body.insertAdjacentHTML('beforeend', loadingHTML);
+            }
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoadingIndicator() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+
+        function showNavigationError(menuText) {
+            alert(`⚠️ Navigation Error\n\nSorry, the ${menuText} page is currently unavailable.\n\nThis might be because:\n• The page is still being developed\n• The file path has changed\n• There's a temporary server issue\n\nPlease try again later or contact support.`);
+        }
+
+        // Add keyboard navigation
+        function initializeKeyboardNavigation() {
+            document.addEventListener('keydown', function (e) {
+                if (e.altKey) {
+                    const menuItems = document.querySelectorAll('.menu-item');
+                    const currentActive = document.querySelector('.menu-item.active');
+                    let currentIndex = Array.from(menuItems).indexOf(currentActive);
+
+                    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        currentIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+                        menuItems[currentIndex].click();
+                    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        currentIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
+                        menuItems[currentIndex].click();
+                    }
+                }
+            });
+        }
+
+        // Load User Information from MongoDB database
+        async function loadUserInfo() {
+            try {
+                // First try to get user data from session/localStorage
+                let userData = null;
+
+                // Check localStorage for stored user data
+                const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
+                if (localData) {
+                    userData = JSON.parse(localData);
+                }
+
+                // If no local data or token exists, try to fetch from backend
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
+                if (!userData && token) {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/current', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            userData = await response.json();
+                            // Save to localStorage for future use
+                            localStorage.setItem('resq_user', JSON.stringify(userData));
+                        } else {
+                            console.log('Failed to fetch user from backend:', response.status);
+                        }
+                    } catch (fetchError) {
+                        console.log('Could not fetch user from backend:', fetchError.message);
+                    }
+                }
+
+                if (userData) {
+                    const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
+                    const lastName = userData.lastName || '';
+                    const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+
+                    // Update sidebar user profile
+                    const userNameElement = document.getElementById('sidebarUserName');
+                    const userAvatarElement = document.getElementById('userAvatar');
+
+                    if (userNameElement) userNameElement.textContent = fullName;
+                    if (userAvatarElement) userAvatarElement.textContent = firstName.charAt(0).toUpperCase();
+
+                    console.log('User loaded:', fullName);
+                } else {
+                    // Fallback to default values
+                    console.log('No user data found');
+                    setDefaultUser();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                setDefaultUser();
+            }
+        }
+
+        function setDefaultUser() {
+            const userNameElement = document.getElementById('userName');
+            const userPointsElement = document.getElementById('userPoints');
+
+            if (userNameElement) userNameElement.textContent = 'Guest User';
+            if (userPointsElement) userPointsElement.textContent = '0';
+        }
+
+        // FETCHING POINTS AND USER DATA FROM DATABASE
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+
+            // Refresh user data every 5 minutes
+            setInterval(loadUserInfo, 5 * 60 * 1000);
+        });
+        document.addEventListener('DOMContentLoaded', function () {
             // Quick action buttons
-            document.getElementById('emergencyCall').addEventListener('click', function() {
+            document.getElementById('emergencyCall').addEventListener('click', function () {
                 alert('Calling Emergency Services: 112');
                 // In a real app, this would initiate a phone call
             });
 
-            document.getElementById('medicalEmergency').addEventListener('click', function() {
+            document.getElementById('medicalEmergency').addEventListener('click', function () {
                 alert('Calling Medical Emergency: 102');
                 // In a real app, this would initiate a phone call
             });
 
-            document.getElementById('campusSecurity').addEventListener('click', function() {
+            document.getElementById('campusSecurity').addEventListener('click', function () {
                 alert('Calling Campus Security: +91-11-2390-0156');
                 // In a real app, this would initiate a phone call
             });
 
-            document.getElementById('campusServices').addEventListener('click', function() {
+            document.getElementById('campusServices').addEventListener('click', function () {
                 alert('Calling Campus Services: +91-11-2390-0158');
                 // In a real app, this would initiate a phone call
             });
@@ -782,7 +1144,7 @@
             // Contact call buttons
             const callButtons = document.querySelectorAll('.call-btn');
             callButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const number = this.getAttribute('data-number');
                     alert(`Calling: ${number}`);
                     // In a real app, this would initiate a phone call
@@ -791,11 +1153,15 @@
             });
 
             // Download contacts button
-            document.querySelector('.page-title .btn').addEventListener('click', function() {
+            document.querySelector('.page-title .btn').addEventListener('click', function () {
                 alert('Downloading emergency contacts as PDF');
                 // In a real app, this would generate and download a PDF
             });
         });
+
+        initializeMenuNavigation();
+        initializeKeyboardNavigation();
     </script>
 </body>
+
 </html>

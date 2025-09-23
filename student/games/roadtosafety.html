@@ -4,19 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Road to Safety (Listos California) 🛣️</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Ubuntu", sans-serif;
         }
         
         body {
-            background: linear-gradient(to bottom, #1a2a6c, #2c3e50);
-            color: #ecf0f1;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .container {
@@ -27,51 +56,81 @@
             flex-wrap: wrap;
         }
         
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .back-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 115, 232, 0.3);
+        }
+        
         .game-info {
             flex: 1;
             min-width: 320px;
-            background: rgba(44, 62, 80, 0.9);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .game-area {
             flex: 2;
             min-width: 600px;
-            background: rgba(44, 62, 80, 0.9);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         header {
             text-align: center;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid var(--primary);
         }
         
         h1 {
             font-size: 2.8rem;
-            color: #3498db;
+            color: var(--primary);
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-shadow: none;
+            font-weight: 700;
         }
         
         h2 {
             font-size: 1.8rem;
-            color: #f39c12;
+            color: var(--p2);
             margin-bottom: 15px;
         }
         
         h3 {
             font-size: 1.4rem;
-            color: #2ecc71;
+            color: var(--secondary);
             margin: 15px 0 10px;
         }
         
@@ -86,10 +145,11 @@
         }
         
         .stats {
-            background: #34495e;
+            background: rgba(26, 115, 232, 0.05);
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         .stat-item {
@@ -97,16 +157,17 @@
             justify-content: space-between;
             margin-bottom: 12px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #2c3e50;
+            border-bottom: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         .status-bar {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
-            background: #34495e;
+            background: rgba(26, 115, 232, 0.05);
             padding: 15px;
             border-radius: 8px;
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         .status-item {
@@ -114,38 +175,41 @@
             flex: 1;
             padding: 12px;
             margin: 0 5px;
-            background: #2c3e50;
+            background: var(--card-bg);
             border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .status-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #f39c12;
+            color: var(--p2);
         }
         
         .scenario {
-            background: #34495e;
+            background: rgba(26, 115, 232, 0.05);
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             flex-grow: 1;
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         .avatar-container {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
-            background: #2c3e50;
+            background: var(--card-bg);
             padding: 15px;
             border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .avatar-image {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: #3498db;
+            background: linear-gradient(135deg, var(--p1), var(--p6));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -161,9 +225,10 @@
             font-size: 1.2rem;
             line-height: 1.6;
             margin-bottom: 20px;
-            background: #2c3e50;
+            background: var(--card-bg);
             padding: 15px;
             border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .actions {
@@ -177,13 +242,13 @@
             padding: 15px;
             border: none;
             border-radius: 8px;
-            background: #3498db;
+            background: var(--primary);
             color: white;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -192,7 +257,7 @@
         
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 25px rgba(26, 115, 232, 0.3);
         }
         
         button:active {
@@ -200,81 +265,83 @@
         }
         
         .danger {
-            background: #e74c3c;
+            background: linear-gradient(90deg, var(--accent), #f56b77);
         }
         
         .success {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
         }
         
         .warning {
-            background: #f39c12;
+            background: linear-gradient(90deg, var(--warning), #ffb95c);
         }
         
         .community {
-            background: #9b59b6;
+            background: linear-gradient(90deg, var(--p5), #ca82d9);
         }
         
         .log {
-            background: #2c3e50;
+            background: var(--card-bg);
             height: 180px;
             border-radius: 10px;
             padding: 15px;
             overflow-y: auto;
             margin-bottom: 20px;
             font-size: 0.95rem;
+            border: 1px solid rgba(26, 115, 232, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .log-entry {
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #34495e;
+            border-bottom: 1px solid rgba(26, 115, 232, 0.1);
             line-height: 1.5;
         }
         
         .success-text {
-            color: #2ecc71;
+            color: var(--secondary);
         }
         
         .danger-text {
-            color: #e74c3c;
+            color: var(--accent);
         }
         
         .warning-text {
-            color: #f39c12;
+            color: var(--warning);
         }
         
         .info-text {
-            color: #3498db;
+            color: var(--primary);
         }
         
         .empathy-text {
-            color: #9b59b6;
+            color: var(--p5);
         }
         
         .restart-btn {
             width: 100%;
             padding: 15px;
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             margin-top: 10px;
         }
         
         .restart-btn:hover {
-            background: #27ae60;
+            background: linear-gradient(90deg, #2ea044, var(--secondary));
             transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 25px rgba(52, 168, 83, 0.3);
         }
         
         .progress-container {
             height: 20px;
-            background: #2c3e50;
+            background: rgba(26, 115, 232, 0.1);
             border-radius: 10px;
             margin-bottom: 20px;
             overflow: hidden;
@@ -282,7 +349,7 @@
         
         .progress-bar {
             height: 100%;
-            background: linear-gradient(to right, #3498db, #2ecc71);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             border-radius: 10px;
             width: 0%;
             transition: width 0.5s ease;
@@ -304,10 +371,22 @@
             .actions {
                 grid-template-columns: 1fr;
             }
+            
+            .back-button {
+                position: relative;
+                margin-bottom: 20px;
+                width: fit-content;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Back Button -->
+    <a href="../gamified-learning.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Games
+    </a>
+    
     <div class="container">
         <div class="game-info">
             <header>

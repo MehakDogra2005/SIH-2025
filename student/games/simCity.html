@@ -4,20 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SimCity: Disaster Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Ubuntu", sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
-            color: #2c3e50;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .container {
@@ -27,14 +55,42 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .back-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 115, 232, 0.3);
         }
         
         .info-panel {
             flex: 1;
             padding: 30px;
-            border-right: 2px solid #3498db;
-            background: #f8f9fa;
+            border-right: 2px solid var(--primary);
+            background: rgba(26, 115, 232, 0.02);
         }
         
         .game-area {
@@ -45,7 +101,7 @@
             align-items: center;
             justify-content: center;
             min-height: 700px;
-            background: #eef5ff;
+            background: var(--card-bg);
         }
         
         .header {
@@ -55,15 +111,16 @@
         }
         
         h1 {
-            color: #3498db;
+            color: var(--primary);
             margin-left: 15px;
             font-size: 32px;
+            font-weight: 700;
         }
         
         h2 {
-            color: #2980b9;
+            color: var(--primary-dark);
             margin: 20px 0 15px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 8px;
             font-size: 22px;
         }
@@ -79,24 +136,25 @@
         }
         
         .score-board {
-            background: #e3f2fd;
+            background: rgba(26, 115, 232, 0.05);
             padding: 20px;
             border-radius: 10px;
             margin-top: 25px;
-            border: 2px solid #3498db;
+            border: 2px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.1);
         }
         
         .current-score {
             font-size: 24px;
             text-align: center;
             margin: 15px 0;
-            color: #2c3e50;
+            color: var(--text-dark);
         }
         
         .max-score {
             font-size: 22px;
             text-align: center;
-            color: #e74c3c;
+            color: var(--accent);
             font-weight: bold;
         }
         
@@ -106,39 +164,40 @@
             background: white;
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 2px solid #3498db;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
         }
         
         .game-title {
             text-align: center;
             margin-bottom: 20px;
-            color: #3498db;
+            color: var(--primary);
             font-size: 28px;
+            font-weight: 700;
         }
         
         .game-description {
             text-align: center;
             margin-bottom: 20px;
-            color: #7f8c8d;
+            color: #6c757d;
             font-style: italic;
         }
         
         .game-canvas {
             width: 100%;
             height: 350px;
-            background: #d6eaf8;
+            background: rgba(26, 115, 232, 0.05);
             border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid #3498db;
+            border: 1px solid var(--primary);
             position: relative;
             overflow: hidden;
         }
         
         .city-element {
             position: absolute;
-            background: #3498db;
-            border: 1px solid #2980b9;
+            background: var(--primary);
+            border: 1px solid var(--primary-dark);
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -146,12 +205,12 @@
             color: white;
             font-size: 12px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
         
         .city-element:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+            box-shadow: 0 0 10px rgba(26, 115, 232, 0.7);
         }
         
         .controls {
@@ -164,38 +223,39 @@
         
         button {
             padding: 12px 25px;
-            background: #3498db;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: var(--shadow);
         }
         
         button:hover {
-            background: #2980b9;
+            background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(26, 115, 232, 0.3);
         }
         
         .disaster-btn {
-            background: #e74c3c;
+            background: linear-gradient(90deg, var(--accent), #f56b77);
         }
         
         .disaster-btn:hover {
-            background: #c0392b;
+            background: linear-gradient(90deg, #f56b77, var(--accent));
         }
         
         .success-btn {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
         }
         
         .success-btn:hover {
-            background: #27ae60;
+            background: linear-gradient(90deg, #2ea044, var(--secondary));
         }
         
         .resources {
@@ -203,21 +263,22 @@
             justify-content: space-between;
             margin-bottom: 15px;
             padding: 10px;
-            background: #e3f2fd;
+            background: rgba(26, 115, 232, 0.05);
             border-radius: 6px;
             font-weight: bold;
+            border: 1px solid rgba(26, 115, 232, 0.1);
         }
         
         .outcomes {
             margin-top: 20px;
             padding: 15px;
-            background: #e8f4fc;
+            background: rgba(26, 115, 232, 0.02);
             border-radius: 8px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid var(--primary);
         }
         
         .outcomes h3 {
-            color: #3498db;
+            color: var(--primary);
             margin-bottom: 10px;
         }
         
@@ -231,13 +292,108 @@
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            background: #e74c3c;
+            background: var(--accent);
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
             font-weight: bold;
             animation: pulse 1s infinite;
             display: none;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+        
+        .emergency-unit {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            color: white;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: move 2s linear infinite;
+            z-index: 100;
+        }
+        
+        .firetruck {
+            background: var(--accent);
+        }
+        
+        .ambulance {
+            background: white;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+        
+        .damaged {
+            background: #8B0000 !important;
+            animation: shake 0.5s infinite;
+        }
+        
+        .destroyed {
+            background: #2F2F2F !important;
+            opacity: 0.5;
+        }
+        
+        .evacuation-route {
+            position: absolute;
+            background: linear-gradient(45deg, yellow, orange);
+            border: 2px dashed black;
+            opacity: 0.7;
+            z-index: 50;
+        }
+        
+        .phase-indicator {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 0 0 0 8px;
+            font-weight: bold;
+            font-size: 12px;
+            z-index: 1000;
+        }
+        
+        .traffic-jam {
+            background: red !important;
+            animation: blink 1s infinite;
+        }
+        
+        .pause-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        @keyframes move {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+            100% { transform: translateX(0); }
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.5; }
         }
         
         @keyframes pulse {
@@ -253,41 +409,57 @@
             
             .info-panel {
                 border-right: none;
-                border-bottom: 2px solid #3498db;
+                border-bottom: 2px solid var(--primary);
+            }
+            
+            .back-button {
+                position: relative;
+                margin-bottom: 20px;
+                width: fit-content;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Back Button -->
+    <a href="../gamified-learning.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Games
+    </a>
+    
     <div class="container">
         <div class="info-panel">
             <div class="header">
-                <i class="fas fa-city fa-3x" style="color: #3498db;"></i>
+                <i class="fas fa-city fa-3x" style="color: var(--primary);"></i>
                 <h1>SimCity: Disaster Manager</h1>
             </div>
             
-            <h2>Rules</h2>
+            <h2>How to Play</h2>
             <ul class="rules-list">
-                <li>Build a resilient city that can withstand natural disasters</li>
-                <li>Plan emergency services and create evacuation routes</li>
-                <li>Manage resources wisely to ensure post-disaster recovery</li>
-                <li>Balance your budget between development and safety measures</li>
-                <li>Respond quickly when disasters strike to minimize damage</li>
+                <li><strong>Phase 1 - Planning:</strong> Build resilient city infrastructure with hospitals, fire stations, and evacuation routes</li>
+                <li><strong>Phase 2 - Response:</strong> Manage real-time disaster response by deploying emergency units and controlling traffic</li>
+                <li><strong>Phase 3 - Rebuilding:</strong> Assess damage, repair buildings, and upgrade infrastructure for future resilience</li>
+                <li>Run practice drills to test your city's emergency preparedness</li>
+                <li>Balance budget between development, safety measures, and post-disaster recovery</li>
+                <li>Maintain citizen morale through community services and effective disaster management</li>
             </ul>
             
-            <h2>Important Points</h2>
+            <h2>Strategy Tips</h2>
             <ul class="points-list">
-                <li>Each game presents different disaster scenarios</li>
-                <li>Hospitals and fire stations reduce casualties</li>
-                <li>Evacuation routes save lives during disasters</li>
-                <li>Green spaces help with flood prevention</li>
-                <li>Your city's resilience score affects funding</li>
+                <li>Build emergency services early - they provide both coverage and emergency units</li>
+                <li>Create multiple evacuation routes to prevent traffic jams during disasters</li>
+                <li>Practice drills improve your disaster response effectiveness</li>
+                <li>Upgrade damaged buildings to disaster-resistant versions for long-term resilience</li>
+                <li>Community centers boost morale and help attract new residents</li>
+                <li>Take loans only when necessary - interest payments reduce long-term funds</li>
             </ul>
             
             <div class="score-board">
                 <h2>Your Scores</h2>
-                <div class="current-score">Current Resilience: <span id="current-score">75%</span></div>
-                <div class="max-score">Max Resilience: <span id="max-score">89%</span></div>
+                <div class="current-score">Current Score: <span id="current-score">0</span></div>
+                <div class="max-score">Max Score: <span id="max-score">0</span></div>
+                <div class="current-score">Resilience: <span id="resilience-display">75%</span></div>
+                <div class="current-score">Drills Completed: <span id="drills-completed">0</span></div>
             </div>
         </div>
         
@@ -297,32 +469,98 @@
                 <p class="game-description">Build resilient cities that can withstand natural disasters</p>
                 
                 <div class="resources">
+                    <div>Phase: <span id="game-phase">Planning</span></div>
                     <div>Funds: <span id="funds">$1,250,000</span></div>
                     <div>Population: <span id="population">25,000</span></div>
-                    <div>Resilience: <span id="resilience">75%</span></div>
+                    <div>Morale: <span id="morale">80%</span></div>
+                </div>
+                
+                <div class="resources">
+                    <div>Power: <span id="power">70%</span></div>
+                    <div>Water: <span id="water">65%</span></div>
+                    <div>Emergency: <span id="emergency-coverage">65%</span></div>
+                    <div>Score: <span id="city-score">0</span></div>
                 </div>
                 
                 <div class="game-canvas" id="game-canvas">
                     <div class="disaster-alert" id="disaster-alert">EARTHQUAKE WARNING!</div>
+                    <div class="phase-indicator" id="phase-indicator">PLANNING PHASE</div>
+                    <div class="pause-overlay" id="pause-overlay">GAME PAUSED</div>
                     <!-- City elements will be added here -->
                 </div>
                 
                 <div class="controls" id="game-controls">
-                    <button onclick="buildStructure('hospital')">
-                        <i class="fas fa-hospital"></i> Hospital ($100K)
-                    </button>
-                    <button onclick="buildStructure('fire')">
-                        <i class="fas fa-fire-extinguisher"></i> Fire Station ($80K)
-                    </button>
-                    <button onclick="buildStructure('shelter')">
-                        <i class="fas fa-house-damage"></i> Evacuation Shelter ($120K)
-                    </button>
-                    <button class="disaster-btn" onclick="triggerDisaster()">
-                        <i class="fas fa-bolt"></i> Simulate Disaster
-                    </button>
-                    <button class="success-btn" onclick="nextYear()">
-                        <i class="fas fa-forward"></i> Advance Year
-                    </button>
+                    <!-- Planning Phase Controls -->
+                    <div id="planning-controls">
+                        <button onclick="buildStructure('hospital')">
+                            <i class="fas fa-hospital"></i> Hospital ($100K)
+                        </button>
+                        <button onclick="buildStructure('fire')">
+                            <i class="fas fa-fire-extinguisher"></i> Fire Station ($80K)
+                        </button>
+                        <button onclick="buildStructure('shelter')">
+                            <i class="fas fa-house-damage"></i> Shelter ($120K)
+                        </button>
+                        <button onclick="buildStructure('power')">
+                            <i class="fas fa-bolt"></i> Power Plant ($150K)
+                        </button>
+                        <button onclick="buildStructure('water')">
+                            <i class="fas fa-tint"></i> Water Pump ($90K)
+                        </button>
+                        <button onclick="createEvacuationRoute()">
+                            <i class="fas fa-route"></i> Evacuation Route ($50K)
+                        </button>
+                        <button onclick="runPracticeDrill()" class="success-btn">
+                            <i class="fas fa-clipboard-check"></i> Practice Drill
+                        </button>
+                        <button class="disaster-btn" onclick="startDisasterPhase()">
+                            <i class="fas fa-exclamation-triangle"></i> Begin Disaster Simulation
+                        </button>
+                    </div>
+                    
+                    <!-- Response Phase Controls -->
+                    <div id="response-controls" style="display: none;">
+                        <button onclick="deployEmergencyUnit('firetruck')">
+                            <i class="fas fa-fire-truck"></i> Deploy Fire Truck
+                        </button>
+                        <button onclick="deployEmergencyUnit('ambulance')">
+                            <i class="fas fa-ambulance"></i> Deploy Ambulance
+                        </button>
+                        <button onclick="manageTraffic()">
+                            <i class="fas fa-traffic-light"></i> Manage Traffic
+                        </button>
+                        <button onclick="pauseGame()" class="success-btn">
+                            <i class="fas fa-pause"></i> Pause & Plan
+                        </button>
+                        <button onclick="evacuateArea()" class="disaster-btn">
+                            <i class="fas fa-running"></i> Mass Evacuation
+                        </button>
+                    </div>
+                    
+                    <!-- Rebuilding Phase Controls -->
+                    <div id="rebuilding-controls" style="display: none;">
+                        <button onclick="assessDamage()">
+                            <i class="fas fa-search"></i> Assess Damage
+                        </button>
+                        <button onclick="repairBuilding()">
+                            <i class="fas fa-hammer"></i> Repair Buildings
+                        </button>
+                        <button onclick="upgradeBuilding()">
+                            <i class="fas fa-arrow-up"></i> Upgrade Structure
+                        </button>
+                        <button onclick="takeLoan()">
+                            <i class="fas fa-money-bill"></i> Take Loan
+                        </button>
+                        <button onclick="raiseTaxes()">
+                            <i class="fas fa-percent"></i> Raise Taxes
+                        </button>
+                        <button onclick="buildCommunityCenter()" class="success-btn">
+                            <i class="fas fa-users"></i> Community Center
+                        </button>
+                        <button onclick="nextYear()" class="disaster-btn">
+                            <i class="fas fa-forward"></i> Complete Rebuilding
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="outcomes" id="game-outcomes">
@@ -345,19 +583,39 @@
             structures: [],
             currentDisaster: null,
             year: 2023,
+            phase: 'planning', // 'planning', 'response', 'rebuilding'
+            gamePhaseTimer: 0,
+            disasterActive: false,
+            emergencyUnits: {
+                firetrucks: 0,
+                ambulances: 0,
+                police: 0
+            },
+            citizenMorale: 80,
+            cityScore: 0,
+            maxCityScore: 0,
             coverage: {
                 emergency: 65,
                 evacuation: 45
-            }
+            },
+            evacuationRoutes: [],
+            trafficJam: false,
+            utilities: {
+                power: 70,
+                water: 65,
+                waste: 60
+            },
+            drillsCompleted: 0,
+            damagedBuildings: [],
+            loans: 0
         };
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
-            // Load max resilience from storage if available
-            const savedResilience = localStorage.getItem('maxResilience');
-            if (savedResilience) {
-                gameData.maxResilience = parseInt(savedResilience);
-                document.getElementById('max-score').textContent = gameData.maxResilience + '%';
+            // Load saved data from storage if available
+            const savedScore = localStorage.getItem('maxCityScore');
+            if (savedScore) {
+                gameData.maxCityScore = parseInt(savedScore);
             }
             
             // Initialize the game
@@ -365,6 +623,7 @@
             
             // Update UI with current values
             updateUI();
+            updatePhaseDisplay();
         });
 
         // Initialize the game
@@ -373,44 +632,59 @@
             
             // Create initial city layout
             createCityLayout();
+            
+            // Set up event listeners for city elements
+            setupCityInteractions();
         }
 
         // Create initial city layout
         function createCityLayout() {
             const canvas = document.getElementById('game-canvas');
             
-            // Clear previous content
-            canvas.innerHTML = '<div class="disaster-alert" id="disaster-alert">EARTHQUAKE WARNING!</div>';
+            // Clear previous content (keep alerts and overlays)
+            const alerts = canvas.querySelector('.disaster-alert');
+            const phaseIndicator = canvas.querySelector('.phase-indicator');
+            const pauseOverlay = canvas.querySelector('.pause-overlay');
+            canvas.innerHTML = '';
+            canvas.appendChild(alerts);
+            canvas.appendChild(phaseIndicator);
+            canvas.appendChild(pauseOverlay);
             
-            // Create roads
-            createRoad(0, 150, 600, 10);
-            createRoad(200, 0, 10, 350);
-            createRoad(400, 0, 10, 350);
+            // Create roads (evacuation routes)
+            createRoad(0, 150, 600, 10, true);
+            createRoad(200, 0, 10, 350, false);
+            createRoad(400, 0, 10, 350, false);
             
             // Create some initial buildings
-            createBuilding(50, 50, 80, 60, 'Residential', '#3498db');
-            createBuilding(250, 50, 80, 60, 'Commercial', '#2ecc71');
-            createBuilding(450, 50, 80, 60, 'Industrial', '#e74c3c');
-            createBuilding(50, 250, 80, 60, 'School', '#f1c40f');
-            createBuilding(250, 250, 80, 60, 'Park', '#27ae60');
-            createBuilding(450, 250, 80, 60, 'Power Plant', '#8e44ad');
+            createBuilding(50, 50, 80, 60, 'Residential', 'var(--primary)', 100);
+            createBuilding(250, 50, 80, 60, 'Commercial', 'var(--secondary)', 150);
+            createBuilding(450, 50, 80, 60, 'Industrial', 'var(--accent)', 120);
+            createBuilding(50, 250, 80, 60, 'School', 'var(--warning)', 80);
+            createBuilding(250, 250, 80, 60, 'Park', 'var(--p2)', 50);
+            createBuilding(450, 250, 80, 60, 'Power Plant', 'var(--p5)', 200);
         }
 
-        // Create a road
-        function createRoad(x, y, width, height) {
+        // Create a road (potential evacuation route)
+        function createRoad(x, y, width, height, isEvacRoute = false) {
             const road = document.createElement('div');
             road.style.position = 'absolute';
             road.style.left = x + 'px';
             road.style.top = y + 'px';
             road.style.width = width + 'px';
             road.style.height = height + 'px';
-            road.style.background = '#7f8c8d';
+            road.style.background = isEvacRoute ? 'linear-gradient(45deg, #6c757d, #8c9196)' : '#6c757d';
             road.style.zIndex = 1;
+            road.className = isEvacRoute ? 'evacuation-route' : '';
+            
+            if (isEvacRoute) {
+                gameData.evacuationRoutes.push({x, y, width, height});
+            }
+            
             document.getElementById('game-canvas').appendChild(road);
         }
 
         // Create a building
-        function createBuilding(x, y, width, height, type, color) {
+        function createBuilding(x, y, width, height, type, color, value = 100) {
             const building = document.createElement('div');
             building.className = 'city-element';
             building.style.left = x + 'px';
@@ -419,133 +693,671 @@
             building.style.height = height + 'px';
             building.style.background = color;
             building.innerHTML = type;
+            building.dataset.type = type;
+            building.dataset.value = value;
+            building.dataset.health = '100';
             
             document.getElementById('game-canvas').appendChild(building);
-            gameData.structures.push({type, x, y, width, height, color});
+            gameData.structures.push({type, x, y, width, height, color, value, health: 100});
         }
 
-        // Build a structure
+        // Setup city interactions
+        function setupCityInteractions() {
+            const canvas = document.getElementById('game-canvas');
+            canvas.addEventListener('click', function(e) {
+                if (gameData.phase === 'response' && gameData.disasterActive) {
+                    // During response phase, clicking dispatches emergency units
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Check if clicked on a building that needs help
+                    const buildings = canvas.querySelectorAll('.city-element');
+                    buildings.forEach(building => {
+                        const bRect = building.getBoundingClientRect();
+                        const bX = bRect.left - rect.left;
+                        const bY = bRect.top - rect.top;
+                        
+                        if (x >= bX && x <= bX + building.offsetWidth && 
+                            y >= bY && y <= bY + building.offsetHeight) {
+                            if (building.classList.contains('damaged')) {
+                                dispatchEmergencyToLocation(bX, bY, building);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        // Phase 1: Planning Phase Functions
         function buildStructure(type) {
-            const cost = {
+            if (gameData.phase !== 'planning') {
+                updateOutcomes('Can only build during planning phase!', true);
+                return;
+            }
+            
+            const costs = {
                 'hospital': 100000,
                 'fire': 80000,
-                'shelter': 120000
-            }[type];
+                'shelter': 120000,
+                'power': 150000,
+                'water': 90000
+            };
+            
+            const cost = costs[type];
             
             if (gameData.funds >= cost) {
                 gameData.funds -= cost;
                 
                 const colors = {
-                    'hospital': '#e74c3c',
-                    'fire': '#f39c12',
-                    'shelter': '#2c3e50'
+                    'hospital': 'var(--accent)',
+                    'fire': 'var(--warning)',
+                    'shelter': 'var(--p5)',
+                    'power': 'var(--p1)',
+                    'water': 'var(--p6)'
                 };
                 
                 const names = {
                     'hospital': 'Hospital',
                     'fire': 'Fire Station',
-                    'shelter': 'Shelter'
+                    'shelter': 'Shelter',
+                    'power': 'Power Plant',
+                    'water': 'Water Pump'
                 };
                 
                 // Find a position for the new structure
                 const x = 50 + Math.random() * 400;
                 const y = 50 + Math.random() * 200;
                 
-                createBuilding(x, y, 70, 50, names[type], colors[type]);
+                createBuilding(x, y, 70, 50, names[type], colors[type], cost/1000);
                 
-                // Update coverage based on structure type
-                if (type === 'hospital') gameData.coverage.emergency += 5;
-                if (type === 'fire') gameData.coverage.emergency += 4;
+                // Update coverage and utilities based on structure type
+                if (type === 'hospital') {
+                    gameData.coverage.emergency += 5;
+                    gameData.emergencyUnits.ambulances += 2;
+                }
+                if (type === 'fire') {
+                    gameData.coverage.emergency += 4;
+                    gameData.emergencyUnits.firetrucks += 2;
+                }
                 if (type === 'shelter') gameData.coverage.evacuation += 8;
+                if (type === 'power') gameData.utilities.power = Math.min(100, gameData.utilities.power + 15);
+                if (type === 'water') gameData.utilities.water = Math.min(100, gameData.utilities.water + 12);
                 
-                // Update resilience
+                // Update resilience and score
                 gameData.resilience = Math.min(100, gameData.resilience + 2);
+                gameData.cityScore += 10;
                 
                 updateUI();
-                updateOutcomes('Built ' + names[type] + '! Emergency preparedness improved.');
+                updateOutcomes(`Built ${names[type]}! City infrastructure improved.`);
             } else {
                 updateOutcomes('Not enough funds to build this structure!', true);
             }
         }
 
-        // Trigger a disaster
-        function triggerDisaster() {
+        function createEvacuationRoute() {
+            if (gameData.phase !== 'planning') {
+                updateOutcomes('Can only plan evacuation routes during planning phase!', true);
+                return;
+            }
+            
+            if (gameData.funds >= 50000) {
+                gameData.funds -= 50000;
+                
+                // Create a new evacuation route
+                const x = Math.random() * 500;
+                const y = Math.random() * 300;
+                const isHorizontal = Math.random() > 0.5;
+                
+                if (isHorizontal) {
+                    createRoad(x, y, 100, 8, true);
+                } else {
+                    createRoad(x, y, 8, 100, true);
+                }
+                
+                gameData.coverage.evacuation += 10;
+                gameData.cityScore += 5;
+                
+                updateUI();
+                updateOutcomes('New evacuation route created! Evacuation coverage improved.');
+            } else {
+                updateOutcomes('Not enough funds for evacuation route!', true);
+            }
+        }
+
+        function runPracticeDrill() {
+            if (gameData.phase !== 'planning') {
+                updateOutcomes('Practice drills can only be run during planning phase!', true);
+                return;
+            }
+            
+            gameData.drillsCompleted++;
+            
+            // Simulate drill results based on current preparedness
+            const effectiveness = (gameData.coverage.emergency + gameData.coverage.evacuation) / 2;
+            
+            if (effectiveness > 75) {
+                gameData.cityScore += 15;
+                updateOutcomes(`Excellent drill! Emergency response time: ${Math.round(15 - effectiveness/10)} minutes. All evacuation routes clear.`);
+            } else if (effectiveness > 50) {
+                gameData.cityScore += 10;
+                updateOutcomes(`Good drill. Emergency response time: ${Math.round(20 - effectiveness/10)} minutes. Some traffic delays noted.`);
+            } else {
+                gameData.cityScore += 5;
+                updateOutcomes(`Poor drill performance. Response time: ${Math.round(25 - effectiveness/10)} minutes. Major gaps in coverage identified.`, true);
+            }
+            
+            updateUI();
+        }
+
+        // Phase 2: Response Phase Functions
+        function startDisasterPhase() {
+            if (gameData.phase !== 'planning') return;
+            
+            gameData.phase = 'response';
+            gameData.disasterActive = true;
+            updatePhaseDisplay();
+            
+            // Trigger random disaster
             const disasters = [
-                { name: 'Earthquake', severity: 7, message: 'EARTHQUAKE WARNING! Get to safe zones!' },
-                { name: 'Flood', severity: 5, message: 'FLOOD ALERT! Evacuate low-lying areas!' },
-                { name: 'Tornado', severity: 8, message: 'TORNADO SIGHTED! Seek shelter immediately!' },
-                { name: 'Wildfire', severity: 6, message: 'WILDFIRE APPROACHING! Evacuate now!' }
+                { name: 'Earthquake', severity: 8, duration: 45000, message: 'MAJOR EARTHQUAKE! Buildings collapsing!' },
+                { name: 'Tornado', severity: 9, duration: 30000, message: 'F3 TORNADO APPROACHING! Take cover!' },
+                { name: 'Flood', severity: 6, duration: 60000, message: 'FLASH FLOOD WARNING! Evacuate low areas!' },
+                { name: 'Wildfire', severity: 7, duration: 90000, message: 'WILDFIRE SPREADING! Evacuate immediately!' }
             ];
             
             const disaster = disasters[Math.floor(Math.random() * disasters.length)];
             gameData.currentDisaster = disaster;
             
-            // Show alert
+            // Show disaster alert
             const alert = document.getElementById('disaster-alert');
             alert.textContent = disaster.message;
             alert.style.display = 'block';
             
-            // Calculate damage based on coverage and resilience
-            const damageModifier = (100 - gameData.coverage.emergency - gameData.coverage.evacuation/2) / 100;
-            const damage = Math.floor(disaster.severity * 5 * damageModifier);
+            // Start disaster simulation
+            simulateDisaster(disaster);
             
-            // Update population and resilience
-            gameData.population = Math.max(0, gameData.population - damage * 100);
-            gameData.resilience = Math.max(0, gameData.resilience - damage);
-            
-            // Update outcomes
-            setTimeout(() => {
-                alert.style.display = 'none';
-                updateOutcomes(`Disaster: ${disaster.name}! Lost ${damage * 100} citizens and ${damage}% resilience.`);
-                updateUI();
-            }, 3000);
+            updateOutcomes(`DISASTER ACTIVE: ${disaster.name}! Deploy emergency services immediately!`);
         }
 
-        // Advance to next year
-        function nextYear() {
-            gameData.year++;
+        function simulateDisaster(disaster) {
+            const buildings = document.querySelectorAll('.city-element');
+            let damageInterval;
             
-            // Increase funds based on population and resilience
-            const revenue = Math.floor(gameData.population * 0.05 * (gameData.resilience / 100));
-            gameData.funds += revenue;
+            // Create traffic jams on roads
+            if (Math.random() > 0.3) {
+                gameData.trafficJam = true;
+                const roads = document.querySelectorAll('.evacuation-route');
+                roads.forEach(road => road.classList.add('traffic-jam'));
+            }
             
-            // Small population growth
-            gameData.population = Math.floor(gameData.population * 1.02);
+            // Damage buildings over time
+            damageInterval = setInterval(() => {
+                if (!gameData.disasterActive) {
+                    clearInterval(damageInterval);
+                    return;
+                }
+                
+                // Random building takes damage
+                if (Math.random() > 0.7) {
+                    const randomBuilding = buildings[Math.floor(Math.random() * buildings.length)];
+                    if (randomBuilding && !randomBuilding.classList.contains('destroyed')) {
+                        const currentHealth = parseInt(randomBuilding.dataset.health);
+                        const damage = Math.floor(disaster.severity * Math.random() * 15);
+                        const newHealth = Math.max(0, currentHealth - damage);
+                        
+                        randomBuilding.dataset.health = newHealth;
+                        
+                        if (newHealth < 30) {
+                            randomBuilding.classList.add('damaged');
+                            if (newHealth === 0) {
+                                randomBuilding.classList.remove('damaged');
+                                randomBuilding.classList.add('destroyed');
+                                gameData.damagedBuildings.push({
+                                    element: randomBuilding,
+                                    originalType: randomBuilding.dataset.type,
+                                    repairCost: parseInt(randomBuilding.dataset.value) * 1000 * 0.7
+                                });
+                            }
+                        }
+                        
+                        // Population loss
+                        if (randomBuilding.dataset.type === 'Residential') {
+                            gameData.population = Math.max(0, gameData.population - Math.floor(damage * 10));
+                        }
+                    }
+                }
+            }, 2000);
             
-            // Update max resilience if current is higher
-            if (gameData.resilience > gameData.maxResilience) {
-                gameData.maxResilience = gameData.resilience;
-                localStorage.setItem('maxResilience', gameData.maxResilience);
+            // End disaster after duration
+            setTimeout(() => {
+                endDisaster();
+                clearInterval(damageInterval);
+            }, disaster.duration);
+        }
+
+        function deployEmergencyUnit(type) {
+            if (gameData.phase !== 'response') return;
+            
+            const units = {
+                'firetruck': gameData.emergencyUnits.firetrucks,
+                'ambulance': gameData.emergencyUnits.ambulances
+            };
+            
+            if (units[type] > 0) {
+                // Visual unit deployment
+                createEmergencyUnit(type);
+                
+                if (type === 'firetruck') {
+                    gameData.emergencyUnits.firetrucks--;
+                    // Reduce fire damage to buildings
+                    setTimeout(() => {
+                        gameData.emergencyUnits.firetrucks++;
+                        updateOutcomes('Fire truck returned to station.');
+                    }, 10000);
+                }
+                
+                if (type === 'ambulance') {
+                    gameData.emergencyUnits.ambulances--;
+                    // Save some population
+                    gameData.population += Math.floor(Math.random() * 100);
+                    setTimeout(() => {
+                        gameData.emergencyUnits.ambulances++;
+                        updateOutcomes('Ambulance returned with rescued citizens.');
+                    }, 8000);
+                }
+                
+                gameData.cityScore += 5;
+                updateUI();
+                updateOutcomes(`${type} deployed! Emergency response in action.`);
+            } else {
+                updateOutcomes(`No ${type}s available! Build more emergency services.`, true);
+            }
+        }
+
+        function createEmergencyUnit(type) {
+            const canvas = document.getElementById('game-canvas');
+            const unit = document.createElement('div');
+            unit.className = `emergency-unit ${type}`;
+            unit.style.left = '10px';
+            unit.style.top = '10px';
+            unit.innerHTML = type === 'firetruck' ? '🚒' : '🚑';
+            
+            canvas.appendChild(unit);
+            
+            // Animate unit movement
+            let position = 10;
+            const moveInterval = setInterval(() => {
+                position += 5;
+                unit.style.left = position + 'px';
+                
+                if (position > 580) {
+                    canvas.removeChild(unit);
+                    clearInterval(moveInterval);
+                }
+            }, 100);
+        }
+
+        function manageTraffic() {
+            if (gameData.phase !== 'response') return;
+            
+            if (gameData.trafficJam) {
+                // Clear traffic jams
+                const roads = document.querySelectorAll('.traffic-jam');
+                roads.forEach(road => road.classList.remove('traffic-jam'));
+                gameData.trafficJam = false;
+                gameData.cityScore += 10;
+                updateOutcomes('Traffic cleared! Emergency vehicles can move freely.');
+            } else {
+                updateOutcomes('No traffic jams to clear.');
             }
             
             updateUI();
-            updateOutcomes(`Year ${gameData.year}: Gained $${revenue.toLocaleString()} in revenue. Population growing.`);
+        }
+
+        function pauseGame() {
+            const overlay = document.getElementById('pause-overlay');
+            overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function evacuateArea() {
+            if (gameData.phase !== 'response') return;
+            
+            // Simulate mass evacuation
+            const evacuationEffectiveness = gameData.coverage.evacuation / 100;
+            const peopleSaved = Math.floor(gameData.population * evacuationEffectiveness * 0.1);
+            
+            gameData.population = Math.max(0, gameData.population - peopleSaved);
+            gameData.cityScore += Math.floor(peopleSaved / 10);
+            
+            updateUI();
+            updateOutcomes(`Emergency evacuation! ${peopleSaved} citizens safely evacuated.`);
+        }
+
+        function dispatchEmergencyToLocation(x, y, building) {
+            // Visual indicator of emergency response
+            const canvas = document.getElementById('game-canvas');
+            const indicator = document.createElement('div');
+            indicator.style.position = 'absolute';
+            indicator.style.left = x + 'px';
+            indicator.style.top = y + 'px';
+            indicator.style.color = 'white';
+            indicator.style.background = 'green';
+            indicator.style.padding = '2px 5px';
+            indicator.style.borderRadius = '3px';
+            indicator.style.fontSize = '10px';
+            indicator.innerHTML = 'HELP SENT';
+            indicator.style.zIndex = 1000;
+            
+            canvas.appendChild(indicator);
+            
+            // Remove building damage
+            building.classList.remove('damaged');
+            building.dataset.health = '80';
+            
+            setTimeout(() => {
+                canvas.removeChild(indicator);
+            }, 2000);
+            
+            gameData.cityScore += 3;
+            updateUI();
+        }
+
+        function endDisaster() {
+            gameData.disasterActive = false;
+            gameData.phase = 'rebuilding';
+            updatePhaseDisplay();
+            
+            // Hide disaster alert
+            document.getElementById('disaster-alert').style.display = 'none';
+            
+            // Calculate final disaster impact
+            const casualties = Math.max(0, 25000 - gameData.population);
+            const buildingsDamaged = gameData.damagedBuildings.length;
+            
+            updateOutcomes(`Disaster ended! Casualties: ${casualties}, Buildings damaged: ${buildingsDamaged}. Begin rebuilding phase.`);
+        }
+
+        // Phase 3: Rebuilding Phase Functions
+        function assessDamage() {
+            if (gameData.phase !== 'rebuilding') return;
+            
+            let totalRepairCost = 0;
+            let report = 'DAMAGE ASSESSMENT REPORT:\n';
+            
+            gameData.damagedBuildings.forEach((building, index) => {
+                totalRepairCost += building.repairCost;
+                report += `• ${building.originalType}: $${building.repairCost.toLocaleString()} to repair\n`;
+            });
+            
+            report += `\nTotal Repair Cost: $${totalRepairCost.toLocaleString()}`;
+            report += `\nPopulation Loss: ${25000 - gameData.population} citizens`;
+            report += `\nTax Revenue Down: ${Math.floor((25000 - gameData.population) * 0.05 * 12)}% annually`;
+            
+            updateOutcomes(report);
+        }
+
+        function repairBuilding() {
+            if (gameData.phase !== 'rebuilding') return;
+            
+            if (gameData.damagedBuildings.length === 0) {
+                updateOutcomes('No damaged buildings to repair.');
+                return;
+            }
+            
+            const building = gameData.damagedBuildings[0];
+            
+            if (gameData.funds >= building.repairCost) {
+                gameData.funds -= building.repairCost;
+                
+                // Remove damage and restore building
+                building.element.classList.remove('damaged', 'destroyed');
+                building.element.dataset.health = '100';
+                building.element.style.background = getOriginalColor(building.originalType);
+                
+                gameData.damagedBuildings.shift();
+                gameData.cityScore += 8;
+                
+                updateUI();
+                updateOutcomes(`Repaired ${building.originalType} for $${building.repairCost.toLocaleString()}.`);
+            } else {
+                updateOutcomes('Not enough funds to repair this building!', true);
+            }
+        }
+
+        function upgradeBuilding() {
+            if (gameData.phase !== 'rebuilding') return;
+            
+            if (gameData.damagedBuildings.length === 0) {
+                updateOutcomes('No buildings available for upgrade.');
+                return;
+            }
+            
+            const building = gameData.damagedBuildings[0];
+            const upgradeCost = building.repairCost * 1.5;
+            
+            if (gameData.funds >= upgradeCost) {
+                gameData.funds -= upgradeCost;
+                
+                // Upgrade building to disaster-resistant version
+                building.element.classList.remove('damaged', 'destroyed');
+                building.element.dataset.health = '150';
+                building.element.style.background = 'linear-gradient(45deg, ' + getOriginalColor(building.originalType) + ', gold)';
+                building.element.innerHTML += ' (Reinforced)';
+                
+                gameData.damagedBuildings.shift();
+                gameData.resilience += 5;
+                gameData.cityScore += 15;
+                
+                updateUI();
+                updateOutcomes(`Upgraded ${building.originalType} to disaster-resistant version!`);
+            } else {
+                updateOutcomes('Not enough funds to upgrade this building!', true);
+            }
+        }
+
+        function takeLoan() {
+            if (gameData.phase !== 'rebuilding') return;
+            
+            const loanAmount = 500000;
+            const interestRate = 0.1;
+            
+            gameData.funds += loanAmount;
+            gameData.loans += loanAmount * (1 + interestRate);
+            
+            updateUI();
+            updateOutcomes(`Loan approved! Received $${loanAmount.toLocaleString()}. Must repay $${(loanAmount * (1 + interestRate)).toLocaleString()} over time.`);
+        }
+
+        function raiseTaxes() {
+            if (gameData.phase !== 'rebuilding') return;
+            
+            if (gameData.citizenMorale > 30) {
+                const revenue = Math.floor(gameData.population * 0.1);
+                gameData.funds += revenue;
+                gameData.citizenMorale -= 15;
+                
+                updateUI();
+                updateOutcomes(`Taxes raised! Gained $${revenue.toLocaleString()} but citizen morale decreased.`);
+            } else {
+                updateOutcomes('Citizen morale too low to raise taxes!', true);
+            }
+        }
+
+        function buildCommunityCenter() {
+            if (gameData.phase !== 'rebuilding') return;
+            
+            const cost = 200000;
+            
+            if (gameData.funds >= cost) {
+                gameData.funds -= cost;
+                gameData.citizenMorale += 20;
+                
+                // Create community center on map
+                const x = 300 + Math.random() * 200;
+                const y = 180 + Math.random() * 100;
+                createBuilding(x, y, 90, 70, 'Community Center', 'var(--p3)', 200);
+                
+                gameData.cityScore += 12;
+                
+                updateUI();
+                updateOutcomes('Community Center built! Citizen morale improved significantly.');
+            } else {
+                updateOutcomes('Not enough funds for Community Center!', true);
+            }
+        }
+
+        function getOriginalColor(type) {
+            const colors = {
+                'Residential': 'var(--primary)',
+                'Commercial': 'var(--secondary)',
+                'Industrial': 'var(--accent)',
+                'School': 'var(--warning)',
+                'Park': 'var(--p2)',
+                'Power Plant': 'var(--p5)',
+                'Hospital': 'var(--accent)',
+                'Fire Station': 'var(--warning)',
+                'Shelter': 'var(--p5)'
+            };
+            return colors[type] || 'var(--primary)';
+        }
+
+        // Updated triggerDisaster for backwards compatibility
+        function triggerDisaster() {
+            startDisasterPhase();
+        }
+
+        // Advance to next year / Complete rebuilding
+        function nextYear() {
+            if (gameData.phase === 'rebuilding') {
+                // Complete rebuilding phase
+                gameData.phase = 'planning';
+                gameData.year++;
+                
+                // Calculate end-of-cycle bonus
+                const moraleBonus = Math.floor(gameData.citizenMorale / 10);
+                const efficiencyBonus = Math.floor((gameData.coverage.emergency + gameData.coverage.evacuation) / 10);
+                
+                gameData.cityScore += moraleBonus + efficiencyBonus;
+                
+                // Pay loan interest
+                if (gameData.loans > 0) {
+                    const payment = Math.floor(gameData.loans * 0.05);
+                    gameData.funds -= payment;
+                    gameData.loans -= payment;
+                }
+                
+                // Population recovery
+                if (gameData.citizenMorale > 60) {
+                    gameData.population = Math.floor(gameData.population * 1.05);
+                }
+                
+                // Revenue from population
+                const revenue = Math.floor(gameData.population * 0.08);
+                gameData.funds += revenue;
+                
+                updatePhaseDisplay();
+                updateUI();
+                updateOutcomes(`Year ${gameData.year} begins! Rebuilding complete. Population: ${gameData.population.toLocaleString()}, Revenue: $${revenue.toLocaleString()}`);
+                
+                // Reset for new cycle
+                gameData.damagedBuildings = [];
+                gameData.trafficJam = false;
+                
+            } else {
+                // Original next year function for planning phase
+                gameData.year++;
+                
+                // Increase funds based on population and resilience
+                const revenue = Math.floor(gameData.population * 0.05 * (gameData.resilience / 100));
+                gameData.funds += revenue;
+                
+                // Small population growth
+                gameData.population = Math.floor(gameData.population * 1.02);
+                
+                updateUI();
+                updateOutcomes(`Year ${gameData.year}: Gained $${revenue.toLocaleString()} in revenue. Population growing.`);
+            }
+            
+            // Update max score if current is higher
+            if (gameData.cityScore > gameData.maxCityScore) {
+                gameData.maxCityScore = gameData.cityScore;
+                localStorage.setItem('maxCityScore', gameData.maxCityScore);
+            }
+        }
+
+        // Update phase display
+        function updatePhaseDisplay() {
+            const phaseIndicator = document.getElementById('phase-indicator');
+            const planningControls = document.getElementById('planning-controls');
+            const responseControls = document.getElementById('response-controls');
+            const rebuildingControls = document.getElementById('rebuilding-controls');
+            
+            // Hide all control panels
+            planningControls.style.display = 'none';
+            responseControls.style.display = 'none';
+            rebuildingControls.style.display = 'none';
+            
+            switch (gameData.phase) {
+                case 'planning':
+                    phaseIndicator.textContent = 'PLANNING PHASE';
+                    phaseIndicator.style.background = 'var(--primary)';
+                    planningControls.style.display = 'flex';
+                    planningControls.style.flexWrap = 'wrap';
+                    planningControls.style.gap = '10px';
+                    break;
+                case 'response':
+                    phaseIndicator.textContent = 'RESPONSE PHASE';
+                    phaseIndicator.style.background = 'var(--accent)';
+                    responseControls.style.display = 'flex';
+                    responseControls.style.flexWrap = 'wrap';
+                    responseControls.style.gap = '10px';
+                    break;
+                case 'rebuilding':
+                    phaseIndicator.textContent = 'REBUILDING PHASE';
+                    phaseIndicator.style.background = 'var(--secondary)';
+                    rebuildingControls.style.display = 'flex';
+                    rebuildingControls.style.flexWrap = 'wrap';
+                    rebuildingControls.style.gap = '10px';
+                    break;
+            }
+            
+            document.getElementById('game-phase').textContent = gameData.phase.charAt(0).toUpperCase() + gameData.phase.slice(1);
         }
 
         // Update UI elements
         function updateUI() {
             document.getElementById('funds').textContent = '$' + gameData.funds.toLocaleString();
             document.getElementById('population').textContent = gameData.population.toLocaleString();
-            document.getElementById('resilience').textContent = gameData.resilience + '%';
-            document.getElementById('current-score').textContent = gameData.resilience + '%';
-            document.getElementById('max-score').textContent = gameData.maxResilience + '%';
+            document.getElementById('morale').textContent = gameData.citizenMorale + '%';
+            document.getElementById('power').textContent = gameData.utilities.power + '%';
+            document.getElementById('water').textContent = gameData.utilities.water + '%';
+            document.getElementById('emergency-coverage').textContent = gameData.coverage.emergency + '%';
+            document.getElementById('city-score').textContent = gameData.cityScore;
+            document.getElementById('current-score').textContent = gameData.cityScore;
+            document.getElementById('max-score').textContent = gameData.maxCityScore;
+            document.getElementById('resilience-display').textContent = gameData.resilience + '%';
+            document.getElementById('drills-completed').textContent = gameData.drillsCompleted;
         }
 
         // Update outcomes panel
         function updateOutcomes(message, isWarning = false) {
             const outcomes = document.getElementById('game-outcomes');
+            const timestamp = new Date().toLocaleTimeString();
+            
             outcomes.innerHTML = `
-                <h3>City Status</h3>
-                <p class="${isWarning ? 'warning' : ''}">${message}</p>
-                <p>Emergency services coverage: ${gameData.coverage.emergency}%</p>
-                <p>Evacuation route completeness: ${gameData.coverage.evacuation}%</p>
-                <p>Year: ${gameData.year}</p>
+                <h3>City Status - ${gameData.phase.charAt(0).toUpperCase() + gameData.phase.slice(1)} Phase</h3>
+                <p class="${isWarning ? 'warning' : ''}" style="color: ${isWarning ? 'var(--accent)' : 'inherit'}">[${timestamp}] ${message}</p>
+                <p>Emergency services coverage: ${gameData.coverage.emergency}% | Evacuation routes: ${gameData.coverage.evacuation}%</p>
+                <p>Fire Trucks: ${gameData.emergencyUnits.firetrucks} | Ambulances: ${gameData.emergencyUnits.ambulances}</p>
+                <p>Year: ${gameData.year} | Loans: $${gameData.loans.toLocaleString()} | Morale: ${gameData.citizenMorale}%</p>
+                ${gameData.damagedBuildings.length > 0 ? `<p style="color: var(--accent)">Buildings needing repair: ${gameData.damagedBuildings.length}</p>` : ''}
             `;
             
             if (isWarning) {
-                outcomes.style.borderLeftColor = '#e74c3c';
+                outcomes.style.borderLeftColor = 'var(--accent)';
             } else {
-                outcomes.style.borderLeftColor = '#3498db';
+                outcomes.style.borderLeftColor = 'var(--primary)';
             }
         }
     </script>

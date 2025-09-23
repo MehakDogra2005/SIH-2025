@@ -108,7 +108,6 @@
             cursor: pointer;
             transition: var(--transition);
             color: rgba(255, 255, 255, 0.95);
-            tabindex: 0;
         }
 
         .menu-item i {
@@ -529,17 +528,19 @@
         <aside class="sidebar">
             <div class="logo">
                 <i class="fas fa-shield-alt"></i>
-                <h1>ResQ</h1>
+                <h1>JeevanSetu</h1>
             </div>
             <div class="menu-items">
                 <div class="menu-item active"><i class="fas fa-home"></i><span>Dashboard</span></div>
                 <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
                 <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
                 <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item"><i class="fa-solid fa-book-open"></i><span>Do's & Dont's</span></div>
+                <div class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
                 <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
                 <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
                 <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
-                <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div>
+                <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
                 <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
 
@@ -768,7 +769,9 @@
                 'Dashboard': 'dashboard-student.html',
                 'Education Modules': 'education-modules.html',
                 'Sandbox Simulator': 'sandbox-simulator.html',
-                'Emergency Contacts': '#emergency-contacts', // Scroll to emergency contacts section
+                'Emergency Contacts': '../emergency_contacts.html', // Scroll to emergency contacts section
+                "Do's & Dont's": '../dos&donts.html',
+                'Drill Schedule': '../drill_schedule.html',
                 'Disaster Map': '../advanced-map.html',
                 'AI Helper': 'chatbot.html',
                 'Gamified Learning': 'gamified-learning.html',

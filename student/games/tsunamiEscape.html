@@ -4,37 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tsunami Escape 🌊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Ubuntu", sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
-            color: #2c3e50;
+            background: var(--light-bg);
+            color: var(--text-dark);
             min-height: 100vh;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-weight: 400;
+            font-style: normal;
         }
         
         .container {
             display: flex;
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
         }
         
         .info-panel {
             flex: 1;
             padding: 30px;
-            border-right: 2px solid #3498db;
-            background: #f8f9fa;
+            border-right: 2px solid var(--primary);
+            background: var(--card-bg);
         }
         
         .game-area {
@@ -45,7 +74,7 @@
             align-items: center;
             justify-content: center;
             min-height: 700px;
-            background: #eef5ff;
+            background: var(--light-bg);
         }
         
         .header {
@@ -55,15 +84,15 @@
         }
         
         h1 {
-            color: #3498db;
+            color: var(--primary);
             margin-left: 15px;
             font-size: 32px;
         }
         
         h2 {
-            color: #2980b9;
+            color: var(--primary-dark);
             margin: 20px 0 15px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 8px;
             font-size: 22px;
         }
@@ -79,48 +108,48 @@
         }
         
         .score-board {
-            background: #e3f2fd;
+            background: var(--p6);
             padding: 20px;
             border-radius: 10px;
             margin-top: 25px;
-            border: 2px solid #3498db;
+            border: 2px solid var(--primary);
         }
         
         .current-score {
             font-size: 24px;
             text-align: center;
             margin: 15px 0;
-            color: #2c3e50;
+            color: var(--text-dark);
         }
         
         .max-score {
             font-size: 22px;
             text-align: center;
-            color: #e74c3c;
+            color: var(--accent);
             font-weight: bold;
         }
         
         .game-container {
             width: 100%;
             max-width: 700px;
-            background: white;
+            background: var(--card-bg);
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 2px solid #3498db;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary);
         }
         
         .game-title {
             text-align: center;
             margin-bottom: 20px;
-            color: #3498db;
+            color: var(--primary);
             font-size: 28px;
         }
         
         .game-description {
             text-align: center;
             margin-bottom: 20px;
-            color: #7f8c8d;
+            color: #6c757d;
             font-style: italic;
         }
         
@@ -129,7 +158,7 @@
             justify-content: space-between;
             margin-bottom: 20px;
             padding: 10px 15px;
-            background: #e3f2fd;
+            background: var(--p6);
             border-radius: 8px;
             font-weight: bold;
         }
@@ -137,10 +166,10 @@
         .game-canvas {
             width: 100%;
             height: 350px;
-            background: #d6eaf8;
+            background: var(--p7);
             border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid #3498db;
+            border: 1px solid var(--primary);
             position: relative;
             overflow: hidden;
         }
@@ -149,7 +178,7 @@
             position: absolute;
             width: 30px;
             height: 30px;
-            background: #e74c3c;
+            background: var(--accent);
             border-radius: 50%;
             bottom: 20px;
             left: 50px;
@@ -174,7 +203,7 @@
             position: absolute;
             width: 100px;
             height: 20px;
-            background: #27ae60;
+            background: var(--secondary);
             right: 50px;
             bottom: 150px;
             border-radius: 4px;
@@ -190,7 +219,7 @@
             position: absolute;
             width: 100%;
             height: 40px;
-            background: #3498db;
+            background: var(--p1);
             bottom: 0;
             left: 0;
             z-index: 2;
@@ -202,22 +231,22 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
             z-index: 100;
             display: none;
             width: 80%;
             text-align: center;
-            border: 2px solid #3498db;
+            border: 2px solid var(--primary);
         }
         
         .warning-sign {
             position: absolute;
             width: 30px;
             height: 30px;
-            background: #f1c40f;
+            background: var(--warning);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -229,60 +258,101 @@
         }
         
         .controls {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-top: 20px;
-            flex-wrap: wrap;
+        }
+
+        /* Enhanced button styling for better UX */
+        .controls button {
+            min-height: 50px;
+            font-size: 1rem;
+            justify-content: center;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .controls button i {
+            font-size: 1.2rem;
+        }
+
+        /* Game status indicators */
+        .game-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--p6), rgba(200, 229, 243, 0.5));
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--primary);
+        }
+
+        .status-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 4px;
         }
         
         button {
             padding: 12px 25px;
-            background: #3498db;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
         button:hover {
-            background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 18px rgba(26, 115, 232, 0.3);
         }
         
         .action-btn {
-            background: #2ecc71;
+            background: linear-gradient(90deg, var(--secondary), #2ea044);
         }
         
         .action-btn:hover {
-            background: #27ae60;
+            box-shadow: 0 6px 18px rgba(52, 168, 83, 0.3);
         }
         
         .warning-btn {
-            background: #f39c12;
+            background: linear-gradient(90deg, var(--p2), #f1a85b);
         }
         
         .warning-btn:hover {
-            background: #e67e22;
+            box-shadow: 0 6px 18px rgba(230, 156, 66, 0.3);
         }
         
         .results {
             margin-top: 20px;
             padding: 15px;
-            background: #e8f4fc;
+            background: var(--p6);
             border-radius: 8px;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid var(--primary);
             display: none;
         }
         
         .results h3 {
-            color: #3498db;
+            color: var(--primary);
             margin-bottom: 10px;
         }
         
@@ -301,7 +371,7 @@
         
         .progress {
             height: 100%;
-            background: #3498db;
+            background: var(--primary);
             border-radius: 5px;
             width: 0%;
             transition: width 0.5s;
@@ -311,7 +381,7 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            background: rgba(243, 156, 18, 0.9);
+            background: rgba(249, 168, 37, 0.9);
             color: white;
             padding: 10px;
             border-radius: 5px;
@@ -319,7 +389,121 @@
             z-index: 20;
             max-width: 200px;
         }
+
+        /* Puzzle options styling */
+        .options-container {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .option {
+            padding: 15px;
+            background: var(--light-bg);
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--p6);
+            transform: translateY(-2px);
+        }
+
+        .option[data-correct="true"]:hover {
+            border-color: var(--secondary);
+            background: rgba(52, 168, 83, 0.1);
+        }
+
+        /* Puzzle feedback styling */
+        #puzzle-feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* Improve modal responsiveness */
+        @media (max-width: 768px) {
+            .nav-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .nav-placeholder {
+                display: none;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .game-status {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .status-item {
+                border-bottom: 1px solid rgba(26, 115, 232, 0.2);
+                padding-bottom: 10px;
+            }
+
+            .status-item:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+        }
         
+        /* Navigation Header */
+        .nav-header {
+            max-width: 1400px;
+            margin: 0 auto 20px auto;
+            padding: 15px 20px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .nav-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .nav-placeholder {
+            width: 140px; /* To balance the layout */
+        }
+
         @media (max-width: 1024px) {
             .container {
                 flex-direction: column;
@@ -333,10 +517,20 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Header -->
+    <div class="nav-header">
+        <button class="nav-back-btn" onclick="goBackToGamifiedLearning()">
+            <i class="fas fa-arrow-left"></i>
+            Back to Games
+        </button>
+        <div class="nav-title">Tsunami Escape Game</div>
+        <div class="nav-placeholder"></div>
+    </div>
+
     <div class="container">
         <div class="info-panel">
             <div class="header">
-                <i class="fas fa-water fa-3x" style="color: #3498db;"></i>
+                <i class="fas fa-water fa-3x" style="color: var(--primary);"></i>
                 <h1>Tsunami Escape 🌊</h1>
             </div>
             
@@ -371,10 +565,23 @@
                 <h2 class="game-title">Tsunami Escape 🌊</h2>
                 <p class="game-description">Race against time to reach high ground before the tsunami hits!</p>
                 
-                <div class="game-ui">
-                    <div>Distance: <span id="distance">120m</span></div>
-                    <div>Water Level: <span id="water-level">Low</span></div>
-                    <div>Puzzles Solved: <span id="puzzles-solved">0</span>/3</div>
+                <div class="game-status">
+                    <div class="status-item">
+                        <span class="status-value" id="distance">120m</span>
+                        <div class="status-label">Distance to Safety</div>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-value" id="water-level">Low</span>
+                        <div class="status-label">Water Level</div>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-value" id="puzzles-solved">0/3</span>
+                        <div class="status-label">Puzzles Solved</div>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-value" id="time-left">60s</span>
+                        <div class="status-label">Time Remaining</div>
+                    </div>
                 </div>
                 
                 <div class="game-canvas" id="game-canvas">
@@ -427,14 +634,14 @@
                 </div>
                 
                 <div class="controls">
+                    <button onclick="startGame()">
+                        <i class="fas fa-play"></i> Start Game
+                    </button>
                     <button class="action-btn" onclick="movePlayer()">
                         <i class="fas fa-running"></i> Move Forward
                     </button>
                     <button class="warning-btn" onclick="showWarning(0)">
                         <i class="fas fa-info-circle"></i> Tsunami Facts
-                    </button>
-                    <button onclick="startGame()">
-                        <i class="fas fa-play"></i> Start Game
                     </button>
                 </div>
             </div>
@@ -547,11 +754,13 @@
             const gameTimer = setInterval(function() {
                 if (gameData.gameActive) {
                     gameData.timeLeft--;
-                    document.getElementById('time-left').textContent = gameData.timeLeft;
                     
                     // Increase water level over time
                     gameData.waterLevel += 0.5;
                     waterEl.style.height = (40 + gameData.waterLevel) + 'px';
+                    
+                    // Update UI including timer
+                    updateUI();
                     
                     // Check if player is safe or game over
                     if (gameData.distance <= 0) {
@@ -667,13 +876,22 @@
             document.getElementById('current-score').textContent = gameData.currentScore;
             document.getElementById('distance').textContent = Math.max(0, gameData.distance) + 'm';
             document.getElementById('puzzles-solved').textContent = gameData.puzzlesSolved + '/' + gameData.totalPuzzles;
+            document.getElementById('time-left').textContent = gameData.timeLeft + 's';
             
-            // Update water level text
+            // Update water level text with color coding
             let waterLevelText = 'Low';
+            let waterLevelElement = document.getElementById('water-level');
             if (gameData.waterLevel > 30) waterLevelText = 'Medium';
             if (gameData.waterLevel > 60) waterLevelText = 'High';
-            if (gameData.waterLevel > 90) waterLevelText = 'DANGEROUS';
-            document.getElementById('water-level').textContent = waterLevelText;
+            if (gameData.waterLevel > 90) waterLevelText = 'CRITICAL';
+            
+            waterLevelElement.textContent = waterLevelText;
+            
+            // Add color coding for water level
+            waterLevelElement.style.color = 'var(--primary)';
+            if (gameData.waterLevel > 30) waterLevelElement.style.color = 'var(--warning)';
+            if (gameData.waterLevel > 60) waterLevelElement.style.color = 'var(--p2)';
+            if (gameData.waterLevel > 90) waterLevelElement.style.color = 'var(--accent)';
         }
 
         // End the game
@@ -703,6 +921,11 @@
                 localStorage.setItem('tsunamiEscapeMaxScore', gameData.maxScore);
                 document.getElementById('max-score').textContent = gameData.maxScore;
             }
+        }
+
+        // Navigation function to go back to gamified learning page
+        function goBackToGamifiedLearning() {
+            window.location.href = '../gamified-learning.html';
         }
     </script>
 </body>

@@ -1,552 +1,1366 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevansetu - Drill Scheduling</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <style>
-        /* Your existing styles unchanged */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        :root { --primary: #1a73e8; --secondary: #0b4fa3; --accent: #ff6b35; --light: #f5f7f9; --dark: #2c3e50;
-            --success: #28a745; --warning: #ffc107; --danger: #dc3545; --gray: #6c757d; --light-gray: #e9ecef;
-            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
-        body { background-color: #f0f2f5; color: #333; display: flex; min-height: 100vh; }
-        .sidebar { width: 260px; background: linear-gradient(to bottom, var(--primary), var(--secondary)); color: white; padding: 20px 0; height: 100vh; position: fixed; overflow-y: auto; transition: all 0.3s ease; }
-        .logo { padding: 0 20px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 20px; }
-        .logo h1 { font-size: 24px; display: flex; align-items: center; gap: 10px; }
-        .logo span { color: var(--accent); }
-        .nav-menu { list-style: none; padding: 0; }
-        .nav-item { margin-bottom: 5px; }
-        .nav-link { display: flex; align-items: center; padding: 12px 20px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: all 0.3s; font-size: 16px; }
-        .nav-link:hover, .nav-link.active { background-color: rgba(255, 255, 255, 0.1); color: white; border-left: 4px solid var(--accent); }
-        .nav-link i { margin-right: 12px; font-size: 18px; }
-        .main-content { flex: 1; margin-left: 260px; padding: 20px; transition: all 0.3s ease; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background-color: white; padding: 15px 25px; border-radius: 10px; box-shadow: var(--card-shadow); }
-        .welcome h2 { color: var(--dark); margin-bottom: 5px; }
-        .welcome p { color: var(--gray); }
-        .user-info { display: flex; align-items: center; gap: 15px; }
-        .user-img { width: 45px; height: 45px; border-radius: 50%; background-color: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; }
-        .page-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .page-title h2 { color: var(--dark); font-size: 24px; }
-        .page-title p { color: var(--gray); }
-        .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card { background: white; border-radius: 10px; padding: 20px; box-shadow: var(--card-shadow); transition: transform 0.3s ease; }
-        .card:hover { transform: translateY(-5px); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .card-title { font-size: 16px; color: var(--dark); font-weight: 600; }
-        .card-icon { width: 40px; height: 40px; border-radius: 10px; background-color: rgba(26, 115, 232, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; }
-        .card-value { font-size: 28px; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
-        .card-text { color: var(--gray); font-size: 14px; }
-        .upcoming-drills { background: white; border-radius: 10px; padding: 25px; box-shadow: var(--card-shadow); margin-bottom: 30px; }
-        .section-header { margin-bottom: 25px; }
-        .section-title { font-size: 20px; color: var(--dark); margin-bottom: 10px; }
-        .section-subtitle { color: var(--gray); font-size: 14px; }
-        .drill-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .drill-card { border: 1px solid var(--light-gray); border-radius: 10px; padding: 20px; transition: all 0.3s ease; }
-        .drill-card:hover { border-color: var(--primary); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
-        .drill-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .drill-type { font-weight: 600; color: var(--dark); }
-        .drill-date { color: var(--gray); font-size: 14px; }
-        .drill-info-item { display: flex; align-items: center; margin-bottom: 8px; font-size: 14px; }
-        .drill-info-item i { margin-right: 10px; color: var(--primary); }
-        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
-        .status-scheduled { background-color: rgba(40, 167, 69, 0.1); color: var(--success); }
-        .drills-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .drills-table th, .drills-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--light-gray); }
-        .drills-table th { background-color: var(--light); color: var(--dark); font-weight: 600; }
-        .drills-table tr:hover { background-color: var(--light); }
-        .btn { padding: 10px 16px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; }
-        .btn-primary { background-color: var(--primary); color: white; }
-        .btn-primary:hover { background-color: var(--secondary); }
-        .btn-outline { background-color: transparent; border: 1px solid var(--primary); color: var(--primary); }
-        .btn-outline:hover { background-color: rgba(26, 115, 232, 0.1); }
-        .calendar-section { background: white; border-radius: 10px; padding: 25px; box-shadow: var(--card-shadow); margin-bottom: 30px; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .calendar-nav { display: flex; gap: 10px; }
-        .calendar-nav-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--light); color: var(--dark); cursor: pointer; transition: all 0.3s; }
-        .calendar-nav-btn:hover { background-color: var(--primary); color: white; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-        .calendar-cell { height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; position: relative; }
-        .calendar-cell.header { font-weight: 600; color: var(--dark); font-size: 12px; background-color: var(--light); }
-        .calendar-cell.day { cursor: pointer; transition: all 0.3s; }
-        .calendar-cell.day:hover { background-color: var(--light); }
-        .calendar-cell.today { background-color: var(--primary); color: white; font-weight: 600; }
-        .calendar-cell.has-drill { background-color: rgba(255, 107, 53, 0.1); color: var(--accent); font-weight: 600; }
-        .calendar-cell.has-drill::after { content: ''; position: absolute; bottom: 4px; width: 6px; height: 6px; border-radius: 50%; background-color: var(--accent); }
-        .calendar-legend { display: flex; gap: 15px; margin-top: 20px; font-size: 12px; }
-        .legend-item { display: flex; align-items: center; gap: 5px; }
-        .legend-color { width: 12px; height: 12px; border-radius: 50%; }
-        .legend-today { background-color: var(--primary); }
-        .legend-drill { background-color: var(--accent); }
-        @media (max-width: 992px) { .sidebar { width: 70px; z-index: 100; } .sidebar .logo h1 span, .sidebar .nav-link span { display: none; } .sidebar .logo h1 { justify-content: center; } .main-content { margin-left: 70px; } }
-        @media (max-width: 768px) { .dashboard-cards { grid-template-columns: 1fr; } .drill-cards { grid-template-columns: 1fr; } .header { flex-direction: column; text-align: center; gap: 15px; } .user-info { justify-content: center; } }
-        .notification-badge { position: relative; }
-        .badge { position: absolute; top: -5px; right: -5px; background-color: var(--accent); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #0b4fa3;
+            --accent: #ff6b35;
+            --light: #f5f7f9;
+            --dark: #2c3e50;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .sidebar {
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
+            position: fixed;
+            width: 240px;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .logo i {
+            font-size: 22px;
+            color: var(--p6)
+        }
+
+        .logo h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px
+        }
+
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .menu-item {
+            /* font-weight: bold; */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95)
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06)
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08)
+        }
+
+        .new-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #fff;
+            margin-left: auto
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .user-profile img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.15)
+        }
+
+        .user-profile h4 {
+            font-size: 16px;
+            margin-bottom: 2px
+        }
+
+        .user-profile p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.85)
+        }
+
+        /* Sidebar User Profile */
+        .sidebar-user-profile {
+            margin-top: auto;
+            padding: 12px;
+            margin: 0 -12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .sidebar-user-profile:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+        }
+
+        .welcome h2 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .welcome p {
+            color: var(--gray);
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            color: var(--dark);
+            font-size: 24px;
+        }
+
+        .page-title p {
+            color: var(--gray);
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: rgba(26, 115, 232, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .card-text {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .upcoming-drills {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .drill-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .drill-card {
+            border: 1px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .drill-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .drill-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .drill-type {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .drill-date {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .drill-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .drill-info-item i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-scheduled {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .drills-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .drills-table th,
+        .drills-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .drills-table th {
+            background-color: var(--light);
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .drills-table tr:hover {
+            background-color: var(--light);
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(26, 115, 232, 0.1);
+        }
+
+        .calendar-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light);
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-nav-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-cell {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .calendar-cell.header {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 12px;
+            background-color: var(--light);
+        }
+
+        .calendar-cell.day {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-cell.day:hover {
+            background-color: var(--light);
+        }
+
+        .calendar-cell.today {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-cell.has-drill {
+            background-color: rgba(255, 107, 53, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .calendar-cell.has-drill::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--accent);
+        }
+
+        .calendar-legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-today {
+            background-color: var(--primary);
+        }
+
+        .legend-drill {
+            background-color: var(--accent);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+                z-index: 100;
+            }
+
+            .sidebar .logo h1 span,
+            .sidebar .nav-link span {
+                display: none;
+            }
+
+            .sidebar .logo h1 {
+                justify-content: center;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .drill-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .user-info {
+                justify-content: center;
+            }
+        }
+
+        .notification-badge {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
 
         /* Countdown Widget */
-        .countdown-widget { background:white; border-radius:10px; padding:20px; box-shadow:var(--card-shadow); text-align:center; margin-bottom:30px; }
-        .countdown-time { font-size:24px; font-weight:bold; color:var(--primary); margin-top:10px; }
+        .countdown-widget {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .countdown-time {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 10px;
+        }
 
         /* Modal */
-        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; }
-        .modal-content { background:white; padding:20px; border-radius:10px; width:400px; text-align:center; }
-        .modal-header { font-size:18px; margin-bottom:10px; font-weight:bold; }
-        .close-btn { cursor:pointer; float:right; font-size:18px; }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .modal-header {
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            float: right;
+            font-size: 18px;
+        }
+
         /* Modal styling */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease;
-}
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
 
-.modal-content {
-  background: #fff;
-  padding: 25px;
-  border-radius: 15px;
-  width: 420px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-  animation: slideUp 0.4s ease;
-}
+        .modal-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            width: 420px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+        }
 
-.modal-header {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+        .modal-header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.modal-header.fire { color: #e74c3c; }
-.modal-header.earthquake { color: #27ae60; }
-.modal-header.flood { color: #2980b9; }
+        .modal-header.fire {
+            color: #e74c3c;
+        }
 
-.modal-body p {
-  margin: 8px 0;
-  font-size: 15px;
-}
+        .modal-header.earthquake {
+            color: #27ae60;
+        }
 
-.modal-actions {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
+        .modal-header.flood {
+            color: #2980b9;
+        }
 
-@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-@keyframes slideUp { from {transform: translateY(50px);} to {transform: translateY(0);} }
+        .modal-body p {
+            margin: 8px 0;
+            font-size: 15px;
+        }
 
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
+
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">
-            <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-book"></i><span>Education Modules</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-vr-cardboard"></i><span>Emergency Contacts</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link active"><i class="fas fa-calendar-alt"></i><span>Drill Schedule</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-book"></i><span>Do's & Dont's</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-exclamation-triangle"></i><span>Evacuation Plan</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-brain"></i><span>Psychological Help</span></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i><span>Settings</span></a></li>
-        </ul>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="header">
-            <div class="welcome">
-                <h2>Welcome back, Priya!</h2>
-                <p>Your disaster preparedness score is 72%. Great job! Keep learning to improve your safety knowledge.</p>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>JeevanSetu</h1>
             </div>
-            <div class="user-info">
-                <div class="notification-badge">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge">3</span>
+            <div class="menu-items">
+                <div class="menu-item active"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
+                <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item"><i class="fa-solid fa-book-open"></i><span>Do's & Dont's</span></div>
+                <div class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
+                <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+
+            <!-- User Profile at Bottom -->
+            <div class="sidebar-user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h4 id="sidebarUserName">User</h4>
+                    <p>Student</p>
                 </div>
-                <div class="user-img">P</div>
             </div>
-        </div>
+        </aside>
 
-        <div class="page-title">
-            <div>
-                <h2>Drill Schedule</h2>
-                <p>View upcoming drills and mark your participation</p>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 data-translate="title">Drill Schedule</h1>
+                <p data-translate="subtitle">View upcoming drills and mark your participation</p>
             </div>
-            <button class="btn btn-primary"><i class="fas fa-download"></i> Export Schedule</button>
-        </div>
 
-        <!-- Countdown Timer Widget -->
-        <div class="countdown-widget">
-            <h3>Next Drill Countdown</h3>
-            <div id="countdown" class="countdown-time">Loading...</div>
-        </div>
+            <!-- Countdown Timer Widget -->
+            <!-- <div class="countdown-widget">
+                    <h3>Next Drill Countdown</h3>
+                    <div id="countdown" class="countdown-time">Loading...</div>
+                </div> -->
 
-        <!-- Dashboard Cards -->
-        <div class="dashboard-cards">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Upcoming Drills</div>
-                    <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
-                </div>
-                <div class="card-value">3</div>
-                <div class="card-text">Next 30 days</div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Your Participation</div>
-                    <div class="card-icon"><i class="fas fa-user-check"></i></div>
-                </div>
-                <div class="card-value">85%</div>
-                <div class="card-text">Attendance rate</div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Next Drill</div>
-                    <div class="card-icon"><i class="fas fa-clock"></i></div>
-                </div>
-                <div class="card-value">2 Days</div>
-                <div class="card-text">Earthquake preparedness</div>
-            </div>
-        </div>
-
-        <!-- Upcoming Drills -->
-        <div class="upcoming-drills">
-            <div class="section-header">
-                <h3 class="section-title">Upcoming Drills</h3>
-                <p class="section-subtitle">Stay prepared with your scheduled safety drills</p>
-            </div>
-            <div class="drill-cards">
-                <div class="drill-card">
-                    <div class="drill-card-header"><span class="drill-type">Fire Drill</span><span class="drill-date">Sep 18, 2025</span></div>
-                    <div class="drill-info">
-                        <div class="drill-info-item"><i class="fas fa-map-marker-alt"></i> Block A - Ground Floor, IGDTUW</div>
-                        <div class="drill-info-item"><i class="fas fa-users"></i> 40 Participants</div>
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Upcoming Drills</div>
+                        <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
                     </div>
-                   <button class="btn btn-primary add-calendar" 
-        data-type="Fire Drill" 
-        data-date="2025-09-18" 
-        data-location="Block A - Ground Floor, IGDTUW">
-    <i class="fas fa-calendar-plus"></i> Add to Calendar
-</button>
-                    <span class="status-badge status-scheduled">Scheduled</span>
+                    <div class="card-value">3</div>
+                    <div class="card-text">Next 30 days</div>
                 </div>
-                <div class="drill-card">
-                    <div class="drill-card-header"><span class="drill-type">Earthquake Drill</span><span class="drill-date">Sep 20, 2025</span></div>
-                    <div class="drill-info">
-                        <div class="drill-info-item"><i class="fas fa-map-marker-alt"></i> Auditorium, IGDTUW</div>
-                        <div class="drill-info-item"><i class="fas fa-users"></i> 65 Participants</div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Your Participation</div>
+                        <div class="card-icon"><i class="fas fa-user-check"></i></div>
                     </div>
-                    <button class="btn btn-primary add-calendar" 
-        data-type="Earthquake Drill" 
-        data-date="2025-09-20" 
-        data-location="Auditorium, IGDTUW">
-    <i class="fas fa-calendar-plus"></i> Add to Calendar
-</button>
-                    <span class="status-badge status-scheduled">Scheduled</span>
+                    <div class="card-value">85%</div>
+                    <div class="card-text">Attendance rate</div>
                 </div>
-                <div class="drill-card">
-                    <div class="drill-card-header"><span class="drill-type">Flood Response</span><span class="drill-date">Sep 25, 2025</span></div>
-                    <div class="drill-info">
-                        <div class="drill-info-item"><i class="fas fa-map-marker-alt"></i> Community Hall, IGDTUW</div>
-                        <div class="drill-info-item"><i class="fas fa-users"></i> 80 Participants</div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Next Drill</div>
+                        <div class="card-icon"><i class="fas fa-clock"></i></div>
                     </div>
-                    <button class="btn btn-primary add-calendar" 
-        data-type="Flood Response" 
-        data-date="2025-09-25" 
-        data-location="Community Hall, IGDTUW">
-    <i class="fas fa-calendar-plus"></i> Add to Calendar
-</button>
-                    <span class="status-badge status-scheduled">Scheduled</span>
+                    <div class="card-value">2 Days</div>
+                    <div class="card-text">Earthquake preparedness</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Scheduled Drills Table -->
-        <div class="upcoming-drills">
-            <div class="section-header">
-                <h3 class="section-title">Scheduled Drills</h3>
-                <p class="section-subtitle">Overview of all your registered drills</p>
-            </div>
-            <table class="drills-table">
-                <thead>
-                    <tr>
-                        <th>Drill Type</th>
-                        <th>Date</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Fire Drill</td><td>Sep 18, 2025</td><td>Block A - Ground Floor, IGDTUW</td><td><span class="status-badge status-scheduled">Scheduled</span></td><td><button class="btn btn-primary join-btn">Join</button> <button class="btn btn-outline details-btn">Details</button></td></tr>
-                    <tr><td>Earthquake Drill</td><td>Sep 20, 2025</td><td>Auditorium, IGDTUW</td><td><span class="status-badge status-scheduled">Scheduled</span></td><td><button class="btn btn-primary join-btn">Join</button> <button class="btn btn-outline details-btn">Details</button></td></tr>
-                    <tr><td>Flood Response</td><td>Sep 25, 2025</td><td>Community Hall, IGDTUW</td><td><span class="status-badge status-scheduled">Scheduled</span></td><td><button class="btn btn-primary join-btn">Join</button> <button class="btn btn-outline details-btn">Details</button></td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Calendar Widget -->
-        <div class="calendar-section">
-            <div class="calendar-header">
-                <h3 class="section-title" id="calendar-title">Calendar</h3>
-                <div class="calendar-nav">
-                    <div class="calendar-nav-btn" id="prev-month"><i class="fas fa-chevron-left"></i></div>
-                    <div class="calendar-nav-btn" id="next-month"><i class="fas fa-chevron-right"></i></div>
+            <!-- Upcoming Drills -->
+            <div class="upcoming-drills">
+                <div class="section-header">
+                    <h3 class="section-title">Upcoming Drills</h3>
+                    <p class="section-subtitle">Stay prepared with your scheduled safety drills</p>
+                </div>
+                <div class="drill-cards">
+                    <div class="drill-card">
+                        <div class="drill-card-header"><span class="drill-type">Fire Drill</span><span
+                                class="drill-date">Sep
+                                18, 2025</span></div>
+                        <div class="drill-info">
+                            <div class="drill-info-item"><i class="fas fa-map-marker-alt"></i> Block A - Ground Floor,
+                                IGDTUW</div>
+                            <div class="drill-info-item"><i class="fas fa-users"></i> 40 Participants</div>
+                        </div>
+                        <button class="btn btn-primary add-calendar" data-type="Fire Drill" data-date="2025-09-18"
+                            data-location="Block A - Ground Floor, IGDTUW">
+                            <i class="fas fa-calendar-plus"></i> Add to Calendar
+                        </button>
+                        <span class="status-badge status-scheduled">Scheduled</span>
+                    </div>
+                    <div class="drill-card">
+                        <div class="drill-card-header"><span class="drill-type">Earthquake Drill</span><span
+                                class="drill-date">Sep 20, 2025</span></div>
+                        <div class="drill-info">
+                            <div class="drill-info-item"><i class="fas fa-map-marker-alt"></i> Auditorium, IGDTUW</div>
+                            <div class="drill-info-item"><i class="fas fa-users"></i> 65 Participants</div>
+                        </div>
+                        <button class="btn btn-primary add-calendar" data-type="Earthquake Drill" data-date="2025-09-20"
+                            data-location="Auditorium, IGDTUW">
+                            <i class="fas fa-calendar-plus"></i> Add to Calendar
+                        </button>
+                        <span class="status-badge status-scheduled">Scheduled</span>
+                    </div>
+                    <div class="drill-card">
+                        <div class="drill-card-header"><span class="drill-type">Flood Response</span><span
+                                class="drill-date">Sep 25, 2025</span></div>
+                        <div class="drill-info">
+                            <div class="drill-info-item"><i class="fas fa-map-marker-alt"></i> Community Hall, IGDTUW
+                            </div>
+                            <div class="drill-info-item"><i class="fas fa-users"></i> 80 Participants</div>
+                        </div>
+                        <button class="btn btn-primary add-calendar" data-type="Flood Response" data-date="2025-09-25"
+                            data-location="Community Hall, IGDTUW">
+                            <i class="fas fa-calendar-plus"></i> Add to Calendar
+                        </button>
+                        <span class="status-badge status-scheduled">Scheduled</span>
+                    </div>
                 </div>
             </div>
-            <div class="calendar-grid" id="calendar-grid"></div>
-            <div class="calendar-legend">
-                <div class="legend-item"><div class="legend-color legend-today"></div> Today</div>
-                <div class="legend-item"><div class="legend-color legend-drill"></div> Drill Scheduled</div>
-            </div>
-        </div>
-    </main>
 
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="close-modal">&times;</span>
-            <div id="modal-body"></div>
+            <!-- Scheduled Drills Table -->
+            <div class="upcoming-drills">
+                <div class="section-header">
+                    <h3 class="section-title">Scheduled Drills</h3>
+                    <p class="section-subtitle">Overview of all your registered drills</p>
+                </div>
+                <table class="drills-table">
+                    <thead>
+                        <tr>
+                            <th>Drill Type</th>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fire Drill</td>
+                            <td>Sep 18, 2025</td>
+                            <td>Block A - Ground Floor, IGDTUW</td>
+                            <td><span class="status-badge status-scheduled">Scheduled</span></td>
+                            <td><button class="btn btn-primary join-btn">Join</button> <button
+                                    class="btn btn-outline details-btn">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>Earthquake Drill</td>
+                            <td>Sep 20, 2025</td>
+                            <td>Auditorium, IGDTUW</td>
+                            <td><span class="status-badge status-scheduled">Scheduled</span></td>
+                            <td><button class="btn btn-primary join-btn">Join</button> <button
+                                    class="btn btn-outline details-btn">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>Flood Response</td>
+                            <td>Sep 25, 2025</td>
+                            <td>Community Hall, IGDTUW</td>
+                            <td><span class="status-badge status-scheduled">Scheduled</span></td>
+                            <td><button class="btn btn-primary join-btn">Join</button> <button
+                                    class="btn btn-outline details-btn">Details</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Calendar Widget -->
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <h3 class="section-title" id="calendar-title">Calendar</h3>
+                    <div class="calendar-nav">
+                        <div class="calendar-nav-btn" id="prev-month"><i class="fas fa-chevron-left"></i></div>
+                        <div class="calendar-nav-btn" id="next-month"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid"></div>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-today"></div> Today
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-drill"></div> Drill Scheduled
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal -->
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="close-modal">&times;</span>
+                <div id="modal-body"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        const calendarGrid = document.getElementById("calendar-grid");
-        const calendarTitle = document.getElementById("calendar-title");
-        const prevBtn = document.getElementById("prev-month");
-        const nextBtn = document.getElementById("next-month");
+        // Wait for DOM to be fully loaded before running calendar and button code
+        document.addEventListener('DOMContentLoaded', function () {
+            // Calendar functionality
+            const calendarGrid = document.getElementById("calendar-grid");
+            const calendarTitle = document.getElementById("calendar-title");
+            const prevBtn = document.getElementById("prev-month");
+            const nextBtn = document.getElementById("next-month");
 
-        let today = new Date();
-        let currentMonth = today.getMonth();
-        let currentYear = today.getFullYear();
+            let today = new Date();
+            let currentMonth = today.getMonth();
+            let currentYear = today.getFullYear();
 
-        // Drill dates
-        const drills = {
-            "2025-9-18": "Fire Drill",
-            "2025-9-20": "Earthquake Drill",
-            "2025-9-25": "Flood Response"
-        };
+            // Drill dates
+            const drills = {
+                "2025-9-18": "Fire Drill",
+                "2025-9-20": "Earthquake Drill",
+                "2025-9-25": "Flood Response"
+            };
 
-        function renderCalendar(month, year) {
-            calendarGrid.innerHTML = "";
-            const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-            calendarTitle.textContent = monthNames[month] + " " + year;
+            function renderCalendar(month, year) {
+                if (!calendarGrid) return;
 
-            const daysOfWeek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-            daysOfWeek.forEach(day => {
-                let cell = document.createElement("div");
-                cell.classList.add("calendar-cell","header");
-                cell.textContent = day;
-                calendarGrid.appendChild(cell);
+                calendarGrid.innerHTML = "";
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                calendarTitle.textContent = monthNames[month] + " " + year;
+
+                const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                daysOfWeek.forEach(day => {
+                    let cell = document.createElement("div");
+                    cell.classList.add("calendar-cell", "header");
+                    cell.textContent = day;
+                    calendarGrid.appendChild(cell);
+                });
+
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                for (let i = 0; i < firstDay; i++) {
+                    let empty = document.createElement("div");
+                    empty.classList.add("calendar-cell");
+                    calendarGrid.appendChild(empty);
+                }
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    let cell = document.createElement("div");
+                    cell.classList.add("calendar-cell", "day");
+                    cell.textContent = day;
+
+                    if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        cell.classList.add("today");
+                    }
+
+                    let key = `${year}-${month + 1}-${day}`;
+                    if (drills[key]) {
+                        cell.classList.add("has-drill");
+                        cell.title = drills[key];
+                    }
+
+                    calendarGrid.appendChild(cell);
+                }
+            }
+
+            // Initialize calendar if elements exist
+            if (prevBtn && nextBtn && calendarGrid) {
+                prevBtn.addEventListener("click", () => {
+                    currentMonth--;
+                    if (currentMonth < 0) {
+                        currentMonth = 11;
+                        currentYear--;
+                    }
+                    renderCalendar(currentMonth, currentYear);
+                });
+
+                nextBtn.addEventListener("click", () => {
+                    currentMonth++;
+                    if (currentMonth > 11) {
+                        currentMonth = 0;
+                        currentYear++;
+                    }
+                    renderCalendar(currentMonth, currentYear);
+                });
+
+                renderCalendar(currentMonth, currentYear);
+            }
+
+            // Countdown Timer
+            const countdownElement = document.getElementById("countdown");
+            if (countdownElement) {
+                const nextDrillDate = new Date("2025-09-18T10:00:00");
+
+                function updateCountdown() {
+                    const now = new Date().getTime();
+                    const distance = nextDrillDate.getTime() - now;
+
+                    if (distance < 0) {
+                        countdownElement.textContent = "Drill in progress / completed";
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }
+                setInterval(updateCountdown, 1000);
+                updateCountdown();
+            }
+
+            // Modal Functionality
+            const modal = document.getElementById("modal");
+            const modalBody = document.getElementById("modal-body");
+            const closeModal = document.getElementById("close-modal");
+
+            // Add to Google Calendar function
+            function addToGoogleCalendar(event) {
+                const start = new Date(event.date + "T10:00:00");
+                const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+                function formatDate(date) {
+                    return date.toISOString().replace(/-|:|\.\d+/g, "");
+                }
+
+                const url = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+                    `&text=${encodeURIComponent(event.type)}` +
+                    `&dates=${formatDate(start)}/${formatDate(end)}` +
+                    `&location=${encodeURIComponent(event.location)}` +
+                    `&details=${encodeURIComponent(event.type + " drill at " + event.location)}`;
+
+                window.open(url, "_blank");
+            }
+
+            // Bind "Add to Calendar" buttons
+            document.querySelectorAll(".add-calendar").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    addToGoogleCalendar({
+                        type: btn.dataset.type,
+                        date: btn.dataset.date,
+                        location: btn.dataset.location
+                    });
+                });
             });
 
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month+1, 0).getDate();
+            // Open Modal function
+            function openModal(event) {
+                let icon = "ℹ️";
+                let typeClass = "";
+                if (event.type.includes("Fire")) {
+                    icon = "🔥";
+                    typeClass = "fire";
+                }
+                else if (event.type.includes("Earthquake")) {
+                    icon = "🌍";
+                    typeClass = "earthquake";
+                }
+                else if (event.type.includes("Flood")) {
+                    icon = "💧";
+                    typeClass = "flood";
+                }
 
-            for(let i=0; i<firstDay; i++) {
-                let empty = document.createElement("div");
-                empty.classList.add("calendar-cell");
-                calendarGrid.appendChild(empty);
+                let formattedDate = event.date;
+                if (!/\d{4}-\d{2}-\d{2}/.test(formattedDate)) {
+                    const d = new Date(formattedDate);
+                    formattedDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                }
+
+                modalBody.innerHTML = `
+                    <div class="modal-header ${typeClass}">${icon} ${event.type}</div>
+                    <div class="modal-body">
+                        <p><b>📅 Date:</b> ${event.date}</p>
+                        <p><b>📍 Location:</b> ${event.location}</p>
+                        <p><b>👥 Participants:</b> ${event.participants || "N/A"}</p>
+                        <p><b>Status:</b> ${event.status || "Scheduled"}</p>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" id="modal-add-calendar">
+                            <i class="fas fa-calendar-plus"></i> Add to Calendar
+                        </button>
+                        ${event.action === "join" ? `<button class="btn btn-primary" id="modal-join" style="background-color: #28a745;">✅ Join Drill</button>` : ""}
+                        <button class="btn btn-outline" id="modal-close">Close</button>
+                    </div>
+                `;
+
+                modal.style.display = "flex";
+
+                // Attach event listeners to modal buttons
+                document.getElementById("modal-add-calendar").addEventListener("click", () => {
+                    addToGoogleCalendar({
+                        type: event.type,
+                        date: formattedDate,
+                        location: event.location
+                    });
+                });
+
+                document.getElementById("modal-close").addEventListener("click", () => {
+                    modal.style.display = "none";
+                });
+
+                if (event.action === "join") {
+                    document.getElementById("modal-join").addEventListener("click", () => {
+                        alert("You joined the drill! ✅");
+                        modal.style.display = "none";
+                    });
+                }
             }
 
-            for(let day=1; day<=daysInMonth; day++) {
-                let cell = document.createElement("div");
-                cell.classList.add("calendar-cell","day");
-                cell.textContent = day;
+            // Bind Join buttons
+            document.querySelectorAll(".join-btn").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    const row = e.target.closest("tr");
+                    if (!row) return;
 
-                if(day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
-                    cell.classList.add("today");
+                    const cells = row.querySelectorAll("td");
+                    if (cells.length < 4) return;
+
+                    openModal({
+                        type: cells[0].textContent,
+                        date: cells[1].textContent,
+                        location: cells[2].textContent,
+                        participants: cells[3].textContent,
+                        status: "Scheduled",
+                        action: "join"
+                    });
+                });
+            });
+
+            // Bind Details buttons
+            document.querySelectorAll(".details-btn").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    const row = e.target.closest("tr");
+                    if (!row) return;
+
+                    const cells = row.querySelectorAll("td");
+                    if (cells.length < 4) return;
+
+                    openModal({
+                        type: cells[0].textContent,
+                        date: cells[1].textContent,
+                        location: cells[2].textContent,
+                        participants: cells[3].textContent,
+                        status: cells[3].textContent,
+                        action: "details"
+                    });
+                });
+            });
+
+            // Close modal functionality
+            if (closeModal) {
+                closeModal.addEventListener("click", () => {
+                    if (modal) modal.style.display = "none";
+                });
+            }
+
+            window.addEventListener("click", (e) => {
+                if (e.target === modal) modal.style.display = "none";
+            });
+        });
+
+        // Load User Information from MongoDB database
+        async function loadUserInfo() {
+            try {
+                let userData = null;
+                const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
+                if (localData) {
+                    userData = JSON.parse(localData);
                 }
 
-                let key = `${year}-${month+1}-${day}`;
-                if(drills[key]) {
-                    cell.classList.add("has-drill");
-                    cell.title = drills[key];
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
+                if (!userData && token) {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/current', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            userData = await response.json();
+                            localStorage.setItem('resq_user', JSON.stringify(userData));
+                        }
+                    } catch (fetchError) {
+                        console.log('Could not fetch user from backend:', fetchError.message);
+                    }
                 }
 
-                calendarGrid.appendChild(cell);
+                if (userData) {
+                    const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
+                    const lastName = userData.lastName || '';
+                    const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+
+                    const userNameElement = document.getElementById('sidebarUserName');
+                    const userAvatarElement = document.getElementById('userAvatar');
+
+                    if (userNameElement) userNameElement.textContent = fullName;
+                    if (userAvatarElement) userAvatarElement.textContent = firstName.charAt(0).toUpperCase();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
             }
         }
 
-        prevBtn.addEventListener("click", () => {
-            currentMonth--;
-            if(currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            renderCalendar(currentMonth, currentYear);
-        });
+        // Menu Navigation functions
+        function initializeMenuNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            const pageMapping = {
+                'Dashboard': '/student/dashboard-student.html',
+                'Education Modules': '/student/education-modules.html',
+                'Sandbox Simulator': '/student/sandbox-simulator.html',
+                'Emergency Contacts': '../emergency_contacts.html',
+                "Do's & Dont's": '../dos&donts.html',
+                'Disaster Map': '../advanced-map.html',
+                'AI Helper': '/student/chatbot.html',
+                'Gamified Learning': '/student/gamified-learning.html',
+                'Profile & Badges': 'profile-badges.html',
+                'Settings': '/student/settings.html'
+            };
 
-        nextBtn.addEventListener("click", () => {
-            currentMonth++;
-            if(currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            renderCalendar(currentMonth, currentYear);
-        });
+            menuItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
 
-        renderCalendar(currentMonth, currentYear);
+                    const menuText = this.querySelector('span').textContent.trim();
+                    const targetPage = pageMapping[menuText];
 
-        // Countdown Timer
-        const countdownElement = document.getElementById("countdown");
-        const nextDrillDate = new Date("2025-09-18T10:00:00"); // First drill
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = nextDrillDate.getTime() - now;
-
-            if(distance < 0) {
-                countdownElement.textContent = "Drill in progress / completed";
-                return;
-            }
-
-            const days = Math.floor(distance / (1000*60*60*24));
-            const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
-            const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
-            const seconds = Math.floor((distance % (1000*60)) / 1000);
-
-            countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    if (targetPage && !targetPage.startsWith('#')) {
+                        navigateToPage(targetPage, menuText);
+                    }
+                });
+            });
         }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
 
-        // Modal Functionality
-        const modal = document.getElementById("modal");
-        const modalBody = document.getElementById("modal-body");
-        const closeModal = document.getElementById("close-modal");
+        function navigateToPage(targetPage, menuText) {
+            showLoadingIndicator();
+            document.body.style.opacity = '0.8';
+            document.body.style.transition = 'opacity 0.3s ease';
 
-        document.querySelectorAll(".join-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-        const row = e.target.closest("tr").children;
-        openModal({
-            type: row[0].textContent,
-            date: row[1].textContent,
-            location: row[2].textContent,
-            participants: row[3].textContent,
-            status: "Scheduled",
-            action: "join"
+            setTimeout(() => {
+                try {
+                    window.location.href = targetPage;
+                } catch (error) {
+                    hideLoadingIndicator();
+                    showNavigationError(menuText);
+                    document.body.style.opacity = '1';
+                }
+            }, 300);
+        }
+
+        function showLoadingIndicator() {
+            if (!document.getElementById('loadingOverlay')) {
+                const loadingHTML = `
+                    <div id="loadingOverlay" style="
+                        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                        background: rgba(26, 115, 232, 0.9); display: flex; flex-direction: column;
+                        justify-content: center; align-items: center; z-index: 9999; color: white;
+                    ">
+                        <div style="width: 50px; height: 50px; border: 3px solid rgba(255, 255, 255, 0.3);
+                        border-top: 3px solid white; border-radius: 50%; animation: spin 1s linear infinite;
+                        margin-bottom: 20px;"></div>
+                        <h3>Loading...</h3>
+                        <p>Navigating to your selected page</p>
+                    </div>
+                    <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+                `;
+                document.body.insertAdjacentHTML('beforeend', loadingHTML);
+            }
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoadingIndicator() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function showNavigationError(menuText) {
+            alert(`⚠️ Navigation Error\n\nSorry, the ${menuText} page is currently unavailable.`);
+        }
+
+        // Initialize when DOM is loaded
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+            initializeMenuNavigation();
+            setInterval(loadUserInfo, 5 * 60 * 1000);
         });
-    });
-});
-
-document.querySelectorAll(".details-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-        const row = e.target.closest("tr").children;
-        openModal({
-            type: row[0].textContent,
-            date: row[1].textContent,
-            location: row[2].textContent,
-            participants: row[3].textContent,
-            status: row[3].textContent,
-            action: "details"
-        });
-    });
-});
-
-
-        closeModal.addEventListener("click", () => modal.style.display = "none");
-        window.addEventListener("click", (e) => { if(e.target === modal) modal.style.display = "none"; });
-
-
-        // Add to Google Calendar
-function addToGoogleCalendar(event) {
-  const start = new Date(event.date + "T10:00:00"); // 10 AM default start
-  const end = new Date(start.getTime() + 60 * 60 * 1000); // +1 hour
-
-  function formatDate(date) {
-    return date.toISOString().replace(/-|:|\.\d+/g, "");
-  }
-
-  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
-    `&text=${encodeURIComponent(event.type)}` +
-    `&dates=${formatDate(start)}/${formatDate(end)}` +
-    `&location=${encodeURIComponent(event.location)}` +
-    `&details=${encodeURIComponent(event.type + " drill at " + event.location)}`;
-
-  window.open(url, "_blank");
-}
-
-// Bind buttons
-document.querySelectorAll(".add-calendar").forEach(btn => {
-  btn.addEventListener("click", () => {
-    addToGoogleCalendar({
-      type: btn.dataset.type,
-      date: btn.dataset.date,
-      location: btn.dataset.location
-    });
-  });
-});
-function openModal(event) {
-  let icon = "ℹ️";
-  let typeClass = "";
-  if (event.type.includes("Fire")) { icon = "🔥"; typeClass = "fire"; }
-  else if (event.type.includes("Earthquake")) { icon = "🌍"; typeClass = "earthquake"; }
-  else if (event.type.includes("Flood")) { icon = "💧"; typeClass = "flood"; }
-
-  // Ensure date is in YYYY-MM-DD format
-  let formattedDate = event.date;
-  if (!/\d{4}-\d{2}-\d{2}/.test(formattedDate)) {
-    // If it's in "Sep 18, 2025" format, convert it
-    const d = new Date(formattedDate);
-    formattedDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  }
-
-  modalBody.innerHTML = `
-    <div class="modal-header ${typeClass}">${icon} ${event.type}</div>
-    <div class="modal-body">
-      <p><b>📅 Date:</b> ${event.date}</p>
-      <p><b>📍 Location:</b> ${event.location}</p>
-      <p><b>👥 Participants:</b> ${event.participants || "N/A"}</p>
-      <p><b>Status:</b> ${event.status || "Scheduled"}</p>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-primary" id="modal-add-calendar">
-        <i class="fas fa-calendar-plus"></i> Add to Calendar
-      </button>
-      ${event.action === "join" ? `<button class="btn btn-success" id="modal-join">✅ Join Drill</button>` : ""}
-      <button class="btn btn-outline" id="modal-close">Close</button>
-    </div>
-  `;
-
-  modal.style.display = "flex";
-
-  // Attach event listeners
-  document.getElementById("modal-add-calendar").addEventListener("click", () => {
-    addToGoogleCalendar({
-      type: event.type,
-      date: formattedDate, // Use correct YYYY-MM-DD
-      location: event.location
-    });
-  });
-
-  document.getElementById("modal-close").addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  if(event.action === "join"){
-    document.getElementById("modal-join").addEventListener("click", () => {
-      alert("You joined the drill! ✅");
-      modal.style.display = "none";
-    });
-  }
-}
-
-
-
-</script>
+    </script>
 </body>
+
 </html>

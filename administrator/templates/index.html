@@ -1,136 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drill Notification System</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>NDMA Disaster Report</title>
+	<link rel="stylesheet" href="../styles.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <!-- Header with Notification Icon -->
-        <header class="header">
-            <div class="header-content">
-                <h1 class="logo">
-                    <i class="fas fa-bell"></i>
-                    Drill Alert System
-                </h1>
-                <div class="notification-container">
-                    <button class="notification-btn" id="notificationBtn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge" id="notificationBadge">0</span>
-                    </button>
-                </div>
-            </div>
-        </header>
+	<div class="container">
+		<header class="header">
+			<div class="header-content">
+				<h1 class="logo">
+					<i class="fas fa-building-shield"></i>
+					NDMA Disaster Report
+				</h1>
+			</div>
+		</header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Schedule Drill Section -->
-            <section class="schedule-section">
-                <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-calendar-plus"></i> Schedule New Drill</h2>
-                    </div>
-                    <form class="drill-form" id="drillForm">
-                        <div class="form-group">
-                            <label for="drillTitle">Drill Title</label>
-                            <input type="text" id="drillTitle" name="drillTitle" placeholder="Enter drill title" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="drillType">Drill Type</label>
-                            <select id="drillType" name="drillType" required>
-                                <option value="">Select drill type</option>
-                                <option value="fire">Fire Drill</option>
-                                <option value="earthquake">Earthquake Drill</option>
-                                <option value="evacuation">Evacuation Drill</option>
-                                <option value="security">Security Drill</option>
-                                <option value="medical">Medical Emergency Drill</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="drillDate">Date</label>
-                                <input type="date" id="drillDate" name="drillDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="drillTime">Time</label>
-                                <input type="time" id="drillTime" name="drillTime" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="drillDescription">Description</label>
-                            <textarea id="drillDescription" name="drillDescription" placeholder="Enter drill description and instructions" rows="4"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="participants">Participants</label>
-                            <div class="participants-input">
-                                <input type="text" id="participants" name="participants" placeholder="Enter email addresses (comma separated)" required>
-                                <small>Example: john@company.com, jane@company.com</small>
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i>
-                            Schedule Drill & Send Notifications
-                        </button>
-                    </form>
-                </div>
-            </section>
+		<main class="main-content">
+			<section class="parent-section">
+				<div class="card">
+					<div class="card-header">
+						<h2><i class="fas fa-file-shield"></i> Submit College Update</h2>
+					</div>
+					<form class="drill-form" id="ndmaForm">
+						<div class="form-row">
+							<div class="form-group">
+								<label for="collegeName">College Name</label>
+								<input type="text" id="collegeName" name="collegeName" placeholder="Enter college name" required>
+							</div>
+							<div class="form-group">
+								<label for="collegeCode">College Code/ID</label>
+								<input type="text" id="collegeCode" name="collegeCode" placeholder="Optional identifier">
+							</div>
+						</div>
 
-            <!-- Notifications Panel -->
-            <section class="notifications-section">
-                <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-bell"></i> Recent Notifications</h2>
-                        <button class="btn btn-secondary" id="clearNotifications">
-                            <i class="fas fa-trash"></i>
-                            Clear All
-                        </button>
-                    </div>
-                    <div class="notifications-list" id="notificationsList">
-                        <div class="no-notifications">
-                            <i class="fas fa-bell-slash"></i>
-                            <p>No notifications yet</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="contactPerson">Reporting Officer</label>
+								<input type="text" id="contactPerson" name="contactPerson" placeholder="Full name" required>
+							</div>
+							<div class="form-group">
+								<label for="contactEmail">Officer Email</label>
+								<input type="email" id="contactEmail" name="contactEmail" placeholder="name@example.com" required>
+							</div>
+						</div>
 
-            <!-- Scheduled Drills -->
-            <section class="scheduled-drills">
-                <div class="card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-calendar-check"></i> Scheduled Drills</h2>
-                    </div>
-                    <div class="drills-list" id="drillsList">
-                        <div class="no-drills">
-                            <i class="fas fa-calendar-times"></i>
-                            <p>No drills scheduled</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="disasterType">Disaster Type</label>
+								<select id="disasterType" name="disasterType" required>
+									<option value="">Select type</option>
+									<option value="Earthquake">Earthquake</option>
+									<option value="Flood">Flood</option>
+									<option value="Fire">Fire</option>
+									<option value="Cyclone">Cyclone</option>
+									<option value="Landslide">Landslide</option>
+									<option value="Other">Other</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="severity">Severity</label>
+								<select id="severity" name="severity" required>
+									<option value="Low">Low</option>
+									<option value="Moderate">Moderate</option>
+									<option value="High">High</option>
+									<option value="Critical">Critical</option>
+								</select>
+							</div>
+						</div>
 
-    <!-- Notification Toast -->
-    <div class="toast" id="toast">
-        <div class="toast-content">
-            <i class="fas fa-bell"></i>
-            <span id="toastMessage"></span>
-        </div>
-        <button class="toast-close" id="toastClose">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="affectedCount">Affected Students</label>
+								<input type="number" id="affectedCount" name="affectedCount" min="0" placeholder="0" required>
+							</div>
+							<div class="form-group">
+								<label for="safeCount">Safe and Accounted</label>
+								<input type="number" id="safeCount" name="safeCount" min="0" placeholder="0" required>
+							</div>
+						</div>
 
-    <script src="script.js"></script>
+						<div class="form-group">
+							<label for="resourcesNeeded">Immediate Needs</label>
+							<input type="text" id="resourcesNeeded" name="resourcesNeeded" placeholder="e.g., Medical kits, water, transport">
+						</div>
+
+						<div class="form-group">
+							<label for="situationSummary">Situation Summary</label>
+							<textarea id="situationSummary" name="situationSummary" rows="4" placeholder="Brief summary of current situation and actions taken" required></textarea>
+						</div>
+
+						<div class="card-header" style="margin-top:12px">
+							<h2><i class="fas fa-id-card"></i> Reporting Student Details</h2>
+						</div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="studentName">Student Name</label>
+								<input type="text" id="studentName" name="studentName" placeholder="Full name" required>
+							</div>
+							<div class="form-group">
+								<label for="studentId">Student ID</label>
+								<input type="text" id="studentId" name="studentId" placeholder="College roll/ID">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="studentPhone">Student Phone</label>
+								<input type="tel" id="studentPhone" name="studentPhone" placeholder="Optional">
+							</div>
+							<div class="form-group">
+								<label for="studentEmail">Student Email</label>
+								<input type="email" id="studentEmail" name="studentEmail" placeholder="Optional">
+							</div>
+						</div>
+
+						<button type="submit" class="btn btn-primary">
+							<i class="fas fa-paper-plane"></i>
+							Send Report to NDMA
+						</button>
+					</form>
+				</div>
+			</section>
+
+			<section class="notifications-section">
+				<div class="card">
+					<div class="card-header">
+						<h2><i class="fas fa-inbox"></i> Submitted Reports</h2>
+					</div>
+					<div class="notifications-list" id="reportsList">
+						<div class="no-notifications">
+							<i class="fas fa-bell-slash"></i>
+							<p>No reports submitted yet</p>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+
+	<div class="toast" id="toast">
+		<div class="toast-content">
+			<i class="fas fa-bell"></i>
+			<span id="toastMessage"></span>
+		</div>
+		<button class="toast-close" id="toastClose">
+			<i class="fas fa-times"></i>
+		</button>
+	</div>
+
+	<script src="script.js"></script>
 </body>
 </html>
+
