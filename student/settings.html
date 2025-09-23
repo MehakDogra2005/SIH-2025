@@ -124,6 +124,123 @@
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         }
 
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .menu-item-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .menu-item-main i:first-child {
+            width: 20px;
+            text-align: center;
+        }
+
+        .dropdown-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .dropdown-menu.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .menu-item-main:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .dropdown-menu.active .menu-item-main {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .dropdown-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            margin: 8px 0 8px 0;
+            padding: 4px 0;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-menu.active .dropdown-content {
+            display: block;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                max-height: 200px;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            margin: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+            font-size: 12px;
+            color: #4ecdc4;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 1);
+            transform: translateX(4px);
+        }
+
+        .dropdown-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        /* Menu items spacing to accommodate dropdown */
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         .new-badge {
             background: linear-gradient(135deg, #ff6b6b, #ee5a52);
             padding: 3px 8px;
@@ -531,17 +648,25 @@
                 <h1>JeevanSetu</h1>
             </div>
             <div class="menu-items">
-                <div class="menu-item active"><i class="fas fa-home"></i><span>Dashboard</span></div>
-                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
+                <div class="menu-item"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item dropdown-menu" id="educationDropdown">
+                    <div class="menu-item-main">
+                        <i class="fas fa-book"></i><span>Education Modules</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </div>
+                    <div class="dropdown-content">
+                        <div class="dropdown-item" data-link="education-modules.html"><i class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
+                        <div class="dropdown-item" data-link="../dos&donts.html"><i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
+                    </div>
+                </div>
                 <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
                 <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
-                <div class="menu-item"><i class="fa-solid fa-book-open"></i><span>Do's & Dont's</span></div>
                 <div class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
                 <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
                 <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
                 <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
                 <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
-                <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
+                <div class="menu-item active"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
 
             <!-- User Profile at Bottom -->
@@ -762,7 +887,8 @@
         *********************/
 
         function initializeMenuNavigation() {
-            const menuItems = document.querySelectorAll('.menu-item');
+            const menuItems = document.querySelectorAll('.menu-item:not(.dropdown-menu)');
+            const educationDropdown = document.getElementById('educationDropdown');
 
             // Define page mappings for each menu item
             const pageMapping = {
@@ -780,29 +906,31 @@
             };
 
             menuItems.forEach(item => {
-                item.addEventListener('click', function () {
-                    // Update active state
-                    menuItems.forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
+                if (item.id !== 'educationDropdown' && !item.classList.contains('dropdown-item')) {
+                    item.addEventListener('click', function () {
+                        // Update active state
+                        menuItems.forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
 
-                    // Get the menu item text
-                    const menuText = this.querySelector('span').textContent.trim();
-                    const targetPage = pageMapping[menuText];
+                        // Get the menu item text
+                        const menuText = this.querySelector('span').textContent.trim();
+                        const targetPage = pageMapping[menuText];
 
-                    if (targetPage) {
-                        if (targetPage.startsWith('#')) {
-                            // Handle anchor links (scroll to section)
-                            if (targetPage === '#emergency-contacts') {
-                                document.querySelector('.emergency-contacts-section').scrollIntoView({
-                                    behavior: 'smooth'
-                                });
+                        if (targetPage) {
+                            if (targetPage.startsWith('#')) {
+                                // Handle anchor links (scroll to section)
+                                if (targetPage === '#emergency-contacts') {
+                                    document.querySelector('.emergency-contacts-section').scrollIntoView({
+                                        behavior: 'smooth'
+                                    });
+                                }
+                            } else if (targetPage !== 'settings.html') {
+                                // Navigate to page (don't navigate if it's the current page)
+                                navigateToPage(targetPage, menuText);
                             }
-                        } else if (targetPage !== 'settings.html') {
-                            // Navigate to page (don't navigate if it's the current page)
-                            navigateToPage(targetPage, menuText);
                         }
-                    }
-                });
+                    });
+                }
 
                 // Add hover effect
                 item.addEventListener('mouseenter', function () {
@@ -817,6 +945,56 @@
                     }
                 });
             });
+
+            // Handle Education Modules dropdown
+            if (educationDropdown) {
+                const mainDropdownButton = educationDropdown.querySelector('.menu-item-main');
+                const dropdownContent = educationDropdown.querySelector('.dropdown-content');
+
+                if (mainDropdownButton) {
+                    mainDropdownButton.addEventListener('click', function (event) {
+                        event.stopPropagation();
+                        console.log('Dropdown clicked, current active state:', educationDropdown.classList.contains('active'));
+                        
+                        // Close other dropdowns first
+                        document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+                            if (dropdown !== educationDropdown) {
+                                dropdown.classList.remove('active');
+                            }
+                        });
+
+                        // Toggle this dropdown
+                        educationDropdown.classList.toggle('active');
+                        console.log('After toggle, active state:', educationDropdown.classList.contains('active'));
+
+                        // Update arrow direction and main button style
+                        const isActive = educationDropdown.classList.contains('active');
+                        const arrow = mainDropdownButton.querySelector('.dropdown-arrow');
+                        if (arrow) {
+                            arrow.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
+                        }
+                    });
+                }
+
+                // Handle dropdown item clicks
+                const dropdownItems = educationDropdown.querySelectorAll('.dropdown-item');
+                dropdownItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const link = this.getAttribute('data-link');
+                        if (link) {
+                            window.location.href = link;
+                        }
+                    });
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (event) {
+                    if (educationDropdown && !educationDropdown.contains(event.target)) {
+                        educationDropdown.classList.remove('active');
+                    }
+                });
+            }
         }
 
         function navigateToPage(targetPage, menuText) {
