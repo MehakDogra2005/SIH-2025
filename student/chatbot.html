@@ -178,6 +178,66 @@
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         }
 
+        /* Accordion/Dropdown Styles for Education Modules */
+        .dashboard-sidebar .accordion-trigger {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dashboard-sidebar .accordion-trigger:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .dashboard-sidebar .submenu-item {
+            display: none;
+            padding-left: 40px;
+            margin-left: 10px;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-sidebar .submenu-item.show {
+            display: flex;
+            animation: slideDownSubmenu 0.3s ease forwards;
+        }
+
+        .dashboard-sidebar .submenu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Slide down animation for submenu items */
+        @keyframes slideDownSubmenu {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                max-height: 50px;
+            }
+        }
+
+        /* Arrow rotation for accordion */
+        .dashboard-sidebar .accordion-arrow {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+            margin-left: auto;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .dashboard-sidebar .accordion-trigger.accordion-active .accordion-arrow {
+            transform: rotate(180deg);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .dashboard-sidebar .accordion-trigger.accordion-active {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
         /* Overlay for dashboard sidebar */
         .dashboard-overlay {
             position: fixed;
@@ -1147,8 +1207,15 @@
                 <div class="menu-item" onclick="navigateTo('dashboard-student.html')">
                     <i class="fas fa-home"></i><span>Dashboard</span>
                 </div>
-                <div class="menu-item" onclick="navigateTo('education-modules.html')">
+                <div class="menu-item accordion-trigger" id="educationAccordion">
                     <i class="fas fa-book"></i><span>Education Modules</span>
+                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                </div>
+                <div class="menu-item submenu-item" onclick="navigateTo('../dos&donts.html')">
+                    <i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span>
+                </div>
+                <div class="menu-item submenu-item" onclick="navigateTo('education-modules.html')">
+                    <i class="fas fa-graduation-cap"></i><span>Learning Modules</span>
                 </div>
                 <div class="menu-item" onclick="navigateTo('sandbox-simulator.html')">
                     <i class="fas fa-gamepad"></i><span>Sandbox Simulator</span>
@@ -2923,7 +2990,56 @@
             const overlay = document.getElementById('dashboardOverlay');
             if (sidebar) sidebar.classList.remove('open');
             if (overlay) overlay.classList.remove('show');
+            
+            // Initialize accordion functionality for Education Modules
+            initializeAccordion();
         });
+        
+        // Initialize accordion functionality for Education Modules
+        function initializeAccordion() {
+            const accordionTrigger = document.getElementById('educationAccordion');
+            
+            if (accordionTrigger) {
+                accordionTrigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log('Education Modules accordion clicked');
+                    
+                    // Toggle the accordion state
+                    this.classList.toggle('accordion-active');
+                    
+                    // Get all submenu items
+                    const submenuItems = document.querySelectorAll('.dashboard-sidebar .submenu-item');
+                    
+                    // Toggle visibility of submenu items
+                    submenuItems.forEach(item => {
+                        if (this.classList.contains('accordion-active')) {
+                            item.classList.add('show');
+                        } else {
+                            item.classList.remove('show');
+                        }
+                    });
+                    
+                    console.log('Accordion state:', this.classList.contains('accordion-active') ? 'expanded' : 'collapsed');
+                });
+            }
+
+            // Close accordion when clicking outside
+            document.addEventListener('click', function(e) {
+                const accordionTrigger = document.getElementById('educationAccordion');
+                const dashboardSidebar = document.getElementById('dashboardSidebar');
+                
+                // Only close if clicking outside the entire dashboard sidebar
+                if (accordionTrigger && !dashboardSidebar.contains(e.target)) {
+                    accordionTrigger.classList.remove('accordion-active');
+                    const submenuItems = document.querySelectorAll('.dashboard-sidebar .submenu-item');
+                    submenuItems.forEach(item => {
+                        item.classList.remove('show');
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>

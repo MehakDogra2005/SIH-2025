@@ -631,6 +631,134 @@
                 margin-top: 10px;
             }
         }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            position: relative;
+        }
+
+        .menu-item-main {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            cursor: pointer;
+        }
+
+        .menu-item-main span {
+            flex: 1;
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .dropdown-menu.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin: 0 12px;
+        }
+
+        .dropdown-menu.active .dropdown-content {
+            max-height: 200px;
+        }
+
+        .dropdown-content .menu-item {
+            padding: 10px 20px;
+            margin: 5px 0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .dropdown-content .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-content .menu-item i {
+            width: 16px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        /* Slide down animation */
+        @keyframes slideDown {
+            from {
+                max-height: 0;
+                opacity: 0;
+            }
+            to {
+                max-height: 200px;
+                opacity: 1;
+            }
+        }
+
+        /* Accordion/Dropdown Styles for Education Modules */
+        .accordion-trigger {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .accordion-trigger:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .submenu-item {
+            display: none;
+            padding-left: 40px; /* Indent submenu items more */
+            margin-left: 10px;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .submenu-item.show {
+            display: flex;
+            animation: slideDownSubmenu 0.3s ease forwards;
+        }
+
+        .submenu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Slide down animation for submenu items */
+        @keyframes slideDownSubmenu {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                max-height: 50px;
+            }
+        }
+
+        /* Arrow rotation for accordion */
+        .accordion-arrow {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+            margin-left: auto;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .accordion-trigger.accordion-active .accordion-arrow {
+            transform: rotate(180deg);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .accordion-trigger.accordion-active {
+            background: rgba(255, 255, 255, 0.08);
+        }
     </style>
 </head>
 
@@ -643,17 +771,25 @@
                 <h1>JeevanSetu</h1>
             </div>
             <div class="menu-items">
-                <div class="menu-item active"><i class="fas fa-home"></i><span>Dashboard</span></div>
-                <div class="menu-item"><i class="fas fa-book"></i><span>Education Modules</span></div>
-                <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
-                <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
-                <div class="menu-item"><i class="fa-solid fa-book-open"></i><span>Do's & Dont's</span></div>
-                <div class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
-                <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
-                <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
-                <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <div class="menu-item" data-link="/student/dashboard-student.html"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item accordion-trigger" id="educationAccordion">
+                    <i class="fas fa-book"></i><span>Education Modules</span>
+                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                </div>
+                <div class="menu-item submenu-item" data-link="dos&donts.html">
+                    <i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span>
+                </div>
+                <div class="menu-item submenu-item" data-link="student/education-modules.html">
+                    <i class="fas fa-graduation-cap"></i><span>Learning Modules</span>
+                </div>
+                <div class="menu-item" data-link="/student/sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item active" data-link="/emergency_contacts.html"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item" data-link="/drill_schedule.html"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item" data-link="/advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item" data-link="/student/chatbot.html"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item" data-link="/student/gamified-learning.html"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
                 <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
-                <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
+                <div class="menu-item" data-link="/student/settings.html"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
 
             <!-- User Profile at Bottom -->
@@ -893,15 +1029,14 @@
             *********************/
 
         function initializeMenuNavigation() {
-            const menuItems = document.querySelectorAll('.menu-item');
+            const menuItems = document.querySelectorAll('.menu-item:not(.accordion-trigger):not(.submenu-item)');
+            const submenuItems = document.querySelectorAll('.submenu-item');
 
             // Define page mappings for each menu item
             const pageMapping = {
                 'Dashboard': '/student/dashboard-student.html',
-                'Education Modules': '/student/education-modules.html',
                 'Sandbox Simulator': '/student/sandbox-simulator.html',
                 'Emergency Contacts': '../emergency_contacts.html',
-                "Do's & Dont's": '../dos&donts.html',
                 'Drill Schedule': '../drill_schedule.html',
                 'Disaster Map': '../advanced-map.html',
                 'AI Helper': '/student/chatbot.html',
@@ -910,10 +1045,11 @@
                 'Settings': '/student/settings.html'
             };
 
+            // Handle regular menu items (excluding accordion trigger and submenu items)
             menuItems.forEach(item => {
                 item.addEventListener('click', function () {
                     // Update active state
-                    menuItems.forEach(i => i.classList.remove('active'));
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
 
                     // Get the menu item text
@@ -921,17 +1057,7 @@
                     const targetPage = pageMapping[menuText];
 
                     if (targetPage) {
-                        if (targetPage.startsWith('#')) {
-                            // Handle anchor links (scroll to section)
-                            if (targetPage === '#emergency-contacts') {
-                                document.querySelector('.emergency-contacts-section').scrollIntoView({
-                                    behavior: 'smooth'
-                                });
-                            }
-                        } else {
-                            // Navigate to page
-                            navigateToPage(targetPage, menuText);
-                        }
+                        navigateToPage(targetPage, menuText);
                     }
                 });
 
@@ -945,6 +1071,23 @@
                 item.addEventListener('mouseleave', function () {
                     if (!this.classList.contains('active')) {
                         this.style.backgroundColor = '';
+                    }
+                });
+            });
+
+            // Handle submenu items separately
+            submenuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Update active state
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const link = this.getAttribute('data-link');
+                    if (link) {
+                        const menuText = this.querySelector('span').textContent.trim();
+                        navigateToPage(link, menuText);
                     }
                 });
             });
@@ -1159,8 +1302,55 @@
             });
         });
 
+        // Initialize accordion functionality
+        function initializeAccordion() {
+            const accordionTrigger = document.getElementById('educationAccordion');
+            
+            if (accordionTrigger) {
+                accordionTrigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log('Education Modules accordion clicked');
+                    
+                    // Toggle the accordion state
+                    this.classList.toggle('accordion-active');
+                    
+                    // Get all submenu items
+                    const submenuItems = document.querySelectorAll('.submenu-item');
+                    
+                    // Toggle visibility of submenu items
+                    submenuItems.forEach(item => {
+                        if (this.classList.contains('accordion-active')) {
+                            item.classList.add('show');
+                        } else {
+                            item.classList.remove('show');
+                        }
+                    });
+                    
+                    console.log('Accordion state:', this.classList.contains('accordion-active') ? 'expanded' : 'collapsed');
+                });
+            }
+        }
+
+        // Close accordion when clicking outside
+        document.addEventListener('click', function(e) {
+            const accordionTrigger = document.getElementById('educationAccordion');
+            const menuItems = document.querySelector('.menu-items');
+            
+            // Only close if clicking outside the entire menu area
+            if (accordionTrigger && !menuItems.contains(e.target)) {
+                accordionTrigger.classList.remove('accordion-active');
+                const submenuItems = document.querySelectorAll('.submenu-item');
+                submenuItems.forEach(item => {
+                    item.classList.remove('show');
+                });
+            }
+        });
+
         initializeMenuNavigation();
         initializeKeyboardNavigation();
+        initializeAccordion();
     </script>
 </body>
 
