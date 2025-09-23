@@ -108,6 +108,95 @@
             font-weight: 500;
         }
 
+        /* Dropdown Menu Styles for Admin - VERTICAL LAYOUT */
+        .sidebar-nav .dropdown-menu-item {
+            position: relative;
+            width: 100%;
+        }
+
+        .sidebar-nav .dropdown-menu-item .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .sidebar-nav .dropdown-menu-item .dropdown-arrow {
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+
+        .sidebar-nav .dropdown-menu-item.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-nav .dropdown-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin: 4px 0 8px 0;
+            padding: 4px 0;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav .dropdown-menu-item.active .dropdown-content {
+            display: block;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                max-height: 120px;
+                transform: translateY(0);
+            }
+        }
+
+        .sidebar-nav .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 2rem;
+            margin: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.85rem;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-nav .dropdown-item i {
+            width: 16px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #4ecdc4;
+        }
+
+        .sidebar-nav .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 1);
+            transform: translateX(4px);
+            text-decoration: none;
+        }
+
         /* Main Content */
         .main-content {
             margin-left: 280px;
@@ -374,6 +463,25 @@
                     <span>Incidents</span>
                 </a>
             </li>
+            <li class="nav-item dropdown-menu-item" id="educationDropdown">
+                <a href="#" class="nav-link">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-book"></i>
+                        <span>Education Modules</span>
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </a>
+                <div class="dropdown-content">
+                    <a href="/student/education-modules.html" class="dropdown-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Learning Modules</span>
+                    </a>
+                    <a href="/dos&donts.html" class="dropdown-item">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Dos & Don'ts</span>
+                    </a>
+                </div>
+            </li>
             <li class="nav-item">
                 <a href="{{ url_for('drills') }}" class="nav-link {% if request.endpoint in ['drills', 'create_drill'] %}active{% endif %}">
                     <i class="fas fa-users-cog"></i>
@@ -567,6 +675,67 @@
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+
+        // Education Modules Dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const educationDropdown = document.getElementById('educationDropdown');
+            
+            if (educationDropdown) {
+                const mainDropdownButton = educationDropdown.querySelector('.nav-link');
+                const dropdownContent = educationDropdown.querySelector('.dropdown-content');
+                
+                if (mainDropdownButton && dropdownContent) {
+                    console.log('✅ Admin dropdown found and setup');
+                    
+                    mainDropdownButton.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        
+                        console.log('🖱️ Admin dropdown clicked');
+                        
+                        // Close any other open dropdowns first
+                        document.querySelectorAll('.dropdown-menu-item').forEach(dropdown => {
+                            if (dropdown !== educationDropdown) {
+                                dropdown.classList.remove('active');
+                            }
+                        });
+                        
+                        // Toggle this dropdown
+                        educationDropdown.classList.toggle('active');
+                        
+                        const isActive = educationDropdown.classList.contains('active');
+                        console.log('🔄 Dropdown active state:', isActive);
+                    });
+                    
+                    // Handle dropdown item clicks
+                    const dropdownItems = educationDropdown.querySelectorAll('.dropdown-item');
+                    dropdownItems.forEach(item => {
+                        item.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            
+                            const link = this.getAttribute('href');
+                            console.log('🌐 Navigating to:', link);
+                            
+                            if (link) {
+                                // Close dropdown
+                                educationDropdown.classList.remove('active');
+                                
+                                // Navigate to the page
+                                window.location.href = link;
+                            }
+                        });
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(event) {
+                        if (!educationDropdown.contains(event.target)) {
+                            educationDropdown.classList.remove('active');
+                        }
+                    });
+                }
+            }
         });
     </script>
 

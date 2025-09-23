@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR First Responder Simulator - DisasterSafe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            /* user palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .vr-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .vr-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            color: white;
+        }
+
+        .vr-header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .vr-header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+        }
+
+        .back-button:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .vr-main {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .vr-sidebar {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(16, 24, 32, 0.03);
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section h3 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid rgba(26, 115, 232, 0.2);
+            padding-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .scenario-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .scenario-item {
+            background: var(--card-bg);
+            border: 2px solid rgba(26, 115, 232, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .scenario-item:hover {
+            background: rgba(26, 115, 232, 0.05);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .scenario-item.active {
+            background: rgba(26, 115, 232, 0.1);
+            border-color: var(--primary);
+        }
+
+        .scenario-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+            color: var(--primary);
+        }
+
+        .scenario-item h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .scenario-item p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .vr-viewer {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(16, 24, 32, 0.03);
+            box-shadow: var(--shadow);
+        }
+
+        .viewer-header {
+            background: linear-gradient(90deg, var(--primary), var(--p1));
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .viewer-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .viewer-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .simulation-area {
+            height: 500px;
+            position: relative;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .vr-environment {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .environment-placeholder {
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .environment-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+            color: var(--primary);
+        }
+
+        .environment-placeholder h3 {
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .environment-placeholder p {
+            color: #666;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .vr-hud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .hud-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hud-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .hud-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .hud-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .timer { color: #f9a825; }
+        .score { color: #34a853; }
+        .patients { color: #e91e63; }
+
+        .action-prompt {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            pointer-events: auto;
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .prompt-text {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .prompt-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .option-button {
+            flex: 1;
+            min-width: 150px;
+            background: var(--primary);
+            border: 2px solid var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .option-button:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .medical-tools {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tool-item {
+            background: rgba(26, 115, 232, 0.05);
+            border: 1px solid rgba(26, 115, 232, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tool-item:hover {
+            background: rgba(26, 115, 232, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .bandage { background: linear-gradient(135deg, #e91e63, #ad1457); }
+        .stethoscope { background: linear-gradient(135deg, #2196f3, #1565c0); }
+        .syringe { background: linear-gradient(135deg, #4caf50, #2e7d32); }
+        .splint { background: linear-gradient(135deg, #ff9800, #f57c00); }
+
+        .tool-info h5 {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .tool-info p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .progress-section {
+            background: rgba(26, 115, 232, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), #4caf50);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .start-simulation {
+            background: linear-gradient(135deg, var(--secondary), #2e7d32);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 20px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .start-simulation:hover {
+            background: linear-gradient(135deg, #388e3c, #1b5e20);
+            transform: translateY(-2px);
+        }
+
+        .start-ar-mode {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 15px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .start-ar-mode:hover {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            transform: translateY(-2px);
+        }
+
+        .achievements {
+            margin-top: 20px;
+        }
+
+        .achievement-item {
+            background: rgba(26, 115, 232, 0.05);
+            border: 1px solid rgba(26, 115, 232, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .achievement-item:hover {
+            background: rgba(26, 115, 232, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .achievement-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffc107, #f57f17);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .achievement-info h6 {
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            color: var(--text-dark);
+        }
+
+        .achievement-info p {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .patient-vitals {
+            background: rgba(26, 115, 232, 0.05);
+            border: 1px solid rgba(26, 115, 232, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .vital-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .vital-label {
+            color: #666;
+        }
+
+        .vital-value {
+            font-weight: 600;
+        }
+
+        .critical { color: #f44336; }
+        .warning { color: #ff9800; }
+        .normal { color: #4caf50; }
+
+        .simulation-active .environment-placeholder {
+            display: none;
+        }
+
+        .patient-models {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .simulation-active .patient-models {
+            display: block;
+        }
+
+        .patient {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px 30px 10px 10px;
+            border: 2px solid #333;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .patient:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .patient.critical {
+            border-color: #f44336;
+            animation: criticalPulse 1s infinite;
+        }
+
+        .patient.urgent {
+            border-color: #ff9800;
+        }
+
+        .patient.stable {
+            border-color: #4caf50;
+        }
+
+        @keyframes criticalPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(244, 67, 54, 0); }
+        }
+
+        .patient-1 { top: 20%; left: 20%; }
+        .patient-2 { top: 60%; left: 70%; }
+        .patient-3 { bottom: 30%; left: 40%; }
+        .patient-4 { top: 40%; right: 20%; }
+
+        .feedback-toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 1200px) {
+            .vr-main {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vr-sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vr-header h1 {
+                font-size: 2rem;
+            }
+
+            .back-button {
+                position: relative;
+                margin-bottom: 20px;
+            }
+
+            .prompt-options {
+                flex-direction: column;
+            }
+
+            .option-button {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="vr-container">
+        <button class="back-button" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+            Back to Simulator
+        </button>
+
+        <div class="vr-header">
+            <h1>VR First Responder Simulator</h1>
+            <p>Immersive virtual reality training for critical medical response skills in emergency situations</p>
+        </div>
+
+        <div class="vr-main">
+            <!-- Left Sidebar - Medical Scenarios -->
+            <div class="vr-sidebar">
+                <div class="sidebar-section">
+                    <h3>Emergency Scenarios</h3>
+                    <div class="scenario-list">
+                        <div class="scenario-item active" data-scenario="mass-casualty">
+                            <i class="fas fa-ambulance scenario-icon"></i>
+                            <h4>Mass Casualty</h4>
+                            <p>Multiple patients with varying injuries</p>
+                        </div>
+                        <div class="scenario-item" data-scenario="cardiac-arrest">
+                            <i class="fas fa-heartbeat scenario-icon"></i>
+                            <h4>Cardiac Emergency</h4>
+                            <p>CPR and defibrillation procedures</p>
+                        </div>
+                        <div class="scenario-item" data-scenario="trauma-care">
+                            <i class="fas fa-user-injured scenario-icon"></i>
+                            <h4>Trauma Care</h4>
+                            <p>Severe injuries and bleeding control</p>
+                        </div>
+                        <div class="scenario-item" data-scenario="respiratory">
+                            <i class="fas fa-lungs scenario-icon"></i>
+                            <h4>Respiratory Crisis</h4>
+                            <p>Airway management and ventilation</p>
+                        </div>
+                        <div class="scenario-item" data-scenario="pediatric">
+                            <i class="fas fa-baby scenario-icon"></i>
+                            <h4>Pediatric Emergency</h4>
+                            <p>Child-specific medical procedures</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Medical Tools</h3>
+                    <div class="medical-tools">
+                        <div class="tool-item" onclick="selectTool('bandage')">
+                            <div class="tool-icon bandage">
+                                <i class="fas fa-band-aid"></i>
+                            </div>
+                            <div class="tool-info">
+                                <h5>Bandages</h5>
+                                <p>Wound dressing and bleeding control</p>
+                            </div>
+                        </div>
+                        <div class="tool-item" onclick="selectTool('stethoscope')">
+                            <div class="tool-icon stethoscope">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <div class="tool-info">
+                                <h5>Stethoscope</h5>
+                                <p>Heart and lung assessment</p>
+                            </div>
+                        </div>
+                        <div class="tool-item" onclick="selectTool('syringe')">
+                            <div class="tool-icon syringe">
+                                <i class="fas fa-syringe"></i>
+                            </div>
+                            <div class="tool-info">
+                                <h5>Emergency Medication</h5>
+                                <p>Epinephrine and pain relief</p>
+                            </div>
+                        </div>
+                        <div class="tool-item" onclick="selectTool('splint')">
+                            <div class="tool-icon splint">
+                                <i class="fas fa-crutch"></i>
+                            </div>
+                            <div class="tool-info">
+                                <h5>Splint Kit</h5>
+                                <p>Fracture stabilization</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="start-simulation" onclick="startVRSimulation()">
+                    <i class="fas fa-vr-cardboard"></i>
+                    Start VR Training
+                </button>
+
+                <button class="start-ar-mode" onclick="launchARMode()">
+                    <i class="fas fa-eye"></i>
+                    Launch AR Mode
+                </button>
+            </div>
+
+            <!-- Main VR Viewer -->
+            <div class="vr-viewer">
+                <div class="viewer-header">
+                    <div class="viewer-title" id="scenarioTitle">Mass Casualty Incident</div>
+                    <div class="viewer-controls">
+                        <button class="control-btn" onclick="pauseSimulation()" title="Pause">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        <button class="control-btn" onclick="resetSimulation()" title="Reset">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                        <button class="control-btn" onclick="toggleFullscreen()" title="Fullscreen">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="simulation-area" id="simulationArea">
+                    <div class="vr-environment">
+                        <div class="environment-placeholder">
+                            <i class="fas fa-vr-cardboard"></i>
+                            <h3>VR Environment Ready</h3>
+                            <p>Click "Start VR Training" to begin your immersive medical simulation</p>
+                        </div>
+
+                        <!-- Patient Models (Hidden until simulation starts) -->
+                        <div class="patient-models">
+                            <div class="patient critical patient-1" data-patient="1" onclick="selectPatient(1)">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="patient urgent patient-2" data-patient="2" onclick="selectPatient(2)">
+                                <i class="fas fa-exclamation"></i>
+                            </div>
+                            <div class="patient stable patient-3" data-patient="3" onclick="selectPatient(3)">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="patient urgent patient-4" data-patient="4" onclick="selectPatient(4)">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VR HUD Overlay -->
+                    <div class="vr-hud" id="vrHUD" style="display: none;">
+                        <div class="hud-overlay">
+                            <div class="hud-stats">
+                                <div class="hud-stat">
+                                    <div class="hud-label">Time Remaining</div>
+                                    <div class="hud-value timer" id="timeRemaining">05:00</div>
+                                </div>
+                                <div class="hud-stat">
+                                    <div class="hud-label">Score</div>
+                                    <div class="hud-value score" id="currentScore">0</div>
+                                </div>
+                                <div class="hud-stat">
+                                    <div class="hud-label">Patients Treated</div>
+                                    <div class="hud-value patients" id="patientsTreated">0/4</div>
+                                </div>
+                                <div class="hud-stat">
+                                    <div class="hud-label">Lives Saved</div>
+                                    <div class="hud-value" id="livesSaved" style="color: #4caf50;">0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Prompt -->
+                        <div class="action-prompt" id="actionPrompt">
+                            <div class="prompt-text" id="promptText">
+                                Patient is unconscious with severe bleeding. What is your immediate priority?
+                            </div>
+                            <div class="prompt-options">
+                                <button class="option-button" onclick="makeDecision(1)">
+                                    Check airway and breathing
+                                </button>
+                                <button class="option-button" onclick="makeDecision(2)">
+                                    Apply direct pressure to wound
+                                </button>
+                                <button class="option-button" onclick="makeDecision(3)">
+                                    Check for pulse and circulation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar - Patient Info & Progress -->
+            <div class="vr-sidebar">
+                <div class="sidebar-section">
+                    <h3>Patient Vitals</h3>
+                    <div class="patient-vitals" id="patientVitals">
+                        <div class="vital-row">
+                            <span class="vital-label">Heart Rate:</span>
+                            <span class="vital-value critical">130 BPM</span>
+                        </div>
+                        <div class="vital-row">
+                            <span class="vital-label">Blood Pressure:</span>
+                            <span class="vital-value warning">90/60 mmHg</span>
+                        </div>
+                        <div class="vital-row">
+                            <span class="vital-label">Oxygen Saturation:</span>
+                            <span class="vital-value critical">85%</span>
+                        </div>
+                        <div class="vital-row">
+                            <span class="vital-label">Respiratory Rate:</span>
+                            <span class="vital-value warning">28 /min</span>
+                        </div>
+                        <div class="vital-row">
+                            <span class="vital-label">Consciousness:</span>
+                            <span class="vital-value critical">Unconscious</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Training Progress</h3>
+                    <div class="progress-section">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">Ready to begin training</div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Recent Achievements</h3>
+                    <div class="achievements">
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h6>Quick Response</h6>
+                                <p>Responded to critical patient in under 30 seconds</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h6>Life Saver</h6>
+                                <p>Successfully treated 10 critical patients</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h6>Trauma Specialist</h6>
+                                <p>Perfect score in trauma care scenario</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let simulationActive = false;
+        let currentScenario = 'mass-casualty';
+        let selectedTool = null;
+        let currentPatient = null;
+        let simulationTimer = null;
+        let timeLeft = 300; // 5 minutes
+        let score = 0;
+        let patientsTreated = 0;
+        let livesSaved = 0;
+        let decisionCount = 0;
+        let correctDecisions = 0;
+
+        // Patient data for simulation
+        const patientData = {
+            1: {
+                name: "Patient Alpha",
+                condition: "critical",
+                injuries: ["Severe head trauma", "Internal bleeding", "Unconscious"],
+                vitals: { hr: 130, bp: "90/60", spo2: 85, rr: 28, consciousness: "Unconscious" },
+                priority: 1
+            },
+            2: {
+                name: "Patient Beta", 
+                condition: "urgent",
+                injuries: ["Broken leg", "Moderate bleeding", "Conscious"],
+                vitals: { hr: 110, bp: "120/80", spo2: 92, rr: 22, consciousness: "Alert" },
+                priority: 2
+            },
+            3: {
+                name: "Patient Gamma",
+                condition: "stable",
+                injuries: ["Minor cuts", "Bruising", "Walking wounded"],
+                vitals: { hr: 88, bp: "125/85", spo2: 98, rr: 16, consciousness: "Alert" },
+                priority: 3
+            },
+            4: {
+                name: "Patient Delta",
+                condition: "urgent",
+                injuries: ["Chest pain", "Difficulty breathing", "Anxious"],
+                vitals: { hr: 120, bp: "140/90", spo2: 89, rr: 26, consciousness: "Alert" },
+                priority: 2
+            }
+        };
+
+        // Medical scenarios with different decision trees
+        const scenarios = {
+            'mass-casualty': {
+                title: 'Mass Casualty Incident',
+                description: 'Multiple patients with varying severity of injuries require immediate triage and treatment.',
+                patients: [1, 2, 3, 4],
+                timeLimit: 300
+            },
+            'cardiac-arrest': {
+                title: 'Cardiac Emergency Response',
+                description: 'Patient in cardiac arrest requires immediate CPR and defibrillation.',
+                patients: [4],
+                timeLimit: 180
+            },
+            'trauma-care': {
+                title: 'Severe Trauma Management',
+                description: 'Critical patient with multiple trauma injuries needs advanced life support.',
+                patients: [1],
+                timeLimit: 240
+            },
+            'respiratory': {
+                title: 'Respiratory Crisis',
+                description: 'Patient with severe breathing difficulties requires airway management.',
+                patients: [4],
+                timeLimit: 200
+            },
+            'pediatric': {
+                title: 'Pediatric Emergency',
+                description: 'Child patient requires specialized pediatric emergency care.',
+                patients: [3],
+                timeLimit: 250
+            }
+        };
+
+        // Decision scenarios for different situations
+        const decisionScenarios = [
+            {
+                situation: "Patient is unconscious with severe bleeding. What is your immediate priority?",
+                options: [
+                    "Check airway and breathing",
+                    "Apply direct pressure to wound", 
+                    "Check for pulse and circulation"
+                ],
+                correct: 0,
+                feedback: {
+                    0: "Correct! Airway and breathing are always the first priority in the ABC approach.",
+                    1: "Important but secondary. Always check airway first in unconscious patients.",
+                    2: "Circulation is important but comes after airway and breathing assessment."
+                }
+            },
+            {
+                situation: "Patient has an open fracture with moderate bleeding. Your approach?",
+                options: [
+                    "Immediately splint the fracture",
+                    "Control bleeding first, then immobilize",
+                    "Give pain medication before treatment"
+                ],
+                correct: 1,
+                feedback: {
+                    0: "Splinting is important but bleeding control takes priority.",
+                    1: "Excellent! Control bleeding first, then stabilize the fracture.",
+                    2: "Pain management can wait until life-threatening issues are addressed."
+                }
+            },
+            {
+                situation: "Multiple patients need help. How do you prioritize?",
+                options: [
+                    "Treat the loudest patient first",
+                    "Use START triage protocol - assess all patients quickly",
+                    "Help the closest patient first"
+                ],
+                correct: 1,
+                feedback: {
+                    0: "Loudest patients are often not the most critical. Use triage principles.",
+                    1: "Perfect! START triage ensures the most critical patients get priority.",
+                    2: "Proximity shouldn't determine priority. Use systematic triage assessment."
+                }
+            }
+        ];
+
+        let currentDecisionIndex = 0;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up scenario selection
+            document.querySelectorAll('.scenario-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.scenario-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    currentScenario = this.dataset.scenario;
+                    updateScenarioDisplay();
+                });
+            });
+
+            updateScenarioDisplay();
+        });
+
+        function updateScenarioDisplay() {
+            const scenario = scenarios[currentScenario];
+            document.getElementById('scenarioTitle').textContent = scenario.title;
+            timeLeft = scenario.timeLimit;
+            updateTimeDisplay();
+        }
+
+        function selectTool(tool) {
+            selectedTool = tool;
+            document.querySelectorAll('.tool-item').forEach(item => item.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            showFeedback(`Selected: ${tool.charAt(0).toUpperCase() + tool.slice(1)}`, 'info');
+        }
+
+        function selectPatient(patientId) {
+            if (!simulationActive) return;
+            
+            currentPatient = patientId;
+            updatePatientVitals(patientId);
+            
+            // Highlight selected patient
+            document.querySelectorAll('.patient').forEach(p => p.classList.remove('selected'));
+            document.querySelector(`[data-patient="${patientId}"]`).classList.add('selected');
+            
+            // Show decision prompt based on patient condition
+            showPatientDecision(patientId);
+        }
+
+        function updatePatientVitals(patientId) {
+            const patient = patientData[patientId];
+            const vitalsDiv = document.getElementById('patientVitals');
+            
+            vitalsDiv.innerHTML = `
+                <h4 style="margin-bottom: 15px; color: #fff;">${patient.name}</h4>
+                <div class="vital-row">
+                    <span class="vital-label">Heart Rate:</span>
+                    <span class="vital-value ${getVitalClass(patient.vitals.hr, 'hr')}">${patient.vitals.hr} BPM</span>
+                </div>
+                <div class="vital-row">
+                    <span class="vital-label">Blood Pressure:</span>
+                    <span class="vital-value ${getVitalClass(patient.vitals.bp, 'bp')}">${patient.vitals.bp} mmHg</span>
+                </div>
+                <div class="vital-row">
+                    <span class="vital-label">Oxygen Saturation:</span>
+                    <span class="vital-value ${getVitalClass(patient.vitals.spo2, 'spo2')}">${patient.vitals.spo2}%</span>
+                </div>
+                <div class="vital-row">
+                    <span class="vital-label">Respiratory Rate:</span>
+                    <span class="vital-value ${getVitalClass(patient.vitals.rr, 'rr')}">${patient.vitals.rr} /min</span>
+                </div>
+                <div class="vital-row">
+                    <span class="vital-label">Consciousness:</span>
+                    <span class="vital-value ${patient.vitals.consciousness === 'Alert' ? 'normal' : 'critical'}">${patient.vitals.consciousness}</span>
+                </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <h5 style="margin-bottom: 10px;">Injuries:</h5>
+                    ${patient.injuries.map(injury => `<p style="font-size: 0.8rem; margin-bottom: 5px;">• ${injury}</p>`).join('')}
+                </div>
+            `;
+        }
+
+        function getVitalClass(value, type) {
+            switch(type) {
+                case 'hr':
+                    if (value < 60 || value > 120) return 'critical';
+                    if (value < 70 || value > 100) return 'warning';
+                    return 'normal';
+                case 'spo2':
+                    if (value < 90) return 'critical';
+                    if (value < 95) return 'warning';
+                    return 'normal';
+                case 'rr':
+                    if (value < 10 || value > 25) return 'critical';
+                    if (value < 12 || value > 20) return 'warning';
+                    return 'normal';
+                default:
+                    return 'normal';
+            }
+        }
+
+        function showPatientDecision(patientId) {
+            const patient = patientData[patientId];
+            let prompt = "";
+            let options = [];
+
+            switch(patient.condition) {
+                case 'critical':
+                    prompt = "Critical patient with life-threatening injuries. Immediate action required:";
+                    options = [
+                        "Establish airway and provide oxygen",
+                        "Control bleeding with direct pressure",
+                        "Prepare for emergency transport"
+                    ];
+                    break;
+                case 'urgent':
+                    prompt = "Urgent patient needs prompt care. Your treatment priority:";
+                    options = [
+                        "Assess and treat injuries systematically",
+                        "Provide pain management",
+                        "Stabilize and monitor vitals"
+                    ];
+                    break;
+                case 'stable':
+                    prompt = "Stable patient with minor injuries. Best approach:";
+                    options = [
+                        "Provide basic first aid",
+                        "Reassure and monitor",
+                        "Document injuries for later care"
+                    ];
+                    break;
+            }
+
+            showDecisionPrompt(prompt, options);
+        }
+
+        function showDecisionPrompt(text, options) {
+            const prompt = document.getElementById('actionPrompt');
+            const promptText = document.getElementById('promptText');
+            const optionsContainer = prompt.querySelector('.prompt-options');
+            
+            promptText.textContent = text;
+            optionsContainer.innerHTML = '';
+            
+            options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                btn.textContent = option;
+                btn.onclick = () => makeDecision(index + 1);
+                optionsContainer.appendChild(btn);
+            });
+            
+            prompt.style.display = 'block';
+        }
+
+        function makeDecision(choice) {
+            decisionCount++;
+            const patient = patientData[currentPatient];
+            
+            // Simulate decision evaluation based on patient priority and choice
+            let isCorrect = false;
+            let points = 0;
+            let message = "";
+
+            if (patient.condition === 'critical') {
+                if (choice === 1) { // Airway management for critical patient
+                    isCorrect = true;
+                    points = 100;
+                    message = "Excellent! Airway management is critical for this patient.";
+                } else {
+                    points = 50;
+                    message = "Good effort, but airway should be the first priority.";
+                }
+            } else if (patient.condition === 'urgent') {
+                if (choice === 1) { // Systematic assessment
+                    isCorrect = true;
+                    points = 75;
+                    message = "Perfect approach for an urgent patient.";
+                } else {
+                    points = 40;
+                    message = "Acceptable choice, but systematic assessment is preferred.";
+                }
+            } else { // stable
+                if (choice === 1 || choice === 2) {
+                    isCorrect = true;
+                    points = 50;
+                    message = "Good care for a stable patient.";
+                } else {
+                    points = 25;
+                    message = "Documentation is important but patient care comes first.";
+                }
+            }
+
+            if (isCorrect) correctDecisions++;
+            score += points;
+            
+            // Mark patient as treated
+            const patientElement = document.querySelector(`[data-patient="${currentPatient}"]`);
+            patientElement.style.opacity = '0.6';
+            patientElement.style.border = '2px solid #4caf50';
+            
+            patientsTreated++;
+            if (isCorrect && patient.condition === 'critical') {
+                livesSaved++;
+            }
+            
+            updateHUD();
+            showFeedback(message, isCorrect ? 'success' : 'warning');
+            
+            document.getElementById('actionPrompt').style.display = 'none';
+            
+            // Check if all patients are treated
+            if (patientsTreated >= scenarios[currentScenario].patients.length) {
+                setTimeout(endSimulation, 2000);
+            }
+        }
+
+        function startVRSimulation() {
+            // Start VR First Responder Training
+            simulationActive = true;
+            document.getElementById('simulationArea').classList.add('simulation-active');
+            document.getElementById('vrHUD').style.display = 'block';
+            
+            // Reset stats
+            score = 0;
+            patientsTreated = 0;
+            livesSaved = 0;
+            decisionCount = 0;
+            correctDecisions = 0;
+            timeLeft = scenarios[currentScenario].timeLimit;
+            
+            updateHUD();
+            startTimer();
+            updateProgress(0);
+            
+            showFeedback('🥽 VR First Responder Training Started! Assess patients quickly using triage principles.', 'info');
+            
+            // Show first instruction after a moment
+            setTimeout(() => {
+                showDecisionPrompt(
+                    "🚨 Multiple casualties detected. How do you begin your response?",
+                    [
+                        "Quickly assess all patients for priority (START triage)",
+                        "Treat the most obvious injury first",
+                        "Call for additional backup before assessing"
+                    ]
+                );
+            }, 3000);
+        }
+
+        function startTimer() {
+            simulationTimer = setInterval(() => {
+                timeLeft--;
+                updateTimeDisplay();
+                
+                if (timeLeft <= 0) {
+                    endSimulation();
+                }
+            }, 1000);
+        }
+
+        function updateTimeDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timeRemaining').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateHUD() {
+            document.getElementById('currentScore').textContent = score;
+            document.getElementById('patientsTreated').textContent = `${patientsTreated}/${scenarios[currentScenario].patients.length}`;
+            document.getElementById('livesSaved').textContent = livesSaved;
+        }
+
+        function updateProgress(percentage) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            
+            let progressText = '';
+            if (percentage < 25) progressText = 'Beginning assessment...';
+            else if (percentage < 50) progressText = 'Triage in progress...';
+            else if (percentage < 75) progressText = 'Treating patients...';
+            else if (percentage < 100) progressText = 'Stabilizing critical cases...';
+            else progressText = 'Training complete!';
+            
+            document.getElementById('progressText').textContent = progressText;
+        }
+
+        function pauseSimulation() {
+            if (simulationTimer) {
+                clearInterval(simulationTimer);
+                simulationTimer = null;
+                showFeedback('Simulation Paused', 'info');
+            } else if (simulationActive) {
+                startTimer();
+                showFeedback('Simulation Resumed', 'info');
+            }
+        }
+
+        function resetSimulation() {
+            if (simulationTimer) clearInterval(simulationTimer);
+            
+            simulationActive = false;
+            document.getElementById('simulationArea').classList.remove('simulation-active');
+            document.getElementById('vrHUD').style.display = 'none';
+            document.getElementById('actionPrompt').style.display = 'none';
+            
+            // Reset all patients
+            document.querySelectorAll('.patient').forEach(p => {
+                p.style.opacity = '1';
+                p.style.border = '2px solid #333';
+                p.classList.remove('selected');
+            });
+            
+            // Reset stats
+            score = 0;
+            patientsTreated = 0;
+            livesSaved = 0;
+            decisionCount = 0;
+            correctDecisions = 0;
+            timeLeft = scenarios[currentScenario].timeLimit;
+            
+            updateProgress(0);
+            updateTimeDisplay();
+            updateHUD();
+            
+            showFeedback('Simulation Reset', 'info');
+        }
+
+        function endSimulation() {
+            if (simulationTimer) clearInterval(simulationTimer);
+            simulationActive = false;
+            
+            document.getElementById('actionPrompt').style.display = 'none';
+            
+            const accuracy = decisionCount > 0 ? Math.round((correctDecisions / decisionCount) * 100) : 0;
+            const progressPercentage = Math.round((patientsTreated / scenarios[currentScenario].patients.length) * 100);
+            
+            updateProgress(100);
+            
+            let performance = '';
+            if (accuracy >= 90 && livesSaved >= 2) performance = 'OUTSTANDING! 🌟';
+            else if (accuracy >= 75 && livesSaved >= 1) performance = 'EXCELLENT! 🏆';
+            else if (accuracy >= 60) performance = 'GOOD WORK! 👍';
+            else performance = 'NEEDS IMPROVEMENT 📚';
+            
+            const report = `
+VR TRAINING COMPLETE!
+
+🎯 Scenario: ${scenarios[currentScenario].title}
+⏱️ Time Used: ${Math.floor((scenarios[currentScenario].timeLimit - timeLeft) / 60)}:${((scenarios[currentScenario].timeLimit - timeLeft) % 60).toString().padStart(2, '0')}
+🏥 Patients Treated: ${patientsTreated}/${scenarios[currentScenario].patients.length}
+💝 Lives Saved: ${livesSaved}
+🎯 Decision Accuracy: ${accuracy}%
+⭐ Final Score: ${score} points
+
+${performance}
+
+Training data has been saved to your profile.
+            `;
+            
+            alert(report);
+            
+            // Auto-reset after showing results
+            setTimeout(resetSimulation, 2000);
+        }
+
+        function toggleFullscreen() {
+            const viewer = document.querySelector('.vr-viewer');
+            if (!document.fullscreenElement) {
+                viewer.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function showFeedback(message, type = 'success') {
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback-toast';
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                        type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+            
+            feedback.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            `;
+            
+            if (type === 'warning') {
+                feedback.style.background = 'var(--warning)';
+            } else if (type === 'info') {
+                feedback.style.background = 'var(--primary)';
+            }
+            
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.remove();
+            }, 3000);
+        }
+
+        function goBack() {
+            if (confirm('Are you sure you want to exit the VR Simulator? Any unsaved progress will be lost.')) {
+                window.location.href = '../sandbox-simulator.html';
+            }
+        }
+
+        function launchARMode() {
+            // Launch AR Campus Evacuation Simulator
+            if (confirm('🔍 Launch AR Campus Evacuation Simulator?\n\nYou will be redirected to the immersive AR training environment.')) {
+                showFeedback('Launching AR Simulation...', 'info');
+                setTimeout(() => {
+                    window.location.href = 'ar-simulation.html';
+                }, 1000);
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (simulationActive) {
+                switch(e.key) {
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                        selectPatient(parseInt(e.key));
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        pauseSimulation();
+                        break;
+                    case 'r':
+                        resetSimulation();
+                        break;
+                }
+            }
+        });
+
+        // Add CSS for selected states
+        const additionalCSS = `
+            .tool-item.selected {
+                background: rgba(26, 115, 232, 0.3) !important;
+                border-color: var(--primary) !important;
+            }
+            
+            .patient.selected {
+                box-shadow: 0 0 30px rgba(26, 115, 232, 0.8) !important;
+                transform: scale(1.1) !important;
+                z-index: 10;
+            }
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = additionalCSS;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -205,6 +205,76 @@
                 top: 0;
             }
         }
+
+        /* Dropdown Styles for Bootstrap Navigation */
+        .sidebar .dropdown-menu {
+            position: relative;
+        }
+
+        .sidebar .menu-item-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+        }
+
+        .sidebar .dropdown-arrow {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .sidebar .dropdown-menu.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .sidebar .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            margin: 0 15px;
+        }
+
+        .sidebar .dropdown-menu.active .dropdown-content {
+            max-height: 200px;
+        }
+
+        .sidebar .dropdown-content .dropdown-item {
+            padding: 8px 20px;
+            margin: 2px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .sidebar .dropdown-content .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar .dropdown-content .dropdown-item i {
+            width: 16px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        /* Slide down animation */
+        @keyframes slideDown {
+            from {
+                max-height: 0;
+                opacity: 0;
+            }
+            to {
+                max-height: 200px;
+                opacity: 1;
+            }
+        }
+
+        .sidebar .dropdown-menu.active .dropdown-content {
+            animation: slideDown 0.3s ease forwards;
+        }
     </style>
 </head>
 <body>
@@ -248,42 +318,51 @@
             <div class="col-lg-2 col-md-3 p-0 sidebar d-none d-md-block">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link active" href="/student/dashboard-student.html">
                             <i class="fas fa-home"></i> Dashboard
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
+                    <li class="nav-item dropdown-menu" id="educationDropdown">
+                        <a class="nav-link menu-item-main" href="#" role="button">
                             <i class="fas fa-book"></i> Education Modules
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
                         </a>
+                        <div class="dropdown-content">
+                            <a class="nav-link dropdown-item" href="/student/education-modules.html">
+                                <i class="fas fa-graduation-cap"></i> Learning Modules
+                            </a>
+                            <a class="nav-link dropdown-item" href="/dos&donts.html">
+                                <i class="fas fa-exclamation-triangle"></i> Dos & Don'ts
+                            </a>
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/student/gamified-learning.html">
                             <i class="fas fa-gamepad"></i> Gamified Learning
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/student/sandbox-simulator.html">
                             <i class="fas fa-map-marked-alt"></i> Sandbox Simulator
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/emergency_contacts.html">
                             <i class="fas fa-phone-alt"></i> Emergency Contacts
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/student/chatbot.html">
                             <i class="fas fa-robot"></i> Psychological Chatbot
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/administrator/dashboard.html">
                             <i class="fas fa-chart-line"></i> Admin Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/student/settings.html">
                             <i class="fas fa-cog"></i> Settings
                         </a>
                     </li>
@@ -582,6 +661,56 @@
             triggerTabList.forEach(triggerEl => {
                 new bootstrap.Tab(triggerEl)
             })
+
+            // Initialize dropdown functionality
+            initializeDropdown();
+        });
+
+        // Initialize dropdown functionality
+        function initializeDropdown() {
+            const dropdown = document.getElementById('educationDropdown');
+            const dropdownMain = dropdown?.querySelector('.menu-item-main');
+            
+            if (dropdownMain) {
+                dropdownMain.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log('Dropdown clicked');
+                    dropdown.classList.toggle('active');
+                    
+                    // Update aria-expanded for accessibility
+                    const isActive = dropdown.classList.contains('active');
+                    dropdownMain.setAttribute('aria-expanded', isActive);
+                    
+                    console.log('Dropdown state:', isActive ? 'open' : 'closed');
+                });
+            }
+            
+            // Handle dropdown item clicks
+            const dropdownItems = dropdown?.querySelectorAll('.dropdown-content .dropdown-item');
+            dropdownItems?.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const link = this.getAttribute('href');
+                    if (link && link !== '#') {
+                        console.log('Navigating to:', link);
+                        window.location.href = link;
+                    }
+                });
+            });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('educationDropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+                const dropdownMain = dropdown.querySelector('.menu-item-main');
+                if (dropdownMain) {
+                    dropdownMain.setAttribute('aria-expanded', 'false');
+                }
+            }
         });
     </script>
 </body>

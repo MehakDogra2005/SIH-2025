@@ -2151,7 +2151,7 @@
                                 <span class="dot active"></span>
                             </div>
                         </div>
-                        <button class="launch-btn" onclick="launchSimulator('vr-responder')">
+                        <button class="launch-btn" onclick="launchVRResponder()">
                             <i class="fas fa-vr-cardboard"></i> Enter VR
                         </button>
                     </div>
@@ -4109,7 +4109,7 @@
         // Launch AR Mode
         function launchARMode() {
             // Navigate to the dedicated AR simulation page
-            window.location.href = 'ar-simulation.html';
+            window.location.href = 'sandbox/ar-simulation.html';
         }
 
         // Start AR Simulation
@@ -4354,6 +4354,28 @@ Your performance will be saved to your profile.`);
             setTimeout(() => {
                 launchARMode();
             }, 1000);
+        }
+
+        // VR First Responder Simulator Launch Function
+        function launchVRResponder() {
+            // Show loading indicator
+            showLoadingIndicator();
+            
+            // Add transition effect
+            document.body.style.transition = 'opacity 0.3s ease';
+            document.body.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                try {
+                    // Navigate to VR First Responder page
+                    window.location.href = 'sandbox/vr-first-responder.html';
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    hideLoadingIndicator();
+                    document.body.style.opacity = '1';
+                    alert('⚠️ Unable to load VR First Responder Simulator\n\nPlease ensure the VR simulator page is available.');
+                }
+            }, 500);
         }
     </script>
         </main>
