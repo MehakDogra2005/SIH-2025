@@ -101,7 +101,7 @@ router.post('/login', async (req, res) => {
 // Get current user API (requires authentication)
 router.get('/current', auth, async (req, res) => {
     try {
-        const user = req.user;
+        const user = await User.findById(req.user.id);  // 👈 direct DB se laa lo
 
         res.json({
             id: user._id,
@@ -110,11 +110,12 @@ router.get('/current', auth, async (req, res) => {
             email: user.email,
             userType: user.userType,
             institution: user.institution,
-            points: user.points
+            points: user.points   // ✅ ab hamesha fresh hoga
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
+
 
 module.exports = router;
