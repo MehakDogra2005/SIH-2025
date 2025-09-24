@@ -351,7 +351,7 @@
         }
 
         .legend-path {
-            background-color: var(--warning);
+            background-color: #ffc107;
         }
 
         /* Map Container Styles */
@@ -373,15 +373,15 @@
 
         .map-content {
             position: relative;
-            height: 500px;
-            overflow: auto;
+            height: 600px;
+            overflow: hidden;
             background-color: #e9f2fc;
         }
 
         .floor-image {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             display: none;
         }
 
@@ -725,25 +725,25 @@
             </div>
             <div class="map-content">
                 <!-- Floor images -->
-                <img src="images/cse-ground-floor.png" alt="CSE Ground Floor" class="floor-image active" id="cse-ground">
-                <img src="images/cse-first-floor.png" alt="CSE First Floor" class="floor-image" id="cse-first">
-                <img src="images/cse-second-floor.png" alt="CSE Second Floor" class="floor-image" id="cse-second">
-                <img src="images/cse-third-floor.png" alt="CSE Third Floor" class="floor-image" id="cse-third">
+                <img src="images/cse_ground.png" alt="CSE Ground Floor" class="floor-image active" id="cse-ground">
+                <img src="images/cse_first.png" alt="CSE First Floor" class="floor-image" id="cse-first">
+                <img src="images/cse_second.png" alt="CSE Second Floor" class="floor-image" id="cse-second">
+                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Third+Floor" alt="CSE Third Floor" class="floor-image" id="cse-third">
                 
-                <img src="images/admin-ground-floor.png" alt="Admin Ground Floor" class="floor-image" id="admin-ground">
-                <img src="images/admin-first-floor.png" alt="Admin First Floor" class="floor-image" id="admin-first">
-                <img src="images/admin-second-floor.png" alt="Admin Second Floor" class="floor-image" id="admin-second">
-                <img src="images/admin-third-floor.jpg" alt="Admin Third Floor" class="floor-image" id="admin-third">
+                <img src="images/admin_ground_floor.png" alt="Admin Ground Floor" class="floor-image" id="admin-ground">
+                <img src="images/admin_first_floor.png" alt="Admin First Floor" class="floor-image" id="admin-first">
+                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Second+Floor" alt="Admin Second Floor" class="floor-image" id="admin-second">
+                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Third+Floor" alt="Admin Third Floor" class="floor-image" id="admin-third">
                 
-                <img src="images/it-ground-floor.png" alt="IT Ground Floor" class="floor-image" id="it-ground">
-                <img src="images/it-first-floor.jpg" alt="IT First Floor" class="floor-image" id="it-first">
-                <img src="images/it-second-floor.jpg" alt="IT Second Floor" class="floor-image" id="it-second">
-                <img src="images/it-third-floor.jpg" alt="IT Third Floor" class="floor-image" id="it-third">
+                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Ground+Floor" alt="IT Ground Floor" class="floor-image" id="it-ground">
+                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+First+Floor" alt="IT First Floor" class="floor-image" id="it-first">
+                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Second+Floor" alt="IT Second Floor" class="floor-image" id="it-second">
+                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Third+Floor" alt="IT Third Floor" class="floor-image" id="it-third">
                 
-                <img src="images/hostel-ground-floor.jpg" alt="Hostel Ground Floor" class="floor-image" id="hostel-ground">
-                <img src="images/hostel-first-floor.jpg" alt="Hostel First Floor" class="floor-image" id="hostel-first">
-                <img src="images/hostel-second-floor.jpg" alt="Hostel Second Floor" class="floor-image" id="hostel-second">
-                <img src="images/hostel-third-floor.jpg" alt="Hostel Third Floor" class="floor-image" id="hostel-third">
+                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Ground+Floor" alt="Hostel Ground Floor" class="floor-image" id="hostel-ground">
+                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+First+Floor" alt="Hostel First Floor" class="floor-image" id="hostel-first">
+                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Second+Floor" alt="Hostel Second Floor" class="floor-image" id="hostel-second">
+                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Third+Floor" alt="Hostel Third Floor" class="floor-image" id="hostel-third">
                
                 <!-- Exit markers -->
                 <div class="exit-marker" data-room="Exit 1" style="top: 15%; left: 10%;" data-x="10" data-y="15">1</div>
@@ -1181,23 +1181,36 @@
                 const endXPx = (endX / 100) * pathCanvas.width;
                 const endYPx = (endY / 100) * pathCanvas.height;
                 
-                // Draw the path
-                ctx.strokeStyle = '#dc3545';
-                ctx.lineWidth = 4;
+                // Draw the path with yellow color and dashed line
+                ctx.strokeStyle = '#ffc107';
+                ctx.lineWidth = 6;
+                ctx.setLineDash([15, 8]);
+                ctx.lineCap = 'round';
                 ctx.beginPath();
                 ctx.moveTo(startXPx, startYPx);
                 ctx.lineTo(endXPx, endYPx);
                 ctx.stroke();
                 
+                // Draw glow effect
+                ctx.strokeStyle = '#fff200';
+                ctx.lineWidth = 10;
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.moveTo(startXPx, startYPx);
+                ctx.lineTo(endXPx, endYPx);
+                ctx.stroke();
+                ctx.globalAlpha = 1.0;
+                ctx.setLineDash([]);
+                
                 // Draw start and end points
                 ctx.fillStyle = '#28a745';
                 ctx.beginPath();
-                ctx.arc(startXPx, startYPx, 6, 0, Math.PI * 2);
+                ctx.arc(startXPx, startYPx, 8, 0, Math.PI * 2);
                 ctx.fill();
                 
-                ctx.fillStyle = '#dc3545';
+                ctx.fillStyle = '#ffc107';
                 ctx.beginPath();
-                ctx.arc(endXPx, endYPx, 6, 0, Math.PI * 2);
+                ctx.arc(endXPx, endYPx, 8, 0, Math.PI * 2);
                 ctx.fill();
             }
             
