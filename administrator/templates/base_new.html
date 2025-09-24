@@ -14,17 +14,17 @@
     
     <style>
         :root {
-            --primary-color: #4285F4;
-            --secondary-color: #1565C0;
+            --primary-color: #4A90E2;
+            --secondary-color: #357ABD;
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
             --info-color: #06b6d4;
             --dark-color: #1f2937;
             --light-color: #f8fafc;
-            --sidebar-bg: #1976D2;
-            --sidebar-hover: #1565C0;
-            --content-bg: #f8fafc;
+            --sidebar-bg: #4A90E2;
+            --sidebar-hover: #357ABD;
+            --content-bg: #f5f7fa;
         }
 
         * {
@@ -93,7 +93,7 @@
         .sidebar-nav .nav-link.active {
             background-color: var(--sidebar-hover);
             color: white;
-            border-left: 3px solid var(--primary-color);
+            border-left: 3px solid white;
             padding-left: calc(1.5rem - 3px);
         }
 
@@ -106,95 +106,6 @@
         .sidebar-nav .nav-link span {
             font-size: 0.9rem;
             font-weight: 500;
-        }
-
-        /* Dropdown Menu Styles for Admin - VERTICAL LAYOUT */
-        .sidebar-nav .dropdown-menu-item {
-            position: relative;
-            width: 100%;
-        }
-
-        .sidebar-nav .dropdown-menu-item .nav-link {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 1.5rem;
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border-radius: 0;
-        }
-
-        .sidebar-nav .dropdown-menu-item .dropdown-arrow {
-            transition: transform 0.3s ease;
-            font-size: 0.8rem;
-            margin-left: auto;
-        }
-
-        .sidebar-nav .dropdown-menu-item.active .dropdown-arrow {
-            transform: rotate(180deg);
-        }
-
-        .sidebar-nav .dropdown-content {
-            display: none;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            margin: 4px 0 8px 0;
-            padding: 4px 0;
-            width: 100%;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar-nav .dropdown-menu-item.active .dropdown-content {
-            display: block;
-            animation: slideDown 0.3s ease-out forwards;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                max-height: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                max-height: 120px;
-                transform: translateY(0);
-            }
-        }
-
-        .sidebar-nav .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 2rem;
-            margin: 2px 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 0.85rem;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .sidebar-nav .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .sidebar-nav .dropdown-item i {
-            width: 16px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #4ecdc4;
-        }
-
-        .sidebar-nav .dropdown-item:hover {
-            background: rgba(255, 255, 255, 0.12);
-            color: rgba(255, 255, 255, 1);
-            transform: translateX(4px);
-            text-decoration: none;
         }
 
         /* Main Content */
@@ -308,7 +219,7 @@
 
         /* Emergency Alert */
         .emergency-alert {
-            background: linear-gradient(135deg, #F44336, #D32F2F);
+            background: linear-gradient(135deg, #FF6B6B, #FF5252);
             color: white;
             border-radius: 12px;
             padding: 1rem;
@@ -334,10 +245,10 @@
         }
 
         .emergency-btn {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
-            color: #D32F2F;
-            border-radius: 25px;
+            color: white;
+            border-radius: 8px;
             padding: 0.5rem 1rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -346,9 +257,8 @@
         }
 
         .emergency-btn:hover {
-            background: white;
-            color: #D32F2F;
-            transform: scale(1.05);
+            background: rgba(255,255,255,0.3);
+            color: white;
         }
 
         /* Module Cards */
@@ -446,7 +356,7 @@
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <h4><i class="fas fa-shield-alt me-2" style="color: #4285F4;"></i>ResQ</h4>
+            <h4><i class="fas fa-life-ring me-2" style="color: white;"></i>JeevanSetu</h4>
             <small>Emergency Management System</small>
         </div>
         
@@ -462,25 +372,6 @@
                     <i class="fas fa-exclamation-triangle"></i>
                     <span>Incidents</span>
                 </a>
-            </li>
-            <li class="nav-item dropdown-menu-item" id="educationDropdown">
-                <a href="#" class="nav-link">
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <i class="fas fa-book"></i>
-                        <span>Education Modules</span>
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-arrow"></i>
-                </a>
-                <div class="dropdown-content">
-                    <a href="/student/education-modules.html" class="dropdown-item">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span>Learning Modules</span>
-                    </a>
-                    <a href="/dos&donts.html" class="dropdown-item">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <span>Dos & Don'ts</span>
-                    </a>
-                </div>
             </li>
             <li class="nav-item">
                 <a href="{{ url_for('drills') }}" class="nav-link {% if request.endpoint in ['drills', 'create_drill'] %}active{% endif %}">
@@ -540,10 +431,10 @@
 
         <div style="position: absolute; bottom: 2rem; left: 1.5rem; right: 1.5rem;">
             <div class="emergency-alert text-center">
-                <i class="fas fa-exclamation-triangle mb-2" style="font-size: 1.5rem;"></i>
-                <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Emergency Response</div>
+                <i class="fas fa-exclamation-circle mb-2" style="font-size: 1.5rem;"></i>
+                <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Emergency Alert System</div>
                 <button class="emergency-btn btn btn-sm w-100" onclick="triggerEmergencyAlert()">
-                    <i class="fas fa-exclamation-triangle me-1"></i>REPORT DISASTER EMERGENCY
+                    <i class="fas fa-bell me-1"></i>EMERGENCY ALERT
                 </button>
             </div>
         </div>
@@ -675,67 +566,6 @@
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
-
-        // Education Modules Dropdown functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const educationDropdown = document.getElementById('educationDropdown');
-            
-            if (educationDropdown) {
-                const mainDropdownButton = educationDropdown.querySelector('.nav-link');
-                const dropdownContent = educationDropdown.querySelector('.dropdown-content');
-                
-                if (mainDropdownButton && dropdownContent) {
-                    console.log('✅ Admin dropdown found and setup');
-                    
-                    mainDropdownButton.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        
-                        console.log('🖱️ Admin dropdown clicked');
-                        
-                        // Close any other open dropdowns first
-                        document.querySelectorAll('.dropdown-menu-item').forEach(dropdown => {
-                            if (dropdown !== educationDropdown) {
-                                dropdown.classList.remove('active');
-                            }
-                        });
-                        
-                        // Toggle this dropdown
-                        educationDropdown.classList.toggle('active');
-                        
-                        const isActive = educationDropdown.classList.contains('active');
-                        console.log('🔄 Dropdown active state:', isActive);
-                    });
-                    
-                    // Handle dropdown item clicks
-                    const dropdownItems = educationDropdown.querySelectorAll('.dropdown-item');
-                    dropdownItems.forEach(item => {
-                        item.addEventListener('click', function(event) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            
-                            const link = this.getAttribute('href');
-                            console.log('🌐 Navigating to:', link);
-                            
-                            if (link) {
-                                // Close dropdown
-                                educationDropdown.classList.remove('active');
-                                
-                                // Navigate to the page
-                                window.location.href = link;
-                            }
-                        });
-                    });
-                    
-                    // Close dropdown when clicking outside
-                    document.addEventListener('click', function(event) {
-                        if (!educationDropdown.contains(event.target)) {
-                            educationDropdown.classList.remove('active');
-                        }
-                    });
-                }
-            }
         });
     </script>
 
