@@ -200,6 +200,7 @@
                 max-height: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 max-height: 200px;
@@ -939,23 +940,31 @@
                 <h1>JeevanSetu</h1>
             </div>
             <div class="menu-items">
-                <div class="menu-item" data-link="dashboard-student.html"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item" data-link="dashboard-student.html"><i
+                        class="fas fa-home"></i><span>Dashboard</span></div>
                 <div class="menu-item dropdown-menu active" id="educationDropdown">
                     <div class="menu-item-main">
                         <i class="fas fa-book"></i><span>Education Modules</span>
                         <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </div>
                     <div class="dropdown-content">
-                        <div class="dropdown-item active" data-link="education-modules.html"><i class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
-                        <div class="dropdown-item" data-link="../dos&donts.html"><i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
+                        <div class="dropdown-item active" data-link="education-modules.html"><i
+                                class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
+                        <div class="dropdown-item" data-link="../dos&donts.html"><i
+                                class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
                     </div>
                 </div>
-                <div class="menu-item" data-link="sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
-                <div class="menu-item" data-link="../emergency_contacts.html"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
-                <div class="menu-item" data-link="../drill_schedule.html"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
-                <div class="menu-item" data-link="../advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item" data-link="sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox
+                        Simulator</span></div>
+                <div class="menu-item" data-link="emergency_contacts.html"><i
+                        class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item" data-link="drill_schedule.html"><i
+                        class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item" data-link="advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster
+                        Map</span></div>
                 <div class="menu-item" data-link="chatbot.html"><i class="fas fa-robot"></i><span>AI Helper</span></div>
-                <div class="menu-item" data-link="gamified-learning.html"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <div class="menu-item" data-link="gamified-learning.html"><i
+                        class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
                 <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
                 <div class="menu-item" data-link="settings.html"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
@@ -1370,7 +1379,7 @@
                 console.log('Education dropdown found, setting up event listeners');
                 const mainDropdownButton = educationDropdown.querySelector('.menu-item-main');
                 const dropdownContent = educationDropdown.querySelector('.dropdown-content');
-                
+
                 // Force show dropdown content since this is the Education Modules page
                 if (dropdownContent) {
                     dropdownContent.style.display = 'block';
@@ -1378,25 +1387,25 @@
                     dropdownContent.style.maxHeight = 'none';
                     console.log('Forced dropdown content to show');
                 }
-                
+
                 if (mainDropdownButton && dropdownContent) {
                     console.log('Dropdown button and content found');
                     mainDropdownButton.addEventListener('click', (event) => {
                         event.preventDefault();
                         event.stopPropagation();
                         console.log('Dropdown clicked, current active state:', educationDropdown.classList.contains('active'));
-                        
+
                         // Close any other open dropdowns first (if there are multiple)
                         document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
                             if (dropdown !== educationDropdown) {
                                 dropdown.classList.remove('active');
                             }
                         });
-                        
+
                         // Toggle this dropdown
                         educationDropdown.classList.toggle('active');
                         console.log('After toggle, active state:', educationDropdown.classList.contains('active'));
-                        
+
                         // Force display check
                         const isActive = educationDropdown.classList.contains('active');
                         console.log('Dropdown content display should be:', isActive ? 'block' : 'none');
@@ -1411,32 +1420,32 @@
             // Handle navigation for dropdown items
             const dropdownItems = document.querySelectorAll('.dropdown-item');
             console.log('Found dropdown items:', dropdownItems.length);
-            
+
             dropdownItems.forEach((item, index) => {
                 const link = item.getAttribute('data-link');
                 const text = item.querySelector('span')?.textContent.trim();
                 console.log(`Dropdown item ${index}:`, text, 'Link:', link);
-                
+
                 item.addEventListener('click', (event) => {
                     event.preventDefault();
                     event.stopPropagation(); // Stop event from bubbling up to the parent
-                    
+
                     console.log('Dropdown item clicked:', text, 'Link:', link);
-                    
+
                     if (link) {
                         // Close the dropdown
                         if (educationDropdown) {
                             educationDropdown.classList.remove('active');
                         }
-                        
+
                         // Remove active class from all menu items and dropdown items
                         document.querySelectorAll('.menu-item, .dropdown-item').forEach(menuItem => {
                             menuItem.classList.remove('active');
                         });
-                        
+
                         // Add active class to clicked dropdown item
                         item.classList.add('active');
-                        
+
                         // Navigate to the page
                         console.log('Navigating to:', link);
                         window.location.href = link;
@@ -1447,7 +1456,7 @@
             });
 
             // Close dropdown when clicking outside
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 if (educationDropdown && !educationDropdown.contains(event.target)) {
                     educationDropdown.classList.remove('active');
                 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta viewport="width=device-width, initial-scale=1.0">
@@ -45,11 +46,13 @@
         }
 
         /* Ensure all containers respect max width */
-        .container, .main-content, .dashboard-container {
+        .container,
+        .main-content,
+        .dashboard-container {
             max-width: 100%;
             box-sizing: border-box;
         }
-        
+
         /* Prevent horizontal overflow for all elements */
         * {
             max-width: 100%;
@@ -57,13 +60,21 @@
         }
 
         /* Text wrapping for long content */
-        h1, h2, h3, h4, h5, h6, p {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
 
         /* Responsive images and media */
-        img, video, canvas {
+        img,
+        video,
+        canvas {
             max-width: 100%;
             height: auto;
         }
@@ -219,6 +230,7 @@
                 max-height: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 max-height: 200px;
@@ -1290,7 +1302,7 @@
                 width: 100%;
                 max-width: 100%;
             }
-            
+
             .main-content {
                 max-width: 100%;
                 padding: 15px;
@@ -1323,25 +1335,25 @@
             .progress-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .action-recommendations {
                 grid-template-columns: 1fr;
             }
-            
+
             .feedback-cards {
                 grid-template-columns: 1fr;
             }
-            
+
             .controls-grid {
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
                 gap: 15px;
             }
-            
+
             .prompt-options {
                 flex-direction: column;
                 gap: 10px;
             }
-            
+
             .option-btn {
                 min-width: 100%;
                 max-width: 100%;
@@ -1495,7 +1507,7 @@
             transform: translateY(20px);
             transition: all 0.5s ease;
         }
-        
+
         .simulator-controls.active {
             opacity: 1;
             transform: translateY(0);
@@ -1558,7 +1570,7 @@
             transform: translateY(20px);
             transition: all 0.5s ease;
         }
-        
+
         .simulator-main.active {
             opacity: 1;
             transform: translateY(0);
@@ -1806,9 +1818,17 @@
         }
 
         @keyframes loading {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
+            0% {
+                width: 0%;
+            }
+
+            50% {
+                width: 70%;
+            }
+
+            100% {
+                width: 100%;
+            }
         }
 
         .loading-text {
@@ -2085,8 +2105,13 @@
         }
 
         @keyframes flood-rise {
-            0% { height: 0%; }
-            100% { height: 60%; }
+            0% {
+                height: 0%;
+            }
+
+            100% {
+                height: 60%;
+            }
         }
 
         .earthquake-shake {
@@ -2094,9 +2119,19 @@
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
         }
 
         .fire-effect {
@@ -2111,8 +2146,15 @@
         }
 
         @keyframes fire-flicker {
-            0% { opacity: 0.6; transform: scaleY(0.9); }
-            100% { opacity: 0.9; transform: scaleY(1.1); }
+            0% {
+                opacity: 0.6;
+                transform: scaleY(0.9);
+            }
+
+            100% {
+                opacity: 0.9;
+                transform: scaleY(1.1);
+            }
         }
 
         .floating-objects {
@@ -2125,8 +2167,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
         }
 
         @media (max-width: 1200px) {
@@ -2171,6 +2220,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -2187,18 +2237,24 @@
                         <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </div>
                     <div class="dropdown-content">
-                        <div class="dropdown-item" data-link="education-modules.html"><i class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
-                        <div class="dropdown-item" data-link="../dos&donts.html"><i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
+                        <div class="dropdown-item" data-link="education-modules.html"><i
+                                class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
+                        <div class="dropdown-item" data-link="dos&donts.html"><i
+                                class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
                     </div>
                 </div>
                 <div class="menu-item active"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
-                <div class="menu-item"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
-                <div class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
-                <div class="menu-item"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
-                <div class="menu-item"><i class="fas fa-robot"></i><span>AI Helper</span></div>
-                <div class="menu-item"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <div class="menu-item" data-link="emergency_contacts.html"><i
+                        class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item" data-link="drill_schedule.html"><i
+                        class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item" data-link="advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster
+                        Map</span></div>
+                <div class="menu-item" data-link="chatbot.html"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item" data-link="gamified-learning.html"><i
+                        class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
                 <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
-                <div class="menu-item"><i class="fas fa-cog"></i><span>Settings</span></div>
+                <div class="menu-item" data-link="settings.html"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div>
 
             <!-- User Profile at Bottom -->
@@ -2213,303 +2269,383 @@
 
         <!-- Main Content -->
         <main class="main-content">
-        <div class="simulators-library">
-            <div class="library-header">
-                <h2>Choose Your Training Environment</h2>
-                <p>Select from our comprehensive library of realistic simulations</p>
-            </div>
-            
-            <div class="simulators-grid">
-                <div class="simulator-card featured" data-type="ar-campus">
-                    <div class="card-header">
-                        <div class="card-icon ar">
-                            <i class="fas fa-school"></i>
+            <div class="simulators-library">
+                <div class="library-header">
+                    <h2>Choose Your Training Environment</h2>
+                    <p>Select from our comprehensive library of realistic simulations</p>
+                </div>
+
+                <div class="simulators-grid">
+                    <div class="simulator-card featured" data-type="ar-campus">
+                        <div class="card-header">
+                            <div class="card-icon ar">
+                                <i class="fas fa-school"></i>
+                            </div>
+                            <div class="card-badge">AR</div>
                         </div>
-                        <div class="card-badge">AR</div>
-                    </div>
-                    <div class="card-content">
-                        <h3>AR Campus Evacuation Simulator</h3>
-                        <p>Practice evacuation procedures using augmented reality in your actual campus environment. Turn theoretical maps into real-world, guided drills.</p>
-                        <div class="card-features">
-                            <span><i class="fas fa-map-marked-alt"></i> Real location mapping</span>
-                            <span><i class="fas fa-users"></i> Multi-user support</span>
-                            <span><i class="fas fa-clock"></i> 15-30 min sessions</span>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="difficulty-indicator">
-                            <span>Difficulty:</span>
-                            <div class="difficulty-dots">
-                                <span class="dot active"></span>
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
+                        <div class="card-content">
+                            <h3>AR Campus Evacuation Simulator</h3>
+                            <p>Practice evacuation procedures using augmented reality in your actual campus environment.
+                                Turn theoretical maps into real-world, guided drills.</p>
+                            <div class="card-features">
+                                <span><i class="fas fa-map-marked-alt"></i> Real location mapping</span>
+                                <span><i class="fas fa-users"></i> Multi-user support</span>
+                                <span><i class="fas fa-clock"></i> 15-30 min sessions</span>
                             </div>
                         </div>
-                        <button class="launch-btn" onclick="launchSimulator('ar-campus')">
-                            <i class="fas fa-play"></i> Launch AR Mode
+                        <div class="card-footer">
+                            <div class="difficulty-indicator">
+                                <span>Difficulty:</span>
+                                <div class="difficulty-dots">
+                                    <span class="dot active"></span>
+                                    <span class="dot active"></span>
+                                    <span class="dot"></span>
+                                </div>
+                            </div>
+                            <button class="launch-btn" onclick="launchSimulator('ar-campus')">
+                                <i class="fas fa-play"></i> Launch AR Mode
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="simulator-card featured" data-type="vr-responder">
+                        <div class="card-header">
+                            <div class="card-icon vr">
+                                <i class="fas fa-ambulance"></i>
+                            </div>
+                            <div class="card-badge">VR</div>
+                        </div>
+                        <div class="card-content">
+                            <h3>VR First-Responder Simulator</h3>
+                            <p>Immersive virtual reality training for critical skills like triage, first-aid, and rescue
+                                operations in high-pressure scenarios.</p>
+                            <div class="card-features">
+                                <span><i class="fas fa-heartbeat"></i> Medical procedures</span>
+                                <span><i class="fas fa-exclamation-triangle"></i> High-pressure training</span>
+                                <span><i class="fas fa-clock"></i> 20-45 min sessions</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="difficulty-indicator">
+                                <span>Difficulty:</span>
+                                <div class="difficulty-dots">
+                                    <span class="dot active"></span>
+                                    <span class="dot active"></span>
+                                    <span class="dot active"></span>
+                                </div>
+                            </div>
+                            <button class="launch-btn" onclick="launchVRResponder()">
+                                <i class="fas fa-vr-cardboard"></i> Enter VR
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="simulator-card" data-type="city-planner">
+                        <div class="card-header">
+                            <div class="card-icon strategy">
+                                <i class="fas fa-city"></i>
+                            </div>
+                            <div class="card-badge">Strategy</div>
+                        </div>
+                        <div class="card-content">
+                            <h3>"Disasteropolis" City Planner Game</h3>
+                            <p>Strategic simulation teaching disaster mitigation and preparedness planning. Build
+                                resilient communities and test your designs against various disasters.</p>
+                            <div class="card-features">
+                                <span><i class="fas fa-hammer"></i> Infrastructure planning</span>
+                                <span><i class="fas fa-shield-alt"></i> Mitigation strategies</span>
+                                <span><i class="fas fa-clock"></i> 30-60 min sessions</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="difficulty-indicator">
+                                <span>Difficulty:</span>
+                                <div class="difficulty-dots">
+                                    <span class="dot active"></span>
+                                    <span class="dot active"></span>
+                                    <span class="dot"></span>
+                                </div>
+                            </div>
+                            <button class="launch-btn" onclick="launchSimulator('city-planner')">
+                                <i class="fas fa-play"></i> Start Planning
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="simulator-card" data-type="crowd-map">
+                        <div class="card-header">
+                            <div class="card-icon community">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="card-badge">Live</div>
+                        </div>
+                        <div class="card-content">
+                            <h3>Crowd-Sourced Safe Zone Map</h3>
+                            <p>Real-time community mapping simulation. Learn to identify and report safe zones while
+                                coordinating with other users during emergencies.</p>
+                            <div class="card-features">
+                                <span><i class="fas fa-users"></i> Community collaboration</span>
+                                <span><i class="fas fa-satellite"></i> Real-time updates</span>
+                                <span><i class="fas fa-clock"></i> 10-25 min sessions</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="difficulty-indicator">
+                                <span>Difficulty:</span>
+                                <div class="difficulty-dots">
+                                    <span class="dot active"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </div>
+                            </div>
+                            <button class="launch-btn" onclick="launchSimulator('crowd-map')">
+                                <i class="fas fa-globe"></i> Join Community
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-start-section">
+                    <h3>Quick Start Options</h3>
+                    <div class="quick-start-buttons">
+                        <button class="quick-btn" onclick="startRandomSimulation()">
+                            <i class="fas fa-random"></i>
+                            <span>Random Challenge</span>
+                        </button>
+                        <button class="quick-btn" onclick="continueProgress()">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Continue Training</span>
+                        </button>
+                        <button class="quick-btn" onclick="startRealScenario()">
+                            <i class="fas fa-users"></i>
+                            <span>Real Scenarios</span>
                         </button>
                     </div>
                 </div>
-
-                <div class="simulator-card featured" data-type="vr-responder">
-                    <div class="card-header">
-                        <div class="card-icon vr">
-                            <i class="fas fa-ambulance"></i>
-                        </div>
-                        <div class="card-badge">VR</div>
-                    </div>
-                    <div class="card-content">
-                        <h3>VR First-Responder Simulator</h3>
-                        <p>Immersive virtual reality training for critical skills like triage, first-aid, and rescue operations in high-pressure scenarios.</p>
-                        <div class="card-features">
-                            <span><i class="fas fa-heartbeat"></i> Medical procedures</span>
-                            <span><i class="fas fa-exclamation-triangle"></i> High-pressure training</span>
-                            <span><i class="fas fa-clock"></i> 20-45 min sessions</span>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="difficulty-indicator">
-                            <span>Difficulty:</span>
-                            <div class="difficulty-dots">
-                                <span class="dot active"></span>
-                                <span class="dot active"></span>
-                                <span class="dot active"></span>
-                            </div>
-                        </div>
-                        <button class="launch-btn" onclick="launchVRResponder()">
-                            <i class="fas fa-vr-cardboard"></i> Enter VR
-                        </button>
-                    </div>
-                </div>
-
-                <div class="simulator-card" data-type="city-planner">
-                    <div class="card-header">
-                        <div class="card-icon strategy">
-                            <i class="fas fa-city"></i>
-                        </div>
-                        <div class="card-badge">Strategy</div>
-                    </div>
-                    <div class="card-content">
-                        <h3>"Disasteropolis" City Planner Game</h3>
-                        <p>Strategic simulation teaching disaster mitigation and preparedness planning. Build resilient communities and test your designs against various disasters.</p>
-                        <div class="card-features">
-                            <span><i class="fas fa-hammer"></i> Infrastructure planning</span>
-                            <span><i class="fas fa-shield-alt"></i> Mitigation strategies</span>
-                            <span><i class="fas fa-clock"></i> 30-60 min sessions</span>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="difficulty-indicator">
-                            <span>Difficulty:</span>
-                            <div class="difficulty-dots">
-                                <span class="dot active"></span>
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <button class="launch-btn" onclick="launchSimulator('city-planner')">
-                            <i class="fas fa-play"></i> Start Planning
-                        </button>
-                    </div>
-                </div>
-
-                <div class="simulator-card" data-type="crowd-map">
-                    <div class="card-header">
-                        <div class="card-icon community">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="card-badge">Live</div>
-                    </div>
-                    <div class="card-content">
-                        <h3>Crowd-Sourced Safe Zone Map</h3>
-                        <p>Real-time community mapping simulation. Learn to identify and report safe zones while coordinating with other users during emergencies.</p>
-                        <div class="card-features">
-                            <span><i class="fas fa-users"></i> Community collaboration</span>
-                            <span><i class="fas fa-satellite"></i> Real-time updates</span>
-                            <span><i class="fas fa-clock"></i> 10-25 min sessions</span>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="difficulty-indicator">
-                            <span>Difficulty:</span>
-                            <div class="difficulty-dots">
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <button class="launch-btn" onclick="launchSimulator('crowd-map')">
-                            <i class="fas fa-globe"></i> Join Community
-                        </button>
-                    </div>
-                </div>
             </div>
 
-            <div class="quick-start-section">
-                <h3>Quick Start Options</h3>
-                <div class="quick-start-buttons">
-                    <button class="quick-btn" onclick="startRandomSimulation()">
-                        <i class="fas fa-random"></i>
-                        <span>Random Challenge</span>
-                    </button>
-                    <button class="quick-btn" onclick="continueProgress()">
-                        <i class="fas fa-play-circle"></i>
-                        <span>Continue Training</span>
-                    </button>
-                    <button class="quick-btn" onclick="startRealScenario()">
-                        <i class="fas fa-users"></i>
-                        <span>Real Scenarios</span>
-                    </button>
+            <!-- User Progress & Feedback System -->
+            <div class="progress-feedback-section">
+                <div class="section-header">
+                    <h2>Your Training Progress</h2>
+                    <p>Track your performance and discover areas for improvement</p>
                 </div>
-            </div>
-        </div>
 
-        <!-- User Progress & Feedback System -->
-        <div class="progress-feedback-section">
-            <div class="section-header">
-                <h2>Your Training Progress</h2>
-                <p>Track your performance and discover areas for improvement</p>
-            </div>
+                <div class="progress-grid">
+                    <div class="performance-summary">
+                        <h3>Performance Overview</h3>
+                        <div class="summary-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-number">87</span>
+                                    <span class="stat-label">Average Score</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-number">4.2</span>
+                                    <span class="stat-label">Avg Response Time (min)</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-number">342</span>
+                                    <span class="stat-label">People Rescued</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-number">15</span>
+                                    <span class="stat-label">Simulations Completed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="progress-grid">
-                <div class="performance-summary">
-                    <h3>Performance Overview</h3>
-                    <div class="summary-stats">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-trophy"></i>
+                    <div class="skill-badges">
+                        <h3>Skill Badges Earned</h3>
+                        <div class="badges-grid">
+                            <div class="badge-item earned">
+                                <div class="badge-icon triage">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <span class="badge-name">Triage Master</span>
+                                <span class="badge-date">Earned 3 days ago</span>
                             </div>
-                            <div class="stat-info">
-                                <span class="stat-number">87</span>
-                                <span class="stat-label">Average Score</span>
+                            <div class="badge-item earned">
+                                <div class="badge-icon evacuation">
+                                    <i class="fas fa-route"></i>
+                                </div>
+                                <span class="badge-name">Evacuation Expert</span>
+                                <span class="badge-date">Earned 1 week ago</span>
+                            </div>
+                            <div class="badge-item earned">
+                                <div class="badge-icon communication">
+                                    <i class="fas fa-broadcast-tower"></i>
+                                </div>
+                                <span class="badge-name">Crisis Communicator</span>
+                                <span class="badge-date">Earned 2 weeks ago</span>
+                            </div>
+                            <div class="badge-item locked">
+                                <div class="badge-icon rescue">
+                                    <i class="fas fa-hands-helping"></i>
+                                </div>
+                                <span class="badge-name">Rescue Specialist</span>
+                                <span class="badge-requirement">Complete 5 VR rescue simulations</span>
+                            </div>
+                            <div class="badge-item locked">
+                                <div class="badge-icon leadership">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <span class="badge-name">Emergency Leader</span>
+                                <span class="badge-requirement">Score 95+ in team scenarios</span>
+                            </div>
+                            <div class="badge-item locked">
+                                <div class="badge-icon planning">
+                                    <i class="fas fa-drafting-compass"></i>
+                                </div>
+                                <span class="badge-name">Strategic Planner</span>
+                                <span class="badge-requirement">Complete Disasteropolis campaign</span>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+
+                <div class="improvement-feedback">
+                    <h3>Areas for Improvement</h3>
+                    <div class="feedback-cards">
+                        <div class="feedback-card warning">
+                            <div class="feedback-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
                             </div>
-                            <div class="stat-info">
-                                <span class="stat-number">4.2</span>
-                                <span class="stat-label">Avg Response Time (min)</span>
+                            <div class="feedback-content">
+                                <h4>Response Time</h4>
+                                <p>Your average response time is 30% slower than optimal. Focus on quick decision-making
+                                    in high-pressure scenarios.</p>
+                                <div class="feedback-actions">
+                                    <button class="action-btn" onclick="reviewSkills('response-time')">
+                                        <i class="fas fa-book"></i> Review Time Management
+                                    </button>
+                                    <button class="action-btn" onclick="practiceScenario('speed-training')">
+                                        <i class="fas fa-stopwatch"></i> Practice Speed Training
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="stat-info">
-                                <span class="stat-number">342</span>
-                                <span class="stat-label">People Rescued</span>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
+                        <div class="feedback-card success">
+                            <div class="feedback-icon">
                                 <i class="fas fa-check-circle"></i>
                             </div>
-                            <div class="stat-info">
-                                <span class="stat-number">15</span>
-                                <span class="stat-label">Simulations Completed</span>
+                            <div class="feedback-content">
+                                <h4>Triage Accuracy</h4>
+                                <p>Excellent work! Your injury assessment accuracy is 94%. You correctly prioritized
+                                    critical patients in 9 out of 10 scenarios.</p>
+                                <div class="feedback-actions">
+                                    <button class="action-btn" onclick="claimRewards('triage-master')">
+                                        <i class="fas fa-trophy"></i> Claim Rewards
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="feedback-card info">
+                            <div class="feedback-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="feedback-content">
+                                <h4>Communication Skills</h4>
+                                <p>Good progress on emergency communications. Consider practicing multi-channel
+                                    coordination to reach the next level.</p>
+                                <div class="feedback-actions">
+                                    <button class="action-btn" onclick="reviewSkills('communication')">
+                                        <i class="fas fa-book"></i> Review Protocols
+                                    </button>
+                                    <button class="action-btn" onclick="practiceScenario('team-coordination')">
+                                        <i class="fas fa-users"></i> Practice Team Scenarios
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="skill-badges">
-                    <h3>Skill Badges Earned</h3>
-                    <div class="badges-grid">
-                        <div class="badge-item earned">
-                            <div class="badge-icon triage">
-                                <i class="fas fa-user-md"></i>
+                <div class="recent-sessions">
+                    <h3>Recent Training Sessions</h3>
+                    <div class="sessions-list">
+                        <div class="session-item">
+                            <div class="session-icon flood">
+                                <i class="fas fa-water"></i>
                             </div>
-                            <span class="badge-name">Triage Master</span>
-                            <span class="badge-date">Earned 3 days ago</span>
-                        </div>
-                        <div class="badge-item earned">
-                            <div class="badge-icon evacuation">
-                                <i class="fas fa-route"></i>
+                            <div class="session-info">
+                                <h4>Flash Flood Response</h4>
+                                <p>Campus AR Simulation • Yesterday, 3:45 PM</p>
+                                <div class="session-metrics">
+                                    <span class="metric"><i class="fas fa-star"></i> Score: 89/100</span>
+                                    <span class="metric"><i class="fas fa-clock"></i> Time: 4:32</span>
+                                    <span class="metric"><i class="fas fa-users"></i> Rescued: 47</span>
+                                </div>
                             </div>
-                            <span class="badge-name">Evacuation Expert</span>
-                            <span class="badge-date">Earned 1 week ago</span>
-                        </div>
-                        <div class="badge-item earned">
-                            <div class="badge-icon communication">
-                                <i class="fas fa-broadcast-tower"></i>
-                            </div>
-                            <span class="badge-name">Crisis Communicator</span>
-                            <span class="badge-date">Earned 2 weeks ago</span>
-                        </div>
-                        <div class="badge-item locked">
-                            <div class="badge-icon rescue">
-                                <i class="fas fa-hands-helping"></i>
-                            </div>
-                            <span class="badge-name">Rescue Specialist</span>
-                            <span class="badge-requirement">Complete 5 VR rescue simulations</span>
-                        </div>
-                        <div class="badge-item locked">
-                            <div class="badge-icon leadership">
-                                <i class="fas fa-crown"></i>
-                            </div>
-                            <span class="badge-name">Emergency Leader</span>
-                            <span class="badge-requirement">Score 95+ in team scenarios</span>
-                        </div>
-                        <div class="badge-item locked">
-                            <div class="badge-icon planning">
-                                <i class="fas fa-drafting-compass"></i>
-                            </div>
-                            <span class="badge-name">Strategic Planner</span>
-                            <span class="badge-requirement">Complete Disasteropolis campaign</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="improvement-feedback">
-                <h3>Areas for Improvement</h3>
-                <div class="feedback-cards">
-                    <div class="feedback-card warning">
-                        <div class="feedback-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="feedback-content">
-                            <h4>Response Time</h4>
-                            <p>Your average response time is 30% slower than optimal. Focus on quick decision-making in high-pressure scenarios.</p>
-                            <div class="feedback-actions">
-                                <button class="action-btn" onclick="reviewSkills('response-time')">
-                                    <i class="fas fa-book"></i> Review Time Management
+                            <div class="session-actions">
+                                <button class="review-btn" onclick="reviewSession('flood-001')">
+                                    <i class="fas fa-chart-line"></i> Review
                                 </button>
-                                <button class="action-btn" onclick="practiceScenario('speed-training')">
-                                    <i class="fas fa-stopwatch"></i> Practice Speed Training
+                                <button class="replay-btn" onclick="replaySession('flood-001')">
+                                    <i class="fas fa-redo"></i> Retry
                                 </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="feedback-card success">
-                        <div class="feedback-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="feedback-content">
-                            <h4>Triage Accuracy</h4>
-                            <p>Excellent work! Your injury assessment accuracy is 94%. You correctly prioritized critical patients in 9 out of 10 scenarios.</p>
-                            <div class="feedback-actions">
-                                <button class="action-btn" onclick="claimRewards('triage-master')">
-                                    <i class="fas fa-trophy"></i> Claim Rewards
+                        <div class="session-item">
+                            <div class="session-icon fire">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="session-info">
+                                <h4>Wildfire Evacuation</h4>
+                                <p>VR First-Responder • 2 days ago, 7:20 PM</p>
+                                <div class="session-metrics">
+                                    <span class="metric"><i class="fas fa-star"></i> Score: 76/100</span>
+                                    <span class="metric"><i class="fas fa-clock"></i> Time: 6:15</span>
+                                    <span class="metric"><i class="fas fa-users"></i> Rescued: 23</span>
+                                </div>
+                            </div>
+                            <div class="session-actions">
+                                <button class="review-btn" onclick="reviewSession('fire-003')">
+                                    <i class="fas fa-chart-line"></i> Review
+                                </button>
+                                <button class="replay-btn" onclick="replaySession('fire-003')">
+                                    <i class="fas fa-redo"></i> Retry
                                 </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="feedback-card info">
-                        <div class="feedback-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <div class="feedback-content">
-                            <h4>Communication Skills</h4>
-                            <p>Good progress on emergency communications. Consider practicing multi-channel coordination to reach the next level.</p>
-                            <div class="feedback-actions">
-                                <button class="action-btn" onclick="reviewSkills('communication')">
-                                    <i class="fas fa-book"></i> Review Protocols
+                        <div class="session-item">
+                            <div class="session-icon earthquake">
+                                <i class="fas fa-mountain"></i>
+                            </div>
+                            <div class="session-info">
+                                <h4>Earthquake Response</h4>
+                                <p>Disasteropolis City Planner • 1 week ago, 2:10 PM</p>
+                                <div class="session-metrics">
+                                    <span class="metric"><i class="fas fa-star"></i> Score: 95/100</span>
+                                    <span class="metric"><i class="fas fa-clock"></i> Time: 12:45</span>
+                                    <span class="metric"><i class="fas fa-building"></i> Buildings Saved: 78</span>
+                                </div>
+                            </div>
+                            <div class="session-actions">
+                                <button class="review-btn" onclick="reviewSession('earthquake-002')">
+                                    <i class="fas fa-chart-line"></i> Review
                                 </button>
-                                <button class="action-btn" onclick="practiceScenario('team-coordination')">
-                                    <i class="fas fa-users"></i> Practice Team Scenarios
+                                <button class="replay-btn" onclick="replaySession('earthquake-002')">
+                                    <i class="fas fa-redo"></i> Retry
                                 </button>
                             </div>
                         </div>
@@ -2517,186 +2653,115 @@
                 </div>
             </div>
 
-            <div class="recent-sessions">
-                <h3>Recent Training Sessions</h3>
-                <div class="sessions-list">
-                    <div class="session-item">
-                        <div class="session-icon flood">
-                            <i class="fas fa-water"></i>
+            <!-- Call-to-Action Navigation -->
+            <div class="navigation-actions">
+                <div class="nav-actions-header">
+                    <h3>What's Next?</h3>
+                    <p>Based on your performance, here are personalized recommendations</p>
+                </div>
+
+                <div class="action-recommendations">
+                    <div class="recommendation-card needs-review">
+                        <div class="rec-icon">
+                            <i class="fas fa-book-open"></i>
                         </div>
-                        <div class="session-info">
-                            <h4>Flash Flood Response</h4>
-                            <p>Campus AR Simulation • Yesterday, 3:45 PM</p>
-                            <div class="session-metrics">
-                                <span class="metric"><i class="fas fa-star"></i> Score: 89/100</span>
-                                <span class="metric"><i class="fas fa-clock"></i> Time: 4:32</span>
-                                <span class="metric"><i class="fas fa-users"></i> Rescued: 47</span>
+                        <div class="rec-content">
+                            <h4>Review Your Skills</h4>
+                            <p>Your response time could use improvement. Review time management techniques in our
+                                education modules.</p>
+                            <div class="rec-tags">
+                                <span class="tag">Emergency Response</span>
+                                <span class="tag">Time Management</span>
                             </div>
                         </div>
-                        <div class="session-actions">
-                            <button class="review-btn" onclick="reviewSession('flood-001')">
-                                <i class="fas fa-chart-line"></i> Review
-                            </button>
-                            <button class="replay-btn" onclick="replaySession('flood-001')">
-                                <i class="fas fa-redo"></i> Retry
+                        <div class="rec-action">
+                            <button class="cta-btn review" onclick="navigateToEducation('time-management')">
+                                <i class="fas fa-arrow-right"></i>
+                                Go to Education
                             </button>
                         </div>
                     </div>
-                    <div class="session-item">
-                        <div class="session-icon fire">
-                            <i class="fas fa-fire"></i>
+
+                    <div class="recommendation-card celebration">
+                        <div class="rec-icon">
+                            <i class="fas fa-trophy"></i>
                         </div>
-                        <div class="session-info">
-                            <h4>Wildfire Evacuation</h4>
-                            <p>VR First-Responder • 2 days ago, 7:20 PM</p>
-                            <div class="session-metrics">
-                                <span class="metric"><i class="fas fa-star"></i> Score: 76/100</span>
-                                <span class="metric"><i class="fas fa-clock"></i> Time: 6:15</span>
-                                <span class="metric"><i class="fas fa-users"></i> Rescued: 23</span>
+                        <div class="rec-content">
+                            <h4>Claim Your Rewards</h4>
+                            <p>Excellent triage performance! You've earned 250 points and unlocked new achievements.</p>
+                            <div class="rec-rewards">
+                                <span class="reward"><i class="fas fa-coins"></i> +250 Points</span>
+                                <span class="reward"><i class="fas fa-medal"></i> Triage Master Badge</span>
                             </div>
                         </div>
-                        <div class="session-actions">
-                            <button class="review-btn" onclick="reviewSession('fire-003')">
-                                <i class="fas fa-chart-line"></i> Review
-                            </button>
-                            <button class="replay-btn" onclick="replaySession('fire-003')">
-                                <i class="fas fa-redo"></i> Retry
+                        <div class="rec-action">
+                            <button class="cta-btn rewards" onclick="navigateToGamification()">
+                                <i class="fas fa-gift"></i>
+                                Claim Rewards
                             </button>
                         </div>
                     </div>
-                    <div class="session-item">
-                        <div class="session-icon earthquake">
-                            <i class="fas fa-mountain"></i>
+
+                    <div class="recommendation-card practice">
+                        <div class="rec-icon">
+                            <i class="fas fa-gamepad"></i>
                         </div>
-                        <div class="session-info">
-                            <h4>Earthquake Response</h4>
-                            <p>Disasteropolis City Planner • 1 week ago, 2:10 PM</p>
-                            <div class="session-metrics">
-                                <span class="metric"><i class="fas fa-star"></i> Score: 95/100</span>
-                                <span class="metric"><i class="fas fa-clock"></i> Time: 12:45</span>
-                                <span class="metric"><i class="fas fa-building"></i> Buildings Saved: 78</span>
+                        <div class="rec-content">
+                            <h4>More Practice</h4>
+                            <p>Ready for the next challenge? Try our gamified scenarios to test your skills in fun ways.
+                            </p>
+                            <div class="rec-suggestions">
+                                <span class="suggestion">Disaster Response Game</span>
+                                <span class="suggestion">Emergency Quiz Challenge</span>
                             </div>
                         </div>
-                        <div class="session-actions">
-                            <button class="review-btn" onclick="reviewSession('earthquake-002')">
-                                <i class="fas fa-chart-line"></i> Review
-                            </button>
-                            <button class="replay-btn" onclick="replaySession('earthquake-002')">
-                                <i class="fas fa-redo"></i> Retry
+                        <div class="rec-action">
+                            <button class="cta-btn practice" onclick="navigateToGames()">
+                                <i class="fas fa-play"></i>
+                                Play Games
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Call-to-Action Navigation -->
-        <div class="navigation-actions">
-            <div class="nav-actions-header">
-                <h3>What's Next?</h3>
-                <p>Based on your performance, here are personalized recommendations</p>
-            </div>
-            
-            <div class="action-recommendations">
-                <div class="recommendation-card needs-review">
-                    <div class="rec-icon">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                    <div class="rec-content">
-                        <h4>Review Your Skills</h4>
-                        <p>Your response time could use improvement. Review time management techniques in our education modules.</p>
-                        <div class="rec-tags">
-                            <span class="tag">Emergency Response</span>
-                            <span class="tag">Time Management</span>
+            <!-- Simulator Interface (Initially Hidden) -->
+            <div class="simulator-controls" id="simulatorControls" style="display: none;">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <h3>Simulation Mode</h3>
+                        <div class="control-buttons">
+                            <button class="control-btn active" data-mode="training">Training</button>
+                            <button class="control-btn" data-mode="assessment">Assessment</button>
+                            <button class="control-btn" data-mode="multiplayer">Multiplayer</button>
                         </div>
                     </div>
-                    <div class="rec-action">
-                        <button class="cta-btn review" onclick="navigateToEducation('time-management')">
-                            <i class="fas fa-arrow-right"></i>
-                            Go to Education
-                        </button>
-                    </div>
-                </div>
-
-                <div class="recommendation-card celebration">
-                    <div class="rec-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="rec-content">
-                        <h4>Claim Your Rewards</h4>
-                        <p>Excellent triage performance! You've earned 250 points and unlocked new achievements.</p>
-                        <div class="rec-rewards">
-                            <span class="reward"><i class="fas fa-coins"></i> +250 Points</span>
-                            <span class="reward"><i class="fas fa-medal"></i> Triage Master Badge</span>
+                    <div class="control-group">
+                        <h3>Difficulty Level</h3>
+                        <div class="control-buttons">
+                            <button class="control-btn active" data-difficulty="beginner">Beginner</button>
+                            <button class="control-btn" data-difficulty="intermediate">Intermediate</button>
+                            <button class="control-btn" data-difficulty="expert">Expert</button>
                         </div>
                     </div>
-                    <div class="rec-action">
-                        <button class="cta-btn rewards" onclick="navigateToGamification()">
-                            <i class="fas fa-gift"></i>
-                            Claim Rewards
-                        </button>
-                    </div>
-                </div>
-
-                <div class="recommendation-card practice">
-                    <div class="rec-icon">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
-                    <div class="rec-content">
-                        <h4>More Practice</h4>
-                        <p>Ready for the next challenge? Try our gamified scenarios to test your skills in fun ways.</p>
-                        <div class="rec-suggestions">
-                            <span class="suggestion">Disaster Response Game</span>
-                            <span class="suggestion">Emergency Quiz Challenge</span>
+                    <div class="control-group">
+                        <h3>Environment</h3>
+                        <div class="control-buttons">
+                            <button class="control-btn active" data-environment="urban">Urban</button>
+                            <button class="control-btn" data-environment="rural">Rural</button>
+                            <button class="control-btn" data-environment="coastal">Coastal</button>
                         </div>
                     </div>
-                    <div class="rec-action">
-                        <button class="cta-btn practice" onclick="navigateToGames()">
-                            <i class="fas fa-play"></i>
-                            Play Games
-                        </button>
-                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="startSimulation()">Start New Simulation</button>
+                    <button class="btn-secondary" onclick="loadScenario()">Load Saved Scenario</button>
                 </div>
             </div>
-        </div>
 
-        <!-- Simulator Interface (Initially Hidden) -->
-        <div class="simulator-controls" id="simulatorControls" style="display: none;">
-            <div class="controls-grid">
-                <div class="control-group">
-                    <h3>Simulation Mode</h3>
-                    <div class="control-buttons">
-                        <button class="control-btn active" data-mode="training">Training</button>
-                        <button class="control-btn" data-mode="assessment">Assessment</button>
-                        <button class="control-btn" data-mode="multiplayer">Multiplayer</button>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <h3>Difficulty Level</h3>
-                    <div class="control-buttons">
-                        <button class="control-btn active" data-difficulty="beginner">Beginner</button>
-                        <button class="control-btn" data-difficulty="intermediate">Intermediate</button>
-                        <button class="control-btn" data-difficulty="expert">Expert</button>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <h3>Environment</h3>
-                    <div class="control-buttons">
-                        <button class="control-btn active" data-environment="urban">Urban</button>
-                        <button class="control-btn" data-environment="rural">Rural</button>
-                        <button class="control-btn" data-environment="coastal">Coastal</button>
-                    </div>
-                </div>
+            <div class="simulator-main" id="simulatorMain" style="display: none;">
+                <!-- Content will be dynamically created when simulator is launched -->
             </div>
-            <div class="action-buttons">
-                <button class="btn-primary" onclick="startSimulation()">Start New Simulation</button>
-                <button class="btn-secondary" onclick="loadScenario()">Load Saved Scenario</button>
-            </div>
-        </div>
-
-        <div class="simulator-main" id="simulatorMain" style="display: none;">
-            <!-- Content will be dynamically created when simulator is launched -->
-        </div>
     </div>
 
     <script>
@@ -2708,10 +2773,10 @@
 
         // Control button functionality
         document.querySelectorAll('.control-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 const type = this.dataset.mode || this.dataset.difficulty || this.dataset.environment;
                 const group = this.parentElement;
-                
+
                 group.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
             });
@@ -2719,10 +2784,10 @@
 
         // Scenario selection
         document.querySelectorAll('.scenario-item').forEach(item => {
-            item.addEventListener('click', function() {
+            item.addEventListener('click', function () {
                 document.querySelectorAll('.scenario-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
-                
+
                 const scenario = this.dataset.scenario;
                 updateScenarioDisplay(scenario);
             });
@@ -2736,7 +2801,7 @@
                 tornado: 'Tornado Simulation',
                 tsunami: 'Tsunami Simulation'
             };
-            
+
             document.getElementById('currentScenario').textContent = scenarios[scenario];
         }
 
@@ -2744,19 +2809,19 @@
             const overlay = document.getElementById('simulationOverlay');
             const canvas = document.getElementById('simulationCanvas');
             const animations = document.getElementById('disasterAnimations');
-            
+
             // Show loading overlay
             overlay.style.display = 'flex';
-            
+
             setTimeout(() => {
                 overlay.style.display = 'none';
                 canvas.innerHTML = '';
-                
+
                 // Get active scenario
                 const activeScenario = document.querySelector('.scenario-item.active').dataset.scenario;
-                
+
                 // Start simulation based on scenario
-                switch(activeScenario) {
+                switch (activeScenario) {
                     case 'flood':
                         startFloodSimulation(animations);
                         break;
@@ -2773,7 +2838,7 @@
                         startTsunamiSimulation(animations);
                         break;
                 }
-                
+
                 // Start timer and progress
                 startTimer();
                 updateProgress();
@@ -2782,9 +2847,9 @@
 
         function startFloodSimulation(container) {
             container.innerHTML = '<div class="water-wave"></div>';
-            
+
             // Add floating debris
-            for(let i = 0; i < 5; i++) {
+            for (let i = 0; i < 5; i++) {
                 const debris = document.createElement('div');
                 debris.className = 'floating-objects';
                 debris.style.left = Math.random() * 80 + '%';
@@ -2792,16 +2857,16 @@
                 debris.style.animationDelay = Math.random() * 2 + 's';
                 container.appendChild(debris);
             }
-            
+
             simulateRescueOperations();
         }
 
         function startEarthquakeSimulation(container) {
             container.innerHTML = '';
             document.getElementById('simulationCanvas').classList.add('earthquake-shake');
-            
+
             // Add falling objects
-            for(let i = 0; i < 8; i++) {
+            for (let i = 0; i < 8; i++) {
                 const debris = document.createElement('div');
                 debris.className = 'floating-objects';
                 debris.style.left = Math.random() * 90 + '%';
@@ -2810,7 +2875,7 @@
                 debris.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(debris);
             }
-            
+
             simulateRescueOperations();
         }
 
@@ -2822,7 +2887,7 @@
         function startTornadoSimulation(container) {
             container.innerHTML = '';
             // Add spinning debris
-            for(let i = 0; i < 10; i++) {
+            for (let i = 0; i < 10; i++) {
                 const debris = document.createElement('div');
                 debris.className = 'floating-objects';
                 debris.style.left = Math.random() * 80 + '%';
@@ -2856,7 +2921,7 @@
                 const elapsed = Date.now() - startTime;
                 const minutes = Math.floor(elapsed / 60000);
                 const seconds = Math.floor((elapsed % 60000) / 1000);
-                document.getElementById('timeElapsed').textContent = 
+                document.getElementById('timeElapsed').textContent =
                     `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }, 1000);
         }
@@ -2866,7 +2931,7 @@
             const progressInterval = setInterval(() => {
                 progress += 2;
                 document.getElementById('progressFill').style.width = progress + '%';
-                
+
                 if (progress >= 100) {
                     clearInterval(progressInterval);
                     completeSimulation();
@@ -2877,7 +2942,7 @@
         function updateStats() {
             document.getElementById('peopleSaved').textContent = peopleSaved;
             document.getElementById('currentScore').textContent = currentScore;
-            
+
             const efficiency = Math.min(100, Math.floor((peopleSaved / 100) * 100));
             document.getElementById('efficiency').textContent = efficiency + '%';
         }
@@ -2889,9 +2954,9 @@
                 rescue: 'Rescue team deployed! Searching for survivors',
                 communication: 'Public alert sent! Warning broadcasted to all devices'
             };
-            
+
             alert(tools[tool]);
-            
+
             // Update score based on tool used
             currentScore += 150;
             updateStats();
@@ -2908,7 +2973,7 @@
         function resetSimulation() {
             if (currentSimulation) clearInterval(currentSimulation);
             if (simulationTimer) clearInterval(simulationTimer);
-            
+
             document.getElementById('disasterAnimations').innerHTML = '';
             document.getElementById('simulationCanvas').className = 'simulation-canvas';
             document.getElementById('simulationCanvas').innerHTML = `
@@ -2919,7 +2984,7 @@
                 </div>
             `;
             document.getElementById('progressFill').style.width = '0%';
-            
+
             // Reset stats
             peopleSaved = 0;
             currentScore = 0;
@@ -2943,7 +3008,7 @@
         function completeSimulation() {
             if (currentSimulation) clearInterval(currentSimulation);
             if (simulationTimer) clearInterval(simulationTimer);
-            
+
             const finalScore = currentScore + (peopleSaved * 100);
             alert(`Simulation Complete!\n\nFinal Score: ${finalScore}\nPeople Saved: ${peopleSaved}\n\nGreat job! Check your profile for badges and achievements.`);
         }
@@ -3264,7 +3329,7 @@
                 to { transform: translateX(100%); opacity: 0; }
             }
         `;
-        
+
         const style = document.createElement('style');
         style.textContent = additionalCSS;
         document.head.appendChild(style);
@@ -3347,10 +3412,10 @@
                 'Dashboard': 'dashboard-student.html',
                 'Education Modules': 'education-modules.html',
                 'Sandbox Simulator': 'sandbox-simulator.html',
-                'Emergency Contacts': '../emergency_contacts.html',
-                "Do's & Dont's": '../dos&donts.html',
-                'Drill Schedule': '../drill_schedule.html',
-                'Disaster Map': '../advanced-map.html',
+                'Emergency Contacts': 'emergency_contacts.html',
+                "Do's & Dont's": 'dos&donts.html',
+                'Drill Schedule': 'drill_schedule.html',
+                'Disaster Map': 'advanced-map.html',
                 'AI Helper': 'chatbot.html',
                 'Gamified Learning': 'gamified-learning.html',
                 'Settings': 'settings.html'
@@ -3397,7 +3462,7 @@
                     mainDropdownButton.addEventListener('click', function (event) {
                         event.stopPropagation();
                         console.log('Dropdown clicked, current active state:', educationDropdown.classList.contains('active'));
-                        
+
                         // Close other dropdowns first
                         document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
                             if (dropdown !== educationDropdown) {
@@ -3526,35 +3591,35 @@
             // Show the simulator controls and main interface
             const simulatorControls = document.getElementById('simulatorControls');
             const simulatorMain = document.getElementById('simulatorMain');
-            
+
             simulatorControls.style.display = 'block';
             simulatorMain.style.display = 'grid';
-            
+
             // Create the simulator interface content
             createSimulatorInterface();
-            
+
             // Add smooth fade-in animation
             setTimeout(() => {
                 simulatorControls.classList.add('active');
                 simulatorMain.classList.add('active');
             }, 100);
-            
+
             // Show loading overlay first
             const overlay = document.getElementById('simulationOverlay');
             overlay.style.display = 'flex';
-            
+
             // Scroll to the simulator section smoothly
             setTimeout(() => {
-                simulatorControls.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
+                simulatorControls.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
                 });
             }, 300);
-            
+
             setTimeout(() => {
                 overlay.style.display = 'none';
-                
-                switch(type) {
+
+                switch (type) {
                     case 'ar-campus':
                         alert('Launching AR Campus Evacuation Simulator...\nPlease ensure your device has camera access for the AR experience.');
                         launchARMode();
@@ -3577,7 +3642,7 @@
 
         function createSimulatorInterface() {
             const simulatorMain = document.getElementById('simulatorMain');
-            
+
             simulatorMain.innerHTML = `
             <div class="simulator-sidebar">
                 <h3>Disaster Scenarios</h3>
@@ -3797,14 +3862,14 @@
                 </div>
             </div>
             `;
-            
+
             // Re-attach event listeners for scenario selection
             const scenarioItems = simulatorMain.querySelectorAll('.scenario-item');
             scenarioItems.forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     scenarioItems.forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     const scenario = this.dataset.scenario;
                     updateScenarioDisplay(scenario);
                 });
@@ -3814,31 +3879,31 @@
         function exitSimulator() {
             const simulatorControls = document.getElementById('simulatorControls');
             const simulatorMain = document.getElementById('simulatorMain');
-            
+
             // Remove active classes for smooth fade-out
             simulatorControls.classList.remove('active');
             simulatorMain.classList.remove('active');
-            
+
             // Hide the simulator interface after animation
             setTimeout(() => {
                 simulatorControls.style.display = 'none';
                 simulatorMain.style.display = 'none';
             }, 500);
-            
+
             // Stop any running simulation
             if (currentSimulation) clearInterval(currentSimulation);
             if (simulationTimer) clearInterval(simulationTimer);
             if (scenarioTimerInterval) clearInterval(scenarioTimerInterval);
-            
+
             // Reset state
             simulationActive = false;
             currentSimulation = null;
             peopleSaved = 0;
             currentScore = 0;
-            
+
             // Scroll back to the top
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
+
             alert('Simulator closed. Your progress has been saved.');
         }
 
@@ -3863,7 +3928,7 @@
 
         // Progress & Feedback Functions
         function reviewSkills(topic) {
-            switch(topic) {
+            switch (topic) {
                 case 'response-time':
                     alert('Redirecting to Education Module: Time Management in Emergency Response');
                     window.location.href = 'education-modules.html#time-management';
@@ -3878,7 +3943,7 @@
         }
 
         function practiceScenario(scenario) {
-            switch(scenario) {
+            switch (scenario) {
                 case 'speed-training':
                     alert('Starting Speed Training Module...\nFocus on quick decision-making under pressure.');
                     break;
@@ -3926,7 +3991,7 @@
 
         function makeDecision(option) {
             decisionCount++;
-            
+
             // Simulate decision evaluation
             const isCorrect = Math.random() > 0.4; // 60% chance of being optimal
             if (isCorrect) {
@@ -3937,10 +4002,10 @@
                 showFeedback('Could be improved. +20 points', 'warning');
                 currentScore += 20;
             }
-            
+
             updateStats();
             hideDecisionPrompt();
-            
+
             // Continue simulation with next scenario
             setTimeout(() => {
                 if (simulationActive) {
@@ -3956,7 +4021,7 @@
                 <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i>
                 <span>${message}</span>
             `;
-            
+
             feedback.style.cssText = `
                 position: fixed;
                 top: 100px;
@@ -3971,9 +4036,9 @@
                 z-index: 1000;
                 animation: slideIn 0.3s ease;
             `;
-            
+
             document.body.appendChild(feedback);
-            
+
             setTimeout(() => {
                 feedback.remove();
             }, 3000);
@@ -3985,7 +4050,7 @@
                     text: "Fire is spreading rapidly. Multiple people need evacuation.",
                     options: [
                         "Evacuate closest group first",
-                        "Split team to cover more ground", 
+                        "Split team to cover more ground",
                         "Focus on disabled individuals"
                     ]
                 },
@@ -4006,7 +4071,7 @@
                     ]
                 }
             ];
-            
+
             const event = events[Math.floor(Math.random() * events.length)];
             showDecisionPrompt(event.text, event.options);
         }
@@ -4015,10 +4080,10 @@
             const prompt = document.getElementById('decisionPrompt');
             const promptText = document.getElementById('promptText');
             const optionsContainer = prompt.querySelector('.prompt-options');
-            
+
             promptText.textContent = text;
             optionsContainer.innerHTML = '';
-            
+
             options.forEach((option, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
@@ -4026,7 +4091,7 @@
                 btn.onclick = () => makeDecision(index + 1);
                 optionsContainer.appendChild(btn);
             });
-            
+
             prompt.style.display = 'block';
         }
 
@@ -4037,12 +4102,12 @@
         function startScenarioTimer() {
             let timeLeft = 300; // 5 minutes
             const timerDisplay = document.getElementById('scenarioTimer');
-            
+
             scenarioTimerInterval = setInterval(() => {
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
                 timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
+
                 if (timeLeft <= 0) {
                     clearInterval(scenarioTimerInterval);
                     endSimulation();
@@ -4054,7 +4119,7 @@
         function endSimulation() {
             simulationActive = false;
             hideDecisionPrompt();
-            
+
             const accuracy = decisionCount > 0 ? Math.round((correctDecisions / decisionCount) * 100) : 0;
             const finalMessage = `
                 Simulation Complete!
@@ -4063,13 +4128,13 @@
                 Decision Accuracy: ${accuracy}%
                 Decisions Made: ${decisionCount}
                 
-                ${accuracy >= 80 ? 'Outstanding performance! 🏆' : 
-                  accuracy >= 60 ? 'Good work! Keep practicing. 👍' : 
-                  'Review your training materials and try again. 📚'}
+                ${accuracy >= 80 ? 'Outstanding performance! 🏆' :
+                    accuracy >= 60 ? 'Good work! Keep practicing. 👍' :
+                        'Review your training materials and try again. 📚'}
             `;
-            
+
             alert(finalMessage);
-            
+
             // Reset for next simulation
             decisionCount = 0;
             correctDecisions = 0;
@@ -4080,7 +4145,7 @@
         function launchSimulatorWithHUD(type) {
             simulationActive = true;
             document.getElementById('simulationHUD').style.display = 'block';
-            
+
             // Set scenario-specific objective
             const objectives = {
                 'ar-campus': 'Navigate to 3 emergency exits using AR guidance',
@@ -4088,19 +4153,19 @@
                 'city-planner': 'Design evacuation routes for 10,000 residents',
                 'crowd-map': 'Identify and mark 15 safe zones in real-time'
             };
-            
+
             document.getElementById('currentObjective').textContent = objectives[type] || 'Complete training scenario';
             document.getElementById('liveScore').textContent = currentScore;
-            
+
             startScenarioTimer();
-            
+
             // Start first event after 5 seconds
             setTimeout(() => {
                 if (simulationActive) {
                     triggerRandomEvent();
                 }
             }, 5000);
-            
+
             // Track detailed analytics
             trackSimulationStart(type);
         }
@@ -4114,14 +4179,14 @@
             sessionStartTime = Date.now();
             simulationType = type;
             decisionTimes = [];
-            
+
             console.log(`Started ${type} simulation at ${new Date().toISOString()}`);
         }
 
         function trackDecisionTime(startTime) {
             const decisionTime = Date.now() - startTime;
             decisionTimes.push(decisionTime);
-            
+
             // Provide real-time feedback on decision speed
             if (decisionTime < 10000) { // Less than 10 seconds
                 showFeedback('Quick thinking! Excellent response time.', 'success');
@@ -4132,9 +4197,9 @@
 
         function calculatePerformanceMetrics() {
             const sessionDuration = Date.now() - sessionStartTime;
-            const avgDecisionTime = decisionTimes.length > 0 ? 
+            const avgDecisionTime = decisionTimes.length > 0 ?
                 decisionTimes.reduce((a, b) => a + b, 0) / decisionTimes.length : 0;
-            
+
             const metrics = {
                 sessionDuration: Math.round(sessionDuration / 1000), // in seconds
                 avgDecisionTime: Math.round(avgDecisionTime / 1000), // in seconds
@@ -4145,7 +4210,7 @@
                 simulationType: simulationType,
                 timestamp: new Date().toISOString()
             };
-            
+
             return metrics;
         }
 
@@ -4169,7 +4234,7 @@
             // Performance rating based on multiple factors
             let rating = 'Needs Improvement';
             let recommendations = [];
-            
+
             if (metrics.accuracy >= 85 && metrics.avgDecisionTime <= 15) {
                 rating = 'Expert Level 🌟';
                 recommendations.push('Consider advanced training scenarios');
@@ -4201,29 +4266,29 @@
         function makeDecision(option) {
             const decisionStartTime = Date.now() - 10000; // Simulate decision start time
             trackDecisionTime(decisionStartTime);
-            
+
             decisionCount++;
-            
+
             // Simulate decision evaluation with more sophisticated scoring
             const scenarios = {
                 1: { points: 50, feedback: 'Excellent prioritization!', correct: true },
                 2: { points: 30, feedback: 'Good approach, but consider assessment first.', correct: false },
                 3: { points: 40, feedback: 'Solid choice, backup is important.', correct: true }
             };
-            
+
             const result = scenarios[option] || scenarios[1];
-            
+
             if (result.correct) {
                 correctDecisions++;
                 showFeedback(result.feedback + ` +${result.points} points`, 'success');
             } else {
                 showFeedback(result.feedback + ` +${result.points} points`, 'warning');
             }
-            
+
             currentScore += result.points;
             updateStats();
             hideDecisionPrompt();
-            
+
             // Continue simulation with next scenario
             setTimeout(() => {
                 if (simulationActive) {
@@ -4237,17 +4302,17 @@
             simulationActive = false;
             hideDecisionPrompt();
             clearInterval(scenarioTimerInterval);
-            
+
             const metrics = calculatePerformanceMetrics();
             const report = generatePerformanceReport(metrics);
-            
+
             // Show detailed performance report
             alert(report);
-            
+
             // Update user interface with new session data
             addSessionToHistory(metrics);
             updateProgressStats(metrics);
-            
+
             // Reset for next simulation
             decisionCount = 0;
             correctDecisions = 0;
@@ -4257,7 +4322,7 @@
         function addSessionToHistory(metrics) {
             // This would typically save to a database
             console.log('Session completed:', metrics);
-            
+
             // For demo purposes, update the recent sessions display
             // In a real app, this would refresh from server data
         }
@@ -4267,7 +4332,7 @@
             // This would typically update user's overall progress metrics
             const currentAvg = parseInt(document.querySelector('.stat-number').textContent) || 0;
             const newAvg = Math.round((currentAvg + metrics.finalScore) / 2);
-            
+
             // Update display (simplified for demo)
             if (document.querySelector('.stat-number')) {
                 document.querySelector('.stat-number').textContent = newAvg;
@@ -4294,10 +4359,10 @@
         function arStartSimulation() {
             arSimulationActive = true;
             arStartTime = Date.now();
-            
+
             // Start AR timer
             arTimer = setInterval(arUpdateTimer, 1000);
-            
+
             // Hide scenario alert after 5 seconds
             setTimeout(() => {
                 const alert = document.getElementById('arScenarioAlert');
@@ -4307,7 +4372,7 @@
                     setTimeout(() => alert.style.display = 'none', 500);
                 }
             }, 5000);
-            
+
             // Hide instructions after 10 seconds
             setTimeout(() => {
                 const instructions = document.getElementById('arInstructions');
@@ -4322,16 +4387,16 @@
         // Update AR Timer
         function arUpdateTimer() {
             if (!arSimulationActive || !arStartTime) return;
-            
+
             const elapsed = Date.now() - arStartTime;
             const minutes = Math.floor(elapsed / 60000);
             const seconds = Math.floor((elapsed % 60000) / 1000);
-            
+
             const timeElement = document.getElementById('arTimeElapsed');
             if (timeElement) {
                 timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
-            
+
             arUpdateEfficiency();
         }
 
@@ -4342,7 +4407,7 @@
             const timeScore = Math.max(0, (maxTime - timeElapsed) / maxTime);
             const evacuationScore = arPeopleEvacuated / arTotalPeople;
             const zoneScore = arSafeZonesDiscovered / 3;
-            
+
             const efficiency = Math.round((timeScore * 0.4 + evacuationScore * 0.4 + zoneScore * 0.2) * 100);
             const efficiencyElement = document.getElementById('arEfficiency');
             if (efficiencyElement) {
@@ -4353,9 +4418,9 @@
         // Interact with AR Safe Zone
         function arInteractWithSafeZone(zoneId) {
             if (!arSimulationActive) return;
-            
+
             arCreateRippleEffect(event);
-            
+
             if (!arDiscoveredZones.has(zoneId)) {
                 arDiscoveredZones.add(zoneId);
                 arSafeZonesDiscovered++;
@@ -4363,10 +4428,10 @@
                 if (safeZonesElement) {
                     safeZonesElement.textContent = `${arSafeZonesDiscovered}/3`;
                 }
-                
+
                 // Show feedback
                 arShowFeedback(`Safe Zone ${zoneId} Discovered!`, 'success');
-                
+
                 // Check completion
                 arCheckCompletion();
             } else {
@@ -4377,24 +4442,24 @@
         // Interact with AR Marker
         function arInteractWithMarker(markerId) {
             if (!arSimulationActive) return;
-            
+
             arCreateRippleEffect(event);
-            
+
             const markerInfo = {
                 1: "Emergency Exit: 25m straight ahead. Capacity: 50 people",
                 2: "Assembly Point: Turn right and proceed 100m to open courtyard",
                 3: "Alternative Route: Stairs blocked, use elevator or west exit"
             };
-            
+
             arShowFeedback(markerInfo[markerId], 'info');
         }
 
         // Evacuate Person in AR
         function arEvacuatePerson(personId) {
             if (!arSimulationActive) return;
-            
+
             arCreateRippleEffect(event);
-            
+
             if (!arEvacuatedPeople.has(personId)) {
                 arEvacuatedPeople.add(personId);
                 arPeopleEvacuated++;
@@ -4402,21 +4467,21 @@
                 if (peopleElement) {
                     peopleElement.textContent = arPeopleEvacuated;
                 }
-                
+
                 // Hide the person
                 const personElement = document.querySelector(`.ar-person-${personId}`);
                 if (personElement) {
                     personElement.style.transition = 'all 0.5s ease';
                     personElement.style.transform = 'scale(0)';
                     personElement.style.opacity = '0';
-                    
+
                     setTimeout(() => {
                         personElement.style.display = 'none';
                     }, 500);
                 }
-                
+
                 arShowFeedback(`Person ${personId} evacuated safely!`, 'success');
-                
+
                 // Check completion
                 arCheckCompletion();
             }
@@ -4426,15 +4491,15 @@
         function arCreateRippleEffect(event) {
             const ripple = document.createElement('div');
             ripple.className = 'ar-interaction-ripple';
-            
+
             const rect = event.target.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
             ripple.style.width = ripple.style.height = size + 'px';
             ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
             ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
-            
+
             event.target.appendChild(ripple);
-            
+
             setTimeout(() => {
                 ripple.remove();
             }, 1000);
@@ -4447,9 +4512,9 @@
                 position: fixed;
                 top: 120px;
                 right: 20px;
-                background: ${type === 'success' ? 'rgba(76, 175, 80, 0.9)' : 
-                            type === 'warning' ? 'rgba(255, 152, 0, 0.9)' : 
-                            'rgba(33, 150, 243, 0.9)'};
+                background: ${type === 'success' ? 'rgba(76, 175, 80, 0.9)' :
+                    type === 'warning' ? 'rgba(255, 152, 0, 0.9)' :
+                        'rgba(33, 150, 243, 0.9)'};
                 color: white;
                 padding: 12px 20px;
                 border-radius: 25px;
@@ -4463,10 +4528,10 @@
                 max-width: 300px;
                 text-align: center;
             `;
-            
+
             feedback.textContent = message;
             document.body.appendChild(feedback);
-            
+
             setTimeout(() => {
                 feedback.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => feedback.remove(), 300);
@@ -4484,17 +4549,17 @@
         function arCompleteSimulation() {
             arSimulationActive = false;
             clearInterval(arTimer);
-            
+
             // Show success animation
             const successAnim = document.getElementById('arSuccessAnimation');
             if (successAnim) {
                 successAnim.style.display = 'block';
             }
-            
+
             // Calculate final score
             const timeElapsed = (Date.now() - arStartTime) / 1000;
             const finalEfficiency = document.getElementById('arEfficiency').textContent;
-            
+
             setTimeout(() => {
                 alert(`🎉 AR MISSION ACCOMPLISHED! 🎉
 
@@ -4506,7 +4571,7 @@
 Excellent work! You've successfully completed the AR Campus Evacuation Simulation.
 
 Your performance will be saved to your profile.`);
-                
+
                 // Ask if user wants to try again or return
                 if (confirm('Would you like to try again with a different scenario?')) {
                     arResetSimulation();
@@ -4521,13 +4586,13 @@ Your performance will be saved to your profile.`);
         function arResetSimulation() {
             arSimulationActive = false;
             if (arTimer) clearInterval(arTimer);
-            
+
             // Reset counters
             arPeopleEvacuated = 0;
             arSafeZonesDiscovered = 0;
             arEvacuatedPeople.clear();
             arDiscoveredZones.clear();
-            
+
             // Restart AR mode
             setTimeout(() => {
                 launchARMode();
@@ -4538,11 +4603,11 @@ Your performance will be saved to your profile.`);
         function launchVRResponder() {
             // Show loading indicator
             showLoadingIndicator();
-            
+
             // Add transition effect
             document.body.style.transition = 'opacity 0.3s ease';
             document.body.style.opacity = '0.8';
-            
+
             setTimeout(() => {
                 try {
                     // Navigate to VR First Responder page
@@ -4556,7 +4621,8 @@ Your performance will be saved to your profile.`);
             }, 500);
         }
     </script>
-        </main>
+    </main>
     </div>
 </body>
+
 </html>
