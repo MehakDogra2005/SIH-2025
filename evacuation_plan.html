@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeevansetu - Evacuation Plan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a73e8;
+            --secondary: #0b4fa3;
+            --accent: #ff6b35;
+            --light: #f5f7f9;
+            --dark: #2c3e50;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        .logo span span {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 15px 0;
+        }
+
+        .nav-item {
+            margin: 5px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .user-section {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 20px;
+        }
+
+        .welcome h2 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .welcome p {
+            color: var(--gray);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title h2 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: var(--gray);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Selection Panel Styles */
+        .selection-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .building-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .building-tab {
+            flex: 1;
+            min-width: 120px;
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .building-tab:hover {
+            background-color: #e3e9f1;
+        }
+
+        .building-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .building-tab i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .floor-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .floor-btn {
+            padding: 10px 15px;
+            background-color: var(--light);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .floor-btn:hover {
+            background-color: #e3e9f1;
+        }
+
+        .floor-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .legend-route {
+            background-color: var(--danger);
+        }
+
+        .legend-exit {
+            background-color: var(--success);
+        }
+
+        .legend-room {
+            background-color: var(--primary);
+        }
+
+        .legend-selected {
+            background-color: var(--accent);
+        }
+
+        .legend-path {
+            background-color: var(--warning);
+        }
+
+        /* Map Container Styles */
+        .map-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .map-content {
+            position: relative;
+            height: 500px;
+            overflow: auto;
+            background-color: #e9f2fc;
+        }
+
+        .floor-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+
+        .floor-image.active {
+            display: block;
+        }
+
+        .marker-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .exit-marker, .room-marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: all;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            transition: var(--transition);
+        }
+
+        .exit-marker {
+            background-color: var(--success);
+            color: white;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .room-marker {
+            background-color: var(--primary);
+            color: white;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 20px;
+            height: 20px;
+        }
+
+        .room-marker.selected {
+            background-color: var(--accent);
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 20;
+        }
+
+        .location-info {
+            position: absolute;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 30;
+            display: none;
+            max-width: 200px;
+            font-size: 0.9rem;
+        }
+
+        /* Instructions Panel Styles */
+        .instructions-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+
+        .instruction-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .instruction-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .instruction-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .instruction-icon i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .instruction-content h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .instruction-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Footer Styles */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .logo span, .sidebar .nav-link span, .sidebar .user-details {
+                display: none;
+            }
+            
+            .sidebar .logo {
+                padding: 20px 10px;
+                text-align: center;
+            }
+            
+            .sidebar .logo h1 {
+                justify-content: center;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .building-tabs {
+                flex-direction: column;
+            }
+            
+            .floor-selector {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-info {
+                margin-top: 10px;
+            }
+            
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .page-title .btn {
+                margin-top: 10px;
+            }
+            
+            .map-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .map-header .btn {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="student/dashboard-student.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="education-modules.html" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>Education Modules</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="sandbox-simulator.html" class="nav-link">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Sandbox Simulator</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="emergency_contacts.html" class="nav-link">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>Emergency Contacts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="dos&donts.html" class="nav-link">
+                    <i class="fas fa-list-check"></i>
+                    <span>Do's & Don'ts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="drill_schedule.html" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Drill Schedule</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="evacuation_plan.html" class="nav-link active">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Disaster Map</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="chatbot.html" class="nav-link">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Helper</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="gamified-learning.html" class="nav-link">
+                    <i class="fas fa-trophy"></i>
+                    <span>Gamified Learning</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+        <div class="user-section">
+            <div class="user-avatar">P</div>
+            <div class="user-details">
+                <div class="user-name">Priya Sharma</div>
+                <div class="user-role">Student</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="header">
+            <div class="welcome">
+                <h2>Welcome back, Priya!</h2>
+                <p>View evacuation routes for CSE, Admin, IT, and Hostel blocks</p>
+            </div>
+            <div class="user-info">
+                <div class="user-img">P</div>
+            </div>
+        </div>
+
+        <div class="page-title">
+            <div>
+                <h2>Disaster Map - Evacuation Plan</h2>
+                <p>Select a building and floor to view evacuation routes</p>
+            </div>
+            <button class="btn btn-primary">
+                <i class="fas fa-download"></i> Download Plan
+            </button>
+        </div>
+
+        <div class="selection-panel">
+            <div class="section-header">
+                <h3 class="section-title">Select Building & Floor</h3>
+                <p class="section-subtitle">Choose one of the four main blocks and a floor level</p>
+            </div>
+            
+            <div class="building-tabs">
+                <div class="building-tab active" data-building="cse">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>CSE Block</span>
+                </div>
+                <div class="building-tab" data-building="admin">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Admin Block</span>
+                </div>
+                <div class="building-tab" data-building="it">
+                    <i class="fas fa-server"></i>
+                    <span>IT Block</span>
+                </div>
+                <div class="building-tab" data-building="hostel">
+                    <i class="fas fa-bed"></i>
+                    <span>Hostel Block</span>
+                </div>
+            </div>
+            
+            <div class="floor-selector">
+                <button class="floor-btn active" data-floor="ground">Ground Floor</button>
+                <button class="floor-btn" data-floor="first">First Floor</button>
+                <button class="floor-btn" data-floor="second">Second Floor</button>
+                <button class="floor-btn" data-floor="third">Third Floor</button>
+            </div>
+            
+            <button class="btn btn-primary" id="showRoute">
+                <i class="fas fa-route"></i> Show Evacuation Route
+            </button>
+
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color legend-route"></div><span>Evacuation Route</span></div>
+                <div class="legend-item"><div class="legend-color legend-exit"></div><span>Emergency Exit</span></div>
+                <div class="legend-item"><div class="legend-color legend-room"></div><span>Room/Area</span></div>
+                <div class="legend-item"><div class="legend-color legend-selected"></div><span>Your Location</span></div>
+                <div class="legend-item"><div class="legend-color legend-path"></div><span>Calculated Path</span></div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div class="map-header">
+                <h3 class="section-title" id="mapTitle">CSE Block - Ground Floor Evacuation Map</h3>
+                <button class="btn btn-outline" id="resetMap">
+                    <i class="fas fa-sync-alt"></i> Reset View
+                </button>
+            </div>
+            <div class="map-content">
+                <!-- Floor images -->
+                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Ground+Floor" alt="CSE Ground Floor" class="floor-image active" id="cse-ground">
+                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+First+Floor" alt="CSE First Floor" class="floor-image" id="cse-first">
+                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Second+Floor" alt="CSE Second Floor" class="floor-image" id="cse-second">
+                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Third+Floor" alt="CSE Third Floor" class="floor-image" id="cse-third">
+                
+                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Ground+Floor" alt="Admin Ground Floor" class="floor-image" id="admin-ground">
+                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+First+Floor" alt="Admin First Floor" class="floor-image" id="admin-first">
+                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Second+Floor" alt="Admin Second Floor" class="floor-image" id="admin-second">
+                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Third+Floor" alt="Admin Third Floor" class="floor-image" id="admin-third">
+                
+                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Ground+Floor" alt="IT Ground Floor" class="floor-image" id="it-ground">
+                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+First+Floor" alt="IT First Floor" class="floor-image" id="it-first">
+                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Second+Floor" alt="IT Second Floor" class="floor-image" id="it-second">
+                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Third+Floor" alt="IT Third Floor" class="floor-image" id="it-third">
+                
+                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Ground+Floor" alt="Hostel Ground Floor" class="floor-image" id="hostel-ground">
+                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+First+Floor" alt="Hostel First Floor" class="floor-image" id="hostel-first">
+                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Second+Floor" alt="Hostel Second Floor" class="floor-image" id="hostel-second">
+                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Third+Floor" alt="Hostel Third Floor" class="floor-image" id="hostel-third">
+
+                <!-- Exit markers -->
+                <div class="exit-marker" data-room="Exit 1" style="top: 15%; left: 10%;" data-x="10" data-y="15">1</div>
+                <div class="exit-marker" data-room="Exit 2" style="top: 15%; left: 90%;" data-x="90" data-y="15">2</div>
+                <div class="exit-marker" data-room="Exit 3" style="top: 85%; left: 50%;" data-x="50" data-y="85">3</div>
+
+                <!-- Room markers -->
+                <div class="room-marker" data-room="Lab 101" style="top: 30%; left: 25%;" data-x="25" data-y="30"></div>
+                <div class="room-marker" data-room="Faculty Room" style="top: 50%; left: 40%;" data-x="40" data-y="50"></div>
+                <div class="room-marker" data-room="Classroom" style="top: 70%; left: 25%;" data-x="25" data-y="70"></div>
+                <div class="room-marker" data-room="Server Room" style="top: 40%; left: 70%;" data-x="70" data-y="40"></div>
+                <div class="room-marker" data-room="Common Area" style="top: 70%; left: 60%;" data-x="60" data-y="70"></div>
+
+                <div class="location-info" id="locationInfo"></div>
+            </div>
+        </div>
+
+        <div class="instructions-panel">
+            <div class="section-header">
+                <h3 class="section-title">Evacuation Instructions</h3>
+                <p class="section-subtitle">Important guidelines to follow during evacuation</p>
+            </div>
+            
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-route"></i>
+                </div>
+                <div class="instruction-content">
+                    <h4>Follow Marked Routes</h4>
+                    <p>Always follow the red-marked evacuation routes to the nearest emergency exit. Do not use elevators during evacuation.</p>
+                </div>
+            </div>
+            
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="instruction-content">
+                    <h4>Assemble at Designated Points</h4>
+                    <p>After evacuation, proceed to the designated assembly points and avoid blocking emergency vehicle access routes.</p>
+                </div>
+            </div>
+            
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-first-aid"></i>
+                </div>
+                <div class="instruction-content">
+                    <h4>Assist Those in Need</h4>
+                    <p>Help individuals with disabilities or mobility issues to evacuate safely. Report to emergency personnel if someone needs assistance.</p>
+                </div>
+            </div>
+            
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <div class="instruction-content">
+                    <h4>Avoid Dangerous Actions</h4>
+                    <p>Do not re-enter the building until declared safe by authorities. Do not use open flames and avoid electrical switches if there is a gas leak suspicion.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Jeevansetu © 2023 | IGDTUW Evacuation Plan</p>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buildingTabs = document.querySelectorAll('.building-tab');
+            const floorBtns = document.querySelectorAll('.floor-btn');
+            const showRouteBtn = document.getElementById('showRoute');
+            const resetMapBtn = document.getElementById('resetMap');
+            const mapTitle = document.getElementById('mapTitle');
+            const floorImages = document.querySelectorAll('.floor-image');
+            const roomMarkers = document.querySelectorAll('.room-marker');
+            const exitMarkers = document.querySelectorAll('.exit-marker');
+            const locationInfo = document.getElementById('locationInfo');
+            
+            let selectedBuilding = 'cse';
+            let selectedFloor = 'ground';
+            let selectedMarker = null;
+            let selectedExit = null;
+            let currentPath = [];
+            
+            // Building tab selection
+            buildingTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    buildingTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedBuilding = this.getAttribute('data-building');
+                    updateMap();
+                });
+            });
+            
+            // Floor button selection
+            floorBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    floorBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedFloor = this.getAttribute('data-floor');
+                    updateMap();
+                });
+            });
+            
+            // Update map based on selection
+            function updateMap() {
+                // Update map title
+                const buildingNames = {
+                    'cse': 'CSE Block',
+                    'admin': 'Admin Block',
+                    'it': 'IT Block',
+                    'hostel': 'Hostel Block'
+                };
+                
+                const floorNames = {
+                    'ground': 'Ground Floor',
+                    'first': 'First Floor',
+                    'second': 'Second Floor',
+                    'third': 'Third Floor'
+                };
+                
+                mapTitle.textContent = `${buildingNames[selectedBuilding]} - ${floorNames[selectedFloor]} Evacuation Map`;
+                
+                // Show the appropriate floor image
+                floorImages.forEach(img => {
+                    img.classList.remove('active');
+                });
+                
+                const activeImage = document.getElementById(`${selectedBuilding}-${selectedFloor}`);
+                if (activeImage) {
+                    activeImage.classList.add('active');
+                }
+                
+                // Update marker positions based on floor
+                updateMarkerPositions();
+                
+                // Clear any existing path
+                clearPath();
+            }
+            
+            // Update marker positions based on current floor
+            function updateMarkerPositions() {
+                // Hide all markers first
+                roomMarkers.forEach(marker => marker.style.display = 'none');
+                exitMarkers.forEach(marker => marker.style.display = 'none');
+                
+                // Show markers for the current floor
+                roomMarkers.forEach(marker => marker.style.display = 'block');
+                exitMarkers.forEach(marker => marker.style.display = 'block');
+                
+                // Adjust marker positions based on floor (you can customize this)
+                if (selectedFloor === 'ground') {
+                    positionGroundFloorMarkers();
+                } else if (selectedFloor === 'first') {
+                    positionFirstFloorMarkers();
+                } else if (selectedFloor === 'second') {
+                    positionSecondFloorMarkers();
+                } else if (selectedFloor === 'third') {
+                    positionThirdFloorMarkers();
+                }
+            }
+            
+            function positionGroundFloorMarkers() {
+                // Default positions for ground floor
+                // You can customize these based on your actual floor plans
+                if (roomMarkers[0]) {
+                    roomMarkers[0].style.top = '30%';
+                    roomMarkers[0].style.left = '25%';
+                    roomMarkers[0].setAttribute('data-x', '25');
+                    roomMarkers[0].setAttribute('data-y', '30');
+                }
+                
+                if (roomMarkers[1]) {
+                    roomMarkers[1].style.top = '50%';
+                    roomMarkers[1].style.left = '40%';
+                    roomMarkers[1].setAttribute('data-x', '40');
+                    roomMarkers[1].setAttribute('data-y', '50');
+                }
+                
+                if (roomMarkers[2]) {
+                    roomMarkers[2].style.top = '70%';
+                    roomMarkers[2].style.left = '25%';
+                    roomMarkers[2].setAttribute('data-x', '25');
+                    roomMarkers[2].setAttribute('data-y', '70');
+                }
+                
+                if (roomMarkers[3]) {
+                    roomMarkers[3].style.top = '40%';
+                    roomMarkers[3].style.left = '70%';
+                    roomMarkers[3].setAttribute('data-x', '70');
+                    roomMarkers[3].setAttribute('data-y', '40');
+                }
+                
+                if (roomMarkers[4]) {
+                    roomMarkers[4].style.top = '70%';
+                    roomMarkers[4].style.left = '60%';
+                    roomMarkers[4].setAttribute('data-x', '60');
+                    roomMarkers[4].setAttribute('data-y', '70');
+                }
+                
+                // Exit markers
+                if (exitMarkers[0]) {
+                    exitMarkers[0].style.top = '15%';
+                    exitMarkers[0].style.left = '10%';
+                    exitMarkers[0].setAttribute('data-x', '10');
+                    exitMarkers[0].setAttribute('data-y', '15');
+                }
+                
+                if (exitMarkers[1]) {
+                    exitMarkers[1].style.top = '15%';
+                    exitMarkers[1].style.left = '90%';
+                    exitMarkers[1].setAttribute('data-x', '90');
+                    exitMarkers[1].setAttribute('data-y', '15');
+                }
+                
+                if (exitMarkers[2]) {
+                    exitMarkers[2].style.top = '85%';
+                    exitMarkers[2].style.left = '50%';
+                    exitMarkers[2].setAttribute('data-x', '50');
+                    exitMarkers[2].setAttribute('data-y', '85');
+                }
+            }
+            
+            function positionFirstFloorMarkers() {
+                // Different positions for first floor
+                if (roomMarkers[0]) {
+                    roomMarkers[0].style.top = '25%';
+                    roomMarkers[0].style.left = '20%';
+                    roomMarkers[0].setAttribute('data-x', '20');
+                    roomMarkers[0].setAttribute('data-y', '25');
+                }
+                
+                if (roomMarkers[1]) {
+                    roomMarkers[1].style.top = '45%';
+                    roomMarkers[1].style.left = '35%';
+                    roomMarkers[1].setAttribute('data-x', '35');
+                    roomMarkers[1].setAttribute('data-y', '45');
+                }
+                
+                if (roomMarkers[2]) {
+                    roomMarkers[2].style.top = '65%';
+                    roomMarkers[2].style.left = '20%';
+                    roomMarkers[2].setAttribute('data-x', '20');
+                    roomMarkers[2].setAttribute('data-y', '65');
+                }
+                
+                if (roomMarkers[3]) {
+                    roomMarkers[3].style.top = '35%';
+                    roomMarkers[3].style.left = '65%';
+                    roomMarkers[3].setAttribute('data-x', '65');
+                    roomMarkers[3].setAttribute('data-y', '35');
+                }
+                
+                if (roomMarkers[4]) {
+                    roomMarkers[4].style.top = '65%';
+                    roomMarkers[4].style.left = '55%';
+                    roomMarkers[4].setAttribute('data-x', '55');
+                    roomMarkers[4].setAttribute('data-y', '65');
+                }
+                
+                // Exit markers for first floor
+                if (exitMarkers[0]) {
+                    exitMarkers[0].style.top = '10%';
+                    exitMarkers[0].style.left = '15%';
+                    exitMarkers[0].setAttribute('data-x', '15');
+                    exitMarkers[0].setAttribute('data-y', '10');
+                }
+                
+                if (exitMarkers[1]) {
+                    exitMarkers[1].style.top = '10%';
+                    exitMarkers[1].style.left = '85%';
+                    exitMarkers[1].setAttribute('data-x', '85');
+                    exitMarkers[1].setAttribute('data-y', '10');
+                }
+                
+                if (exitMarkers[2]) {
+                    exitMarkers[2].style.top = '80%';
+                    exitMarkers[2].style.left = '45%';
+                    exitMarkers[2].setAttribute('data-x', '45');
+                    exitMarkers[2].setAttribute('data-y', '80');
+                }
+            }
+            
+            function positionSecondFloorMarkers() {
+                // Positions for second floor
+                if (roomMarkers[0]) {
+                    roomMarkers[0].style.top = '35%';
+                    roomMarkers[0].style.left = '30%';
+                    roomMarkers[0].setAttribute('data-x', '30');
+                    roomMarkers[0].setAttribute('data-y', '35');
+                }
+                
+                if (roomMarkers[1]) {
+                    roomMarkers[1].style.top = '55%';
+                    roomMarkers[1].style.left = '45%';
+                    roomMarkers[1].setAttribute('data-x', '45');
+                    roomMarkers[1].setAttribute('data-y', '55');
+                }
+                
+                if (roomMarkers[2]) {
+                    roomMarkers[2].style.top = '75%';
+                    roomMarkers[2].style.left = '30%';
+                    roomMarkers[2].setAttribute('data-x', '30');
+                    roomMarkers[2].setAttribute('data-y', '75');
+                }
+                
+                if (roomMarkers[3]) {
+                    roomMarkers[3].style.top = '45%';
+                    roomMarkers[3].style.left = '75%';
+                    roomMarkers[3].setAttribute('data-x', '75');
+                    roomMarkers[3].setAttribute('data-y', '45');
+                }
+                
+                if (roomMarkers[4]) {
+                    roomMarkers[4].style.top = '75%';
+                    roomMarkers[4].style.left = '65%';
+                    roomMarkers[4].setAttribute('data-x', '65');
+                    roomMarkers[4].setAttribute('data-y', '75');
+                }
+                
+                // Exit markers for second floor
+                if (exitMarkers[0]) {
+                    exitMarkers[0].style.top = '20%';
+                    exitMarkers[0].style.left = '5%';
+                    exitMarkers[0].setAttribute('data-x', '5');
+                    exitMarkers[0].setAttribute('data-y', '20');
+                }
+                
+                if (exitMarkers[1]) {
+                    exitMarkers[1].style.top = '20%';
+                    exitMarkers[1].style.left = '95%';
+                    exitMarkers[1].setAttribute('data-x', '95');
+                    exitMarkers[1].setAttribute('data-y', '20');
+                }
+                
+                if (exitMarkers[2]) {
+                    exitMarkers[2].style.top = '90%';
+                    exitMarkers[2].style.left = '55%';
+                    exitMarkers[2].setAttribute('data-x', '55');
+                    exitMarkers[2].setAttribute('data-y', '90');
+                }
+            }
+            
+            function positionThirdFloorMarkers() {
+                // Positions for third floor
+                if (roomMarkers[0]) {
+                    roomMarkers[0].style.top = '40%';
+                    roomMarkers[0].style.left = '35%';
+                    roomMarkers[0].setAttribute('data-x', '35');
+                    roomMarkers[0].setAttribute('data-y', '40');
+                }
+                
+                if (roomMarkers[1]) {
+                    roomMarkers[1].style.top = '60%';
+                    roomMarkers[1].style.left = '50%';
+                    roomMarkers[1].setAttribute('data-x', '50');
+                    roomMarkers[1].setAttribute('data-y', '60');
+                }
+                
+                if (roomMarkers[2]) {
+                    roomMarkers[2].style.top = '80%';
+                    roomMarkers[2].style.left = '35%';
+                    roomMarkers[2].setAttribute('data-x', '35');
+                    roomMarkers[2].setAttribute('data-y', '80');
+                }
+                
+                if (roomMarkers[3]) {
+                    roomMarkers[3].style.top = '50%';
+                    roomMarkers[3].style.left = '80%';
+                    roomMarkers[3].setAttribute('data-x', '80');
+                    roomMarkers[3].setAttribute('data-y', '50');
+                }
+                
+                if (roomMarkers[4]) {
+                    roomMarkers[4].style.top = '80%';
+                    roomMarkers[4].style.left = '70%';
+                    roomMarkers[4].setAttribute('data-x', '70');
+                    roomMarkers[4].setAttribute('data-y', '80');
+                }
+                
+                // Exit markers for third floor
+                if (exitMarkers[0]) {
+                    exitMarkers[0].style.top = '25%';
+                    exitMarkers[0].style.left = '20%';
+                    exitMarkers[0].setAttribute('data-x', '20');
+                    exitMarkers[0].setAttribute('data-y', '25');
+                }
+                
+                if (exitMarkers[1]) {
+                    exitMarkers[1].style.top = '25%';
+                    exitMarkers[1].style.left = '80%';
+                    exitMarkers[1].setAttribute('data-x', '80');
+                    exitMarkers[1].setAttribute('data-y', '25');
+                }
+                
+                if (exitMarkers[2]) {
+                    exitMarkers[2].style.top = '95%';
+                    exitMarkers[2].style.left = '60%';
+                    exitMarkers[2].setAttribute('data-x', '60');
+                    exitMarkers[2].setAttribute('data-y', '95');
+                }
+            }
+            
+            // Simplified path drawing function
+            function drawPath(startX, startY, endX, endY) {
+                // Create a canvas overlay for drawing the path
+                let pathCanvas = document.getElementById('pathCanvas');
+                if (!pathCanvas) {
+                    pathCanvas = document.createElement('canvas');
+                    pathCanvas.id = 'pathCanvas';
+                    pathCanvas.style.position = 'absolute';
+                    pathCanvas.style.top = '0';
+                    pathCanvas.style.left = '0';
+                    pathCanvas.style.pointerEvents = 'none';
+                    pathCanvas.style.zIndex = '5';
+                    document.querySelector('.map-content').appendChild(pathCanvas);
+                }
+                
+                // Set canvas size to match container
+                const container = document.querySelector('.map-content');
+                pathCanvas.width = container.clientWidth;
+                pathCanvas.height = container.clientHeight;
+                
+                const ctx = pathCanvas.getContext('2d');
+                
+                // Clear previous path
+                ctx.clearRect(0, 0, pathCanvas.width, pathCanvas.height);
+                
+                // Convert percentage coordinates to pixel coordinates
+                const startXPx = (startX / 100) * pathCanvas.width;
+                const startYPx = (startY / 100) * pathCanvas.height;
+                const endXPx = (endX / 100) * pathCanvas.width;
+                const endYPx = (endY / 100) * pathCanvas.height;
+                
+                // Draw the path
+                ctx.strokeStyle = '#dc3545';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(startXPx, startYPx);
+                ctx.lineTo(endXPx, endYPx);
+                ctx.stroke();
+                
+                // Draw start and end points
+                ctx.fillStyle = '#28a745';
+                ctx.beginPath();
+                ctx.arc(startXPx, startYPx, 6, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#dc3545';
+                ctx.beginPath();
+                ctx.arc(endXPx, endYPx, 6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            function clearPath() {
+                const pathCanvas = document.getElementById('pathCanvas');
+                if (pathCanvas) {
+                    pathCanvas.remove();
+                }
+            }
+            
+            // Room marker selection
+            roomMarkers.forEach(marker => {
+                marker.addEventListener('click', function() {
+                    if (selectedMarker) selectedMarker.classList.remove('selected');
+                    this.classList.add('selected');
+                    selectedMarker = this;
+                    
+                    const roomName = this.getAttribute('data-room');
+                    locationInfo.innerHTML = `<strong>${roomName}</strong><br>Click an exit to see evacuation path`;
+                    
+                    const rect = this.getBoundingClientRect();
+                    const mapRect = document.querySelector('.map-content').getBoundingClientRect();
+                    let leftPos = rect.left - mapRect.left + rect.width/2 - locationInfo.offsetWidth/2;
+                    let topPos = rect.top - mapRect.top - locationInfo.offsetHeight - 10;
+                    
+                    leftPos = Math.max(10, Math.min(leftPos, mapRect.width - locationInfo.offsetWidth - 10));
+                    topPos = Math.max(10, topPos);
+
+                    locationInfo.style.left = leftPos + 'px';
+                    locationInfo.style.top = topPos + 'px';
+                    locationInfo.style.display = 'block';
+                    
+                    clearPath();
+                });
+            });
+            
+            // Exit marker selection
+            exitMarkers.forEach(marker => {
+                marker.addEventListener('click', function() {
+                    if (!selectedMarker) {
+                        alert('Please select a room first');
+                        return;
+                    }
+                    
+                    selectedExit = this;
+                    
+                    const startX = parseInt(selectedMarker.getAttribute('data-x'));
+                    const startY = parseInt(selectedMarker.getAttribute('data-y'));
+                    const endX = parseInt(this.getAttribute('data-x'));
+                    const endY = parseInt(this.getAttribute('data-y'));
+                    
+                    drawPath(startX, startY, endX, endY);
+                    
+                    const roomName = selectedMarker.getAttribute('data-room');
+                    const exitName = this.getAttribute('data-room');
+                    locationInfo.innerHTML = `<strong>Path from ${roomName} to ${exitName}</strong><br>Direct evacuation route shown`;
+                });
+            });
+            
+            // Show Route button
+            showRouteBtn.addEventListener('click', function() {
+                if (!selectedMarker) {
+                    alert('Please select a room first');
+                    return;
+                }
+                
+                if (!selectedExit) {
+                    alert('Please select an exit to see the evacuation route');
+                    return;
+                }
+                
+                const roomName = selectedMarker.getAttribute('data-room');
+                const exitName = selectedExit.getAttribute('data-room');
+                
+                alert(`Showing evacuation route from ${roomName} to ${exitName}`);
+            });
+            
+            // Reset map
+            resetMapBtn.addEventListener('click', function() {
+                if (selectedMarker) selectedMarker.classList.remove('selected');
+                selectedMarker = null;
+                selectedExit = null;
+                locationInfo.style.display = 'none';
+                clearPath();
+            });
+            
+            // Initialize
+            updateMap();
+        });
+    </script>
+</body>
+</html>

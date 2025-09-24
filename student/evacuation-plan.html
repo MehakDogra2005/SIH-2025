@@ -1028,14 +1028,17 @@ function findNearestExit(roomMarker) {
 // Draw evacuation path
 function drawEvacuationPath(startMarker, endMarker) {
     clearPath();
-    
+
     const mapContent = document.querySelector('.map-content');
-    const mapRect = mapContent.getBoundingClientRect();
     const startX = parseFloat(startMarker.getAttribute('data-x'));
     const startY = parseFloat(startMarker.getAttribute('data-y'));
     const endX = parseFloat(endMarker.getAttribute('data-x'));
     const endY = parseFloat(endMarker.getAttribute('data-y'));
-    
+
+    // Calculate elbow point: horizontal then vertical (can swap for vertical then horizontal)
+    const elbowX = endX;
+    const elbowY = startY;
+
     // Create SVG overlay for the evacuation path
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.classList.add('evacuation-path');
@@ -1048,32 +1051,35 @@ function drawEvacuationPath(startMarker, endMarker) {
     svg.style.zIndex = '100';
     svg.setAttribute('viewBox', '0 0 100 100');
     svg.setAttribute('preserveAspectRatio', 'none');
-    
-    // Create glow effect path (background)
-    const pathGlow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    pathGlow.setAttribute('d', `M ${startX} ${startY} L ${endX} ${endY}`);
+
+    // Polyline points for elbowed path
+    const points = `${startX},${startY} ${elbowX},${elbowY} ${endX},${endY}`;
+
+    // Glow effect path
+    const pathGlow = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    pathGlow.setAttribute('points', points);
     pathGlow.setAttribute('stroke', '#ffeb3b');
     pathGlow.setAttribute('stroke-width', '1.5');
     pathGlow.setAttribute('stroke-dasharray', '2,1');
     pathGlow.setAttribute('fill', 'none');
     pathGlow.setAttribute('stroke-linecap', 'round');
     pathGlow.setAttribute('opacity', '0.6');
-    
-    // Create main yellow path
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', `M ${startX} ${startY} L ${endX} ${endY}`);
+
+    // Main yellow path
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    path.setAttribute('points', points);
     path.setAttribute('stroke', '#ffc107');
     path.setAttribute('stroke-width', '0.8');
     path.setAttribute('stroke-dasharray', '3,2');
     path.setAttribute('fill', 'none');
     path.setAttribute('stroke-linecap', 'round');
-    
+
     // Add animation
     path.style.strokeDashoffset = '5';
     path.style.animation = 'pathAnimation 3s linear infinite';
     pathGlow.style.strokeDashoffset = '3';
     pathGlow.style.animation = 'pathAnimation 3s linear infinite reverse';
-    
+
     // Add CSS animation if not already present
     if (!document.getElementById('pathAnimationStyle')) {
         const style = document.createElement('style');
@@ -1090,15 +1096,12 @@ function drawEvacuationPath(startMarker, endMarker) {
         `;
         document.head.appendChild(style);
     }
-    
-    // Add both paths to SVG
+
     svg.appendChild(pathGlow);
     svg.appendChild(path);
-    
-    // Ensure it's added to the map content container
     mapContent.appendChild(svg);
-    
-    console.log('Evacuation path drawn from', startX, startY, 'to', endX, endY);
+
+    console.log('Evacuation elbowed path drawn from', startX, startY, 'to', endX, endY);
 }
 
 // Show route instructions
