@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Evacuation Plan - JeevanSetu</title>
+    
+    <!-- Font Awesome and Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--light-bg);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            line-height: 1.6;
+        }
+        /* Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
+            position: fixed;
+            width: 240px;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .logo i {
+            font-size: 22px;
+            color: var(--p6);
+        }
+
+        .logo h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .menu-item-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .menu-item-main i:first-child {
+            width: 20px;
+            text-align: center;
+        }
+
+        .dropdown-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .dropdown-menu.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .menu-item-main:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .dropdown-menu.active .menu-item-main {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .dropdown-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            margin: 8px 0 8px 0;
+            padding: 4px 0;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-menu.active .dropdown-content {
+            display: block;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                max-height: 120px;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            margin: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+            font-size: 12px;
+            color: #4ecdc4;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 1);
+            transform: translateX(4px);
+        }
+
+        .dropdown-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        /* Main content */
+        .main-content {
+            grid-column: 2;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            border-radius: 12px;
+            background: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(16, 24, 32, 0.03);
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+        
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 23px;
+            color: var(--primary);
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(26, 115, 232, 0.08);
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        h3 {
+            color: var(--primary-dark);
+            margin: 1.5rem 0 0.5rem;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+        
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .emergency-contacts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+        
+        .contact-card {
+            border-radius: 14px;
+            padding: 16px;
+            background: linear-gradient(180deg, #fff, #f7fbff);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .contact-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .contact-card p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .map-placeholder {
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            margin: 1rem 0;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .map-placeholder p {
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        .assembly-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+        
+        .point-card {
+            background: linear-gradient(180deg, #fff, #f7fbff);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(16, 24, 32, 0.03);
+            transition: var(--transition);
+        }
+
+        .point-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .point-card h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .point-card p {
+            color: #666;
+            font-size: 14px;
+            margin: 4px 0;
+        }
+        
+        .emergency-procedures {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+        
+        .procedure-card {
+            background: linear-gradient(180deg, #fff, #fff8f0);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--p2);
+            transition: var(--transition);
+        }
+
+        .procedure-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .procedure-card h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .procedure-card ul {
+            margin-left: 16px;
+        }
+
+        .procedure-card li {
+            margin-bottom: 6px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        footer {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .important-note {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 8px;
+            color: var(--text-dark);
+        }
+
+        .important-note strong {
+            color: var(--warning);
+        }
+
+        /* Emergency button */
+        .emergency-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--accent), #ff6b77);
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(242, 92, 84, 0.3);
+            transition: transform .12s ease;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .emergency-button:hover {
+            transform: scale(1.05);
+        }
+
+        .emergency-button i {
+            font-size: 16px;
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                padding: 18px;
+            }
+            
+            .emergency-contacts, .assembly-points, .emergency-procedures {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-placeholder {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>JeevanSetu</h1>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item" data-link="dashboard-student.html"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item dropdown-menu" id="educationDropdown">
+                    <div class="menu-item-main">
+                        <i class="fas fa-book"></i><span>Education Modules</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </div>
+                    <div class="dropdown-content">
+                        <div class="dropdown-item" data-link="education-modules.html"><i class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
+                        <div class="dropdown-item" data-link="dos&donts.html"><i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
+                    </div>
+                </div>
+                <div class="menu-item" data-link="sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item" data-link="emergency_contacts.html"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item" data-link="drill_schedule.html"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item active" data-link="evacuation-plan.html"><i class="fas fa-map-marked-alt"></i><span>Evacuation Plan</span></div>
+                <div class="menu-item" data-link="advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item" data-link="chatbot.html"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item" data-link="gamified-learning.html"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <div class="menu-item" data-link="settings.html"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1 class="section-title">
+                    <i class="fas fa-route"></i>
+                    Emergency Evacuation Plan
+                </h1>
+                <button class="emergency-button" onclick="alert('Emergency services will be contacted!')">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    REPORT EMERGENCY
+                </button>
+            </div>
+
+            <div class="container">
+                <div class="card">
+                    <h2><i class="fas fa-info-circle" style="color: var(--p1); margin-right: 8px;"></i>Introduction</h2>
+                    <p>This Emergency Evacuation Plan has been developed to ensure the safe and orderly evacuation of all occupants from IGDTUW buildings in the event of an emergency. The plan outlines procedures, responsibilities, and assembly points to minimize risk to life and property.</p>
+                    
+                    <div class="important-note">
+                        <p><strong>Important:</strong> All students, staff, and visitors must familiarize themselves with this evacuation plan and follow instructions during emergencies.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-phone-alt" style="color: var(--accent); margin-right: 8px;"></i>Emergency Contacts</h2>
+            <div class="emergency-contacts">
+                <div class="contact-card">
+                    <h3>Emergency Control Room</h3>
+                    <p><strong>Phone:</strong> 011-23900268</p>
+                    <p><strong>Mobile:</strong> 986888xxxx</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Security Office</h3>
+                    <p><strong>Phone:</strong> 011-23900265</p>
+                    <p><strong>Mobile:</strong> 987365xxxx</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Medical Emergency</h3>
+                    <p><strong>University Health Center:</strong> 011-23900267</p>
+                    <p><strong>Ambulance:</strong> 102</p>
+                </div>
+                <div class="contact-card">
+                    <h3>External Emergency Services</h3>
+                    <p><strong>Fire:</strong> 101</p>
+                    <p><strong>Police:</strong> 100</p>
+                    <p><strong>Disaster Management:</strong> 108</p>
+                </div>
+            </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-map" style="color: var(--p1); margin-right: 8px;"></i>Campus Evacuation Map</h2>
+                    <p>The following map shows evacuation routes, emergency exits, fire extinguisher locations, and assembly points across the IGDTUW campus.</p>
+                    
+                    <div class="map-placeholder">
+                        <p><i class="fas fa-map-marked-alt" style="margin-right: 8px; font-size: 24px;"></i>IGDTUW Campus Evacuation Map - Interactive Version Coming Soon</p>
+                    </div>
+                    
+                    <p><strong>Note:</strong> The interactive map with detailed evacuation routes and real-time updates will be available soon.</p>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-map-pin" style="color: var(--secondary); margin-right: 8px;"></i>Assembly Points</h2>
+            <p>During an evacuation, proceed to the designated assembly points. Do not re-enter buildings until authorized personnel declare it safe.</p>
+            
+            <div class="assembly-points">
+                <div class="point-card">
+                    <h4>Main Building</h4>
+                    <p><strong>Assembly Area:</strong> Main Lawn near Admin Block</p>
+                    <p><strong>Capacity:</strong> 500+ persons</p>
+                </div>
+                <div class="point-card">
+                    <h4>Academic Block A</h4>
+                    <p><strong>Assembly Area:</strong> Basketball Court</p>
+                    <p><strong>Capacity:</strong> 300 persons</p>
+                </div>
+                <div class="point-card">
+                    <h4>Academic Block B</h4>
+                    <p><strong>Assembly Area:</strong> Parking Area North</p>
+                    <p><strong>Capacity:</strong> 400 persons</p>
+                </div>
+                <div class="point-card">
+                    <h4>Hostel Building</h4>
+                    <p><strong>Assembly Area:</strong> Hostel Garden</p>
+                    <p><strong>Capacity:</strong> 350 persons</p>
+                </div>
+            </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-clipboard-list" style="color: var(--p2); margin-right: 8px;"></i>Emergency Procedures</h2>
+            
+            <h3>General Evacuation Procedure</h3>
+            <ol>
+                <li>Remain calm. Do not panic.</li>
+                <li>If you discover a fire, activate the nearest fire alarm.</li>
+                <li>Evacuate the building immediately using the nearest safe exit.</li>
+                <li>Do not use elevators during a fire emergency.</li>
+                <li>Assist persons with disabilities in evacuation.</li>
+                <li>Proceed directly to your designated assembly area.</li>
+                <li>Do not re-enter the building until authorized by emergency personnel.</li>
+            </ol>
+            
+            <h3>Specific Emergency Procedures</h3>
+            <div class="emergency-procedures">
+                <div class="procedure-card">
+                    <h4>Fire Emergency</h4>
+                    <ul>
+                        <li>Activate nearest fire alarm</li>
+                        <li>Use stairs, not elevators</li>
+                        <li>Close doors behind you</li>
+                        <li>If trapped, signal from window</li>
+                        <li>Use fire extinguisher only if trained</li>
+                    </ul>
+                </div>
+                <div class="procedure-card">
+                    <h4>Earthquake</h4>
+                    <ul>
+                        <li>Drop, Cover, and Hold On</li>
+                        <li>Stay away from windows</li>
+                        <li>Evacuate after shaking stops</li>
+                        <li>Watch for falling debris</li>
+                        <li>Assemble in open areas</li>
+                    </ul>
+                </div>
+                <div class="procedure-card">
+                    <h4>Medical Emergency</h4>
+                    <ul>
+                        <li>Call University Health Center</li>
+                        <li>Provide first aid if trained</li>
+                        <li>Do not move seriously injured</li>
+                        <li>Clear area for emergency personnel</li>
+                        <li>Remain with person until help arrives</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>Evacuation for Persons with Disabilities</h3>
+            <p>Persons with mobility impairments should proceed to designated Areas of Refuge (stairwell landings) and wait for assistance. Evacuation chairs are available at strategic locations. Inform security or evacuation wardens about your location.</p>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-users" style="color: var(--primary); margin-right: 8px;"></i>Roles and Responsibilities</h2>
+            
+            <h3>Evacuation Wardens</h3>
+            <p>Designated staff members who assist in evacuation:</p>
+            <ul>
+                <li>Ensure all occupants evacuate the building</li>
+                <li>Check rooms and areas under their responsibility</li>
+                <li>Assist persons with disabilities</li>
+                <li>Report status to Emergency Coordinator</li>
+            </ul>
+            
+            <h3>Department Heads/Faculty</h3>
+            <ul>
+                <li>Ensure evacuation of students/staff in their area</li>
+                <li>Account for persons at assembly points</li>
+                <li>Report missing persons to emergency personnel</li>
+            </ul>
+            
+            <h3>Security Personnel</h3>
+            <ul>
+                <li>Direct evacuation flow</li>
+                <li>Secure building perimeter</li>
+                <li>Assist emergency services</li>
+                <li>Prevent re-entry until safe</li>
+            </ul>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-graduation-cap" style="color: var(--p3); margin-right: 8px;"></i>Training and Drills</h2>
+            <p>Regular evacuation drills will be conducted to ensure all occupants are familiar with evacuation procedures. Participation in these drills is mandatory for all students and staff.</p>
+            
+            <h3>Schedule</h3>
+            <ul>
+                <li>Fire drills: Twice per year</li>
+                <li>Earthquake drills: Once per year</li>
+                <li>Special scenario drills: As needed</li>
+            </ul>
+            
+                    <p>All new students and staff will receive orientation on emergency procedures during induction programs.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>JeevanSetu - Disaster Management System</p>
+        <p>Indira Gandhi Delhi Technical University for Women</p>
+        <p>Emergency Evacuation Plan | Last Updated: September 2025</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Sidebar navigation
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function (event) {
+                    const link = this.getAttribute('data-link');
+                    if (link) {
+                        // Remove active class from all items
+                        menuItems.forEach(mi => mi.classList.remove('active'));
+                        // Add active class to clicked item
+                        this.classList.add('active');
+                        // Navigate to page
+                        window.location.href = link;
+                    }
+                });
+            });
+
+            // Add smooth scrolling for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.card, .contact-card, .point-card, .procedure-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-6px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Dropdown functionality for Education Modules
+            const educationDropdown = document.getElementById('educationDropdown');
+            
+            if (educationDropdown) {
+                const mainDropdownButton = educationDropdown.querySelector('.menu-item-main');
+                
+                if (mainDropdownButton) {
+                    mainDropdownButton.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        
+                        // Close any other open dropdowns first (if there are multiple)
+                        document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+                            if (dropdown !== educationDropdown) {
+                                dropdown.classList.remove('active');
+                            }
+                        });
+                        
+                        // Toggle this dropdown
+                        educationDropdown.classList.toggle('active');
+                    });
+                }
+            }
+
+            // Handle navigation for dropdown items
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            
+            dropdownItems.forEach((item) => {
+                const link = item.getAttribute('data-link');
+                
+                item.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    if (link) {
+                        // Close the dropdown
+                        if (educationDropdown) {
+                            educationDropdown.classList.remove('active');
+                        }
+                        
+                        // Remove active class from all menu items and dropdown items
+                        document.querySelectorAll('.menu-item, .dropdown-item').forEach(menuItem => {
+                            menuItem.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked dropdown item
+                        item.classList.add('active');
+                        
+                        // Navigate to the page
+                        window.location.href = link;
+                    }
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (educationDropdown && !educationDropdown.contains(event.target)) {
+                    educationDropdown.classList.remove('active');
+                }
+            });
+
+            // Handle navigation for regular menu items (excluding dropdown)
+            const navigationMenuItems = document.querySelectorAll('.menu-item');
+            navigationMenuItems.forEach(item => {
+                // Exclude dropdown main button and dropdown items from this generic navigation
+                if (item.id !== 'educationDropdown' && !item.classList.contains('dropdown-item')) {
+                    item.addEventListener('click', function (event) {
+                        const link = this.getAttribute('data-link');
+                        if (link) {
+                            // Remove active class from all items
+                            navigationMenuItems.forEach(mi => mi.classList.remove('active'));
+                            // Add active class to clicked item
+                            this.classList.add('active');
+                            // Navigate to page
+                            window.location.href = link;
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

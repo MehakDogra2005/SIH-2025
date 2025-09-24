@@ -13,12 +13,15 @@
         :root {
             --primary: #1a73e8;
             --primary-dark: #0d47a1;
-            --secondary: #0b4fa3;
-            --accent: #ff6b35;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
             --light: #f5f7f9;
             --dark: #2c3e50;
             --success: #28a745;
-            --warning: #ffc107;
             --danger: #dc3545;
             --gray: #6c757d;
             --light-gray: #e9ecef;
@@ -30,7 +33,6 @@
             --p5: #e2afd3;
             --p6: #c8e5f3;
             --p7: #fae8c7;
-
             --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
             --transition: all 0.25s ease;
             --glass: rgba(255, 255, 255, 0.72);
@@ -50,6 +52,13 @@
             font-family: "Ubuntu", sans-serif;
             font-weight: 400;
             font-style: normal;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
         }
 
         .page-header {
@@ -150,14 +159,121 @@
             border-radius: 12px;
             font-size: 12px;
             color: #fff;
-            margin-left: auto
+            margin-left: auto;
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .menu-item-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .menu-item-main i:first-child {
+            width: 20px;
+            text-align: center;
+        }
+
+        .dropdown-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .dropdown-menu.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .menu-item-main:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .dropdown-menu.active .menu-item-main {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .dropdown-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            margin: 8px 0 8px 0;
+            padding: 4px 0;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-menu.active .dropdown-content {
+            display: block;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                max-height: 120px;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            margin: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+            font-size: 12px;
+            color: #4ecdc4;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 1);
+            transform: translateX(4px);
+        }
+
+        .dropdown-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
         }
 
         .main-content {
-            flex: 1;
-            margin-left: 260px;
+            grid-column: 2;
             padding: 20px;
-            transition: all 0.3s ease;
+            min-height: 100vh;
         }
 
         .header {
@@ -583,22 +699,18 @@
         }
 
         @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
             .sidebar {
-                width: 70px;
-                z-index: 100;
-            }
-
-            .sidebar .logo h1 span,
-            .sidebar .nav-link span {
-                display: none;
-            }
-
-            .sidebar .logo h1 {
-                justify-content: center;
+                position: relative;
+                width: 100%;
+                height: auto;
             }
 
             .main-content {
-                margin-left: 70px;
+                padding: 18px;
             }
         }
 
@@ -776,79 +888,41 @@
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-        <div class="logo">
-            <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="../dashboard-student.html" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../education-modules.html" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span>Education Modules</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../sandbox-simulator.html" class="nav-link">
-                    <i class="fas fa-gamepad"></i>
-                    <span>Sandbox Simulator</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../emergency_contacts.html" class="nav-link">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>Emergency Contacts</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../dos&donts.html" class="nav-link">
-                    <i class="fas fa-list-check"></i>
-                    <span>Do's & Don'ts</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../drill_schedule.html" class="nav-link active">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Drill Schedule</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="evacuation_plan/evacuation_plan.html" class="nav-link">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <span>Disaster Map</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="chatbot.html" class="nav-link">
-                    <i class="fas fa-robot"></i>
-                    <span>AI Helper</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../gamified-learning.html" class="nav-link">
-                    <i class="fas fa-trophy"></i>
-                    <span>Gamified Learning</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../settings.html" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </li>
-        </ul>
-        <div class="user-section">
-            <div class="user-avatar">P</div>
-            <div class="user-details">
-                <div class="user-name">Priya Sharma</div>
-                <div class="user-role">Student</div>
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>JeevanSetu</h1>
             </div>
-        </div>
-    </aside>
+            <div class="menu-items">
+                <div class="menu-item" data-link="dashboard-student.html"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item dropdown-menu" id="educationDropdown">
+                    <div class="menu-item-main">
+                        <i class="fas fa-book"></i><span>Education Modules</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </div>
+                    <div class="dropdown-content">
+                        <div class="dropdown-item" data-link="education-modules.html"><i class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
+                        <div class="dropdown-item" data-link="dos&donts.html"><i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
+                    </div>
+                </div>
+                <div class="menu-item" data-link="sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
+                <div class="menu-item" data-link="emergency_contacts.html"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item active" data-link="drill_schedule.html"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item" data-link="evacuation-plan.html"><i class="fas fa-route"></i><span>Evacuation Plan</span></div>
+                <div class="menu-item" data-link="advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
+                <div class="menu-item" data-link="chatbot.html"><i class="fas fa-robot"></i><span>AI Helper</span></div>
+                <div class="menu-item" data-link="gamified-learning.html"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+                <div class="menu-item" data-link="settings.html"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div>
+
+            <!-- User Profile at Bottom -->
+            <div class="sidebar-user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h4 id="sidebarUserName">User</h4>
+                    <p>Student</p>
+                </div>
+            </div>
+        </aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -1323,34 +1397,86 @@
             }
         }
 
-        // Menu Navigation functions
-        function initializeMenuNavigation() {
+        // Sidebar navigation
+        function initializeSidebarNavigation() {
             const menuItems = document.querySelectorAll('.menu-item');
-            const pageMapping = {
-                'Dashboard': '/student/dashboard-student.html',
-                'Education Modules': '/student/education-modules.html',
-                'Sandbox Simulator': '/student/sandbox-simulator.html',
-                'Emergency Contacts': '../emergency_contacts.html',
-                "Do's & Dont's": '../dos&donts.html',
-                'Disaster Map': '../advanced-map.html',
-                'AI Helper': '/student/chatbot.html',
-                'Gamified Learning': '/student/gamified-learning.html',
-                'Profile & Badges': 'profile-badges.html',
-                'Settings': '/student/settings.html'
-            };
+            const educationDropdown = document.getElementById('educationDropdown');
 
             menuItems.forEach(item => {
-                item.addEventListener('click', function () {
-                    menuItems.forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
+                // Exclude dropdown main button from this generic navigation
+                if (item.id !== 'educationDropdown' && !item.classList.contains('dropdown-item')) {
+                    item.addEventListener('click', function (event) {
+                        const link = this.getAttribute('data-link');
+                        if (link) {
+                            // Remove active class from all items
+                            menuItems.forEach(mi => mi.classList.remove('active'));
+                            // Add active class to clicked item
+                            this.classList.add('active');
+                            // Navigate to page
+                            window.location.href = link;
+                        }
+                    });
+                }
+            });
 
-                    const menuText = this.querySelector('span').textContent.trim();
-                    const targetPage = pageMapping[menuText];
+            // Dropdown menu functionality
+            if (educationDropdown) {
+                const mainDropdownButton = educationDropdown.querySelector('.menu-item-main');
+                const dropdownContent = educationDropdown.querySelector('.dropdown-content');
+                
+                if (mainDropdownButton && dropdownContent) {
+                    mainDropdownButton.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        
+                        // Close any other open dropdowns first (if there are multiple)
+                        document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+                            if (dropdown !== educationDropdown) {
+                                dropdown.classList.remove('active');
+                            }
+                        });
+                        
+                        // Toggle this dropdown
+                        educationDropdown.classList.toggle('active');
+                    });
+                }
+            }
 
-                    if (targetPage && !targetPage.startsWith('#')) {
-                        navigateToPage(targetPage, menuText);
+            // Handle navigation for dropdown items
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            
+            dropdownItems.forEach((item) => {
+                const link = item.getAttribute('data-link');
+                
+                item.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    if (link) {
+                        // Close the dropdown
+                        if (educationDropdown) {
+                            educationDropdown.classList.remove('active');
+                        }
+                        
+                        // Remove active class from all menu items and dropdown items
+                        document.querySelectorAll('.menu-item, .dropdown-item').forEach(menuItem => {
+                            menuItem.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked dropdown item
+                        item.classList.add('active');
+                        
+                        // Navigate to the page
+                        window.location.href = link;
                     }
                 });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (educationDropdown && !educationDropdown.contains(event.target)) {
+                    educationDropdown.classList.remove('active');
+                }
             });
         }
 
@@ -1403,7 +1529,7 @@
         // Initialize when DOM is loaded
         window.addEventListener('DOMContentLoaded', () => {
             loadUserInfo();
-            initializeMenuNavigation();
+            initializeSidebarNavigation();
             setInterval(loadUserInfo, 5 * 60 * 1000);
         });
     </script>
