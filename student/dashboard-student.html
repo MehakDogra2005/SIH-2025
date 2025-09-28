@@ -1421,7 +1421,68 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // Get user streak points from the backend
+        async function fetchUserStreak() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.log('No token found');
+                    return null;
+                }
+
+                const response = await fetch('http://localhost:5000/api/streak/user-streak', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch streak data');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching streak:', error);
+                return null;
+            }
+        }
+
+        // Update user streak in the backend
+        async function updateUserStreak(streakData) {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found');
+                    return false;
+                }
+
+                const response = await fetch('http://localhost:5000/api/streak/update-streak', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(streakData)
+                });
+
+                if (!response.ok) throw new Error('Failed to update streak');
+                const data = await response.json();
+                return data.success;
+            } catch (error) {
+                console.error('Error updating streak:', error);
+                return false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Initialize streak system
+            await initializeStreakSystem();
+
+            // Add click event to streak button
+            const streakBtn = document.getElementById('streakBtn');
+            if (streakBtn) {
+                streakBtn.addEventListener('click', showDailyQuestion);
+            }
             // Sidebar navigation
             const menuItems = document.querySelectorAll('.menu-item');
             const educationDropdown = document.getElementById('educationDropdown');
@@ -1935,10 +1996,31 @@
                 });
             });
 
-            submitBtn.addEventListener('click', () => {
+            submitBtn.addEventListener('click', async () => {
                 if (selectedOption === null) return;
 
                 const isCorrect = selectedOption === question.correctAnswer;
+                resultMessage.style.display = 'block';
+
+                if (isCorrect) {
+                    resultMessage.textContent = '🎉 Correct! +5 points';
+                    resultMessage.className = 'result-message result-success';
+
+                    // Update streak in backend
+                    await updateStreak(5, question.id);
+
+                } else {
+                    resultMessage.textContent = '❌ Incorrect. Try again tomorrow!';
+                    resultMessage.className = 'result-message result-error';
+                }
+
+                submitBtn.disabled = true;
+                setTimeout(() => {
+                    if (isCorrect) {
+                        overlay.remove();
+                        showStreakCelebration();
+                    }
+                }, 2000);
 
                 // Show result with green correct answers
                 optionBtns.forEach(btn => {
@@ -1982,6 +2064,28 @@
 
         // Update streak when question is answered correctly - FIXED
         async function updateStreak(points, questionId) {
+            try {
+                if (!userStreakData) await loadStreakData();
+
+                // Update streak data
+                userStreakData.totalPoints += points;
+                userStreakData.lastCompletedDate = new Date();
+                userStreakData.completedQuestions.push({
+                    date: new Date(),
+                    points: points,
+                    questionId: questionId
+                });
+
+                // Save to backend
+                await saveStreakData();
+
+                // Update UI
+                document.querySelector('.streak-points').textContent = userStreakData.totalPoints;
+                todayQuestionCompleted = true;
+                updateStreakDisplay();
+            } catch (error) {
+                console.error('Error updating streak:', error);
+            }
             try {
                 console.log('🔥 Updating streak with points:', points);
 
