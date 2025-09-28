@@ -1220,7 +1220,7 @@
                         class="fas fa-robot"></i><span>AI Helper</span></div>
                 <div class="menu-item" data-link="gamified-learning.html"><i
                         class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
-                       
+
                 <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
                 <div class="menu-item" data-link="settings.html"><i class="fas fa-cog"></i><span>Settings</span></div>
             </div> <!-- User Profile at Bottom -->
@@ -2949,11 +2949,14 @@
         makeDraggable(emergencyModal, emergencyHeader);
 
         // ✅ KEEP ONLY THIS SINGLE EVENT LISTENER
-        confirmEmergency.addEventListener('click', () => {
+        confirmEmergency.addEventListener('click', function () {
             if (!selectedDisasterType) {
                 alert('Please select a disaster type or use voice recognition');
                 return;
             }
+
+            // Close overlay immediately
+            emergencyOverlay.style.display = 'none';
 
             const voiceText = document.getElementById('voiceTranscript').textContent;
             let alertMessage;
@@ -2967,15 +2970,19 @@
             // Add to alerts
             addNewAlert('emergency', selectedDisasterType.toUpperCase() + ' Alert', alertMessage, 'just now');
 
-            // ✅ Close the modal
-            emergencyOverlay.style.display = 'none';
-
             // Update status
             document.querySelector('.status-indicator').className = 'status-indicator help';
             document.querySelector('.status-indicator').innerHTML =
                 '<i class="fas fa-exclamation-triangle"></i><span>EMERGENCY - ' + selectedDisasterType.toUpperCase() + '</span>';
 
-            alert('✅ Emergency alert sent successfully!');
+            // Reset state
+            selectedDisasterType = null;
+            document.querySelectorAll('.emergency-category').forEach(b => b.classList.remove('selected'));
+            document.getElementById('voiceTranscript').textContent = 'Your voice description will appear here...';
+
+            setTimeout(() => {
+                alert('✅ Emergency alert sent successfully!');
+            }, 100);
         });
 
         /**********************
