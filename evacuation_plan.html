@@ -351,7 +351,7 @@
         }
 
         .legend-path {
-            background-color: #ffc107;
+            background-color: var(--warning);
         }
 
         /* Map Container Styles */
@@ -373,15 +373,15 @@
 
         .map-content {
             position: relative;
-            height: 600px;
-            overflow: hidden;
+            height: 500px;
+            overflow: auto;
             background-color: #e9f2fc;
         }
 
         .floor-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: none;
         }
 
@@ -580,43 +580,43 @@
         </div>
         <ul class="nav-menu">
             <li class="nav-item">
-                <a href="../dashboard-student.html" class="nav-link">
+                <a href="student/dashboard-student.html" class="nav-link">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../education-modules.html" class="nav-link">
+                <a href="education-modules.html" class="nav-link">
                     <i class="fas fa-book"></i>
                     <span>Education Modules</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../sandbox-simulator.html" class="nav-link">
+                <a href="sandbox-simulator.html" class="nav-link">
                     <i class="fas fa-gamepad"></i>
                     <span>Sandbox Simulator</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../emergency_contacts.html" class="nav-link">
+                <a href="emergency_contacts.html" class="nav-link">
                     <i class="fas fa-phone-alt"></i>
                     <span>Emergency Contacts</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../dos&donts.html" class="nav-link">
+                <a href="dos&donts.html" class="nav-link">
                     <i class="fas fa-list-check"></i>
                     <span>Do's & Don'ts</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../drill_schedule.html" class="nav-link">
+                <a href="drill_schedule.html" class="nav-link">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Drill Schedule</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../evacuation_plan.html" class="nav-link active">
+                <a href="evacuation_plan.html" class="nav-link active">
                     <i class="fas fa-map-marked-alt"></i>
                     <span>Disaster Map</span>
                 </a>
@@ -628,13 +628,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../gamified-learning.html" class="nav-link">
+                <a href="gamified-learning.html" class="nav-link">
                     <i class="fas fa-trophy"></i>
                     <span>Gamified Learning</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../settings.html" class="nav-link">
+                <a href="settings.html" class="nav-link">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </a>
@@ -725,13 +725,13 @@
             </div>
             <div class="map-content">
                 <!-- Floor images -->
-                <img src="images/cse_ground.png" alt="CSE Ground Floor" class="floor-image active" id="cse-ground">
-                <img src="images/cse_first.png" alt="CSE First Floor" class="floor-image" id="cse-first">
-                <img src="images/cse_second.png" alt="CSE Second Floor" class="floor-image" id="cse-second">
+                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Ground+Floor" alt="CSE Ground Floor" class="floor-image active" id="cse-ground">
+                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+First+Floor" alt="CSE First Floor" class="floor-image" id="cse-first">
+                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Second+Floor" alt="CSE Second Floor" class="floor-image" id="cse-second">
                 <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Third+Floor" alt="CSE Third Floor" class="floor-image" id="cse-third">
                 
-                <img src="images/admin_ground_floor.png" alt="Admin Ground Floor" class="floor-image" id="admin-ground">
-                <img src="images/admin_first_floor.png" alt="Admin First Floor" class="floor-image" id="admin-first">
+                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Ground+Floor" alt="Admin Ground Floor" class="floor-image" id="admin-ground">
+                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+First+Floor" alt="Admin First Floor" class="floor-image" id="admin-first">
                 <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Second+Floor" alt="Admin Second Floor" class="floor-image" id="admin-second">
                 <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Third+Floor" alt="Admin Third Floor" class="floor-image" id="admin-third">
                 
@@ -744,7 +744,7 @@
                 <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+First+Floor" alt="Hostel First Floor" class="floor-image" id="hostel-first">
                 <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Second+Floor" alt="Hostel Second Floor" class="floor-image" id="hostel-second">
                 <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Third+Floor" alt="Hostel Third Floor" class="floor-image" id="hostel-third">
-               
+
                 <!-- Exit markers -->
                 <div class="exit-marker" data-room="Exit 1" style="top: 15%; left: 10%;" data-x="10" data-y="15">1</div>
                 <div class="exit-marker" data-room="Exit 2" style="top: 15%; left: 90%;" data-x="90" data-y="15">2</div>
@@ -1181,36 +1181,23 @@
                 const endXPx = (endX / 100) * pathCanvas.width;
                 const endYPx = (endY / 100) * pathCanvas.height;
                 
-                // Draw the path with yellow color and dashed line
-                ctx.strokeStyle = '#ffc107';
-                ctx.lineWidth = 6;
-                ctx.setLineDash([15, 8]);
-                ctx.lineCap = 'round';
+                // Draw the path
+                ctx.strokeStyle = '#dc3545';
+                ctx.lineWidth = 4;
                 ctx.beginPath();
                 ctx.moveTo(startXPx, startYPx);
                 ctx.lineTo(endXPx, endYPx);
                 ctx.stroke();
-                
-                // Draw glow effect
-                ctx.strokeStyle = '#fff200';
-                ctx.lineWidth = 10;
-                ctx.globalAlpha = 0.3;
-                ctx.beginPath();
-                ctx.moveTo(startXPx, startYPx);
-                ctx.lineTo(endXPx, endYPx);
-                ctx.stroke();
-                ctx.globalAlpha = 1.0;
-                ctx.setLineDash([]);
                 
                 // Draw start and end points
                 ctx.fillStyle = '#28a745';
                 ctx.beginPath();
-                ctx.arc(startXPx, startYPx, 8, 0, Math.PI * 2);
+                ctx.arc(startXPx, startYPx, 6, 0, Math.PI * 2);
                 ctx.fill();
                 
-                ctx.fillStyle = '#ffc107';
+                ctx.fillStyle = '#dc3545';
                 ctx.beginPath();
-                ctx.arc(endXPx, endYPx, 8, 0, Math.PI * 2);
+                ctx.arc(endXPx, endYPx, 6, 0, Math.PI * 2);
                 ctx.fill();
             }
             
