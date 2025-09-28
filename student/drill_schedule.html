@@ -162,113 +162,65 @@
             margin-left: auto;
         }
 
-        /* Dropdown Menu Styles */
-        .dropdown-menu {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-        }
-
-        .menu-item-main {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 10px;
+        /* Accordion/Dropdown Styles for Education Modules */
+        .accordion-trigger {
             cursor: pointer;
-            transition: var(--transition);
-            color: rgba(255, 255, 255, 0.95);
+            position: relative;
         }
 
-        .menu-item-main i:first-child {
-            width: 20px;
-            text-align: center;
-        }
-
-        .dropdown-arrow {
-            margin-left: auto;
-            transition: transform 0.3s ease;
-            font-size: 12px;
-        }
-
-        .dropdown-menu.active .dropdown-arrow {
-            transform: rotate(180deg);
-        }
-
-        .menu-item-main:hover {
+        .accordion-trigger:hover {
             background: rgba(255, 255, 255, 0.06);
         }
 
-        .dropdown-menu.active .menu-item-main {
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-        }
-
-        .dropdown-content {
+        .submenu-item {
             display: none;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            margin: 8px 0 8px 0;
-            padding: 4px 0;
-            width: 100%;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            padding-left: 40px;
+            margin-left: 10px;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
         }
 
-        .dropdown-menu.active .dropdown-content {
-            display: block;
-            animation: slideDown 0.3s ease-out forwards;
+        .submenu-item.show {
+            display: flex;
+            animation: slideDownSubmenu 0.3s ease forwards;
         }
 
-        @keyframes slideDown {
+        .submenu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Slide down animation for submenu items */
+        @keyframes slideDownSubmenu {
             from {
                 opacity: 0;
-                max-height: 0;
                 transform: translateY(-10px);
+                max-height: 0;
             }
 
             to {
                 opacity: 1;
-                max-height: 120px;
                 transform: translateY(0);
+                max-height: 50px;
             }
         }
 
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 16px;
-            margin: 2px 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: var(--transition);
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item i {
-            width: 16px;
-            text-align: center;
+        /* Arrow rotation for accordion */
+        .accordion-arrow {
+            transition: transform 0.3s ease;
             font-size: 12px;
-            color: #4ecdc4;
+            margin-left: auto;
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .dropdown-item:hover {
-            background: rgba(255, 255, 255, 0.12);
+        .accordion-trigger.accordion-active .accordion-arrow {
+            transform: rotate(180deg);
             color: rgba(255, 255, 255, 1);
-            transform: translateX(4px);
         }
 
-        .dropdown-item.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
+        .accordion-trigger.accordion-active {
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .main-content {
@@ -329,7 +281,7 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
         }
-       
+
 
         .user-avatar {
             width: 40px;
@@ -883,142 +835,143 @@
                 transform: translateY(0);
             }
         }
+
         /* Sidebar Styles */
-.sidebar {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    background: linear-gradient(180deg, var(--primary), var(--primary-dark));
-    color: #fff;
-    padding: 22px;
-    position: fixed;
-    width: 240px;
-    height: 100%;
-    overflow-y: auto;
-    box-shadow: var(--shadow);
-    z-index: 200;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-}
+        .sidebar {
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
+            position: fixed;
+            width: 240px;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
 
-.logo i {
-    font-size: 22px;
-    color: var(--p6);
-}
+        .logo i {
+            font-size: 22px;
+            color: var(--p6);
+        }
 
-.logo h1 {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-}
+        .logo h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
 
-.nav-menu {
-    margin-top: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    list-style: none;
-}
+        .nav-menu {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            list-style: none;
+        }
 
-.nav-item {
-    display: flex;
-    align-items: center;
-}
+        .nav-item {
+            display: flex;
+            align-items: center;
+        }
 
-.nav-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: var(--transition);
-    color: rgba(255, 255, 255, 0.95);
-    text-decoration: none;
-    width: 100%;
-}
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95);
+            text-decoration: none;
+            width: 100%;
+        }
 
-.nav-link i {
-    width: 20px;
-    text-align: center;
-}
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
 
-.nav-link:hover {
-    background: rgba(255, 255, 255, 0.06);
-}
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
 
-.nav-link.active {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
 
-.user-section {
-    margin-top: auto;
-    padding: 12px;
-    margin: 12px -12px -12px -12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: var(--transition);
-    cursor: pointer;
-}
+        .user-section {
+            margin-top: auto;
+            padding: 12px;
+            margin: 12px -12px -12px -12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
 
-.user-section:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
+        .user-section:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
 
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--p6), var(--p1));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--primary-dark);
-    text-transform: uppercase;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    flex-shrink: 0;
-}
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
 
-.user-details {
-    flex: 1;
-    min-width: 0;
-}
+        .user-details {
+            flex: 1;
+            min-width: 0;
+        }
 
-.user-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-.user-role {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 0;
-}
+        .user-role {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+        }
     </style>
 </head>
 
 <body>
-       <!-- Sidebar -->
-        <div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="dashboard-container">
         <aside class="sidebar">
             <div class="logo">
                 <i class="fas fa-shield-alt"></i>
@@ -1027,17 +980,15 @@
             <div class="menu-items">
                 <div class="menu-item" data-link="dashboard-student.html"><i
                         class="fas fa-home"></i><span>Dashboard</span></div>
-                <div class="menu-item dropdown-menu" id="educationDropdown">
-                    <div class="menu-item-main">
-                        <i class="fas fa-book"></i><span>Education Modules</span>
-                        <i class="fas fa-chevron-down dropdown-arrow"></i>
-                    </div>
-                    <div class="dropdown-content">
-                        <div class="dropdown-item" data-link="education-modules.html"><i
-                                class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
-                        <div class="dropdown-item" data-link="dos&donts.html"><i
-                                class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
-                    </div>
+                <div class="menu-item accordion-trigger" id="educationAccordion">
+                    <i class="fas fa-book"></i><span>Education Modules</span>
+                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                </div>
+                <div class="menu-item submenu-item" data-link="education-modules.html">
+                    <i class="fas fa-graduation-cap"></i><span>Learning Modules</span>
+                </div>
+                <div class="menu-item submenu-item" data-link="dos&donts.html">
+                    <i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span>
                 </div>
                 <div class="menu-item" data-link="sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox
                         Simulator</span></div>
@@ -1536,85 +1487,80 @@
             }
         }
 
-        // Sidebar navigation
         function initializeSidebarNavigation() {
-            const menuItems = document.querySelectorAll('.menu-item');
-            const educationDropdown = document.getElementById('educationDropdown');
+            const menuItems = document.querySelectorAll('.menu-item:not(.accordion-trigger):not(.submenu-item)');
+            const submenuItems = document.querySelectorAll('.submenu-item');
+            const accordionTrigger = document.getElementById('educationAccordion');
 
+            // Handle regular menu items
             menuItems.forEach(item => {
-                // Exclude dropdown main button from this generic navigation
-                if (item.id !== 'educationDropdown' && !item.classList.contains('dropdown-item')) {
-                    item.addEventListener('click', function (event) {
-                        const link = this.getAttribute('data-link');
-                        if (link) {
-                            // Remove active class from all items
-                            menuItems.forEach(mi => mi.classList.remove('active'));
-                            // Add active class to clicked item
-                            this.classList.add('active');
-                            // Navigate to page
-                            window.location.href = link;
-                        }
-                    });
-                }
+                item.addEventListener('click', function () {
+                    const dataLink = this.getAttribute('data-link');
+                    if (dataLink) {
+                        navigateToPage(dataLink, this.querySelector('span').textContent.trim());
+                    }
+                });
+
+                // Add hover effect
+                item.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateX(5px)';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateX(0)';
+                });
             });
 
-            // Dropdown menu functionality
-            if (educationDropdown) {
-                const mainDropdownButton = educationDropdown.querySelector('.menu-item-main');
-                const dropdownContent = educationDropdown.querySelector('.dropdown-content');
-
-                if (mainDropdownButton && dropdownContent) {
-                    mainDropdownButton.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        // Close any other open dropdowns first (if there are multiple)
-                        document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
-                            if (dropdown !== educationDropdown) {
-                                dropdown.classList.remove('active');
-                            }
-                        });
-
-                        // Toggle this dropdown
-                        educationDropdown.classList.toggle('active');
-                    });
-                }
-            }
-
-            // Handle navigation for dropdown items
-            const dropdownItems = document.querySelectorAll('.dropdown-item');
-
-            dropdownItems.forEach((item) => {
-                const link = item.getAttribute('data-link');
-
-                item.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    if (link) {
-                        // Close the dropdown
-                        if (educationDropdown) {
-                            educationDropdown.classList.remove('active');
-                        }
-
-                        // Remove active class from all menu items and dropdown items
-                        document.querySelectorAll('.menu-item, .dropdown-item').forEach(menuItem => {
-                            menuItem.classList.remove('active');
-                        });
-
-                        // Add active class to clicked dropdown item
-                        item.classList.add('active');
-
-                        // Navigate to the page
-                        window.location.href = link;
+            // Handle submenu items separately
+            submenuItems.forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const dataLink = this.getAttribute('data-link');
+                    if (dataLink) {
+                        navigateToPage(dataLink, this.querySelector('span').textContent.trim());
                     }
                 });
             });
 
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function (event) {
-                if (educationDropdown && !educationDropdown.contains(event.target)) {
-                    educationDropdown.classList.remove('active');
+            // Initialize accordion functionality
+            if (accordionTrigger) {
+                accordionTrigger.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    console.log('Education Modules accordion clicked');
+
+                    // Toggle the accordion state
+                    this.classList.toggle('accordion-active');
+
+                    // Get all submenu items
+                    const submenuItems = document.querySelectorAll('.submenu-item');
+
+                    // Toggle visibility of submenu items
+                    submenuItems.forEach(item => {
+                        if (this.classList.contains('accordion-active')) {
+                            item.classList.add('show');
+                        } else {
+                            item.classList.remove('show');
+                        }
+                    });
+
+                    console.log('Accordion state:', this.classList.contains('accordion-active') ? 'expanded' : 'collapsed');
+                });
+            }
+
+            // Close accordion when clicking outside
+            document.addEventListener('click', function (e) {
+                const accordionTrigger = document.getElementById('educationAccordion');
+                const menuItems = document.querySelector('.menu-items');
+
+                // Only close if clicking outside the entire menu area
+                if (accordionTrigger && !menuItems.contains(e.target)) {
+                    accordionTrigger.classList.remove('accordion-active');
+                    const submenuItems = document.querySelectorAll('.submenu-item');
+                    submenuItems.forEach(item => {
+                        item.classList.remove('show');
+                    });
                 }
             });
         }

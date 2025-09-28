@@ -190,6 +190,7 @@
                 max-height: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 max-height: 200px;
@@ -655,8 +656,10 @@
                         <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </div>
                     <div class="dropdown-content">
-                        <div class="dropdown-item" data-link="education-modules.html"><i class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
-                        <div class="dropdown-item" data-link="../dos&donts.html"><i class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
+                        <div class="dropdown-item" data-link="education-modules.html"><i
+                                class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
+                        <div class="dropdown-item" data-link="dos&donts.html"><i
+                                class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
                     </div>
                 </div>
                 <div class="menu-item"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
@@ -895,10 +898,10 @@
                 'Dashboard': 'dashboard-student.html',
                 'Education Modules': 'education-modules.html',
                 'Sandbox Simulator': 'sandbox-simulator.html',
-                'Emergency Contacts': '../emergency_contacts.html', // Scroll to emergency contacts section
-                "Do's & Dont's": '../dos&donts.html',
-                'Drill Schedule': '../drill_schedule.html',
-                'Disaster Map': '../advanced-map.html',
+                'Emergency Contacts': 'emergency_contacts.html',
+                "Do's & Dont's": 'dos&donts.html',
+                'Drill Schedule': 'drill_schedule.html',
+                'Disaster Map': 'advanced-map.html',
                 'AI Helper': 'chatbot.html',
                 'Gamified Learning': 'gamified-learning.html',
                 'Profile & Badges': 'profile-badges.html',
@@ -955,7 +958,7 @@
                     mainDropdownButton.addEventListener('click', function (event) {
                         event.stopPropagation();
                         console.log('Dropdown clicked, current active state:', educationDropdown.classList.contains('active'));
-                        
+
                         // Close other dropdowns first
                         document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
                             if (dropdown !== educationDropdown) {
