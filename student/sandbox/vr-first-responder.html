@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -273,8 +274,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.7; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
         }
 
         .vr-hud {
@@ -324,9 +334,17 @@
             font-weight: 700;
         }
 
-        .timer { color: #f9a825; }
-        .score { color: #34a853; }
-        .patients { color: #e91e63; }
+        .timer {
+            color: #f9a825;
+        }
+
+        .score {
+            color: #34a853;
+        }
+
+        .patients {
+            color: #e91e63;
+        }
 
         .action-prompt {
             position: absolute;
@@ -409,10 +427,21 @@
             font-size: 1.2rem;
         }
 
-        .bandage { background: linear-gradient(135deg, #e91e63, #ad1457); }
-        .stethoscope { background: linear-gradient(135deg, #2196f3, #1565c0); }
-        .syringe { background: linear-gradient(135deg, #4caf50, #2e7d32); }
-        .splint { background: linear-gradient(135deg, #ff9800, #f57c00); }
+        .bandage {
+            background: linear-gradient(135deg, #e91e63, #ad1457);
+        }
+
+        .stethoscope {
+            background: linear-gradient(135deg, #2196f3, #1565c0);
+        }
+
+        .syringe {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+        }
+
+        .splint {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
 
         .tool-info h5 {
             margin-bottom: 5px;
@@ -569,9 +598,17 @@
             font-weight: 600;
         }
 
-        .critical { color: #f44336; }
-        .warning { color: #ff9800; }
-        .normal { color: #4caf50; }
+        .critical {
+            color: #f44336;
+        }
+
+        .warning {
+            color: #ff9800;
+        }
+
+        .normal {
+            color: #4caf50;
+        }
 
         .simulation-active .environment-placeholder {
             display: none;
@@ -623,14 +660,36 @@
         }
 
         @keyframes criticalPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4); }
-            50% { box-shadow: 0 0 0 20px rgba(244, 67, 54, 0); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 20px rgba(244, 67, 54, 0);
+            }
         }
 
-        .patient-1 { top: 20%; left: 20%; }
-        .patient-2 { top: 60%; left: 70%; }
-        .patient-3 { bottom: 30%; left: 40%; }
-        .patient-4 { top: 40%; right: 20%; }
+        .patient-1 {
+            top: 20%;
+            left: 20%;
+        }
+
+        .patient-2 {
+            top: 60%;
+            left: 70%;
+        }
+
+        .patient-3 {
+            bottom: 30%;
+            left: 40%;
+        }
+
+        .patient-4 {
+            top: 40%;
+            right: 20%;
+        }
 
         .feedback-toast {
             position: fixed;
@@ -649,8 +708,15 @@
         }
 
         @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         @media (max-width: 1200px) {
@@ -684,6 +750,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="vr-container">
         <button class="back-button" onclick="goBack()">
@@ -966,7 +1033,7 @@
                 priority: 1
             },
             2: {
-                name: "Patient Beta", 
+                name: "Patient Beta",
                 condition: "urgent",
                 injuries: ["Broken leg", "Moderate bleeding", "Conscious"],
                 vitals: { hr: 110, bp: "120/80", spo2: 92, rr: 22, consciousness: "Alert" },
@@ -1028,7 +1095,7 @@
                 situation: "Patient is unconscious with severe bleeding. What is your immediate priority?",
                 options: [
                     "Check airway and breathing",
-                    "Apply direct pressure to wound", 
+                    "Apply direct pressure to wound",
                     "Check for pulse and circulation"
                 ],
                 correct: 0,
@@ -1071,10 +1138,10 @@
         let currentDecisionIndex = 0;
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Set up scenario selection
             document.querySelectorAll('.scenario-item').forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     document.querySelectorAll('.scenario-item').forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
                     currentScenario = this.dataset.scenario;
@@ -1096,20 +1163,20 @@
             selectedTool = tool;
             document.querySelectorAll('.tool-item').forEach(item => item.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
-            
+
             showFeedback(`Selected: ${tool.charAt(0).toUpperCase() + tool.slice(1)}`, 'info');
         }
 
         function selectPatient(patientId) {
             if (!simulationActive) return;
-            
+
             currentPatient = patientId;
             updatePatientVitals(patientId);
-            
+
             // Highlight selected patient
             document.querySelectorAll('.patient').forEach(p => p.classList.remove('selected'));
             document.querySelector(`[data-patient="${patientId}"]`).classList.add('selected');
-            
+
             // Show decision prompt based on patient condition
             showPatientDecision(patientId);
         }
@@ -1117,7 +1184,7 @@
         function updatePatientVitals(patientId) {
             const patient = patientData[patientId];
             const vitalsDiv = document.getElementById('patientVitals');
-            
+
             vitalsDiv.innerHTML = `
                 <h4 style="margin-bottom: 15px; color: #fff;">${patient.name}</h4>
                 <div class="vital-row">
@@ -1148,7 +1215,7 @@
         }
 
         function getVitalClass(value, type) {
-            switch(type) {
+            switch (type) {
                 case 'hr':
                     if (value < 60 || value > 120) return 'critical';
                     if (value < 70 || value > 100) return 'warning';
@@ -1171,7 +1238,7 @@
             let prompt = "";
             let options = [];
 
-            switch(patient.condition) {
+            switch (patient.condition) {
                 case 'critical':
                     prompt = "Critical patient with life-threatening injuries. Immediate action required:";
                     options = [
@@ -1205,10 +1272,10 @@
             const prompt = document.getElementById('actionPrompt');
             const promptText = document.getElementById('promptText');
             const optionsContainer = prompt.querySelector('.prompt-options');
-            
+
             promptText.textContent = text;
             optionsContainer.innerHTML = '';
-            
+
             options.forEach((option, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-button';
@@ -1216,14 +1283,14 @@
                 btn.onclick = () => makeDecision(index + 1);
                 optionsContainer.appendChild(btn);
             });
-            
+
             prompt.style.display = 'block';
         }
 
         function makeDecision(choice) {
             decisionCount++;
             const patient = patientData[currentPatient];
-            
+
             // Simulate decision evaluation based on patient priority and choice
             let isCorrect = false;
             let points = 0;
@@ -1260,22 +1327,22 @@
 
             if (isCorrect) correctDecisions++;
             score += points;
-            
+
             // Mark patient as treated
             const patientElement = document.querySelector(`[data-patient="${currentPatient}"]`);
             patientElement.style.opacity = '0.6';
             patientElement.style.border = '2px solid #4caf50';
-            
+
             patientsTreated++;
             if (isCorrect && patient.condition === 'critical') {
                 livesSaved++;
             }
-            
+
             updateHUD();
             showFeedback(message, isCorrect ? 'success' : 'warning');
-            
+
             document.getElementById('actionPrompt').style.display = 'none';
-            
+
             // Check if all patients are treated
             if (patientsTreated >= scenarios[currentScenario].patients.length) {
                 setTimeout(endSimulation, 2000);
@@ -1287,7 +1354,7 @@
             simulationActive = true;
             document.getElementById('simulationArea').classList.add('simulation-active');
             document.getElementById('vrHUD').style.display = 'block';
-            
+
             // Reset stats
             score = 0;
             patientsTreated = 0;
@@ -1295,13 +1362,13 @@
             decisionCount = 0;
             correctDecisions = 0;
             timeLeft = scenarios[currentScenario].timeLimit;
-            
+
             updateHUD();
             startTimer();
             updateProgress(0);
-            
+
             showFeedback('🥽 VR First Responder Training Started! Assess patients quickly using triage principles.', 'info');
-            
+
             // Show first instruction after a moment
             setTimeout(() => {
                 showDecisionPrompt(
@@ -1319,7 +1386,7 @@
             simulationTimer = setInterval(() => {
                 timeLeft--;
                 updateTimeDisplay();
-                
+
                 if (timeLeft <= 0) {
                     endSimulation();
                 }
@@ -1329,7 +1396,7 @@
         function updateTimeDisplay() {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
-            document.getElementById('timeRemaining').textContent = 
+            document.getElementById('timeRemaining').textContent =
                 `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
@@ -1341,14 +1408,14 @@
 
         function updateProgress(percentage) {
             document.getElementById('progressFill').style.width = percentage + '%';
-            
+
             let progressText = '';
             if (percentage < 25) progressText = 'Beginning assessment...';
             else if (percentage < 50) progressText = 'Triage in progress...';
             else if (percentage < 75) progressText = 'Treating patients...';
             else if (percentage < 100) progressText = 'Stabilizing critical cases...';
             else progressText = 'Training complete!';
-            
+
             document.getElementById('progressText').textContent = progressText;
         }
 
@@ -1365,19 +1432,19 @@
 
         function resetSimulation() {
             if (simulationTimer) clearInterval(simulationTimer);
-            
+
             simulationActive = false;
             document.getElementById('simulationArea').classList.remove('simulation-active');
             document.getElementById('vrHUD').style.display = 'none';
             document.getElementById('actionPrompt').style.display = 'none';
-            
+
             // Reset all patients
             document.querySelectorAll('.patient').forEach(p => {
                 p.style.opacity = '1';
                 p.style.border = '2px solid #333';
                 p.classList.remove('selected');
             });
-            
+
             // Reset stats
             score = 0;
             patientsTreated = 0;
@@ -1385,31 +1452,31 @@
             decisionCount = 0;
             correctDecisions = 0;
             timeLeft = scenarios[currentScenario].timeLimit;
-            
+
             updateProgress(0);
             updateTimeDisplay();
             updateHUD();
-            
+
             showFeedback('Simulation Reset', 'info');
         }
 
         function endSimulation() {
             if (simulationTimer) clearInterval(simulationTimer);
             simulationActive = false;
-            
+
             document.getElementById('actionPrompt').style.display = 'none';
-            
+
             const accuracy = decisionCount > 0 ? Math.round((correctDecisions / decisionCount) * 100) : 0;
             const progressPercentage = Math.round((patientsTreated / scenarios[currentScenario].patients.length) * 100);
-            
+
             updateProgress(100);
-            
+
             let performance = '';
             if (accuracy >= 90 && livesSaved >= 2) performance = 'OUTSTANDING! 🌟';
             else if (accuracy >= 75 && livesSaved >= 1) performance = 'EXCELLENT! 🏆';
             else if (accuracy >= 60) performance = 'GOOD WORK! 👍';
             else performance = 'NEEDS IMPROVEMENT 📚';
-            
+
             const report = `
 VR TRAINING COMPLETE!
 
@@ -1424,9 +1491,9 @@ ${performance}
 
 Training data has been saved to your profile.
             `;
-            
+
             alert(report);
-            
+
             // Auto-reset after showing results
             setTimeout(resetSimulation, 2000);
         }
@@ -1443,23 +1510,23 @@ Training data has been saved to your profile.
         function showFeedback(message, type = 'success') {
             const feedback = document.createElement('div');
             feedback.className = 'feedback-toast';
-            
-            const icon = type === 'success' ? 'fa-check-circle' : 
-                        type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
-            
+
+            const icon = type === 'success' ? 'fa-check-circle' :
+                type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+
             feedback.innerHTML = `
                 <i class="fas ${icon}"></i>
                 <span>${message}</span>
             `;
-            
+
             if (type === 'warning') {
                 feedback.style.background = 'var(--warning)';
             } else if (type === 'info') {
                 feedback.style.background = 'var(--primary)';
             }
-            
+
             document.body.appendChild(feedback);
-            
+
             setTimeout(() => {
                 feedback.remove();
             }, 3000);
@@ -1467,7 +1534,21 @@ Training data has been saved to your profile.
 
         function goBack() {
             if (confirm('Are you sure you want to exit the VR Simulator? Any unsaved progress will be lost.')) {
-                window.location.href = '../sandbox-simulator.html';
+                // Stop any running simulation timers
+                if (typeof simulationTimer !== 'undefined' && simulationTimer) clearInterval(simulationTimer);
+
+                // Exit fullscreen if active, then navigate back to sandbox
+                const navigateBack = () => {
+                    // Use assign for a reliable navigation
+                    window.location.assign('../sandbox-simulator.html');
+                };
+
+                if (document.fullscreenElement) {
+                    document.exitFullscreen().finally(navigateBack);
+                } else {
+                    // small delay to ensure any UI cleanup completes
+                    setTimeout(navigateBack, 200);
+                }
             }
         }
 
@@ -1482,9 +1563,9 @@ Training data has been saved to your profile.
         }
 
         // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (simulationActive) {
-                switch(e.key) {
+                switch (e.key) {
                     case '1':
                     case '2':
                     case '3':
@@ -1515,10 +1596,11 @@ Training data has been saved to your profile.
                 z-index: 10;
             }
         `;
-        
+
         const style = document.createElement('style');
         style.textContent = additionalCSS;
         document.head.appendChild(style);
     </script>
 </body>
+
 </html>
