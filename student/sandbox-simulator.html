@@ -2230,7 +2230,8 @@
                 <h1>ResQ</h1>
             </div>
             <div class="menu-items">
-                <div class="menu-item"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item" data-link="dashboard-student.html"><i
+                        class="fas fa-home"></i><span>Dashboard</span></div>
                 <div class="menu-item dropdown-menu" id="educationDropdown">
                     <div class="menu-item-main">
                         <i class="fas fa-book"></i><span>Education Modules</span>
@@ -2249,7 +2250,8 @@
                 <div class="menu-item" data-link="drill_schedule.html"><i
                         class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
                 <div class="menu-item" data-link="advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster
-                        Map</span></div>
+                        Map</span>
+                </div>
                 <div class="menu-item" data-link="chatbot.html"><i class="fas fa-robot"></i><span>AI Helper</span></div>
                 <div class="menu-item" data-link="gamified-learning.html"><i
                         class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
@@ -3404,6 +3406,15 @@
 
         // Initialize menu navigation
         function initializeMenuNavigation() {
+            // Add click handlers for all menu items
+            document.querySelectorAll('.menu-item:not(.dropdown-menu)').forEach(item => {
+                item.addEventListener('click', function () {
+                    const targetPage = this.getAttribute('data-link');
+                    if (targetPage) {
+                        window.location.href = targetPage;
+                    }
+                });
+            });
             const menuItems = document.querySelectorAll('.menu-item:not(.dropdown-menu)');
             const educationDropdown = document.getElementById('educationDropdown');
 
@@ -3421,34 +3432,12 @@
                 'Settings': 'settings.html'
             };
 
+            // made changes 
             menuItems.forEach(item => {
-                if (item.id !== 'educationDropdown' && !item.classList.contains('dropdown-item')) {
-                    item.addEventListener('click', function () {
-                        // Update active state
-                        menuItems.forEach(i => i.classList.remove('active'));
-                        this.classList.add('active');
-
-                        // Get the menu item text
-                        const menuText = this.querySelector('span').textContent.trim();
-                        const targetPage = pageMapping[menuText];
-
-                        if (targetPage && menuText !== 'Sandbox Simulator') {
-                            // Navigate to page (don't navigate if current page)
-                            navigateToPage(targetPage, menuText);
-                        }
-                    });
-                }
-
-                // Add hover effect
-                item.addEventListener('mouseenter', function () {
-                    if (!this.classList.contains('active')) {
-                        this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
-                    }
-                });
-
-                item.addEventListener('mouseleave', function () {
-                    if (!this.classList.contains('active')) {
-                        this.style.backgroundColor = '';
+                item.addEventListener('click', function () {
+                    const targetPage = item.getAttribute('data-link');
+                    if (targetPage) {
+                        window.location.href = targetPage;
                     }
                 });
             });
@@ -3504,24 +3493,11 @@
             }
         }
 
-        function navigateToPage(targetPage, menuText) {
-            // Show loading indicator
-            showLoadingIndicator();
-
-            // Add smooth transition
-            document.body.style.opacity = '0.8';
-            document.body.style.transition = 'opacity 0.3s ease';
-
-            setTimeout(() => {
-                try {
-                    window.location.href = targetPage;
-                } catch (error) {
-                    console.error('Navigation error:', error);
-                    hideLoadingIndicator();
-                    showNavigationError(menuText);
-                    document.body.style.opacity = '1';
-                }
-            }, 300);
+        // made changes 
+        function navigateToPage(targetPage) {
+            if (targetPage) {
+                window.location.href = targetPage;
+            }
         }
 
         function showLoadingIndicator() {
