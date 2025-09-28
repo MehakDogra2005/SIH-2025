@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR Campus Evacuation Simulator - ResQ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #1a73e8;
@@ -171,8 +174,17 @@
         }
 
         @keyframes pulse-route {
-            0%, 100% { opacity: 0.7; transform: scaleY(1); }
-            50% { opacity: 1; transform: scaleY(1.5); }
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: scaleY(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scaleY(1.5);
+            }
         }
 
         /* Safe Zones */
@@ -197,8 +209,17 @@
         }
 
         @keyframes pulse-safe {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
-            50% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(76, 175, 80, 0); }
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+            }
+
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 20px rgba(76, 175, 80, 0);
+            }
         }
 
         .zone-1 {
@@ -236,8 +257,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .marker-1 {
@@ -274,14 +302,37 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.6; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0.6;
+            }
         }
 
-        .person-1 { top: 35%; left: 30%; }
-        .person-2 { top: 45%; left: 70%; }
-        .person-3 { bottom: 40%; left: 40%; }
-        .person-4 { top: 55%; right: 40%; }
+        .person-1 {
+            top: 35%;
+            left: 30%;
+        }
+
+        .person-2 {
+            top: 45%;
+            left: 70%;
+        }
+
+        .person-3 {
+            bottom: 40%;
+            left: 40%;
+        }
+
+        .person-4 {
+            top: 55%;
+            right: 40%;
+        }
 
         /* AR HUD */
         .ar-hud {
@@ -334,8 +385,15 @@
         }
 
         @keyframes slideDown {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .instruction-title {
@@ -404,8 +462,15 @@
         }
 
         @keyframes alertPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
         }
 
         /* AR Success Animation */
@@ -429,9 +494,17 @@
         }
 
         @keyframes successBounce {
-            0% { transform: translate(-50%, -50%) scale(0); }
-            60% { transform: translate(-50%, -50%) scale(1.2); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+
+            60% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
 
         /* Responsive Design */
@@ -510,8 +583,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .loading-text {
@@ -535,11 +613,17 @@
         }
 
         @keyframes loadProgress {
-            0% { width: 0%; }
-            100% { width: 100%; }
+            0% {
+                width: 0%;
+            }
+
+            100% {
+                width: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- Loading Screen -->
     <div class="ar-loading" id="arLoading">
@@ -548,7 +632,8 @@
         <div class="loading-progress">
             <div class="loading-bar"></div>
         </div>
-        <p style="margin-top: 15px; opacity: 0.7; font-size: 0.9rem;">Setting up campus mapping and evacuation routes...</p>
+        <p style="margin-top: 15px; opacity: 0.7; font-size: 0.9rem;">Setting up campus mapping and evacuation routes...
+        </p>
     </div>
 
     <!-- AR Header -->
@@ -663,7 +748,8 @@
             <div class="instruction-title">AR Navigation Guide</div>
             <div class="instruction-text">
                 • Tap <span style="color: #64b5f6;">blue markers</span> for evacuation info<br>
-                • Guide <span style="color: #f9a825;">yellow people</span> to <span style="color: #4caf50;">green safe zones</span><br>
+                • Guide <span style="color: #f9a825;">yellow people</span> to <span style="color: #4caf50;">green safe
+                    zones</span><br>
                 • Follow the <span style="color: #4caf50;">green evacuation routes</span><br>
                 • Complete evacuation within time limit
             </div>
@@ -694,10 +780,10 @@
         function startSimulation() {
             simulationActive = true;
             startTime = Date.now();
-            
+
             // Start timer
             timer = setInterval(updateTimer, 1000);
-            
+
             // Hide scenario alert after 5 seconds
             setTimeout(() => {
                 const alert = document.getElementById('scenarioAlert');
@@ -705,7 +791,7 @@
                 alert.style.opacity = '0';
                 setTimeout(() => alert.style.display = 'none', 500);
             }, 5000);
-            
+
             // Hide instructions after 10 seconds
             setTimeout(() => {
                 const instructions = document.getElementById('arInstructions');
@@ -718,14 +804,14 @@
         // Update Timer
         function updateTimer() {
             if (!simulationActive || !startTime) return;
-            
+
             const elapsed = Date.now() - startTime;
             const minutes = Math.floor(elapsed / 60000);
             const seconds = Math.floor((elapsed % 60000) / 1000);
-            
-            document.getElementById('timeElapsed').textContent = 
+
+            document.getElementById('timeElapsed').textContent =
                 `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
+
             updateEfficiency();
         }
 
@@ -736,7 +822,7 @@
             const timeScore = Math.max(0, (maxTime - timeElapsed) / maxTime);
             const evacuationScore = peopleEvacuated / totalPeople;
             const zoneScore = safeZonesDiscovered / 3;
-            
+
             const efficiency = Math.round((timeScore * 0.4 + evacuationScore * 0.4 + zoneScore * 0.2) * 100);
             document.getElementById('efficiency').textContent = `${Math.max(0, efficiency)}%`;
         }
@@ -744,17 +830,17 @@
         // Interact with Safe Zone
         function interactWithSafeZone(zoneId) {
             if (!simulationActive) return;
-            
+
             createRippleEffect(event);
-            
+
             if (!discoveredZones.has(zoneId)) {
                 discoveredZones.add(zoneId);
                 safeZonesDiscovered++;
                 document.getElementById('safeZonesFound').textContent = `${safeZonesDiscovered}/3`;
-                
+
                 // Show feedback
                 showARFeedback(`Safe Zone ${zoneId} Discovered!`, 'success');
-                
+
                 // Check completion
                 checkCompletion();
             } else {
@@ -765,41 +851,41 @@
         // Interact with AR Marker
         function interactWithMarker(markerId) {
             if (!simulationActive) return;
-            
+
             createRippleEffect(event);
-            
+
             const markerInfo = {
                 1: "Emergency Exit: 25m straight ahead. Capacity: 50 people",
                 2: "Assembly Point: Turn right and proceed 100m to open courtyard",
                 3: "Alternative Route: Stairs blocked, use elevator or west exit"
             };
-            
+
             showARFeedback(markerInfo[markerId], 'info');
         }
 
         // Evacuate Person
         function evacuatePerson(personId) {
             if (!simulationActive) return;
-            
+
             createRippleEffect(event);
-            
+
             if (!evacuatedPeople.has(personId)) {
                 evacuatedPeople.add(personId);
                 peopleEvacuated++;
                 document.getElementById('peopleEvacuated').textContent = peopleEvacuated;
-                
+
                 // Hide the person
                 const personElement = document.querySelector(`.person-${personId}`);
                 personElement.style.transition = 'all 0.5s ease';
                 personElement.style.transform = 'scale(0)';
                 personElement.style.opacity = '0';
-                
+
                 setTimeout(() => {
                     personElement.style.display = 'none';
                 }, 500);
-                
+
                 showARFeedback(`Person ${personId} evacuated safely!`, 'success');
-                
+
                 // Check completion
                 checkCompletion();
             }
@@ -809,15 +895,15 @@
         function createRippleEffect(event) {
             const ripple = document.createElement('div');
             ripple.className = 'interaction-ripple';
-            
+
             const rect = event.target.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
             ripple.style.width = ripple.style.height = size + 'px';
             ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
             ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
-            
+
             event.target.appendChild(ripple);
-            
+
             setTimeout(() => {
                 ripple.remove();
             }, 1000);
@@ -830,9 +916,9 @@
                 position: fixed;
                 top: 100px;
                 right: 20px;
-                background: ${type === 'success' ? 'rgba(76, 175, 80, 0.9)' : 
-                            type === 'warning' ? 'rgba(255, 152, 0, 0.9)' : 
-                            'rgba(33, 150, 243, 0.9)'};
+                background: ${type === 'success' ? 'rgba(76, 175, 80, 0.9)' :
+                    type === 'warning' ? 'rgba(255, 152, 0, 0.9)' :
+                        'rgba(33, 150, 243, 0.9)'};
                 color: white;
                 padding: 12px 20px;
                 border-radius: 25px;
@@ -846,10 +932,10 @@
                 max-width: 300px;
                 text-align: center;
             `;
-            
+
             feedback.textContent = message;
             document.body.appendChild(feedback);
-            
+
             setTimeout(() => {
                 feedback.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => feedback.remove(), 300);
@@ -867,15 +953,15 @@
         function completeSimulation() {
             simulationActive = false;
             clearInterval(timer);
-            
+
             // Show success animation
             const successAnim = document.getElementById('successAnimation');
             successAnim.style.display = 'block';
-            
+
             // Calculate final score
             const timeElapsed = (Date.now() - startTime) / 1000;
             const finalEfficiency = document.getElementById('efficiency').textContent;
-            
+
             setTimeout(() => {
                 alert(`🎉 MISSION ACCOMPLISHED! 🎉
 
@@ -887,7 +973,7 @@
 Excellent work! You've successfully completed the AR Campus Evacuation Simulation.
 
 Your performance will be saved to your profile.`);
-                
+
                 // Ask if user wants to try again or return
                 if (confirm('Would you like to try again with a different scenario?')) {
                     resetSimulation();
@@ -901,19 +987,19 @@ Your performance will be saved to your profile.`);
         function resetSimulation() {
             simulationActive = false;
             if (timer) clearInterval(timer);
-            
+
             // Reset counters
             peopleEvacuated = 0;
             safeZonesDiscovered = 0;
             evacuatedPeople.clear();
             discoveredZones.clear();
-            
+
             // Reset UI
             document.getElementById('peopleEvacuated').textContent = '0';
             document.getElementById('timeElapsed').textContent = '00:00';
             document.getElementById('safeZonesFound').textContent = '0/3';
             document.getElementById('efficiency').textContent = '0%';
-            
+
             // Show all people again
             document.querySelectorAll('.person-icon').forEach(person => {
                 person.style.display = 'flex';
@@ -921,22 +1007,22 @@ Your performance will be saved to your profile.`);
                 person.style.opacity = '1';
                 person.style.transition = 'none';
             });
-            
+
             // Hide success animation
             document.getElementById('successAnimation').style.display = 'none';
-            
+
             // Show scenario alert again
             const alert = document.getElementById('scenarioAlert');
             alert.style.display = 'block';
             alert.style.opacity = '1';
             alert.style.transition = 'none';
-            
+
             // Show instructions again
             const instructions = document.getElementById('arInstructions');
             instructions.style.display = 'block';
             instructions.style.opacity = '1';
             instructions.style.transition = 'none';
-            
+
             // Restart simulation
             setTimeout(() => {
                 startSimulation();
@@ -949,7 +1035,7 @@ Your performance will be saved to your profile.`);
                 simulationActive = false;
                 clearInterval(timer);
                 showARFeedback('Simulation Paused', 'info');
-                
+
                 // Change pause button to resume
                 const pauseBtn = document.querySelector('[onclick="pauseSimulation()"]');
                 pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
@@ -962,7 +1048,7 @@ Your performance will be saved to your profile.`);
             simulationActive = true;
             timer = setInterval(updateTimer, 1000);
             showARFeedback('Simulation Resumed', 'success');
-            
+
             // Change resume button back to pause
             const resumeBtn = document.querySelector('[onclick="resumeSimulation()"]');
             resumeBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
@@ -987,9 +1073,9 @@ Your performance will be saved to your profile.`);
                 // Stop simulation
                 simulationActive = false;
                 if (timer) clearInterval(timer);
-                
-                // Navigate back to sandbox simulator
-                window.location.href = 'sandbox-simulator.html';
+
+                // Navigate back to sandbox simulator (one level up)
+                window.location.href = '../sandbox-simulator.html';
             }
         }
 
@@ -1005,7 +1091,7 @@ Your performance will be saved to your profile.`);
                 to { transform: translateX(100%); opacity: 0; }
             }
         `;
-        
+
         const style = document.createElement('style');
         style.textContent = additionalCSS;
         document.head.appendChild(style);
@@ -1014,14 +1100,14 @@ Your performance will be saved to your profile.`);
         window.addEventListener('DOMContentLoaded', initializeAR);
 
         // Handle page visibility changes
-        document.addEventListener('visibilitychange', function() {
+        document.addEventListener('visibilitychange', function () {
             if (document.hidden && simulationActive) {
                 pauseSimulation();
             }
         });
 
         // Prevent accidental navigation
-        window.addEventListener('beforeunload', function(e) {
+        window.addEventListener('beforeunload', function (e) {
             if (simulationActive) {
                 e.preventDefault();
                 e.returnValue = 'You have an active AR simulation. Are you sure you want to leave?';
@@ -1030,4 +1116,5 @@ Your performance will be saved to your profile.`);
         });
     </script>
 </body>
+
 </html>
