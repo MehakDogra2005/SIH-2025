@@ -694,6 +694,7 @@
                 max-height: 0;
                 opacity: 0;
             }
+
             to {
                 max-height: 200px;
                 opacity: 1;
@@ -712,7 +713,8 @@
 
         .submenu-item {
             display: none;
-            padding-left: 40px; /* Indent submenu items more */
+            padding-left: 40px;
+            /* Indent submenu items more */
             margin-left: 10px;
             border-left: 2px solid rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.05);
@@ -736,6 +738,7 @@
                 transform: translateY(-10px);
                 max-height: 0;
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -771,7 +774,8 @@
                 <h1>JeevanSetu</h1>
             </div>
             <div class="menu-items">
-                <div class="menu-item" data-link="/student/dashboard-student.html"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item" data-link="/student/dashboard-student.html"><i
+                        class="fas fa-home"></i><span>Dashboard</span></div>
                 <div class="menu-item accordion-trigger" id="educationAccordion">
                     <i class="fas fa-book"></i><span>Education Modules</span>
                     <i class="fas fa-chevron-down accordion-arrow"></i>
@@ -782,14 +786,27 @@
                 <div class="menu-item submenu-item" data-link="education-modules.html">
                     <i class="fas fa-graduation-cap"></i><span>Learning Modules</span>
                 </div>
-                <div class="menu-item" data-link="sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></div>
-                <div class="menu-item active" data-link="/emergency_contacts.html"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
-                <div class="menu-item" data-link="/student/drill_schedule.html"><i class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
-                <div class="menu-item" data-link="/advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></div>
-                <div class="menu-item" data-link="chatbot.html"><i class="fas fa-robot"></i><span>AI Helper</span></div>
-                <div class="menu-item" data-link="gamified-learning.html"><i class="fas fa-graduation-cap"></i><span>Gamified Learning</span></div>
+
+                <div class="menu-item" data-link="sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox
+                        Simulator</span></div>
+                <div class="menu-item active" data-link="emergency_contacts.html"><i
+                        class="fas fa-phone-alt"></i><span>Emergency Contacts</span></div>
+                <div class="menu-item" data-link="drill_schedule.html"><i
+                        class="fa-solid fa-calendar-days"></i><span>Drill Schedule</span></div>
+                <div class="menu-item" onclick="window.location.href='advanced-map.html'" data-link="advanced-map.html">
+                    <i class="fas fa-map-marked-alt"></i><span>Disaster
+                        Map</span>
+                </div>
+                <div class="menu-item" onclick="window.location.href='chatbot.html'" data-link="chatbot.html"><i
+                        class="fas fa-robot"></i><span>AI
+                        Helper</span></div>
+                <div class="menu-item" onclick="window.location.href='gamified-learning.html'"
+                    data-link="gamified-learning.html"><i class="fas fa-graduation-cap"></i><span>Gamified
+                        Learning</span></div>
+               
                 <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
-                <div class="menu-item" data-link="/student/settings.html"><i class="fas fa-cog"></i><span>Settings</span></div>
+                <div class="menu-item" data-link="/student/settings.html"><i
+                        class="fas fa-cog"></i><span>Settings</span></div>
             </div>
 
             <!-- User Profile at Bottom -->
@@ -1034,15 +1051,15 @@
 
             // Define page mappings for each menu item
             const pageMapping = {
-                'Dashboard': '/student/dashboard-student.html',
-                'Sandbox Simulator': '/student/sandbox-simulator.html',
-                'Emergency Contacts': '../emergency_contacts.html',
-                'Drill Schedule': '../drill_schedule.html',
-                'Disaster Map': '../advanced-map.html',
-                'AI Helper': '/student/chatbot.html',
-                'Gamified Learning': '/student/gamified-learning.html',
+                'Dashboard': 'dashboard-student.html',
+                'Sandbox Simulator': 'sandbox-simulator.html',
+                'Emergency Contacts': 'emergency_contacts.html',
+                'Drill Schedule': 'drill_schedule.html',
+                'Disaster Map': 'advanced-map.html',
+                'AI Helper': 'chatbot.html',
+                'Gamified Learning': 'gamified-learning.html',
                 'Profile & Badges': 'profile-badges.html',
-                'Settings': '/student/settings.html'
+                'Settings': 'settings.html'
             };
 
             // Handle regular menu items (excluding accordion trigger and submenu items)
@@ -1077,13 +1094,13 @@
 
             // Handle submenu items separately
             submenuItems.forEach(item => {
-                item.addEventListener('click', function(e) {
+                item.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    
+
                     // Update active state
                     document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     const link = this.getAttribute('data-link');
                     if (link) {
                         const menuText = this.querySelector('span').textContent.trim();
@@ -1305,20 +1322,20 @@
         // Initialize accordion functionality
         function initializeAccordion() {
             const accordionTrigger = document.getElementById('educationAccordion');
-            
+
             if (accordionTrigger) {
-                accordionTrigger.addEventListener('click', function(e) {
+                accordionTrigger.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    
+
                     console.log('Education Modules accordion clicked');
-                    
+
                     // Toggle the accordion state
                     this.classList.toggle('accordion-active');
-                    
+
                     // Get all submenu items
                     const submenuItems = document.querySelectorAll('.submenu-item');
-                    
+
                     // Toggle visibility of submenu items
                     submenuItems.forEach(item => {
                         if (this.classList.contains('accordion-active')) {
@@ -1327,17 +1344,17 @@
                             item.classList.remove('show');
                         }
                     });
-                    
+
                     console.log('Accordion state:', this.classList.contains('accordion-active') ? 'expanded' : 'collapsed');
                 });
             }
         }
 
         // Close accordion when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const accordionTrigger = document.getElementById('educationAccordion');
             const menuItems = document.querySelector('.menu-items');
-            
+
             // Only close if clicking outside the entire menu area
             if (accordionTrigger && !menuItems.contains(e.target)) {
                 accordionTrigger.classList.remove('accordion-active');
