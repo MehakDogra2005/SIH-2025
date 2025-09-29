@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeevansetu - Evacuation Plan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        :root {
+            --primary: #1a73e8;
+            --secondary: #0b4fa3;
+            --accent: #ff6b35;
+            --light: #f5f7f9;
+            --dark: #2c3e50;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+        .logo {
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .logo h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        .logo span span {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        .nav-menu {
+            list-style: none;
+            padding: 15px 0;
+        }
+        .nav-item {
+            margin: 5px 0;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+        .nav-link i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        .user-section {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .user-details {
+            flex: 1;
+        }
+        .user-name {
+            font-weight: 600;
+        }
+        .user-role {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 20px;
+        }
+        .welcome h2 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        .welcome p {
+            color: var(--gray);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .page-title h2 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        .page-title p {
+            color: var(--gray);
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+        .btn i {
+            margin-right: 8px;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        /* Selection Panel Styles */
+        .selection-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        .section-header {
+            margin-bottom: 20px;
+        }
+        .section-title {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .building-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .building-tab {
+            flex: 1;
+            min-width: 120px;
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .building-tab:hover {
+            background-color: #e3e9f1;
+        }
+        .building-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        .building-tab i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        .floor-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .floor-btn {
+            padding: 10px 15px;
+            background-color: var(--light);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .floor-btn:hover {
+            background-color: #e3e9f1;
+        }
+        .floor-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        .legend-route {
+            background-color: var(--danger);
+        }
+        .legend-exit {
+            background-color: var(--success);
+        }
+        .legend-room {
+            background-color: var(--primary);
+        }
+        .legend-selected {
+            background-color: var(--accent);
+        }
+        .legend-path {
+            background-color: #ffc107;
+        }
+        .legend-danger {
+            background-color: var(--danger);
+        }
+        /* Map Container Styles */
+        .map-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        .map-content {
+            position: relative;
+            height: 600px;
+            overflow: hidden;
+            background-color: #e9f2fc;
+        }
+        .floor-svg {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        .floor-svg.active {
+            display: block;
+        }
+        .location-info {
+            position: absolute;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 30;
+            display: none;
+            max-width: 200px;
+            font-size: 0.9rem;
+        }
+        /* SVG Marker Styles */
+        .room-marker {
+            fill: var(--primary);
+            stroke: white;
+            stroke-width: 2;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .room-marker:hover {
+            fill: var(--secondary);
+            transform: scale(1.2);
+        }
+        .room-marker.selected {
+            fill: var(--accent);
+            transform: scale(1.3);
+        }
+        .exit-marker {
+            fill: var(--success);
+            stroke: white;
+            stroke-width: 2;
+            cursor: pointer;
+        }
+        .evacuation-path {
+            stroke: #ffc107;
+            stroke-width: 4;
+            stroke-dasharray: 5, 5;
+            fill: none;
+            animation: pathAnimation 1s linear infinite;
+        }
+        @keyframes pathAnimation {
+            from {
+                stroke-dashoffset: 10;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        .danger-zone {
+            fill: rgba(220, 53, 69, 0.3);
+            stroke: var(--danger);
+            stroke-width: 2;
+            stroke-dasharray: 4, 4;
+        }
+        /* Instructions Panel Styles */
+        .instructions-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        .instruction-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        .instruction-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .instruction-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .instruction-icon i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        .instruction-content h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        .instruction-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        /* Footer Styles */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            .sidebar .logo span, .sidebar .nav-link span, .sidebar .user-details {
+                display: none;
+            }
+            .sidebar .logo {
+                padding: 20px 10px;
+                text-align: center;
+            }
+            .sidebar .logo h1 {
+                justify-content: center;
+            }
+            .main-content {
+                margin-left: 70px;
+            }
+            .building-tabs {
+                flex-direction: column;
+            }
+            .floor-selector {
+                justify-content: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 10px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .user-info {
+                margin-top: 10px;
+            }
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .page-title .btn {
+                margin-top: 10px;
+            }
+            .map-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .map-header .btn {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="dashboard-student.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="education-modules.html" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>Education Modules</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="sandbox-simulator.html" class="nav-link">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Sandbox Simulator</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="emergency_contacts.html" class="nav-link">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>Emergency Contacts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="dos&donts.html" class="nav-link">
+                    <i class="fas fa-list-check"></i>
+                    <span>Do's & Don'ts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="drill_schedule.html" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Drill Schedule</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="evacuation-plan.html" class="nav-link active">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Disaster Map</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="chatbot.html" class="nav-link">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Helper</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="gamified-learning.html" class="nav-link">
+                    <i class="fas fa-trophy"></i>
+                    <span>Gamified Learning</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+        <div class="user-section">
+            <div class="user-avatar">P</div>
+            <div class="user-details">
+                <div class="user-name">Priya Sharma</div>
+                <div class="user-role">Student</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="header">
+            <div class="welcome">
+                <h2>Welcome back, Priya!</h2>
+                <p>View evacuation routes for CSE, Admin, IT, and Hostel blocks</p>
+            </div>
+            <div class="user-info">
+                <div class="user-img">P</div>
+            </div>
+        </div>
+        <div class="page-title">
+            <div>
+                <h2>Disaster Map - Evacuation Plan</h2>
+                <p>Select a building and floor to view evacuation routes</p>
+            </div>
+            <button class="btn btn-primary">
+                <i class="fas fa-download"></i> Download Plan
+            </button>
+        </div>
+        <div class="selection-panel">
+            <div class="section-header">
+                <h3 class="section-title">Select Building & Floor</h3>
+                <p class="section-subtitle">Choose one of the four main blocks and a floor level</p>
+            </div>
+            <div class="building-tabs">
+                <div class="building-tab active" data-building="cse">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>CSE Block</span>
+                </div>
+                <div class="building-tab" data-building="admin">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Admin Block</span>
+                </div>
+                <div class="building-tab" data-building="it">
+                    <i class="fas fa-server"></i>
+                    <span>IT Block</span>
+                </div>
+                <div class="building-tab" data-building="hostel">
+                    <i class="fas fa-bed"></i>
+                    <span>Hostel Block</span>
+                </div>
+            </div>
+            <div class="floor-selector">
+                <button class="floor-btn active" data-floor="ground">Ground Floor</button>
+                <button class="floor-btn" data-floor="first">First Floor</button>
+                <button class="floor-btn" data-floor="second">Second Floor</button>
+                <button class="floor-btn" data-floor="third">Third Floor</button>
+            </div>
+            <button class="btn btn-primary" id="showRoute">
+                <i class="fas fa-route"></i> Show Evacuation Route
+            </button>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color legend-route"></div><span>Evacuation Route</span></div>
+                <div class="legend-item"><div class="legend-color legend-exit"></div><span>Emergency Exit</span></div>
+                <div class="legend-item"><div class="legend-color legend-room"></div><span>Room/Area</span></div>
+                <div class="legend-item"><div class="legend-color legend-selected"></div><span>Your Location</span></div>
+                <div class="legend-item"><div class="legend-color legend-path"></div><span>Calculated Path</span></div>
+                <div class="legend-item"><div class="legend-color legend-danger"></div><span>Danger Zone</span></div>
+            </div>
+        </div>
+        <div class="map-container">
+            <div class="map-header">
+                <h3 class="section-title" id="mapTitle">CSE Block - Ground Floor Evacuation Map</h3>
+                <button class="btn btn-outline" id="resetMap">
+                    <i class="fas fa-sync-alt"></i> Reset View
+                </button>
+            </div>
+            <div class="map-content">
+                <!-- SVG maps will be loaded here -->
+                <div id="svg-container"></div>
+                <div class="location-info" id="locationInfo"></div>
+            </div>
+        </div>
+        <div class="instructions-panel">
+            <div class="section-header">
+                <h3 class="section-title">Evacuation Instructions</h3>
+                <p class="section-subtitle">Important guidelines to follow during evacuation</p>
+            </div>
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-route"></i>
+                </div>
+                <div class="instruction-content">
+                    <h4>Follow Marked Routes</h4>
+                    <p>Always follow the red-marked evacuation routes to the nearest emergency exit. Do not use elevators during evacuation.</p>
+                </div>
+            </div>
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="instruction-content">
+                    <h4>Assemble at Designated Points</h4>
+                    <p>After evacuation, proceed to the designated assembly points and avoid blocking emergency vehicle access routes.</p>
+                </div>
+            </div>
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-first-aid"></i>
+                </div>
+                <div class="instruction-content">
+                    <h4>Assist Those in Need</h4>
+                    <p>Help individuals with disabilities or mobility issues to evacuate safely. Report to emergency personnel if someone needs assistance.</p>
+                </div>
+            </div>
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <div class="instruction-content">
+                    <h4>Avoid Dangerous Actions</h4>
+                    <p>Do not re-enter the building until declared safe by authorities. Do not use open flames and avoid electrical switches if there is a gas leak suspicion.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Jeevansetu © 2025 | IGDTUW Evacuation Plan</p>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buildingTabs = document.querySelectorAll('.building-tab');
+            const floorBtns = document.querySelectorAll('.floor-btn');
+            const showRouteBtn = document.getElementById('showRoute');
+            const resetMapBtn = document.getElementById('resetMap');
+            const mapTitle = document.getElementById('mapTitle');
+            const svgContainer = document.getElementById('svg-container');
+            const locationInfo = document.getElementById('locationInfo');
+            
+            let selectedBuilding = 'cse';
+            let selectedFloor = 'ground';
+            let selectedRoom = null;
+            let currentSVG = null;
+            
+            // Building graph data - simplified representation of building layout
+            const buildingGraphs = {
+                'cse-ground': {
+                    rooms: [
+                        { id: 'lab101', name: 'Lab 101', x: 150, y: 120 },
+                        { id: 'faculty', name: 'Faculty Room', x: 300, y: 200 },
+                        { id: 'classroom', name: 'Classroom', x: 150, y: 280 },
+                        { id: 'server', name: 'Server Room', x: 450, y: 160 },
+                        { id: 'common', name: 'Common Area', x: 360, y: 280 }
+                    ],
+                    exits: [
+                        { id: 'exit1', name: 'Exit 1', x: 60, y: 90 },
+                        { id: 'exit2', name: 'Exit 2', x: 540, y: 90 },
+                        { id: 'exit3', name: 'Exit 3', x: 300, y: 340 }
+                    ],
+                    corridors: [
+                        { id: 'corridor1', points: [{x: 100, y: 160}, {x: 200, y: 160}, {x: 200, y: 240}, {x: 100, y: 240}] },
+                        { id: 'corridor2', points: [{x: 200, y: 160}, {x: 400, y: 160}, {x: 400, y: 240}, {x: 200, y: 240}] },
+                        { id: 'corridor3', points: [{x: 400, y: 160}, {x: 500, y: 160}, {x: 500, y: 240}, {x: 400, y: 240}] }
+                    ],
+                    dangerZones: [
+                        { id: 'danger1', x: 180, y: 120, width: 40, height: 30 },
+                        { id: 'danger2', x: 420, y: 200, width: 30, height: 40 }
+                    ]
+                }
+                // Add more floor data as needed
+            };
+            
+            // Building tab selection
+            buildingTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    buildingTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedBuilding = this.getAttribute('data-building');
+                    loadSVGMap();
+                });
+            });
+            
+            // Floor button selection
+            floorBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    floorBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedFloor = this.getAttribute('data-floor');
+                    loadSVGMap();
+                });
+            });
+            
+            // Load SVG map
+            function loadSVGMap() {
+                const mapKey = `${selectedBuilding}-${selectedFloor}`;
+                const svgPath = `maps/${selectedBuilding}_${selectedFloor}_floor_trace.svg`;
+                
+                // Clear previous SVG
+                svgContainer.innerHTML = '';
+                locationInfo.style.display = 'none';
+                selectedRoom = null;
+                
+                // Create SVG element
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.classList.add('floor-svg', 'active');
+                svg.setAttribute('width', '100%');
+                svg.setAttribute('height', '100%');
+                svg.setAttribute('viewBox', '0 0 600 400');
+                
+                // Add background (this would be your actual SVG content)
+                const background = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                background.setAttribute('width', '100%');
+                background.setAttribute('height', '100%');
+                background.setAttribute('fill', '#f8f9fa');
+                svg.appendChild(background);
+                
+                // Draw corridors
+                if (buildingGraphs[mapKey] && buildingGraphs[mapKey].corridors) {
+                    buildingGraphs[mapKey].corridors.forEach(corridor => {
+                        const corridorPath = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                        const points = corridor.points.map(p => `${p.x},${p.y}`).join(' ');
+                        corridorPath.setAttribute('points', points);
+                        corridorPath.setAttribute('fill', '#e9ecef');
+                        corridorPath.setAttribute('stroke', '#dee2e6');
+                        corridorPath.setAttribute('stroke-width', '1');
+                        svg.appendChild(corridorPath);
+                    });
+                }
+                
+                // Draw danger zones
+                if (buildingGraphs[mapKey] && buildingGraphs[mapKey].dangerZones) {
+                    buildingGraphs[mapKey].dangerZones.forEach(zone => {
+                        const dangerRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        dangerRect.setAttribute('x', zone.x);
+                        dangerRect.setAttribute('y', zone.y);
+                        dangerRect.setAttribute('width', zone.width);
+                        dangerRect.setAttribute('height', zone.height);
+                        dangerRect.setAttribute('class', 'danger-zone');
+                        svg.appendChild(dangerRect);
+                    });
+                }
+                
+                // Add room markers
+                if (buildingGraphs[mapKey] && buildingGraphs[mapKey].rooms) {
+                    buildingGraphs[mapKey].rooms.forEach(room => {
+                        const roomMarker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        roomMarker.setAttribute('cx', room.x);
+                        roomMarker.setAttribute('cy', room.y);
+                        roomMarker.setAttribute('r', '8');
+                        roomMarker.setAttribute('class', 'room-marker');
+                        roomMarker.setAttribute('data-room-id', room.id);
+                        roomMarker.setAttribute('data-room-name', room.name);
+                        
+                        roomMarker.addEventListener('click', function() {
+                            selectRoom(this);
+                        });
+                        
+                        // Add room label
+                        const roomLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        roomLabel.setAttribute('x', room.x);
+                        roomLabel.setAttribute('y', room.y - 15);
+                        roomLabel.setAttribute('text-anchor', 'middle');
+                        roomLabel.setAttribute('font-size', '10');
+                        roomLabel.setAttribute('fill', '#333');
+                        roomLabel.textContent = room.name;
+                        
+                        svg.appendChild(roomMarker);
+                        svg.appendChild(roomLabel);
+                    });
+                }
+                
+                // Add exit markers
+                if (buildingGraphs[mapKey] && buildingGraphs[mapKey].exits) {
+                    buildingGraphs[mapKey].exits.forEach(exit => {
+                        const exitMarker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        exitMarker.setAttribute('cx', exit.x);
+                        exitMarker.setAttribute('cy', exit.y);
+                        exitMarker.setAttribute('r', '10');
+                        exitMarker.setAttribute('class', 'exit-marker');
+                        exitMarker.setAttribute('data-exit-id', exit.id);
+                        exitMarker.setAttribute('data-exit-name', exit.name);
+                        
+                        // Add exit label
+                        const exitLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        exitLabel.setAttribute('x', exit.x);
+                        exitLabel.setAttribute('y', exit.y - 15);
+                        exitLabel.setAttribute('text-anchor', 'middle');
+                        exitLabel.setAttribute('font-size', '10');
+                        exitLabel.setAttribute('fill', 'white');
+                        exitLabel.textContent = exit.name;
+                        
+                        svg.appendChild(exitMarker);
+                        svg.appendChild(exitLabel);
+                    });
+                }
+                
+                svgContainer.appendChild(svg);
+                currentSVG = svg;
+                
+                // Update map title
+                const buildingNames = {
+                    'cse': 'CSE Block',
+                    'admin': 'Admin Block',
+                    'it': 'IT Block',
+                    'hostel': 'Hostel Block'
+                };
+                
+                const floorNames = {
+                    'ground': 'Ground Floor',
+                    'first': 'First Floor',
+                    'second': 'Second Floor',
+                    'third': 'Third Floor'
+                };
+                
+                mapTitle.textContent = `${buildingNames[selectedBuilding]} - ${floorNames[selectedFloor]} Evacuation Map`;
+            }
+            
+            // Select room
+            function selectRoom(roomMarker) {
+                // Deselect previous room
+                const previousSelected = currentSVG.querySelector('.room-marker.selected');
+                if (previousSelected) {
+                    previousSelected.classList.remove('selected');
+                }
+                
+                // Select new room
+                roomMarker.classList.add('selected');
+                selectedRoom = roomMarker;
+                
+                // Show location info
+                const roomName = roomMarker.getAttribute('data-room-name');
+                locationInfo.innerHTML = `
+                    <strong>${roomName} Selected</strong><br>
+                    <small>Click "Show Evacuation Route" to see path to nearest exit</small>
+                `;
+                locationInfo.style.display = 'block';
+                
+                // Clear any existing paths
+                clearEvacuationPath();
+            }
+            
+            // Show evacuation route
+            showRouteBtn.addEventListener('click', function() {
+                if (!selectedRoom) {
+                    alert('Please select a room first by clicking on a room marker');
+                    return;
+                }
+                
+                const mapKey = `${selectedBuilding}-${selectedFloor}`;
+                const roomId = selectedRoom.getAttribute('data-room-id');
+                const roomName = selectedRoom.getAttribute('data-room-name');
+                
+                // Find nearest exit
+                const nearestExit = findNearestExit(roomId, mapKey);
+                
+                if (nearestExit) {
+                    // Draw evacuation path
+                    drawEvacuationPath(roomId, nearestExit.id, mapKey);
+                    
+                    // Show route information
+                    locationInfo.innerHTML = `
+                        <strong>🟡 Evacuation Route Active</strong><br>
+                        <strong>From:</strong> ${roomName}<br>
+                        <strong>To:</strong> ${nearestExit.name}<br>
+                        <small>Follow the yellow dashed line to reach the exit safely</small>
+                    `;
+                }
+            });
+            
+            // Find nearest exit
+            function findNearestExit(roomId, mapKey) {
+                const graph = buildingGraphs[mapKey];
+                if (!graph) return null;
+                
+                const room = graph.rooms.find(r => r.id === roomId);
+                if (!room) return null;
+                
+                let nearestExit = null;
+                let shortestDistance = Infinity;
+                
+                graph.exits.forEach(exit => {
+                    const distance = Math.sqrt(
+                        Math.pow(exit.x - room.x, 2) + Math.pow(exit.y - room.y, 2)
+                    );
+                    
+                    if (distance < shortestDistance) {
+                        shortestDistance = distance;
+                        nearestExit = exit;
+                    }
+                });
+                
+                return nearestExit;
+            }
+            
+            // Draw evacuation path
+            function drawEvacuationPath(roomId, exitId, mapKey) {
+                clearEvacuationPath();
+                
+                const graph = buildingGraphs[mapKey];
+                if (!graph) return;
+                
+                const room = graph.rooms.find(r => r.id === roomId);
+                const exit = graph.exits.find(e => e.id === exitId);
+                
+                if (!room || !exit) return;
+                
+                // Simple path calculation (in a real app, use Dijkstra's algorithm)
+                // This is a simplified straight path for demonstration
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+                path.setAttribute('points', `${room.x},${room.y} ${exit.x},${exit.y}`);
+                path.setAttribute('class', 'evacuation-path');
+                
+                currentSVG.appendChild(path);
+            }
+            
+            // Clear evacuation path
+            function clearEvacuationPath() {
+                const existingPath = currentSVG.querySelector('.evacuation-path');
+                if (existingPath) {
+                    existingPath.remove();
+                }
+            }
+            
+            // Reset map view
+            resetMapBtn.addEventListener('click', function() {
+                selectedRoom = null;
+                locationInfo.style.display = 'none';
+                clearEvacuationPath();
+                
+                // Deselect any selected room
+                const selectedMarker = currentSVG.querySelector('.room-marker.selected');
+                if (selectedMarker) {
+                    selectedMarker.classList.remove('selected');
+                }
+            });
+            
+            // Initialize map
+            loadSVGMap();
+        });
+    </script>
+</body>
+</html>
