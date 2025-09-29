@@ -16,6 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)  # Session expires after 2 hours
 
 # Enable CORS for cross-origin requests
 CORS(app)
@@ -133,6 +134,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
+            flash('Please log in to access this page.', 'warning')
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -165,6 +167,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         
         if user and check_password_hash(user.password_hash, password):
+            session.permanent = True  # Enable session timeout
             session['user_id'] = user.id
             session['user_role'] = user.role
             session['user_name'] = user.name
@@ -175,15 +178,11 @@ def login():
     
     return render_template('login_new.html')
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.clear()
-    flash('You have been logged out', 'info')
-    # Redirect to landing page - modify this URL as needed for your setup
-    # For development, landing page might be at localhost:3000 or served at root
-    # For production, adjust to your domain
-    landing_page_url = 'http://localhost:3000'  # Change this to your landing page URL
-    return redirect(landing_page_url)
+    flash('You have been logged out successfully!', 'success')
+    return redirect(url_for('login'))
 
 @app.route('/dashboard')
 @login_required
