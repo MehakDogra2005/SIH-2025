@@ -179,7 +179,11 @@ def login():
 def logout():
     session.clear()
     flash('You have been logged out', 'info')
-    return redirect(url_for('login'))
+    # Redirect to landing page - modify this URL as needed for your setup
+    # For development, landing page might be at localhost:3000 or served at root
+    # For production, adjust to your domain
+    landing_page_url = 'http://localhost:3000'  # Change this to your landing page URL
+    return redirect(landing_page_url)
 
 @app.route('/dashboard')
 @login_required
@@ -518,6 +522,33 @@ def add_student():
         
     return redirect(url_for('students'))
 
+@app.route('/api/students/<int:student_id>', methods=['GET'])
+@login_required
+def api_get_student(student_id):
+    """Get student details"""
+    student = Student.query.get_or_404(student_id)
+    
+    try:
+        student_data = {
+            'id': student.id,
+            'student_id': student.student_id,
+            'name': student.name,
+            'email': student.email,
+            'class': student.class_name,
+            'emergency_contact_name': student.emergency_contact_name,
+            'emergency_contact_phone': student.emergency_contact_phone,
+            'medical_conditions': student.medical_conditions,
+            'drill_participation': student.drill_participation,
+            'last_checkin': student.last_checkin.isoformat() if student.last_checkin else None,
+            'status': student.status,
+            'created_at': student.created_at.isoformat(),
+            'updated_at': student.updated_at.isoformat()
+        }
+        
+        return jsonify({'success': True, 'student': student_data})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/api/students/<int:student_id>/update', methods=['POST'])
 @login_required
 @admin_required
@@ -735,6 +766,12 @@ def init_db():
             db.session.add(admin)
         
         db.session.commit()
+
+@app.route('/settings')
+@login_required
+def settings():
+    """Admin settings page"""
+    return render_template('settings.html')
 
 # Error handlers
 @app.errorhandler(404)

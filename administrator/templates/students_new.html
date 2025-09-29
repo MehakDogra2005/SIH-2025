@@ -143,7 +143,7 @@
                             </thead>
                             <tbody>
                                 {% for student in students %}
-                                <tr data-class="{{ student.class }}" data-name="{{ student.name.lower() }}">
+                                <tr data-class="{{ student.class_name }}" data-name="{{ student.name.lower() }}">
                                     <td>
                                         <input type="checkbox" name="studentSelect" value="{{ student.id }}">
                                     </td>
@@ -163,7 +163,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge bg-info">{{ student.class }}</span>
+                                        <span class="badge bg-info">{{ student.class_name }}</span>
                                     </td>
                                     <td>
                                         <div>
@@ -394,20 +394,258 @@ function searchStudents() {
 }
 
 function viewStudent(studentId) {
-    // Implement view student details
-    alert('View student details for ID: ' + studentId);
+    // Fetch student details and show modal
+    fetch(`/api/students/${studentId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showStudentDetailsModal(data.student);
+            } else {
+                alert('Error loading student details: ' + data.error);
+            }
+        })
+        .catch(error => {
+            alert('Error loading student details: ' + error);
+        });
 }
 
 function editStudent(studentId) {
-    // Implement edit student
-    alert('Edit student for ID: ' + studentId);
+    // For now, show edit form in modal (you can implement a proper edit modal)
+    const studentRow = document.querySelector(`tr td input[value="${studentId}"]`).closest('tr');
+    const studentName = studentRow.querySelector('strong').textContent;
+    
+    if (confirm(`Edit student: ${studentName}?\n\nThis will open the edit form.`)) {
+        // You can implement a proper edit modal here
+        // For now, we'll show a simple prompt for demonstration
+        showEditStudentModal(studentId);
+    }
 }
 
 function deleteStudent(studentId) {
-    if (confirm('Are you sure you want to delete this student?')) {
-        // Implement delete student
-        alert('Delete student for ID: ' + studentId);
+    const studentRow = document.querySelector(`tr td input[value="${studentId}"]`).closest('tr');
+    const studentName = studentRow.querySelector('strong').textContent;
+    
+    if (confirm(`Are you sure you want to delete student: ${studentName}?\n\nThis action cannot be undone.`)) {
+        // Show loading state
+        const deleteBtn = studentRow.querySelector('.btn-outline-danger');
+        const originalHtml = deleteBtn.innerHTML;
+        deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        deleteBtn.disabled = true;
+        
+        fetch(`/api/students/${studentId}/delete`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the row from table
+                studentRow.remove();
+                
+                // Show success message
+                showAlert('Student deleted successfully!', 'success');
+                
+                // Update student count
+                updateStudentCount();
+            } else {
+                // Restore button state
+                deleteBtn.innerHTML = originalHtml;
+                deleteBtn.disabled = false;
+                
+                showAlert('Error deleting student: ' + data.error, 'error');
+            }
+        })
+        .catch(error => {
+            // Restore button state
+            deleteBtn.innerHTML = originalHtml;
+            deleteBtn.disabled = false;
+            
+            showAlert('Error deleting student: ' + error, 'error');
+        });
     }
+}
+
+function showAlert(message, type) {
+    // Create alert div
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    // Insert at top of content
+    const content = document.querySelector('.dashboard-content');
+    content.insertBefore(alertDiv, content.firstChild);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+
+function updateStudentCount() {
+    // Update the total students count
+    const totalStudents = document.querySelectorAll('#studentsTable tbody tr').length;
+    const totalStudentsElement = document.querySelector('.info-card.bg-primary h3');
+    if (totalStudentsElement) {
+        totalStudentsElement.textContent = totalStudents;
+    }
+}
+
+function showEditStudentModal(studentId) {
+    // Get student data from the row
+    const studentRow = document.querySelector(`tr td input[value="${studentId}"]`).closest('tr');
+    const cells = studentRow.querySelectorAll('td');
+    
+    const studentData = {
+        id: studentId,
+        student_id: cells[1].textContent.trim(),
+        name: cells[2].querySelector('strong').textContent,
+        email: cells[2].querySelector('small').textContent.replace('No email', ''),
+        class: cells[3].textContent.trim(),
+        emergency_contact_name: cells[4].querySelector('strong').textContent,
+        emergency_contact_phone: cells[4].querySelector('small').textContent.replace('📞', '').trim()
+    };
+    
+    // Create edit modal HTML
+    const modalHTML = `
+        <div class="modal fade" id="editStudentModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-user-edit me-2"></i>Edit Student
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form id="editStudentForm">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_student_id" class="form-label">Student ID</label>
+                                        <input type="text" class="form-control" id="edit_student_id" value="${studentData.student_id}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_name" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="edit_name" value="${studentData.name}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_class" class="form-label">Class</label>
+                                        <select class="form-control" id="edit_class" required>
+                                            <option value="">Select Class</option>
+                                            ${['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 
+                                               'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
+                                               .map(grade => `<option value="${grade}" ${grade === studentData.class ? 'selected' : ''}>${grade}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="edit_email" value="${studentData.email}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_emergency_contact_name" class="form-label">Emergency Contact Name</label>
+                                        <input type="text" class="form-control" id="edit_emergency_contact_name" value="${studentData.emergency_contact_name}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_emergency_contact_phone" class="form-label">Emergency Contact Phone</label>
+                                        <input type="tel" class="form-control" id="edit_emergency_contact_phone" value="${studentData.emergency_contact_phone}" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Update Student
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('editStudentModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('editStudentModal'));
+    modal.show();
+    
+    // Handle form submission
+    document.getElementById('editStudentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const updateData = {
+            name: document.getElementById('edit_name').value,
+            class: document.getElementById('edit_class').value,
+            email: document.getElementById('edit_email').value,
+            emergency_contact_name: document.getElementById('edit_emergency_contact_name').value,
+            emergency_contact_phone: document.getElementById('edit_emergency_contact_phone').value
+        };
+        
+        // Show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalHtml = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Updating...';
+        submitBtn.disabled = true;
+        
+        fetch(`/api/students/${studentId}/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                modal.hide();
+                showAlert('Student updated successfully!', 'success');
+                
+                // Refresh the page to show updated data
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                submitBtn.innerHTML = originalHtml;
+                submitBtn.disabled = false;
+                showAlert('Error updating student: ' + data.error, 'error');
+            }
+        })
+        .catch(error => {
+            submitBtn.innerHTML = originalHtml;
+            submitBtn.disabled = false;
+            showAlert('Error updating student: ' + error, 'error');
+        });
+    });
 }
 
 function exportStudentData() {
@@ -442,5 +680,11 @@ function exportStudentData() {
 function importStudents() {
     alert('Import functionality would be implemented here');
 }
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-refresh student count periodically
+    setInterval(updateStudentCount, 30000); // Every 30 seconds
+});
 </script>
 {% endblock %}

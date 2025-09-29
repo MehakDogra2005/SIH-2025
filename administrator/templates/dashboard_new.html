@@ -1,419 +1,1065 @@
 {% extends "base_new.html" %}
 
 {% block title %}Dashboard - Emergency Management System{% endblock %}
-{% block page_title %}Dashboard{% endblock %}
+{% block page_title %}Welcome back, {{ user.name.split()[0] }}!{% endblock %}
 
 {% block content %}
-<!-- Preparedness Score Section -->
+<!-- Emergency Alert Section -->
 <div class="row mb-4">
     <div class="col-12">
-        <div class="card">
-            <div class="card-body p-4">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h5 class="text-muted mb-2">Your disaster preparedness score is <strong class="text-primary">{{ stats.preparedness_score }}%</strong> - Great job! Keep learning to improve your safety knowledge.</h5>
-                        <div class="progress mb-3" style="height: 12px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ stats.preparedness_score }}%"></div>
+        <div class="emergency-alert-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center">
+                        <div class="emergency-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
-                        <div class="d-flex gap-2">
-                            <span class="badge bg-success">5 Badges</span>
-                            <span class="badge bg-info">4 Completed Modules</span>
+                        <div>
+                            <h4 class="mb-1 text-white">Emergency Response Center</h4>
+                            <p class="mb-0 text-white-50">Report incidents immediately • Get help when you need it</p>
                         </div>
                     </div>
-                    <div class="col-md-4 text-end">
-                        <button class="btn btn-primary">
-                            <i class="fas fa-play me-2"></i>Continue Learning
-                        </button>
-                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-danger btn-lg emergency-btn" onclick="reportEmergency()">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        REPORT EMERGENCY
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Stats Cards -->
+<!-- System Status Banner -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stats-card">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="stats-number">{{ stats.total_incidents }}</div>
-                    <div class="stats-label">Total Incidents</div>
+    <div class="col-12">
+        <div class="status-banner">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="status-indicator status-normal me-3"></div>
+                        <div>
+                            <h5 class="mb-0 text-dark">System Status: <span class="text-success fw-bold">All Clear</span></h5>
+                            <small class="text-muted">Last updated: Just now</small>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; opacity: 0.7;"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stats-card warning">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="stats-number">{{ stats.active_incidents }}</div>
-                    <div class="stats-label">Active Alerts</div>
-                </div>
-                <div>
-                    <i class="fas fa-bell" style="font-size: 2rem; opacity: 0.7;"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stats-card success">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="stats-number">{{ stats.safe_checkins }}</div>
-                    <div class="stats-label">Safe Zones</div>
-                </div>
-                <div>
-                    <i class="fas fa-shield-alt" style="font-size: 2rem; opacity: 0.7;"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stats-card info">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="stats-number">72</div>
-                    <div class="stats-label">Drills This Year</div>
-                </div>
-                <div>
-                    <i class="fas fa-users-cog" style="font-size: 2rem; opacity: 0.7;"></i>
+                <div class="col-md-6">
+                    <div class="d-flex gap-4 justify-content-md-end">
+                        <div class="status-item-inline">
+                            <i class="fas fa-shield-alt text-success me-1"></i>
+                            <span class="text-dark">Security: Active</span>
+                        </div>
+                        <div class="status-item-inline">
+                            <i class="fas fa-users text-primary me-1"></i>
+                            <span class="text-dark">{{ stats.safe_checkins + stats.stuck_checkins }} Online</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Main Content Row -->
+<!-- Main Dashboard Content -->
 <div class="row">
-    <!-- Left Column - Interactive Learning Modules -->
-    <div class="col-lg-8 mb-4">
-        <div class="card">
+    <!-- Left Column - Stats and Activity -->
+    <div class="col-lg-8">
+        <!-- Key Metrics Cards -->
+        <div class="section-header">
+            <h5><i class="fas fa-chart-bar me-2"></i>Key Metrics</h5>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6 col-lg-3 mb-3">
+                <div class="metric-card metric-primary">
+                    <div class="metric-content">
+                        <div class="metric-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="metric-data">
+                            <h3>{{ stats.total_incidents }}</h3>
+                            <p>Total Incidents</p>
+                            <span class="metric-change">
+                                <i class="fas fa-arrow-up"></i> +3 this week
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-3">
+                <div class="metric-card metric-warning">
+                    <div class="metric-content">
+                        <div class="metric-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="metric-data">
+                            <h3>{{ stats.active_incidents }}</h3>
+                            <p>Active Alerts</p>
+                            <span class="metric-change">
+                                {% if stats.active_incidents > 0 %}
+                                <i class="fas fa-exclamation-circle"></i> Needs attention
+                                {% else %}
+                                <i class="fas fa-check-circle"></i> All clear
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-3">
+                <div class="metric-card metric-success">
+                    <div class="metric-content">
+                        <div class="metric-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="metric-data">
+                            <h3>{{ stats.safe_checkins }}</h3>
+                            <p>Safe Personnel</p>
+                            <span class="metric-change">
+                                <i class="fas fa-shield-alt"></i> {{ ((stats.safe_checkins / (stats.safe_checkins + stats.stuck_checkins + 1)) * 100)|round }}% secured
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-3">
+                <div class="metric-card metric-info">
+                    <div class="metric-content">
+                        <div class="metric-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="metric-data">
+                            <h3>{{ stats.preparedness_score|round }}%</h3>
+                            <p>Preparedness Score</p>
+                            <span class="metric-change">
+                                <i class="fas fa-trending-up"></i> +5% this month
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Health and Recent Activity -->
+        <div class="row">
+            <!-- System Health -->
+            <div class="col-md-6 mb-4">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h6><i class="fas fa-heartbeat me-2"></i>System Health</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="health-status-list">
+                            <div class="health-item">
+                                <div class="health-indicator health-good"></div>
+                                <div class="health-details">
+                                    <span class="health-name">Emergency Services</span>
+                                    <span class="health-value">Online</span>
+                                </div>
+                            </div>
+                            <div class="health-item">
+                                <div class="health-indicator health-good"></div>
+                                <div class="health-details">
+                                    <span class="health-name">Communication Network</span>
+                                    <span class="health-value">Strong</span>
+                                </div>
+                            </div>
+                            <div class="health-item">
+                                <div class="health-indicator health-warning"></div>
+                                <div class="health-details">
+                                    <span class="health-name">Weather Monitoring</span>
+                                    <span class="health-value">Alert Active</span>
+                                </div>
+                            </div>
+                            <div class="health-item">
+                                <div class="health-indicator health-good"></div>
+                                <div class="health-details">
+                                    <span class="health-name">Database Connection</span>
+                                    <span class="health-value">Stable</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            {% if recent_incidents %}
+            <div class="col-md-6 mb-4">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h6><i class="fas fa-history me-2"></i>Recent Activity</h6>
+                        <a href="{{ url_for('incidents') }}" class="btn btn-outline-primary btn-sm">View All</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list">
+                            {% for incident in recent_incidents[:4] %}
+                            <div class="activity-item">
+                                <div class="activity-icon activity-{{ incident.type }}">
+                                    <i class="fas fa-{% if incident.type == 'fire' %}fire{% elif incident.type == 'flood' %}water{% elif incident.type == 'earthquake' %}mountain{% else %}exclamation-triangle{% endif %}"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">{{ incident.type.title() }} incident reported</div>
+                                    <div class="activity-subtitle">{{ incident.location }} • {{ incident.created_at.strftime('%H:%M') }}</div>
+                                </div>
+                                <div class="activity-status">
+                                    <span class="status-badge status-{{ incident.status }}">{{ incident.status.title() }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>    <!-- Right Sidebar -->
+    <div class="col-lg-4">
+        <!-- Emergency Actions -->
+        <div class="dashboard-card mb-4">
             <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-graduation-cap me-2 text-primary"></i>
-                    Interactive Learning Modules
-                </h5>
+                <h6><i class="fas fa-shield-alt me-2"></i>Emergency Actions</h6>
             </div>
             <div class="card-body">
-                <!-- Module Tabs -->
-                <ul class="nav nav-pills mb-4" id="module-tabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="mitigation-tab" data-bs-toggle="pill" data-bs-target="#mitigation" type="button">
-                            Mitigation
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="preparedness-tab" data-bs-toggle="pill" data-bs-target="#preparedness" type="button">
-                            Preparedness
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="first-aid-tab" data-bs-toggle="pill" data-bs-target="#first-aid" type="button">
-                            First Aid
-                        </button>
-                    </li>
-                </ul>
+                <div class="d-grid gap-3">
+                    <button class="btn btn-primary btn-lg" onclick="sendNDMAReport()">
+                        <i class="fas fa-file-export me-2"></i>
+                        Send Report to NDMA
+                    </button>
+                    <button class="btn btn-success btn-lg" onclick="sendSafeMessages()">
+                        <i class="fas fa-comment-medical me-2"></i>
+                        Send Safe Messages to Guardians
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                <!-- Module Content -->
-                <div class="tab-content" id="module-content">
-                    <div class="tab-pane fade show active" id="mitigation" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="module-card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div>
-                                                <h6 class="card-title mb-1">
-                                                    <i class="fas fa-mountain text-warning me-2"></i>
-                                                    Earthquake Mitigation
-                                                </h6>
-                                                <small class="text-muted">Learn earthquake safety protocols</small>
-                                            </div>
-                                            <button class="btn btn-outline-primary btn-sm">Continue</button>
-                                        </div>
-                                        <div class="progress mb-2" style="height: 6px;">
-                                            <div class="progress-bar bg-warning" style="width: 75%"></div>
-                                        </div>
-                                        <small class="text-muted">75% Complete</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="module-card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div>
-                                                <h6 class="card-title mb-1">
-                                                    <i class="fas fa-water text-info me-2"></i>
-                                                    Flood Mitigation
-                                                </h6>
-                                                <small class="text-muted">Flood response and safety measures</small>
-                                            </div>
-                                            <button class="btn btn-outline-primary btn-sm">Start</button>
-                                        </div>
-                                        <div class="progress mb-2" style="height: 6px;">
-                                            <div class="progress-bar bg-info" style="width: 45%"></div>
-                                        </div>
-                                        <small class="text-muted">45% Complete</small>
-                                    </div>
-                                </div>
-                            </div>
+        <!-- Student Status -->
+        <div class="dashboard-card mb-4">
+            <div class="card-header">
+                <h6><i class="fas fa-users me-2"></i>Student Status Overview</h6>
+            </div>
+            <div class="card-body">
+                <div class="student-stats">
+                    <div class="stat-item rescued">
+                        <div class="stat-icon">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h4>{{ stats.rescued_students or 0 }}</h4>
+                            <p>Students Rescued</p>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="preparedness" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="module-card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div>
-                                                <h6 class="card-title mb-1">
-                                                    <i class="fas fa-box text-success me-2"></i>
-                                                    Emergency Kit
-                                                </h6>
-                                                <small class="text-muted">Essential emergency supplies</small>
-                                            </div>
-                                            <button class="btn btn-outline-primary btn-sm">Start</button>
-                                        </div>
-                                        <div class="progress mb-2" style="height: 6px;">
-                                            <div class="progress-bar bg-success" style="width: 0%"></div>
-                                        </div>
-                                        <small class="text-muted">Not Started</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="module-card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div>
-                                                <h6 class="card-title mb-1">
-                                                    <i class="fas fa-route text-primary me-2"></i>
-                                                    Evacuation Planning
-                                                </h6>
-                                                <small class="text-muted">Emergency evacuation procedures</small>
-                                            </div>
-                                            <button class="btn btn-outline-primary btn-sm">Start</button>
-                                        </div>
-                                        <div class="progress mb-2" style="height: 6px;">
-                                            <div class="progress-bar bg-primary" style="width: 0%"></div>
-                                        </div>
-                                        <small class="text-muted">Not Started</small>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="stat-item learning">
+                        <div class="stat-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h4>{{ stats.learning_students or 0 }}</h4>
+                            <p>Continuing Learning</p>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="first-aid" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="module-card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div>
-                                                <h6 class="card-title mb-1">
-                                                    <i class="fas fa-heart text-danger me-2"></i>
-                                                    CPR Training
-                                                </h6>
-                                                <small class="text-muted">Cardiopulmonary resuscitation</small>
-                                            </div>
-                                            <button class="btn btn-outline-primary btn-sm">Start</button>
-                                        </div>
-                                        <div class="progress mb-2" style="height: 6px;">
-                                            <div class="progress-bar bg-danger" style="width: 0%"></div>
-                                        </div>
-                                        <small class="text-muted">Not Started</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="module-card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div>
-                                                <h6 class="card-title mb-1">
-                                                    <i class="fas fa-band-aid text-warning me-2"></i>
-                                                    Basic First Aid
-                                                </h6>
-                                                <small class="text-muted">Essential first aid techniques</small>
-                                            </div>
-                                            <button class="btn btn-outline-primary btn-sm">Start</button>
-                                        </div>
-                                        <div class="progress mb-2" style="height: 6px;">
-                                            <div class="progress-bar bg-warning" style="width: 0%"></div>
-                                        </div>
-                                        <small class="text-muted">Not Started</small>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="stat-item safe">
+                        <div class="stat-icon">
+                            <i class="fas fa-shield-check"></i>
                         </div>
+                        <div class="stat-details">
+                            <h4>{{ stats.safe_students or 0 }}</h4>
+                            <p>Confirmed Safe</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-section mt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Overall Safety Status</span>
+                        <span class="fw-bold">{{ ((stats.safe_students or 0) / (stats.total_students or 1) * 100)|round }}%</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ ((stats.safe_students or 0) / (stats.total_students or 1) * 100)|round }}%"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Right Column - Notifications and Quick Actions -->
-    <div class="col-lg-4">
-        <!-- Recent Notifications -->
-        <div class="card mb-4">
+        <!-- Live Notifications -->
+        <div class="dashboard-card mb-4">
             <div class="card-header">
-                <h6 class="mb-0">
-                    <i class="fas fa-bell me-2 text-warning"></i>
-                    Recent Notifications
-                </h6>
+                <h6><i class="fas fa-bell me-2"></i>Live Updates</h6>
+                <span class="notification-badge">{{ recent_notifications|length if recent_notifications else 3 }}</span>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body">
                 {% if recent_notifications %}
-                    {% for notification in recent_notifications[:3] %}
+                    {% for notification in recent_notifications[:4] %}
                     <div class="notification-item">
-                        <div class="d-flex">
-                            <i class="fas fa-{% if notification.type == 'alert' %}exclamation-triangle text-warning{% elif notification.type == 'drill' %}users-cog text-info{% else %}info-circle text-primary{% endif %} me-2 mt-1"></i>
-                            <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <strong style="font-size: 0.9rem;">{{ notification.title }}</strong>
-                                    <small class="text-muted">10 min ago</small>
-                                </div>
-                                <p class="text-muted mb-0" style="font-size: 0.8rem;">{{ notification.message }}</p>
+                        <div class="notification-icon">
+                            <i class="fas fa-{% if notification.type == 'alert' %}exclamation-triangle{% elif notification.type == 'drill' %}users-cog{% else %}info-circle{% endif %}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">{{ notification.title }}</div>
+                            <div class="notification-text">{{ notification.message|truncate(80) }}</div>
+                            <div class="notification-time">
+                                <i class="fas fa-clock me-1"></i>{{ notification.created_at.strftime('%H:%M') }}
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 {% else %}
                 <div class="notification-item">
-                    <div class="d-flex">
-                        <i class="fas fa-exclamation-triangle text-warning me-2 mt-1"></i>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <strong style="font-size: 0.9rem;">Flood Warning</strong>
-                                <small class="text-muted">10 min ago</small>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 0.8rem;">Heavy rainfall alert issued for your region</p>
+                    <div class="notification-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Weather Alert</div>
+                        <div class="notification-text">Heavy rainfall expected in your region today</div>
+                        <div class="notification-time">
+                            <i class="fas fa-clock me-1"></i>10 min ago
                         </div>
                     </div>
                 </div>
                 <div class="notification-item">
-                    <div class="d-flex">
-                        <i class="fas fa-users-cog text-info me-2 mt-1"></i>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <strong style="font-size: 0.9rem;">Drill Scheduled</strong>
-                                <small class="text-muted">2 hours ago</small>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 0.8rem;">Earthquake drill scheduled for tomorrow 11 AM</p>
+                    <div class="notification-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Drill Scheduled</div>
+                        <div class="notification-text">Fire evacuation drill tomorrow at 11:00 AM</div>
+                        <div class="notification-time">
+                            <i class="fas fa-clock me-1"></i>2 hours ago
                         </div>
                     </div>
                 </div>
                 <div class="notification-item">
-                    <div class="d-flex">
-                        <i class="fas fa-info-circle text-primary me-2 mt-1"></i>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <strong style="font-size: 0.9rem;">New Module Added</strong>
-                                <small class="text-muted">1 day ago</small>
-                            </div>
-                            <p class="text-muted mb-0" style="font-size: 0.8rem;">Check out the new Fire Safety module</p>
+                    <div class="notification-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">System Update</div>
+                        <div class="notification-text">Emergency protocols updated successfully</div>
+                        <div class="notification-time">
+                            <i class="fas fa-clock me-1"></i>1 day ago
                         </div>
                     </div>
                 </div>
                 {% endif %}
             </div>
         </div>
-
-        <!-- Quick Actions -->
-        <div class="card">
-            <div class="card-header">
-                <h6 class="mb-0">
-                    <i class="fas fa-bolt me-2 text-primary"></i>
-                    Quick Actions
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <a href="{{ url_for('create_incident') }}" class="btn btn-outline-danger">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Report Incident
-                    </a>
-                    <button class="btn btn-outline-success" onclick="quickCheckin()">
-                        <i class="fas fa-user-check me-2"></i>Quick Check-in
-                    </button>
-                    <a href="{{ url_for('emergency_contacts') }}" class="btn btn-outline-info">
-                        <i class="fas fa-phone-alt me-2"></i>Emergency Contacts
-                    </a>
-                    {% if session.get('user_role') == 'admin' %}
-                    <a href="{{ url_for('create_drill') }}" class="btn btn-outline-warning">
-                        <i class="fas fa-users-cog me-2"></i>Create Drill
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
-<!-- Recent Incidents -->
-{% if recent_incidents %}
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">
-                        <i class="fas fa-clock me-2 text-secondary"></i>
-                        Recent Incidents
-                    </h6>
-                    <a href="{{ url_for('incidents') }}" class="btn btn-outline-primary btn-sm">View All</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Type</th>
-                                <th>Location</th>
-                                <th>Status</th>
-                                <th>Time</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for incident in recent_incidents %}
-                            <tr>
-                                <td>
-                                    <span class="badge bg-{% if incident.type == 'fire' %}danger{% elif incident.type == 'flood' %}info{% elif incident.type == 'earthquake' %}warning{% else %}secondary{% endif %}">
-                                        {{ incident.type.title() }}
-                                    </span>
-                                </td>
-                                <td>{{ incident.location }}</td>
-                                <td>
-                                    <span class="badge bg-{% if incident.status == 'resolved' %}success{% elif incident.status == 'assigned' %}warning{% else %}danger{% endif %}">
-                                        {{ incident.status.title() }}
-                                    </span>
-                                </td>
-                                <td><small class="text-muted">{{ incident.created_at.strftime('%H:%M') }}</small></td>
-                                <td>
-                                    <a href="{{ url_for('incident_detail', id=incident.id) }}" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
 {% endblock %}
 
 {% block extra_js %}
+<style>
+/* Emergency Alert Section */
+.emergency-alert-section {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    color: white;
+    box-shadow: 0 8px 32px rgba(220, 38, 38, 0.3);
+}
+
+.emergency-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    animation: pulse-emergency 2s infinite;
+}
+
+@keyframes pulse-emergency {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+.emergency-btn {
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 2px solid white;
+    background: white;
+    color: #dc2626;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.emergency-btn:hover {
+    background: transparent;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+/* Status Banner */
+.status-banner {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #10b981;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.status-normal { background: #10b981; }
+.status-warning { background: #f59e0b; }
+.status-danger { background: #ef4444; }
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.status-item-inline {
+    font-size: 0.9rem;
+}
+
+/* Section Headers */
+.section-header {
+    margin-bottom: 1.5rem;
+}
+
+.section-header h5 {
+    color: var(--text-dark);
+    font-weight: 600;
+    margin: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary);
+    display: inline-block;
+}
+
+/* Quick Actions */
+.quick-actions-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    border: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: 100%;
+    min-height: 120px;
+}
+
+.action-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    color: white;
+}
+
+.action-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.action-label {
+    font-size: 0.9rem;
+    text-align: center;
+    line-height: 1.3;
+}
+
+.action-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.action-success { background: linear-gradient(135deg, #10b981, #059669); }
+.action-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.action-info { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.action-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+.action-secondary { background: linear-gradient(135deg, #6b7280, #4b5563); }
+
+/* Metric Cards */
+.metric-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.metric-primary { border-left-color: var(--primary); }
+.metric-warning { border-left-color: #f59e0b; }
+.metric-success { border-left-color: #10b981; }
+.metric-info { border-left-color: #06b6d4; }
+
+.metric-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.metric-icon {
+    background: #f1f5f9;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.metric-data h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-dark);
+}
+
+.metric-data p {
+    margin: 0;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.metric-change {
+    font-size: 0.8rem;
+    color: #10b981;
+    font-weight: 500;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    height: fit-content;
+}
+
+.card-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+}
+
+.card-header h6 {
+    margin: 0;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Health Status */
+.health-status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.health-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.health-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.health-good { background: #10b981; }
+.health-warning { background: #f59e0b; }
+.health-danger { background: #ef4444; }
+
+.health-details {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.health-name {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.health-value {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+/* Activity Items */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.activity-fire { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.activity-flood { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.activity-earthquake { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.activity-other { background: linear-gradient(135deg, #6b7280, #4b5563); }
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.activity-subtitle {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-open { background: #fef3c7; color: #92400e; }
+.status-resolved { background: #d1fae5; color: #065f46; }
+.status-assigned { background: #dbeafe; color: #1e40af; }
+
+/* Notification Items */
+.notification-badge {
+    background: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.notification-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.notification-text {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.notification-time {
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+/* Contact Items */
+.contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.contact-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.contact-fire { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.contact-police { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.contact-medical { background: linear-gradient(135deg, #10b981, #059669); }
+
+.contact-details {
+    flex: 1;
+}
+
+.contact-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.contact-number {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Student Status */
+.student-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.stat-item.rescued {
+    background: linear-gradient(135deg, #fef3c7, #fcd34d);
+    border-left: 4px solid #f59e0b;
+}
+
+.stat-item.learning {
+    background: linear-gradient(135deg, #dbeafe, #93c5fd);
+    border-left: 4px solid #3b82f6;
+}
+
+.stat-item.safe {
+    background: linear-gradient(135deg, #d1fae5, #86efac);
+    border-left: 4px solid #10b981;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-item.rescued .stat-icon {
+    background: #f59e0b;
+}
+
+.stat-item.learning .stat-icon {
+    background: #3b82f6;
+}
+
+.stat-item.safe .stat-icon {
+    background: #10b981;
+}
+
+.stat-details h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-dark);
+}
+
+.stat-details p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.progress-section {
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Emergency Actions */
+.dashboard-card .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.dashboard-card .btn-lg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .emergency-alert-section, .quick-actions-section {
+        padding: 1.5rem;
+    }
+    
+    .metric-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .action-card {
+        min-height: 100px;
+    }
+    
+    .action-icon {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
 <script>
+// Emergency Report Function
+function reportEmergency() {
+    const modal = new bootstrap.Modal(document.getElementById('emergencyModal') || createEmergencyModal());
+    modal.show();
+}
+
+function createEmergencyModal() {
+    const modalHtml = `
+        <div class="modal fade" id="emergencyModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Report Emergency
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="emergencyForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Emergency Type</label>
+                                    <select class="form-select" name="emergency_type" required>
+                                        <option value="">Select Emergency Type</option>
+                                        <option value="fire">Fire</option>
+                                        <option value="flood">Flood</option>
+                                        <option value="earthquake">Earthquake</option>
+                                        <option value="medical">Medical Emergency</option>
+                                        <option value="security">Security Threat</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Severity Level</label>
+                                    <select class="form-select" name="severity" required>
+                                        <option value="">Select Severity</option>
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                        <option value="critical">Critical</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Location</label>
+                                <input type="text" class="form-control" name="location" placeholder="Exact location of emergency" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Description</label>
+                                <textarea class="form-control" name="description" rows="4" placeholder="Describe the emergency situation in detail..." required></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Your Name</label>
+                                    <input type="text" class="form-control" name="reporter_name" placeholder="Your full name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Contact Number</label>
+                                    <input type="tel" class="form-control" name="contact_number" placeholder="Your contact number" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="submitEmergencyReport()">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Submit Emergency Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    return document.getElementById('emergencyModal');
+}
+
+function submitEmergencyReport() {
+    const form = document.getElementById('emergencyForm');
+    const formData = new FormData(form);
+    
+    // Convert to URL encoded format
+    const data = new URLSearchParams();
+    for (let [key, value] of formData) {
+        data.append(key, value);
+    }
+    
+    fetch('/create_incident', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data
+    })
+    .then(response => {
+        if (response.ok) {
+            bootstrap.Modal.getInstance(document.getElementById('emergencyModal')).hide();
+            showSuccessMessage('Emergency report submitted successfully! Authorities have been notified.');
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            throw new Error('Failed to submit report');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showErrorMessage('Failed to submit emergency report. Please try again or call emergency services directly.');
+    });
+}
+
+// NDMA Report Function
+function sendNDMAReport() {
+    if (confirm('Send emergency report to NDMA? This will include all current incident data and statistics.')) {
+        const loadingToast = showLoadingMessage('Preparing NDMA report...');
+        
+        fetch('/send_ndma_report', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                timestamp: new Date().toISOString(),
+                emergency_level: 'high',
+                include_stats: true
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingToast.remove();
+            if (data.success) {
+                showSuccessMessage('NDMA report sent successfully! Reference ID: ' + (data.reference_id || 'N/A'));
+            } else {
+                throw new Error(data.message || 'Failed to send report');
+            }
+        })
+        .catch(error => {
+            loadingToast.remove();
+            console.error('Error:', error);
+            showErrorMessage('Failed to send NDMA report. Please try again or contact authorities directly.');
+        });
+    }
+}
+
+// Guardian Messages Function
+function sendSafeMessages() {
+    if (confirm('Send safety confirmation messages to all guardians? This will notify them about their children\'s current status.')) {
+        const loadingToast = showLoadingMessage('Sending messages to guardians...');
+        
+        fetch('/send_guardian_messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message_type: 'safety_update',
+                include_location: true,
+                emergency_contact: true
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingToast.remove();
+            if (data.success) {
+                showSuccessMessage(`Safety messages sent to ${data.sent_count || 0} guardians successfully!`);
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                throw new Error(data.message || 'Failed to send messages');
+            }
+        })
+        .catch(error => {
+            loadingToast.remove();
+            console.error('Error:', error);
+            showErrorMessage('Failed to send guardian messages. Please try again.');
+        });
+    }
+}
+// Quick Check-in Function  
 function quickCheckin() {
     const modal = new bootstrap.Modal(document.getElementById('checkinModal') || createCheckinModal());
     modal.show();
@@ -425,26 +1071,26 @@ function createCheckinModal() {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Quick Safety Check-in</h5>
+                        <h5 class="modal-title">
+                            <i class="fas fa-user-check me-2"></i>Quick Safety Check-in
+                        </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="checkinForm">
-                            <div class="mb-3">
-                                <label class="form-label">Current Status</label>
-                                <div class="d-grid gap-2">
-                                    <button type="button" class="btn btn-outline-success" onclick="submitCheckin('safe')">
-                                        <i class="fas fa-check me-2"></i>I'm Safe
-                                    </button>
-                                    <button type="button" class="btn btn-outline-warning" onclick="submitCheckin('need_help')">
-                                        <i class="fas fa-hand-paper me-2"></i>Need Help
-                                    </button>
-                                    <button type="button" class="btn btn-outline-danger" onclick="submitCheckin('emergency')">
-                                        <i class="fas fa-exclamation-triangle me-2"></i>Emergency
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                        <div class="text-center mb-4">
+                            <p class="text-muted">Please confirm your current safety status</p>
+                        </div>
+                        <div class="d-grid gap-3">
+                            <button type="button" class="btn btn-success btn-lg" onclick="submitCheckin('safe')">
+                                <i class="fas fa-check-circle me-2"></i>I'm Safe
+                            </button>
+                            <button type="button" class="btn btn-warning btn-lg" onclick="submitCheckin('need_help')">
+                                <i class="fas fa-hand-paper me-2"></i>Need Assistance
+                            </button>
+                            <button type="button" class="btn btn-danger btn-lg" onclick="submitCheckin('emergency')">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Emergency Help
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -466,14 +1112,95 @@ function submitCheckin(status) {
     .then(data => {
         if (data.success) {
             bootstrap.Modal.getInstance(document.getElementById('checkinModal')).hide();
-            location.reload();
+            showSuccessMessage('Check-in recorded successfully!');
+            setTimeout(() => location.reload(), 1500);
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showErrorMessage('Failed to record check-in. Please try again.');
     });
 }
 
-// Auto-refresh dashboard every 30 seconds
+function callContact(number) {
+    if (confirm(`Call ${number}?`)) {
+        window.open(`tel:${number}`, '_self');
+    }
+}
+
+function refreshDashboard() {
+    location.reload();
+}
+
+function showSuccessMessage(message) {
+    const toast = document.createElement('div');
+    toast.className = 'position-fixed top-0 end-0 p-3';
+    toast.style.zIndex = '9999';
+    toast.innerHTML = `
+        <div class="toast show align-items-center text-white bg-success border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-check-circle me-2"></i>${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 5000);
+}
+
+function showErrorMessage(message) {
+    const toast = document.createElement('div');
+    toast.className = 'position-fixed top-0 end-0 p-3';
+    toast.style.zIndex = '9999';
+    toast.innerHTML = `
+        <div class="toast show align-items-center text-white bg-danger border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-exclamation-triangle me-2"></i>${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 5000);
+}
+
+function showLoadingMessage(message) {
+    const toast = document.createElement('div');
+    toast.className = 'position-fixed top-0 end-0 p-3';
+    toast.style.zIndex = '9999';
+    toast.innerHTML = `
+        <div class="toast show align-items-center text-white bg-info border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>${message}
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    return toast;
+}
+
+// Auto-refresh dashboard every 2 minutes
 setInterval(function() {
-    // You can add AJAX calls here to update specific sections
-}, 30000);
+    fetch('/api/dashboard_stats')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Dashboard stats updated:', data);
+        })
+        .catch(error => console.error('Error updating stats:', error));
+}, 120000);
+
+// Initialize tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
 </script>
 {% endblock %}
