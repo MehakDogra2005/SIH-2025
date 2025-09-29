@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jeevansetu - Evacuation Plan</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-book"></i><span>Education Modules</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-gamepad"></i><span>Sandbox Simulator</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-phone-alt"></i><span>Emergency Contacts</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-list-check"></i><span>Do's & Don'ts</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-calendar-alt"></i><span>Drill Schedule</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link active"><i class="fas fa-map-marked-alt"></i><span>Disaster Map</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-robot"></i><span>AI Helper</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-trophy"></i><span>Gamified Learning</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+    </ul>
+    <div class="user-section">
+      <div class="user-avatar">P</div>
+      <div class="user-details">
+        <div class="user-name">Priya Sharma</div>
+        <div class="user-role">Student</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="header">
+      <div class="welcome">
+        <h2>Welcome back, Priya!</h2>
+        <p>View evacuation routes for CSE, Admin, IT, and Hostel blocks</p>
+      </div>
+      <div class="user-info"><div class="user-img">P</div></div>
+    </div>
+
+    <div class="page-title">
+      <div>
+        <h2>Disaster Map - Evacuation Plan</h2>
+        <p>Select a building and floor to view evacuation routes</p>
+      </div>
+      <button class="btn btn-primary" id="downloadBtn"><i class="fas fa-download"></i> Download Plan</button>
+    </div>
+
+    <div class="selection-panel">
+      <div class="section-header">
+        <h3 class="section-title">Select Building & Floor</h3>
+        <p class="section-subtitle">Choose one of the four main blocks and a floor level</p>
+      </div>
+
+      <div class="building-tabs" id="buildingTabs">
+        <div class="building-tab active" data-building="cse"><i class="fas fa-laptop-code"></i><span>CSE Block</span></div>
+        <div class="building-tab" data-building="admin"><i class="fas fa-user-tie"></i><span>Admin Block</span></div>
+        <div class="building-tab" data-building="it"><i class="fas fa-server"></i><span>IT Block</span></div>
+        <div class="building-tab" data-building="hostel"><i class="fas fa-bed"></i><span>Hostel Block</span></div>
+      </div>
+
+      <div class="floor-selector" id="floorSelector">
+        <button class="floor-btn active" data-floor="ground">Ground Floor</button>
+        <button class="floor-btn" data-floor="first">First Floor</button>
+        <button class="floor-btn" data-floor="second">Second Floor</button>
+        <button class="floor-btn" data-floor="third">Third Floor</button>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-primary" id="showRoute"><i class="fas fa-route"></i> Show Evacuation Route</button>
+        <button class="btn btn-outline" id="toggleDanger"><i class="fas fa-triangle-exclamation"></i> Toggle Danger (demo)</button>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-color legend-route"></div><span>Evacuation Route</span></div>
+        <div class="legend-item"><div class="legend-color legend-exit"></div><span>Emergency Exit</span></div>
+        <div class="legend-item"><div class="legend-color legend-room"></div><span>Room/Area</span></div>
+        <div class="legend-item"><div class="legend-color legend-selected"></div><span>Your Location</span></div>
+        <div class="legend-item"><div class="legend-color legend-path"></div><span>Calculated Path</span></div>
+        <div class="legend-item"><div class="legend-color legend-danger"></div><span>Danger Zone</span></div>
+      </div>
+    </div>
+
+    <div class="map-container">
+      <div class="map-header">
+        <h3 class="section-title" id="mapTitle">CSE Block - Ground Floor Evacuation Map</h3>
+        <button class="btn btn-outline" id="resetMap"><i class="fas fa-sync-alt"></i> Reset View</button>
+      </div>
+      <div class="map-content">
+        <div id="svg-container"></div>
+        <div class="location-info" id="locationInfo"></div>
+      </div>
+    </div>
+
+    <div class="instructions-panel">
+      <div class="section-header">
+        <h3 class="section-title">Evacuation Instructions</h3>
+        <p class="section-subtitle">Important guidelines to follow during evacuation</p>
+      </div>
+      <div class="instruction-item">
+        <div class="instruction-icon"><i class="fas fa-route"></i></div>
+        <div class="instruction-content">
+          <h4>Follow Marked Routes</h4>
+          <p>Always follow the red-marked evacuation routes to the nearest emergency exit. Do not use elevators during evacuation.</p>
+        </div>
+      </div>
+      <div class="instruction-item">
+        <div class="instruction-icon"><i class="fas fa-users"></i></div>
+        <div class="instruction-content">
+          <h4>Assemble at Designated Points</h4>
+          <p>After evacuation, proceed to the designated assembly points and avoid blocking emergency vehicle access routes.</p>
+        </div>
+      </div>
+      <div class="instruction-item">
+        <div class="instruction-icon"><i class="fas fa-first-aid"></i></div>
+        <div class="instruction-content">
+          <h4>Assist Those in Need</h4>
+          <p>Help individuals with disabilities or mobility issues to evacuate safely. Report to emergency personnel if someone needs assistance.</p>
+        </div>
+      </div>
+      <div class="instruction-item">
+        <div class="instruction-icon"><i class="fas fa-ban"></i></div>
+        <div class="instruction-content">
+          <h4>Avoid Dangerous Actions</h4>
+          <p>Do not re-enter the building until declared safe by authorities. Avoid electrical switches if there is a gas leak suspicion.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer"><p>Jeevansetu © 2025 | IGDTUW Evacuation Plan</p></div>
+  </main>
+
+  <script src="js/astar.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
