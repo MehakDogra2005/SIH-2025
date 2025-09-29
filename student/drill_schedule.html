@@ -1195,12 +1195,306 @@
             let currentMonth = today.getMonth();
             let currentYear = today.getFullYear();
 
-            // Drill dates
-            const drills = {
-                "2025-9-18": "Fire Drill",
-                "2025-9-20": "Earthquake Drill",
-                "2025-9-25": "Flood Response"
-            };
+            // API Configuration
+            const API_BASE_URL = 'http://127.0.0.1:5000'; // Administrator API URL
+            
+            // Global drill data
+            let drillsData = [];
+            let drills = {}; // For calendar compatibility
+
+            // Fetch drills from administrator API
+            async function fetchDrills() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/public/drills`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        drillsData = data.drills;
+                        
+                        // Update drill calendar format
+                        drills = {};
+                        drillsData.forEach(drill => {
+                            const date = new Date(drill.scheduled_date);
+                            const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+                            drills[key] = drill.title;
+                        });
+                        
+                        updateDrillDisplay();
+                        updateDashboardStats();
+                        
+                        // Re-render calendar with new data
+                        renderCalendar(currentMonth, currentYear);
+                        
+                        console.log('Drills loaded successfully:', drillsData.length, 'drills');
+                    } else {
+                        console.error('Failed to fetch drills:', data.error);
+                        showErrorMessage('Failed to load drill data. Using sample data.');
+                    }
+                } catch (error) {
+                    console.error('Error fetching drills:', error);
+                    showErrorMessage('Unable to connect to server. Using sample data.');
+                    loadSampleDrills();
+                }
+            }
+
+            // Load sample drills as fallback
+            function loadSampleDrills() {
+                drills = {
+                    "2025-9-18": "Fire Drill",
+                    "2025-9-20": "Earthquake Drill",
+                    "2025-9-25": "Flood Response"
+                };
+                
+                drillsData = [
+                    {
+                        id: 1,
+                        title: "Fire Drill",
+                        drill_type: "fire",
+                        location: "Block A - Ground Floor, IGDTUW",
+                        scheduled_date: "2025-09-18T10:00:00",
+                        total_expected: 40,
+                        participation_count: 0,
+                        status: "scheduled"
+                    },
+                    {
+                        id: 2,
+                        title: "Earthquake Drill",
+                        drill_type: "earthquake",
+                        location: "Auditorium, IGDTUW",
+                        scheduled_date: "2025-09-20T14:00:00",
+                        total_expected: 65,
+                        participation_count: 0,
+                        status: "scheduled"
+                    },
+                    {
+                        id: 3,
+                        title: "Flood Response",
+                        drill_type: "flood",
+                        location: "Community Hall, IGDTUW",
+                        scheduled_date: "2025-09-25T11:00:00",
+                        total_expected: 80,
+                        participation_count: 0,
+                        status: "scheduled"
+                    }
+                ];
+                
+                updateDrillDisplay();
+                updateDashboardStats();
+            }
+
+            // Update drill cards and table with real data
+            function updateDrillDisplay() {
+                updateDrillCards();
+                updateDrillsTable();
+            }
+
+            // Update drill cards section
+            function updateDrillCards() {
+                const drillCardsContainer = document.querySelector('.drill-cards');
+                if (!drillCardsContainer) return;
+
+                drillCardsContainer.innerHTML = '';
+
+                drillsData.slice(0, 3).forEach(drill => {
+                    const drillDate = new Date(drill.scheduled_date);
+                    const formattedDate = drillDate.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                    });
+
+                    const drillCard = document.createElement('div');
+                    drillCard.className = 'drill-card';
+                    drillCard.innerHTML = `
+                        <div class="drill-card-header">
+                            <span class="drill-type">${drill.title}</span>
+                            <span class="drill-date">${formattedDate}</span>
+                        </div>
+                        <div class="drill-info">
+                            <div class="drill-info-item">
+                                <i class="fas fa-map-marker-alt"></i> ${drill.location}
+                            </div>
+                            <div class="drill-info-item">
+                                <i class="fas fa-users"></i> ${drill.total_expected} Participants
+                            </div>
+                        </div>
+                        <button class="btn btn-primary add-calendar" 
+                                data-type="${drill.title}" 
+                                data-date="${drill.scheduled_date.split('T')[0]}" 
+                                data-location="${drill.location}">
+                            <i class="fas fa-calendar-plus"></i> Add to Calendar
+                        </button>
+                        <span class="status-badge status-scheduled">${drill.status}</span>
+                    `;
+                    
+                    drillCardsContainer.appendChild(drillCard);
+                });
+
+                // Re-bind calendar buttons
+                bindCalendarButtons();
+            }
+
+            // Update drills table
+            function updateDrillsTable() {
+                const tableBody = document.querySelector('.drills-table tbody');
+                if (!tableBody) return;
+
+                tableBody.innerHTML = '';
+
+                drillsData.forEach(drill => {
+                    const drillDate = new Date(drill.scheduled_date);
+                    const formattedDate = drillDate.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                    });
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${drill.title}</td>
+                        <td>${formattedDate}</td>
+                        <td>${drill.location}</td>
+                        <td><span class="status-badge status-scheduled">${drill.status}</span></td>
+                        <td>
+                            <button class="btn btn-primary join-btn" data-drill-id="${drill.id}">Join</button>
+                            <button class="btn btn-outline details-btn" data-drill='${JSON.stringify(drill)}'>Details</button>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+
+                // Re-bind join and details buttons
+                bindTableButtons();
+            }
+
+            // Update dashboard statistics
+            function updateDashboardStats() {
+                const upcomingCount = drillsData.filter(drill => 
+                    new Date(drill.scheduled_date) > new Date()
+                ).length;
+
+                const nextDrill = drillsData.find(drill => 
+                    new Date(drill.scheduled_date) > new Date()
+                );
+
+                // Update upcoming drills count
+                const upcomingCard = document.querySelector('.dashboard-cards .card:first-child .card-value');
+                if (upcomingCard) {
+                    upcomingCard.textContent = upcomingCount;
+                }
+
+                // Update next drill info
+                const nextDrillCard = document.querySelector('.dashboard-cards .card:last-child');
+                if (nextDrillCard && nextDrill) {
+                    const daysUntil = Math.ceil((new Date(nextDrill.scheduled_date) - new Date()) / (1000 * 60 * 60 * 24));
+                    nextDrillCard.querySelector('.card-value').textContent = `${daysUntil} Days`;
+                    nextDrillCard.querySelector('.card-text').textContent = nextDrill.title;
+                }
+            }
+
+            // Participate in drill function
+            async function participateInDrill(drillId) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/public/drills/${drillId}/participate`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            student_name: 'Student User', // You can customize this
+                            student_id: 'STUDENT_001'
+                        })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        showSuccessMessage('Successfully joined the drill!');
+                        // Refresh drill data to show updated participation
+                        fetchDrills();
+                    } else {
+                        showErrorMessage('Failed to join drill: ' + data.error);
+                    }
+                } catch (error) {
+                    console.error('Error participating in drill:', error);
+                    showErrorMessage('Unable to join drill. Please try again.');
+                }
+            }
+
+            // Bind calendar buttons
+            function bindCalendarButtons() {
+                document.querySelectorAll(".add-calendar").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        addToGoogleCalendar({
+                            type: btn.dataset.type,
+                            date: btn.dataset.date,
+                            location: btn.dataset.location
+                        });
+                    });
+                });
+            }
+
+            // Bind table buttons (join and details)
+            function bindTableButtons() {
+                // Bind Join buttons
+                document.querySelectorAll(".join-btn").forEach(btn => {
+                    btn.addEventListener("click", (e) => {
+                        const drillId = e.target.dataset.drillId;
+                        if (drillId) {
+                            participateInDrill(drillId);
+                        }
+                    });
+                });
+
+                // Bind Details buttons
+                document.querySelectorAll(".details-btn").forEach(btn => {
+                    btn.addEventListener("click", (e) => {
+                        const drillData = JSON.parse(e.target.dataset.drill);
+                        const drillDate = new Date(drillData.scheduled_date);
+                        openModal({
+                            type: drillData.title,
+                            date: drillDate.toLocaleDateString(),
+                            location: drillData.location,
+                            participants: drillData.total_expected,
+                            status: drillData.status,
+                            action: "join"
+                        });
+                    });
+                });
+            }
+
+            // Show success message
+            function showSuccessMessage(message) {
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-success';
+                alert.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 300px;';
+                alert.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>${message}
+                    <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+                `;
+                document.body.appendChild(alert);
+                
+                setTimeout(() => {
+                    if (alert.parentElement) alert.remove();
+                }, 5000);
+            }
+
+            // Show error message
+            function showErrorMessage(message) {
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-warning';
+                alert.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 300px;';
+                alert.innerHTML = `
+                    <i class="fas fa-exclamation-triangle me-2"></i>${message}
+                    <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+                `;
+                document.body.appendChild(alert);
+                
+                setTimeout(() => {
+                    if (alert.parentElement) alert.remove();
+                }, 5000);
+            }
 
             function renderCalendar(month, year) {
                 if (!calendarGrid) return;
@@ -1440,6 +1734,9 @@
             window.addEventListener("click", (e) => {
                 if (e.target === modal) modal.style.display = "none";
             });
+            
+            // Initialize drill data from API
+            fetchDrills();
         });
 
         // Load User Information from MongoDB database
@@ -1616,6 +1913,12 @@
             loadUserInfo();
             initializeSidebarNavigation();
             setInterval(loadUserInfo, 5 * 60 * 1000);
+            
+            // Initialize drill data
+            fetchDrills();
+            
+            // Refresh drill data every 5 minutes
+            setInterval(fetchDrills, 5 * 60 * 1000);
         });
     </script>
 </body>
