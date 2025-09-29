@@ -71,6 +71,8 @@ class Drill(db.Model):
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
     drill_type = db.Column(db.String(50))  # fire, earthquake, flood, evacuation
+    location = db.Column(db.String(200), default='IGDTUW Campus')
+    scheduled_date = db.Column(db.DateTime)
     file_url = db.Column(db.String(200))
     score = db.Column(db.Float, default=0.0)
     participation_count = db.Column(db.Integer, default=0)
@@ -283,18 +285,40 @@ def drills():
 @admin_required
 def create_drill():
     if request.method == 'POST':
-        drill = Drill(
-            title=request.form['title'],
-            description=request.form['description'],
-            drill_type=request.form['drill_type'],
-            total_expected=int(request.form.get('total_expected', 100)),
-            conducted_by=session['user_id']
-        )
+        # Parse scheduled date
+        scheduled_date = None
+        if request.form.get('scheduled_date'):
+            try:
+                scheduled_date = datetime.strptime(request.form['scheduled_date'], '%Y-%m-%dT%H:%M')
+            except ValueError:
+                try:
+                    scheduled_date = datetime.strptime(request.form['scheduled_date'], '%Y-%m-%d')
+                except ValueError:
+                    flash('Invalid date format. Please use YYYY-MM-DD or YYYY-MM-DDTHH:MM format.', 'error')
+                    return render_template('create_drill.html')
+        
+        # Create drill with basic fields first
+        drill_data = {
+            'title': request.form['title'],
+            'description': request.form['description'],
+            'drill_type': request.form['drill_type'],
+            'total_expected': int(request.form.get('total_expected', 100)),
+            'conducted_by': session['user_id']
+        }
+        
+        # Add new fields if they exist in the model
+        if hasattr(Drill, 'location'):
+            drill_data['location'] = request.form.get('location', 'IGDTUW Campus')
+        
+        if hasattr(Drill, 'scheduled_date') and scheduled_date:
+            drill_data['scheduled_date'] = scheduled_date
+        
+        drill = Drill(**drill_data)
         
         # Handle file upload
         if 'file' in request.files:
             file = request.files['file']
-            if file.filename != '':
+            if file.filename and file.filename != '':
                 filename = secure_filename(file.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(file_path)
@@ -751,7 +775,11 @@ def drill_participation():
 # Initialize database
 def init_db():
     with app.app_context():
+        # For development, drop and recreate all tables to ensure clean schema
+        print("Initializing database...")
+        db.drop_all()
         db.create_all()
+        print("✅ Database tables created")
         
         # Create admin user if not exists
         admin = User.query.filter_by(email='admin@emergency.gov').first()
@@ -763,8 +791,59 @@ def init_db():
                 role='admin'
             )
             db.session.add(admin)
+            print("✅ Admin user created")
+        
+        # Create some sample data for testing
+        create_sample_data()
         
         db.session.commit()
+        print("✅ Database initialization complete")
+
+def create_sample_data():
+    """Create some sample drills for testing"""
+    try:
+        # Check if we already have drills
+        if Drill.query.count() == 0:
+            sample_drills = [
+                Drill(
+                    title='Fire Evacuation Drill',
+                    description='Practice fire evacuation procedures',
+                    drill_type='fire',
+                    location='Building A - Ground Floor',
+                    scheduled_date=datetime.now() + timedelta(days=2),
+                    total_expected=50,
+                    conducted_by=1
+                ),
+                Drill(
+                    title='Earthquake Safety Drill',
+                    description='Learn earthquake response procedures',
+                    drill_type='earthquake', 
+                    location='Auditorium',
+                    scheduled_date=datetime.now() + timedelta(days=5),
+                    total_expected=75,
+                    conducted_by=1
+                ),
+                Drill(
+                    title='Flood Response Training',
+                    description='Flood emergency response training',
+                    drill_type='flood',
+                    location='Community Hall',
+                    scheduled_date=datetime.now() + timedelta(days=8),
+                    total_expected=60,
+                    conducted_by=1
+                )
+            ]
+            
+            for drill in sample_drills:
+                db.session.add(drill)
+            
+            print("✅ Sample drills created")
+    except Exception as e:
+        print(f"Error creating sample data: {e}")
+
+def migrate_database():
+    """Migrate database to add new columns if they don't exist - Not needed in clean initialization"""
+    pass
 
 @app.route('/settings')
 @login_required
@@ -773,6 +852,85 @@ def settings():
     return render_template('settings.html')
 
 # Error handlers
+# Public API endpoints for student access (no login required)
+@app.route('/api/public/drills', methods=['GET'])
+def public_drills():
+    """Public endpoint for students to access drill data"""
+    try:
+        # Get all active drills
+        drills = Drill.query.order_by(Drill.created_at.desc()).all()
+        
+        drill_list = []
+        for drill in drills:
+            # Use scheduled_date if available, otherwise calculate from creation date
+            try:
+                if hasattr(drill, 'scheduled_date') and drill.scheduled_date:
+                    drill_date = drill.scheduled_date
+                else:
+                    drill_date = drill.created_at + timedelta(days=1)  # Example: drill is next day after creation
+            except:
+                drill_date = drill.created_at + timedelta(days=1)
+            
+            # Get location safely
+            try:
+                location = drill.location if hasattr(drill, 'location') and drill.location else 'IGDTUW Campus'
+            except:
+                location = 'IGDTUW Campus'
+            
+            drill_data = {
+                'id': drill.id,
+                'title': drill.title,
+                'description': drill.description,
+                'drill_type': drill.drill_type,
+                'location': location,
+                'total_expected': drill.total_expected,
+                'participation_count': drill.participation_count,
+                'score': drill.score,
+                'file_url': drill.file_url,
+                'created_at': drill.created_at.isoformat(),
+                'scheduled_date': drill_date.isoformat(),
+                'status': 'scheduled',  # Default status for new drills
+                'conductor_name': drill.conductor.name if drill.conductor else 'Administrator'
+            }
+            drill_list.append(drill_data)
+        
+        return jsonify({
+            'success': True,
+            'drills': drill_list,
+            'total_count': len(drill_list)
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/public/drills/<int:drill_id>/participate', methods=['POST'])
+def public_drill_participate(drill_id):
+    """Public endpoint for students to mark participation in a drill"""
+    try:
+        data = request.get_json()
+        student_name = data.get('student_name', 'Anonymous Student')
+        student_id = data.get('student_id', 'unknown')
+        
+        drill = Drill.query.get_or_404(drill_id)
+        
+        # Increment participation count
+        drill.participation_count += 1
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': f'Participation recorded for {student_name}',
+            'drill_id': drill_id,
+            'new_participation_count': drill.participation_count
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
