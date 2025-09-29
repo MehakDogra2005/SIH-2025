@@ -10,7 +10,6 @@ import json
 from functools import wraps
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emergency_management.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -18,12 +17,8 @@ app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-# Session configuration
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
-app.config['SESSION_COOKIE_SECURE'] = False
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+# Enable CORS for cross-origin requests
+CORS(app)
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
@@ -159,7 +154,7 @@ def admin_required(f):
 def index():
     if 'user_id' in session:
         return redirect(url_for('dashboard'))
-    return render_template('dashboard.html')
+    return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -741,6 +736,15 @@ def init_db():
         
         db.session.commit()
 
+# Error handlers
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    app.run(debug=True, host='0.0.0.0', port=5000)
