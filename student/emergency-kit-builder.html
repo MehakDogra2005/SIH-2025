@@ -470,10 +470,10 @@
             
             <div class="video-container">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/a0j3lOxGGqo?rel=0&modestbranding=1" 
+                    <iframe src="https://www.youtube.com/embed/KKN7Ewht1DQ?rel=0&modestbranding=1&showinfo=0" 
                             title="Emergency Kit Basics"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -501,10 +501,10 @@
             
             <div class="video-container">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/rHR7S1fCQZE?rel=0&modestbranding=1" 
+                    <iframe src="https://www.youtube.com/embed/Y0TgLmFNY0c?rel=0&modestbranding=1&showinfo=0" 
                             title="Water Storage for Emergency Kits"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -565,10 +565,10 @@
             
             <div class="video-container">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/VdSj3f3o_nY?rel=0&modestbranding=1" 
+                    <iframe src="https://www.youtube.com/embed/jNAz5VmbuJo?rel=0&modestbranding=1&showinfo=0" 
                             title="Building a Complete First Aid Kit"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -618,10 +618,10 @@
             
             <div class="video-container">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/rHR7S1fCQZE?rel=0&modestbranding=1" 
+                    <iframe src="https://www.youtube.com/embed/0QmnO82NLZk?rel=0&modestbranding=1&showinfo=0" 
                             title="Emergency Communication Equipment"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -670,10 +670,10 @@
             
             <div class="video-container">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/L8_98i_bNQo?rel=0&modestbranding=1" 
+                    <iframe src="https://www.youtube.com/embed/VdX7vEo44bk?rel=0&modestbranding=1&showinfo=0" 
                             title="Emergency Hygiene and Sanitation"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -754,10 +754,10 @@
             
             <div class="video-container">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/HiLkbU8JCuU?rel=0&modestbranding=1" 
+                    <iframe src="https://www.youtube.com/embed/UmiGvOha7As?rel=0&modestbranding=1&showinfo=0" 
                             title="Car Emergency Kit Essentials"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -879,7 +879,7 @@
     <script>
         // Progress tracking
         let currentProgress = 0;
-        const totalSections = 8;
+        const totalSections = 9; // Updated to match actual number of content sections
         let completedSections = new Set();
         let selectedAnswer = null;
         let currentQuizIndex = 0;
@@ -988,7 +988,7 @@
         });
 
         function updateProgress() {
-            const progressPercentage = Math.round((completedSections.size / totalSections) * 100);
+            const progressPercentage = Math.min(Math.round((completedSections.size / totalSections) * 100), 100);
             currentProgress = progressPercentage;
             
             document.getElementById('progressFill').style.width = progressPercentage + '%';
