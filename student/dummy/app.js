@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedRoomId = null;
   let fakeDangerActive = true; // toggle demo
 
+  // Map building/floor to JSON files in root
+  const DATA_FILES = {
+    'cse-ground':  'cse_ground.json',
+    'cse-first':   'cse_first.json',
+    'admin-ground': 'admin_ground.json',
+    'admin-first':  'admin_first.json'
+    // Add IT/Hostel when you create their JSON
+  };
+
   function titleize() {
     const bMap = { cse:'CSE Block', admin:'Admin Block', it:'IT Block', hostel:'Hostel Block' };
     const fMap = { ground:'Ground Floor', first:'First Floor', second:'Second Floor', third:'Third Floor' };
@@ -24,16 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadData() {
     const key = `${selectedBuilding}-${selectedFloor}`;
-    // For demo we only ship cse-ground.json; fallback to it for other floors
-    const url = `data/${selectedBuilding}-${selectedFloor}.json`.replace('-', '-');
-    const safeUrl = (selectedBuilding === 'cse' && selectedFloor === 'ground')
-      ? 'data/cse-ground.json'
-      : 'data/cse-ground.json';
+    const file = DATA_FILES[key] || 'cse_ground.json'; // fallback
     try {
-      const res = await fetch(url);
+      const res = await fetch(file);
+      if (!res.ok) throw new Error(res.statusText);
       dataset = await res.json();
-    } catch {
-      const res = await fetch(safeUrl);
+    } catch (err) {
+      console.error('Failed to load JSON', err);
+      alert(`Could not load data for ${key}. Falling back to cse_ground.json`);
+      const res = await fetch('cse_ground.json');
       dataset = await res.json();
     }
     drawSVG();
@@ -50,10 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
     svg.style.height = '100%';
 
     // background
-    const bg = rect(0,0,600,400,'#f8f9fa');
-    svg.appendChild(bg);
+    svg.appendChild(rect(0,0,600,400,'#f8f9fa'));
 
-    // corridors (light grey polygons)
+    // corridors
     (dataset.corridors || []).forEach(poly => {
       const p = document.createElementNS('http://www.w3.org/2000/svg','polygon');
       p.setAttribute('points', poly.points.map(pt => `${pt.x},${pt.y}`).join(' '));
@@ -63,14 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
       svg.appendChild(p);
     });
 
-    // danger zones (red rectangles)
+    // danger zones
     (dataset.dangerZones || []).forEach(z => {
       const d = rect(z.x, z.y, z.width, z.height, null, 'danger-zone');
       d.dataset.dangerId = z.id;
       svg.appendChild(d);
     });
 
-    // exits (green circles)
+    // exits
     (dataset.nodes || []).filter(n => n.type === 'exit').forEach(n => {
       const c = circle(n.x, n.y, 10, 'exit-marker');
       svg.appendChild(c);
@@ -78,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
       svg.appendChild(label);
     });
 
-    // rooms (blue circles, clickable start points)
+    // rooms
     (dataset.nodes || []).filter(n => n.type === 'room').forEach(n => {
       const c = circle(n.x, n.y, 8, 'room-marker');
       c.dataset.roomId = n.id;
@@ -94,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
       svg.appendChild(label);
     });
 
-    // edges (optional, subtle)
+    // edges
     (dataset.edges || []).forEach(e => {
       const a = dataset.nodes.find(n => n.id === e.from);
       const b = dataset.nodes.find(n => n.id === e.to);
@@ -102,7 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const line = document.createElementNS('http://www.w3.org/2000/svg','line');
       line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
       line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
-      line.setAttribute('stroke', '#cfd8e3'); line.setAttribute('stroke-width', '1.5');
+      line.setAttribute('stroke', '#cfd8e3');
+      line.setAttribute('stroke-width', '1.5');
       line.setAttribute('stroke-dasharray', '3,4');
       svg.appendChild(line);
     });
@@ -111,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentSVG = svg;
   }
 
+  // Helpers
   function rect(x,y,w,h,fill,className){
     const r = document.createElementNS('http://www.w3.org/2000/svg','rect');
     r.setAttribute('x',x); r.setAttribute('y',y);
@@ -158,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   toggleDangerBtn.addEventListener('click', () => {
-    // demo: toggle visibility of danger zones (still affects routing because penalty function reads dataset)
     fakeDangerActive = !fakeDangerActive;
     currentSVG.querySelectorAll('.danger-zone').forEach(d => d.style.display = fakeDangerActive ? 'block' : 'none');
   });
@@ -174,19 +182,15 @@ document.addEventListener('DOMContentLoaded', () => {
     currentSVG?.querySelectorAll('.route-line').forEach(e => e.remove());
   }
 
-  // geometry: line segment AB vs rectangle (axis-aligned)
+  // Geometry: line vs rect
   function lineIntersectsRect(ax,ay,bx,by, rx,ry,rw,rh){
     const minX = rx, maxX = rx + rw, minY = ry, maxY = ry + rh;
-
     function between(a,b,c){ return (a >= Math.min(b,c) && a <= Math.max(b,c)); }
-    // quick reject
     if (Math.max(ax,bx) < minX || Math.min(ax,bx) > maxX || Math.max(ay,by) < minY || Math.min(ay,by) > maxY){
-      // could still be inside rect entirely:
       const insideA = ax>minX && ax<maxX && ay>minY && ay<maxY;
       const insideB = bx>minX && bx<maxX && by>minY && by<maxY;
       return insideA || insideB ? true : false;
     }
-    // check intersection with each side
     const edges = [
       {x1:minX,y1:minY,x2:maxX,y2:minY},
       {x1:maxX,y1:minY,x2:maxX,y2:maxY},
@@ -203,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return edges.some(e => segIntersect(ax,ay,bx,by,e.x1,e.y1,e.x2,e.y2));
   }
 
-  // Cost penalty based on danger zones (Infinity blocks, else adds cost)
+  // Penalty function
   function makePenaltyFn(dangerZones) {
     return (a, b, edge) => {
       const ax=a.x, ay=a.y, bx=b.x, by=b.y;
@@ -212,23 +216,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!fakeDangerActive) break;
         const intersects = lineIntersectsRect(ax,ay,bx,by, z.x,z.y,z.width,z.height);
         if (intersects) {
-          // If an edge crosses a danger zone we heavily penalize it.
-          // If the zone is marked "hard", block entirely.
           if (z.hard) return Infinity;
-          penalty += 500; // big penalty so A* prefers other routes
+          penalty += 500;
         } else {
-          // near miss: if either endpoint is very close to a zone, add soft penalty
           const cx = Math.max(z.x, Math.min((ax+bx)/2, z.x+z.width));
           const cy = Math.max(z.y, Math.min((ay+by)/2, z.y+z.height));
           const dist = Math.hypot(((ax+bx)/2)-cx, ((ay+by)/2)-cy);
-          if (dist < 25) penalty += (25 - dist) * 6; // gentle gradient
+          if (dist < 25) penalty += (25 - dist) * 6;
         }
       }
       return penalty;
     };
   }
 
-  // Draw the A* result as a yellow dashed polyline
+  // Draw the A* result
   function drawRoute(ids) {
     clearRoute();
     const pts = ids.map(id => {
@@ -241,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentSVG.appendChild(pl);
   }
 
-  // Find path button
+  // Find path
   showRouteBtn.addEventListener('click', () => {
     if (!selectedRoomId) {
       alert('Please select a room by clicking a blue marker.');
