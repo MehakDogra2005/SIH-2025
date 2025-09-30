@@ -9,21 +9,45 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Ubuntu Font Family -->
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-color: #4A90E2;
-            --secondary-color: #357ABD;
+            /* Student Dashboard Color Palette */
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #f25c54;
+            --warning: #f9a825;
+            --card-bg: #ffffff;
+            --text-dark: #202124;
+            --light-bg: #f5f7fb;
+
+            /* User palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
+
+            /* Legacy compatibility */
+            --primary-color: #1a73e8;
+            --secondary-color: #0d47a1;
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
             --info-color: #06b6d4;
             --dark-color: #1f2937;
             --light-color: #f8fafc;
-            --sidebar-bg: #4A90E2;
-            --sidebar-hover: #357ABD;
+            --sidebar-bg: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            --sidebar-hover: rgba(255, 255, 255, 0.06);
             --content-bg: #f5f7fa;
         }
 
@@ -34,8 +58,13 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--content-bg);
+            background: var(--content-bg);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
             overflow-x: hidden;
         }
 
@@ -45,61 +74,84 @@
             top: 0;
             left: 0;
             height: 100vh;
-            width: 280px;
-            background-color: var(--sidebar-bg);
-            padding: 1.5rem 0;
+            width: 240px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
             z-index: 1000;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
+            overflow-y: auto;
         }
 
         .sidebar-brand {
-            padding: 0 1.5rem 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-brand i {
+            font-size: 22px;
+            color: var(--p6);
         }
 
         .sidebar-brand h4 {
             color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.2px;
+            margin: 0;
         }
 
         .sidebar-brand small {
-            color: #94a3b8;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.75rem;
+            display: none; /* Hide subtitle for cleaner look */
         }
 
         .sidebar-nav {
             list-style: none;
             padding: 0;
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .sidebar-nav .nav-item {
-            margin-bottom: 0.25rem;
+            margin-bottom: 0;
         }
 
         .sidebar-nav .nav-link {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1.5rem;
-            color: #cbd5e1;
+            gap: 12px;
+            padding: 10px;
+            color: rgba(255, 255, 255, 0.95);
             text-decoration: none;
-            transition: all 0.3s ease;
-            border-radius: 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .sidebar-nav .nav-link:hover,
-        .sidebar-nav .nav-link.active {
-            background-color: var(--sidebar-hover);
+        .sidebar-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.06);
             color: white;
-            border-left: 3px solid white;
-            padding-left: calc(1.5rem - 3px);
+        }
+
+        .sidebar-nav .nav-link.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            color: white;
         }
 
         .sidebar-nav .nav-link i {
             width: 20px;
-            margin-right: 0.75rem;
+            text-align: center;
             font-size: 1rem;
         }
 
@@ -110,16 +162,9 @@
 
         /* Main Content */
         .main-content {
-            margin-left: 280px;
+            margin-left: 240px;
             min-height: 100vh;
             background-color: var(--content-bg);
-        }
-
-        .top-navbar {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border-bottom: 1px solid #e2e8f0;
         }
 
         .content-wrapper {
@@ -207,58 +252,14 @@
         }
 
         .btn-primary {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
+            background: var(--primary);
+            border-color: var(--primary);
         }
 
         .btn-primary:hover {
-            background: var(--secondary-color);
-            border-color: var(--secondary-color);
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
             transform: translateY(-1px);
-        }
-
-        /* Emergency Alert */
-        .emergency-alert {
-            background: linear-gradient(135deg, #FF6B6B, #FF5252);
-            color: white;
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .emergency-alert::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .emergency-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-        }
-
-        .emergency-btn:hover {
-            background: rgba(255,255,255,0.3);
-            color: white;
         }
 
         /* Module Cards */
@@ -295,6 +296,65 @@
             border-bottom: none;
         }
 
+        /* Sidebar User Profile */
+        .sidebar-user-profile {
+            margin-top: auto;
+            padding: 12px;
+            margin: 0 -12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+            position: absolute;
+            bottom: 2rem;
+            left: 22px;
+            right: 22px;
+        }
+
+        .sidebar-user-profile:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -303,7 +363,7 @@
             }
 
             .sidebar.show {
-                width: 280px;
+                width: 240px;
                 transform: translateX(0);
             }
 
@@ -356,7 +416,8 @@
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <h4><i class="fas fa-life-ring me-2" style="color: white;"></i>JeevanSetu</h4>
+            <i class="fas fa-shield-alt"></i>
+            <h4>JeevanSetu</h4>
             <small>Emergency Management System</small>
         </div>
         
@@ -415,103 +476,34 @@
                 </a>
             </li>
             {% endif %}
-            <li class="nav-item mt-4">
-                <a href="#" class="nav-link" onclick="showQuickActions()">
-                    <i class="fas fa-bolt"></i>
-                    <span>Quick Actions</span>
-                </a>
-            </li>
             <li class="nav-item">
-                <a href="#" class="nav-link" onclick="showSettings()">
+                <a href="{{ url_for('settings') }}" class="nav-link {% if request.endpoint == 'settings' %}active{% endif %}">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <form action="{{ url_for('logout') }}" method="POST" style="margin: 0;" onsubmit="return confirmLogout()">
+                    <button type="submit" class="nav-link btn btn-link" style="border: none; background: none; color: inherit; text-decoration: none; padding: 0.5rem 1rem; width: 100%; text-align: left;">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            </li>
         </ul>
 
-        <div style="position: absolute; bottom: 2rem; left: 1.5rem; right: 1.5rem;">
-            <div class="emergency-alert text-center">
-                <i class="fas fa-exclamation-circle mb-2" style="font-size: 1.5rem;"></i>
-                <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Emergency Alert System</div>
-                <button class="emergency-btn btn btn-sm w-100" onclick="triggerEmergencyAlert()">
-                    <i class="fas fa-bell me-1"></i>EMERGENCY ALERT
-                </button>
+        <!-- User Profile at Bottom -->
+        <div class="sidebar-user-profile">
+            <div class="user-avatar" id="userAvatar">{{ session.get('user_name', 'Admin')[0].upper() }}</div>
+            <div class="user-info">
+                <h4 id="sidebarUserName">{{ session.get('user_name', 'Administrator') }}</h4>
+                <p>{{ session.get('user_role', 'Administrator').title() }}</p>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Top Navigation -->
-        <div class="top-navbar d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <button class="btn btn-link d-md-none p-0 me-3" onclick="toggleSidebar()">
-                    <i class="fas fa-bars text-dark"></i>
-                </button>
-                <h5 class="mb-0 text-dark">{% block page_title %}Dashboard{% endblock %}</h5>
-            </div>
-            
-            <div class="d-flex align-items-center">
-                <div class="dropdown me-3">
-                    <button class="btn btn-link position-relative" data-bs-toggle="dropdown">
-                        <i class="fas fa-bell text-muted" style="font-size: 1.1rem;"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                            3
-                        </span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end" style="width: 300px;">
-                        <h6 class="dropdown-header">Recent Notifications</h6>
-                        <div class="notification-item">
-                            <div class="d-flex">
-                                <i class="fas fa-exclamation-triangle text-warning me-2 mt-1"></i>
-                                <div>
-                                    <small class="text-muted">10 min ago</small>
-                                    <div style="font-size: 0.9rem;">Flood Warning</div>
-                                    <small class="text-muted">Heavy rainfall alert issued for your region</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="notification-item">
-                            <div class="d-flex">
-                                <i class="fas fa-users-cog text-info me-2 mt-1"></i>
-                                <div>
-                                    <small class="text-muted">2 hours ago</small>
-                                    <div style="font-size: 0.9rem;">Drill Scheduled</div>
-                                    <small class="text-muted">Earthquake drill scheduled for tomorrow 11 AM</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="notification-item">
-                            <div class="d-flex">
-                                <i class="fas fa-info-circle text-primary me-2 mt-1"></i>
-                                <div>
-                                    <small class="text-muted">1 day ago</small>
-                                    <div style="font-size: 0.9rem;">New Module Added</div>
-                                    <small class="text-muted">Check out the new Fire Safety module</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="dropdown">
-                    <button class="btn btn-link d-flex align-items-center" data-bs-toggle="dropdown">
-                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                            {{ session.get('user_name', 'Admin')[0].upper() }}
-                        </div>
-                        <span class="text-dark">{{ session.get('user_name', 'Administrator') }}</span>
-                        <i class="fas fa-chevron-down text-muted ms-2" style="font-size: 0.8rem;"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
         <!-- Content -->
         <div class="content-wrapper">
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -547,16 +539,6 @@
             }
         }
 
-        function showQuickActions() {
-            // Implement quick actions modal
-            alert('Quick Actions - Feature coming soon!');
-        }
-
-        function showSettings() {
-            // Implement settings modal
-            alert('Settings - Feature coming soon!');
-        }
-
         // Auto-refresh notifications
         setInterval(function() {
             // Add notification refresh logic here
@@ -567,6 +549,11 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
+
+        // Logout confirmation
+        function confirmLogout() {
+            return confirm('Are you sure you want to logout?');
+        }
     </script>
 
     {% block extra_js %}{% endblock %}

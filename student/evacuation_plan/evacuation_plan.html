@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevansetu - Evacuation Plan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
         }
 
         :root {
@@ -27,14 +31,322 @@
             --light-gray: #e9ecef;
             --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --transition: all 0.3s ease;
+
+            /* user palette to use across cards/overlays */
+            --p1: #309ad4;
+            --p2: #e69c42;
+            --p3: #ea8d99;
+            --p4: #faafa4;
+            --p5: #e2afd3;
+            --p6: #c8e5f3;
+            --p7: #fae8c7;
+
+            --shadow: 0 8px 20px rgba(18, 38, 63, 0.08);
+            --transition: all 0.25s ease;
+            --glass: rgba(255, 255, 255, 0.72);
         }
 
         body {
-            background-color: #f0f2f5;
-            color: #333;
-            display: flex;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Ubuntu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
             min-height: 100vh;
-            line-height: 1.6;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 22px;
+            position: fixed;
+            width: 240px;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            z-index: 200;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .logo i {
+            font-size: 22px;
+            color: var(--p6)
+        }
+
+        .logo h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px
+        }
+
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95)
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.06)
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08)
+        }
+
+        .new-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #fff;
+            margin-left: auto
+        }
+
+        /* Dropdown Menu Styles - VERTICAL LAYOUT */
+        .dropdown-menu {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .menu-item-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .menu-item-main i:first-child {
+            width: 20px;
+            text-align: center;
+        }
+
+        .dropdown-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .dropdown-menu.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .menu-item-main:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .dropdown-menu.active .menu-item-main {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .dropdown-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            margin: 8px 0 8px 0;
+            padding: 4px 0;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-menu.active .dropdown-content {
+            display: block;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                max-height: 120px;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            margin: 2px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+            font-size: 12px;
+            color: #4ecdc4;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 1);
+            transform: translateX(4px);
+        }
+
+        .dropdown-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        /* Menu items spacing to accommodate dropdown */
+        .menu-items {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Ensure dropdown pushes other menu items down */
+        .dropdown-menu {
+            flex-direction: column;
+        }
+
+        /* Main content */
+        /* .main-content {
+            grid-column: 2;
+            padding: 20px 30px;
+            min-height: 100vh;
+            background: var(--light);
+            margin-left: 250px;
+
+        } */
+        .main-content {
+            grid-column: 2;
+            padding: 20px;
+            min-height: 100vh
+        }
+
+        /* padding-left accounts for fixed sidebar */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            border-radius: 12px;
+            /* background: linear-gradient(90deg, var(--primary), var(--primary-dark)); */
+            background: transparent;
+            color: white;
+            box-shadow: var(--shadow);
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 8px 12px;
+            border-radius: 999px;
+            width: 42%;
+            min-width: 220px;
+            gap: 10px
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%
+        }
+
+        .search-bar .search-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-top: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-profile img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-profile h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+        }
+
+        .user-profile p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
         }
 
         /* Sidebar Styles */
@@ -49,7 +361,7 @@
             z-index: 1000;
         }
 
-        .logo {
+        /* .logo {
             padding: 20px 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -63,7 +375,7 @@
         .logo i {
             margin-right: 10px;
             font-size: 1.8rem;
-        }
+        } */
 
         .logo span span {
             color: var(--accent);
@@ -88,7 +400,8 @@
             transition: var(--transition);
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover,
+        .nav-link.active {
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
             border-left: 4px solid var(--accent);
@@ -134,7 +447,62 @@
             opacity: 0.8;
         }
 
-        /* Main Content Styles */
+        /* Sidebar User Profile */
+        .sidebar-user-profile {
+            margin-top: auto;
+            padding: 12px;
+            margin: 0 -12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .sidebar-user-profile:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--p6), var(--p1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+        }
+
+        /* Main Content Styles
         .main-content {
             flex: 1;
             margin-left: 250px;
@@ -142,7 +510,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-        }
+        } */
 
         .header {
             display: flex;
@@ -398,7 +766,8 @@
             pointer-events: none;
         }
 
-        .exit-marker, .room-marker {
+        .exit-marker,
+        .room-marker {
             position: absolute;
             width: 30px;
             height: 30px;
@@ -511,28 +880,30 @@
             .sidebar {
                 width: 70px;
             }
-            
-            .sidebar .logo span, .sidebar .nav-link span, .sidebar .user-details {
+
+            .sidebar .logo span,
+            .sidebar .nav-link span,
+            .sidebar .user-details {
                 display: none;
             }
-            
+
             .sidebar .logo {
                 padding: 20px 10px;
                 text-align: center;
             }
-            
+
             .sidebar .logo h1 {
                 justify-content: center;
             }
-            
+
             .main-content {
                 margin-left: 70px;
             }
-            
+
             .building-tabs {
                 flex-direction: column;
             }
-            
+
             .floor-selector {
                 justify-content: center;
             }
@@ -542,279 +913,296 @@
             .main-content {
                 padding: 10px;
             }
-            
+
             .header {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .user-info {
                 margin-top: 10px;
             }
-            
+
             .page-title {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .page-title .btn {
                 margin-top: 10px;
             }
-            
+
             .map-header {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .map-header .btn {
                 margin-top: 10px;
             }
         }
     </style>
 </head>
+
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">
-            <h1><i class="fas fa-shield-alt"></i> <span>Jeevan<span>Setu</span></span></h1>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="../dashboard-student.html" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../education-modules.html" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span>Education Modules</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../sandbox-simulator.html" class="nav-link">
-                    <i class="fas fa-gamepad"></i>
-                    <span>Sandbox Simulator</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../emergency_contacts.html" class="nav-link">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>Emergency Contacts</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../dos&donts.html" class="nav-link">
-                    <i class="fas fa-list-check"></i>
-                    <span>Do's & Don'ts</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../drill_schedule.html" class="nav-link">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Drill Schedule</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../evacuation_plan.html" class="nav-link active">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <span>Disaster Map</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="chatbot.html" class="nav-link">
-                    <i class="fas fa-robot"></i>
-                    <span>AI Helper</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../gamified-learning.html" class="nav-link">
-                    <i class="fas fa-trophy"></i>
-                    <span>Gamified Learning</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="../settings.html" class="nav-link">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </li>
-        </ul>
-        <div class="user-section">
-            <div class="user-avatar">P</div>
-            <div class="user-details">
-                <div class="user-name">Priya Sharma</div>
-                <div class="user-role">Student</div>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>JeevanSetu</h1>
             </div>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="header">
-            <div class="welcome">
-                <h2>Welcome back, Priya!</h2>
-                <p>View evacuation routes for CSE, Admin, IT, and Hostel blocks</p>
-            </div>
-            <div class="user-info">
-                <div class="user-img">P</div>
-            </div>
-        </div>
-
-        <div class="page-title">
-            <div>
-                <h2>Disaster Map - Evacuation Plan</h2>
-                <p>Select a building and floor to view evacuation routes</p>
-            </div>
-            <button class="btn btn-primary">
-                <i class="fas fa-download"></i> Download Plan
-            </button>
-        </div>
-
-        <div class="selection-panel">
-            <div class="section-header">
-                <h3 class="section-title">Select Building & Floor</h3>
-                <p class="section-subtitle">Choose one of the four main blocks and a floor level</p>
-            </div>
-            
-            <div class="building-tabs">
-                <div class="building-tab active" data-building="cse">
-                    <i class="fas fa-laptop-code"></i>
-                    <span>CSE Block</span>
+            <div class="menu-items">
+                <div class="menu-item active" data-link="dashboard-student.html"><i
+                        class="fas fa-home"></i><span>Dashboard</span></div>
+                <div class="menu-item dropdown-menu" id="educationDropdown">
+                    <div class="menu-item-main">
+                        <i class="fas fa-book"></i><span>Education Modules</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </div>
+                    <div class="dropdown-content">
+                        <div class="dropdown-item" data-link="education-modules.html"><i
+                                class="fas fa-graduation-cap"></i><span>Learning Modules</span></div>
+                        <div class="dropdown-item" data-link="dos&donts.html"><i
+                                class="fas fa-exclamation-triangle"></i><span>Dos & Don'ts</span></div>
+                    </div>
                 </div>
-                <div class="building-tab" data-building="admin">
-                    <i class="fas fa-user-tie"></i>
-                    <span>Admin Block</span>
-                </div>
-                <div class="building-tab" data-building="it">
-                    <i class="fas fa-server"></i>
-                    <span>IT Block</span>
-                </div>
-                <div class="building-tab" data-building="hostel">
-                    <i class="fas fa-bed"></i>
-                    <span>Hostel Block</span>
+                <div class="menu-item" data-link="sandbox-simulator.html"><i class="fas fa-gamepad"></i><span>Sandbox
+                        Simulator</span></div>
+                <div class="menu-item" data-link="emergency_contacts.html"><i
+                        class="fas fa-phone-alt"></i><span>Emergency
+                        Contacts</span></div>
+                <div class="menu-item" data-link="drill_schedule.html"><i
+                        class="fa-solid fa-calendar-days"></i><span>Drill
+                        Schedule</span></div>
+                <div class="menu-item" data-link="advanced-map.html"><i class="fas fa-map-marked-alt"></i><span>Disaster
+                        Map</span></div>
+                <div class="menu-item" onclick="window.location.href='chatbot.html'"><i
+                        class="fas fa-robot"></i><span>AI
+                        Helper</span></div>
+                <div class="menu-item" data-link="gamified-learning.html"><i
+                        class="fas fa-graduation-cap"></i><span>Gamified
+                        Learning</span></div>
+
+                <!-- <div class="menu-item"><i class="fas fa-user"></i><span>Profile & Badges</span></div> -->
+                <div class="menu-item" data-link="settings.html"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </div> <!-- User Profile at Bottom -->
+            <div class="sidebar-user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h4 id="sidebarUserName">User</h4>
+                    <p>Student</p>
                 </div>
             </div>
-            
-            <div class="floor-selector">
-                <button class="floor-btn active" data-floor="ground">Ground Floor</button>
-                <button class="floor-btn" data-floor="first">First Floor</button>
-                <button class="floor-btn" data-floor="second">Second Floor</button>
-                <button class="floor-btn" data-floor="third">Third Floor</button>
-            </div>
-            
-            <button class="btn btn-primary" id="showRoute">
-                <i class="fas fa-route"></i> Show Evacuation Route
-            </button>
+        </aside>
 
-            <div class="legend">
-                <div class="legend-item"><div class="legend-color legend-route"></div><span>Evacuation Route</span></div>
-                <div class="legend-item"><div class="legend-color legend-exit"></div><span>Emergency Exit</span></div>
-                <div class="legend-item"><div class="legend-color legend-room"></div><span>Room/Area</span></div>
-                <div class="legend-item"><div class="legend-color legend-selected"></div><span>Your Location</span></div>
-                <div class="legend-item"><div class="legend-color legend-path"></div><span>Calculated Path</span></div>
-            </div>
-        </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- <div class="header">
+                <div class="welcome">
+                    <h2>Welcome back, Priya!</h2>
+                    <p>View evacuation routes for CSE, Admin, IT, and Hostel blocks</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-img">P</div>
+                </div>
+            </div> -->
 
-        <div class="map-container">
-            <div class="map-header">
-                <h3 class="section-title" id="mapTitle">CSE Block - Ground Floor Evacuation Map</h3>
-                <button class="btn btn-outline" id="resetMap">
-                    <i class="fas fa-sync-alt"></i> Reset View
+            <div class="page-title">
+                <div>
+                    <h2>Disaster Map - Evacuation Plan</h2>
+                    <p>Select a building and floor to view evacuation routes</p>
+                </div>
+                <button class="btn btn-primary">
+                    <i class="fas fa-download"></i> Download Plan
                 </button>
             </div>
-            <div class="map-content">
-                <!-- Floor images -->
-                <img src="images/cse_ground.png" alt="CSE Ground Floor" class="floor-image active" id="cse-ground">
-                <img src="images/cse_first.png" alt="CSE First Floor" class="floor-image" id="cse-first">
-                <img src="images/cse_second.png" alt="CSE Second Floor" class="floor-image" id="cse-second">
-                <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Third+Floor" alt="CSE Third Floor" class="floor-image" id="cse-third">
-                
-                <img src="images/admin_ground_floor.png" alt="Admin Ground Floor" class="floor-image" id="admin-ground">
-                <img src="images/admin_first_floor.png" alt="Admin First Floor" class="floor-image" id="admin-first">
-                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Second+Floor" alt="Admin Second Floor" class="floor-image" id="admin-second">
-                <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Third+Floor" alt="Admin Third Floor" class="floor-image" id="admin-third">
-                
-                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Ground+Floor" alt="IT Ground Floor" class="floor-image" id="it-ground">
-                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+First+Floor" alt="IT First Floor" class="floor-image" id="it-first">
-                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Second+Floor" alt="IT Second Floor" class="floor-image" id="it-second">
-                <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Third+Floor" alt="IT Third Floor" class="floor-image" id="it-third">
-                
-                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Ground+Floor" alt="Hostel Ground Floor" class="floor-image" id="hostel-ground">
-                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+First+Floor" alt="Hostel First Floor" class="floor-image" id="hostel-first">
-                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Second+Floor" alt="Hostel Second Floor" class="floor-image" id="hostel-second">
-                <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Third+Floor" alt="Hostel Third Floor" class="floor-image" id="hostel-third">
-               
-                <!-- Exit markers -->
-                <div class="exit-marker" data-room="Exit 1" style="top: 15%; left: 10%;" data-x="10" data-y="15">1</div>
-                <div class="exit-marker" data-room="Exit 2" style="top: 15%; left: 90%;" data-x="90" data-y="15">2</div>
-                <div class="exit-marker" data-room="Exit 3" style="top: 85%; left: 50%;" data-x="50" data-y="85">3</div>
 
-                <!-- Room markers -->
-                <div class="room-marker" data-room="Lab 101" style="top: 30%; left: 25%;" data-x="25" data-y="30"></div>
-                <div class="room-marker" data-room="Faculty Room" style="top: 50%; left: 40%;" data-x="40" data-y="50"></div>
-                <div class="room-marker" data-room="Classroom" style="top: 70%; left: 25%;" data-x="25" data-y="70"></div>
-                <div class="room-marker" data-room="Server Room" style="top: 40%; left: 70%;" data-x="70" data-y="40"></div>
-                <div class="room-marker" data-room="Common Area" style="top: 70%; left: 60%;" data-x="60" data-y="70"></div>
+            <div class="selection-panel">
+                <div class="section-header">
+                    <h3 class="section-title">Select Building & Floor</h3>
+                    <p class="section-subtitle">Choose one of the four main blocks and a floor level</p>
+                </div>
 
-                <div class="location-info" id="locationInfo"></div>
-            </div>
-        </div>
+                <div class="building-tabs">
+                    <div class="building-tab active" data-building="cse">
+                        <i class="fas fa-laptop-code"></i>
+                        <span>CSE Block</span>
+                    </div>
+                    <div class="building-tab" data-building="admin">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Admin Block</span>
+                    </div>
+                    <div class="building-tab" data-building="it">
+                        <i class="fas fa-server"></i>
+                        <span>IT Block</span>
+                    </div>
+                    <div class="building-tab" data-building="hostel">
+                        <i class="fas fa-bed"></i>
+                        <span>Hostel Block</span>
+                    </div>
+                </div>
 
-        <div class="instructions-panel">
-            <div class="section-header">
-                <h3 class="section-title">Evacuation Instructions</h3>
-                <p class="section-subtitle">Important guidelines to follow during evacuation</p>
-            </div>
-            
-            <div class="instruction-item">
-                <div class="instruction-icon">
-                    <i class="fas fa-route"></i>
+                <div class="floor-selector">
+                    <button class="floor-btn active" data-floor="ground">Ground Floor</button>
+                    <button class="floor-btn" data-floor="first">First Floor</button>
+                    <button class="floor-btn" data-floor="second">Second Floor</button>
+                    <button class="floor-btn" data-floor="third">Third Floor</button>
                 </div>
-                <div class="instruction-content">
-                    <h4>Follow Marked Routes</h4>
-                    <p>Always follow the red-marked evacuation routes to the nearest emergency exit. Do not use elevators during evacuation.</p>
-                </div>
-            </div>
-            
-            <div class="instruction-item">
-                <div class="instruction-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="instruction-content">
-                    <h4>Assemble at Designated Points</h4>
-                    <p>After evacuation, proceed to the designated assembly points and avoid blocking emergency vehicle access routes.</p>
-                </div>
-            </div>
-            
-            <div class="instruction-item">
-                <div class="instruction-icon">
-                    <i class="fas fa-first-aid"></i>
-                </div>
-                <div class="instruction-content">
-                    <h4>Assist Those in Need</h4>
-                    <p>Help individuals with disabilities or mobility issues to evacuate safely. Report to emergency personnel if someone needs assistance.</p>
+
+                <button class="btn btn-primary" id="showRoute">
+                    <i class="fas fa-route"></i> Show Evacuation Route
+                </button>
+
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-route"></div><span>Evacuation Route</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-exit"></div><span>Emergency Exit</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-room"></div><span>Room/Area</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-selected"></div><span>Your Location</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-path"></div><span>Calculated Path</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="instruction-item">
-                <div class="instruction-icon">
-                    <i class="fas fa-ban"></i>
+
+            <div class="map-container">
+                <div class="map-header">
+                    <h3 class="section-title" id="mapTitle">CSE Block - Ground Floor Evacuation Map</h3>
+                    <button class="btn btn-outline" id="resetMap">
+                        <i class="fas fa-sync-alt"></i> Reset View
+                    </button>
                 </div>
-                <div class="instruction-content">
-                    <h4>Avoid Dangerous Actions</h4>
-                    <p>Do not re-enter the building until declared safe by authorities. Do not use open flames and avoid electrical switches if there is a gas leak suspicion.</p>
+                <div class="map-content">
+                    <!-- Floor images -->
+                    <img src="images/cse_ground.png" alt="CSE Ground Floor" class="floor-image active" id="cse-ground">
+                    <img src="images/cse_first.png" alt="CSE First Floor" class="floor-image" id="cse-first">
+                    <img src="images/cse_second.png" alt="CSE Second Floor" class="floor-image" id="cse-second">
+                    <img src="https://via.placeholder.com/800x500/4a90e2/ffffff?text=CSE+Third+Floor"
+                        alt="CSE Third Floor" class="floor-image" id="cse-third">
+
+                    <img src="images/admin_ground_floor.png" alt="Admin Ground Floor" class="floor-image"
+                        id="admin-ground">
+                    <img src="images/admin_first_floor.png" alt="Admin First Floor" class="floor-image"
+                        id="admin-first">
+                    <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Second+Floor"
+                        alt="Admin Second Floor" class="floor-image" id="admin-second">
+                    <img src="https://via.placeholder.com/800x500/50c878/ffffff?text=Admin+Third+Floor"
+                        alt="Admin Third Floor" class="floor-image" id="admin-third">
+
+                    <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Ground+Floor"
+                        alt="IT Ground Floor" class="floor-image" id="it-ground">
+                    <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+First+Floor"
+                        alt="IT First Floor" class="floor-image" id="it-first">
+                    <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Second+Floor"
+                        alt="IT Second Floor" class="floor-image" id="it-second">
+                    <img src="https://via.placeholder.com/800x500/ff6b35/ffffff?text=IT+Third+Floor"
+                        alt="IT Third Floor" class="floor-image" id="it-third">
+
+                    <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Ground+Floor"
+                        alt="Hostel Ground Floor" class="floor-image" id="hostel-ground">
+                    <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+First+Floor"
+                        alt="Hostel First Floor" class="floor-image" id="hostel-first">
+                    <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Second+Floor"
+                        alt="Hostel Second Floor" class="floor-image" id="hostel-second">
+                    <img src="https://via.placeholder.com/800x500/8e44ad/ffffff?text=Hostel+Third+Floor"
+                        alt="Hostel Third Floor" class="floor-image" id="hostel-third">
+
+                    <!-- Exit markers -->
+                    <div class="exit-marker" data-room="Exit 1" style="top: 15%; left: 10%;" data-x="10" data-y="15">1
+                    </div>
+                    <div class="exit-marker" data-room="Exit 2" style="top: 15%; left: 90%;" data-x="90" data-y="15">2
+                    </div>
+                    <div class="exit-marker" data-room="Exit 3" style="top: 85%; left: 50%;" data-x="50" data-y="85">3
+                    </div>
+
+                    <!-- Room markers -->
+                    <div class="room-marker" data-room="Lab 101" style="top: 30%; left: 25%;" data-x="25" data-y="30">
+                    </div>
+                    <div class="room-marker" data-room="Faculty Room" style="top: 50%; left: 40%;" data-x="40"
+                        data-y="50">
+                    </div>
+                    <div class="room-marker" data-room="Classroom" style="top: 70%; left: 25%;" data-x="25" data-y="70">
+                    </div>
+                    <div class="room-marker" data-room="Server Room" style="top: 40%; left: 70%;" data-x="70"
+                        data-y="40">
+                    </div>
+                    <div class="room-marker" data-room="Common Area" style="top: 70%; left: 60%;" data-x="60"
+                        data-y="70">
+                    </div>
+
+                    <div class="location-info" id="locationInfo"></div>
                 </div>
             </div>
-        </div>
-        
-        <div class="footer">
-            <p>Jeevansetu © 2023 | IGDTUW Evacuation Plan</p>
-        </div>
-    </main>
+
+            <div class="instructions-panel">
+                <div class="section-header">
+                    <h3 class="section-title">Evacuation Instructions</h3>
+                    <p class="section-subtitle">Important guidelines to follow during evacuation</p>
+                </div>
+
+                <div class="instruction-item">
+                    <div class="instruction-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div class="instruction-content">
+                        <h4>Follow Marked Routes</h4>
+                        <p>Always follow the red-marked evacuation routes to the nearest emergency exit. Do not use
+                            elevators during evacuation.</p>
+                    </div>
+                </div>
+
+                <div class="instruction-item">
+                    <div class="instruction-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="instruction-content">
+                        <h4>Assemble at Designated Points</h4>
+                        <p>After evacuation, proceed to the designated assembly points and avoid blocking emergency
+                            vehicle
+                            access routes.</p>
+                    </div>
+                </div>
+
+                <div class="instruction-item">
+                    <div class="instruction-icon">
+                        <i class="fas fa-first-aid"></i>
+                    </div>
+                    <div class="instruction-content">
+                        <h4>Assist Those in Need</h4>
+                        <p>Help individuals with disabilities or mobility issues to evacuate safely. Report to emergency
+                            personnel if someone needs assistance.</p>
+                    </div>
+                </div>
+
+                <div class="instruction-item">
+                    <div class="instruction-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <div class="instruction-content">
+                        <h4>Avoid Dangerous Actions</h4>
+                        <p>Do not re-enter the building until declared safe by authorities. Do not use open flames and
+                            avoid
+                            electrical switches if there is a gas leak suspicion.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="footer">
+                <p>Jeevansetu © 2023 | IGDTUW Evacuation Plan</p>
+            </div> -->
+        </main>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const buildingTabs = document.querySelectorAll('.building-tab');
             const floorBtns = document.querySelectorAll('.floor-btn');
             const showRouteBtn = document.getElementById('showRoute');
@@ -824,33 +1212,33 @@
             const roomMarkers = document.querySelectorAll('.room-marker');
             const exitMarkers = document.querySelectorAll('.exit-marker');
             const locationInfo = document.getElementById('locationInfo');
-            
+
             let selectedBuilding = 'cse';
             let selectedFloor = 'ground';
             let selectedMarker = null;
             let selectedExit = null;
             let currentPath = [];
-            
+
             // Building tab selection
             buildingTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function () {
                     buildingTabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                     selectedBuilding = this.getAttribute('data-building');
                     updateMap();
                 });
             });
-            
+
             // Floor button selection
             floorBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     floorBtns.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     selectedFloor = this.getAttribute('data-floor');
                     updateMap();
                 });
             });
-            
+
             // Update map based on selection
             function updateMap() {
                 // Update map title
@@ -860,43 +1248,43 @@
                     'it': 'IT Block',
                     'hostel': 'Hostel Block'
                 };
-                
+
                 const floorNames = {
                     'ground': 'Ground Floor',
                     'first': 'First Floor',
                     'second': 'Second Floor',
                     'third': 'Third Floor'
                 };
-                
+
                 mapTitle.textContent = `${buildingNames[selectedBuilding]} - ${floorNames[selectedFloor]} Evacuation Map`;
-                
+
                 // Show the appropriate floor image
                 floorImages.forEach(img => {
                     img.classList.remove('active');
                 });
-                
+
                 const activeImage = document.getElementById(`${selectedBuilding}-${selectedFloor}`);
                 if (activeImage) {
                     activeImage.classList.add('active');
                 }
-                
+
                 // Update marker positions based on floor
                 updateMarkerPositions();
-                
+
                 // Clear any existing path
                 clearPath();
             }
-            
+
             // Update marker positions based on current floor
             function updateMarkerPositions() {
                 // Hide all markers first
                 roomMarkers.forEach(marker => marker.style.display = 'none');
                 exitMarkers.forEach(marker => marker.style.display = 'none');
-                
+
                 // Show markers for the current floor
                 roomMarkers.forEach(marker => marker.style.display = 'block');
                 exitMarkers.forEach(marker => marker.style.display = 'block');
-                
+
                 // Adjust marker positions based on floor (you can customize this)
                 if (selectedFloor === 'ground') {
                     positionGroundFloorMarkers();
@@ -908,7 +1296,7 @@
                     positionThirdFloorMarkers();
                 }
             }
-            
+
             function positionGroundFloorMarkers() {
                 // Default positions for ground floor
                 // You can customize these based on your actual floor plans
@@ -918,35 +1306,35 @@
                     roomMarkers[0].setAttribute('data-x', '25');
                     roomMarkers[0].setAttribute('data-y', '30');
                 }
-                
+
                 if (roomMarkers[1]) {
                     roomMarkers[1].style.top = '50%';
                     roomMarkers[1].style.left = '40%';
                     roomMarkers[1].setAttribute('data-x', '40');
                     roomMarkers[1].setAttribute('data-y', '50');
                 }
-                
+
                 if (roomMarkers[2]) {
                     roomMarkers[2].style.top = '70%';
                     roomMarkers[2].style.left = '25%';
                     roomMarkers[2].setAttribute('data-x', '25');
                     roomMarkers[2].setAttribute('data-y', '70');
                 }
-                
+
                 if (roomMarkers[3]) {
                     roomMarkers[3].style.top = '40%';
                     roomMarkers[3].style.left = '70%';
                     roomMarkers[3].setAttribute('data-x', '70');
                     roomMarkers[3].setAttribute('data-y', '40');
                 }
-                
+
                 if (roomMarkers[4]) {
                     roomMarkers[4].style.top = '70%';
                     roomMarkers[4].style.left = '60%';
                     roomMarkers[4].setAttribute('data-x', '60');
                     roomMarkers[4].setAttribute('data-y', '70');
                 }
-                
+
                 // Exit markers
                 if (exitMarkers[0]) {
                     exitMarkers[0].style.top = '15%';
@@ -954,14 +1342,14 @@
                     exitMarkers[0].setAttribute('data-x', '10');
                     exitMarkers[0].setAttribute('data-y', '15');
                 }
-                
+
                 if (exitMarkers[1]) {
                     exitMarkers[1].style.top = '15%';
                     exitMarkers[1].style.left = '90%';
                     exitMarkers[1].setAttribute('data-x', '90');
                     exitMarkers[1].setAttribute('data-y', '15');
                 }
-                
+
                 if (exitMarkers[2]) {
                     exitMarkers[2].style.top = '85%';
                     exitMarkers[2].style.left = '50%';
@@ -969,7 +1357,7 @@
                     exitMarkers[2].setAttribute('data-y', '85');
                 }
             }
-            
+
             function positionFirstFloorMarkers() {
                 // Different positions for first floor
                 if (roomMarkers[0]) {
@@ -978,35 +1366,35 @@
                     roomMarkers[0].setAttribute('data-x', '20');
                     roomMarkers[0].setAttribute('data-y', '25');
                 }
-                
+
                 if (roomMarkers[1]) {
                     roomMarkers[1].style.top = '45%';
                     roomMarkers[1].style.left = '35%';
                     roomMarkers[1].setAttribute('data-x', '35');
                     roomMarkers[1].setAttribute('data-y', '45');
                 }
-                
+
                 if (roomMarkers[2]) {
                     roomMarkers[2].style.top = '65%';
                     roomMarkers[2].style.left = '20%';
                     roomMarkers[2].setAttribute('data-x', '20');
                     roomMarkers[2].setAttribute('data-y', '65');
                 }
-                
+
                 if (roomMarkers[3]) {
                     roomMarkers[3].style.top = '35%';
                     roomMarkers[3].style.left = '65%';
                     roomMarkers[3].setAttribute('data-x', '65');
                     roomMarkers[3].setAttribute('data-y', '35');
                 }
-                
+
                 if (roomMarkers[4]) {
                     roomMarkers[4].style.top = '65%';
                     roomMarkers[4].style.left = '55%';
                     roomMarkers[4].setAttribute('data-x', '55');
                     roomMarkers[4].setAttribute('data-y', '65');
                 }
-                
+
                 // Exit markers for first floor
                 if (exitMarkers[0]) {
                     exitMarkers[0].style.top = '10%';
@@ -1014,14 +1402,14 @@
                     exitMarkers[0].setAttribute('data-x', '15');
                     exitMarkers[0].setAttribute('data-y', '10');
                 }
-                
+
                 if (exitMarkers[1]) {
                     exitMarkers[1].style.top = '10%';
                     exitMarkers[1].style.left = '85%';
                     exitMarkers[1].setAttribute('data-x', '85');
                     exitMarkers[1].setAttribute('data-y', '10');
                 }
-                
+
                 if (exitMarkers[2]) {
                     exitMarkers[2].style.top = '80%';
                     exitMarkers[2].style.left = '45%';
@@ -1029,7 +1417,7 @@
                     exitMarkers[2].setAttribute('data-y', '80');
                 }
             }
-            
+
             function positionSecondFloorMarkers() {
                 // Positions for second floor
                 if (roomMarkers[0]) {
@@ -1038,35 +1426,35 @@
                     roomMarkers[0].setAttribute('data-x', '30');
                     roomMarkers[0].setAttribute('data-y', '35');
                 }
-                
+
                 if (roomMarkers[1]) {
                     roomMarkers[1].style.top = '55%';
                     roomMarkers[1].style.left = '45%';
                     roomMarkers[1].setAttribute('data-x', '45');
                     roomMarkers[1].setAttribute('data-y', '55');
                 }
-                
+
                 if (roomMarkers[2]) {
                     roomMarkers[2].style.top = '75%';
                     roomMarkers[2].style.left = '30%';
                     roomMarkers[2].setAttribute('data-x', '30');
                     roomMarkers[2].setAttribute('data-y', '75');
                 }
-                
+
                 if (roomMarkers[3]) {
                     roomMarkers[3].style.top = '45%';
                     roomMarkers[3].style.left = '75%';
                     roomMarkers[3].setAttribute('data-x', '75');
                     roomMarkers[3].setAttribute('data-y', '45');
                 }
-                
+
                 if (roomMarkers[4]) {
                     roomMarkers[4].style.top = '75%';
                     roomMarkers[4].style.left = '65%';
                     roomMarkers[4].setAttribute('data-x', '65');
                     roomMarkers[4].setAttribute('data-y', '75');
                 }
-                
+
                 // Exit markers for second floor
                 if (exitMarkers[0]) {
                     exitMarkers[0].style.top = '20%';
@@ -1074,14 +1462,14 @@
                     exitMarkers[0].setAttribute('data-x', '5');
                     exitMarkers[0].setAttribute('data-y', '20');
                 }
-                
+
                 if (exitMarkers[1]) {
                     exitMarkers[1].style.top = '20%';
                     exitMarkers[1].style.left = '95%';
                     exitMarkers[1].setAttribute('data-x', '95');
                     exitMarkers[1].setAttribute('data-y', '20');
                 }
-                
+
                 if (exitMarkers[2]) {
                     exitMarkers[2].style.top = '90%';
                     exitMarkers[2].style.left = '55%';
@@ -1089,7 +1477,7 @@
                     exitMarkers[2].setAttribute('data-y', '90');
                 }
             }
-            
+
             function positionThirdFloorMarkers() {
                 // Positions for third floor
                 if (roomMarkers[0]) {
@@ -1098,35 +1486,35 @@
                     roomMarkers[0].setAttribute('data-x', '35');
                     roomMarkers[0].setAttribute('data-y', '40');
                 }
-                
+
                 if (roomMarkers[1]) {
                     roomMarkers[1].style.top = '60%';
                     roomMarkers[1].style.left = '50%';
                     roomMarkers[1].setAttribute('data-x', '50');
                     roomMarkers[1].setAttribute('data-y', '60');
                 }
-                
+
                 if (roomMarkers[2]) {
                     roomMarkers[2].style.top = '80%';
                     roomMarkers[2].style.left = '35%';
                     roomMarkers[2].setAttribute('data-x', '35');
                     roomMarkers[2].setAttribute('data-y', '80');
                 }
-                
+
                 if (roomMarkers[3]) {
                     roomMarkers[3].style.top = '50%';
                     roomMarkers[3].style.left = '80%';
                     roomMarkers[3].setAttribute('data-x', '80');
                     roomMarkers[3].setAttribute('data-y', '50');
                 }
-                
+
                 if (roomMarkers[4]) {
                     roomMarkers[4].style.top = '80%';
                     roomMarkers[4].style.left = '70%';
                     roomMarkers[4].setAttribute('data-x', '70');
                     roomMarkers[4].setAttribute('data-y', '80');
                 }
-                
+
                 // Exit markers for third floor
                 if (exitMarkers[0]) {
                     exitMarkers[0].style.top = '25%';
@@ -1134,14 +1522,14 @@
                     exitMarkers[0].setAttribute('data-x', '20');
                     exitMarkers[0].setAttribute('data-y', '25');
                 }
-                
+
                 if (exitMarkers[1]) {
                     exitMarkers[1].style.top = '25%';
                     exitMarkers[1].style.left = '80%';
                     exitMarkers[1].setAttribute('data-x', '80');
                     exitMarkers[1].setAttribute('data-y', '25');
                 }
-                
+
                 if (exitMarkers[2]) {
                     exitMarkers[2].style.top = '95%';
                     exitMarkers[2].style.left = '60%';
@@ -1149,7 +1537,7 @@
                     exitMarkers[2].setAttribute('data-y', '95');
                 }
             }
-            
+
             // Simplified path drawing function
             function drawPath(startX, startY, endX, endY) {
                 // Create a canvas overlay for drawing the path
@@ -1164,23 +1552,23 @@
                     pathCanvas.style.zIndex = '5';
                     document.querySelector('.map-content').appendChild(pathCanvas);
                 }
-                
+
                 // Set canvas size to match container
                 const container = document.querySelector('.map-content');
                 pathCanvas.width = container.clientWidth;
                 pathCanvas.height = container.clientHeight;
-                
+
                 const ctx = pathCanvas.getContext('2d');
-                
+
                 // Clear previous path
                 ctx.clearRect(0, 0, pathCanvas.width, pathCanvas.height);
-                
+
                 // Convert percentage coordinates to pixel coordinates
                 const startXPx = (startX / 100) * pathCanvas.width;
                 const startYPx = (startY / 100) * pathCanvas.height;
                 const endXPx = (endX / 100) * pathCanvas.width;
                 const endYPx = (endY / 100) * pathCanvas.height;
-                
+
                 // Draw the path with yellow color and dashed line
                 ctx.strokeStyle = '#ffc107';
                 ctx.lineWidth = 6;
@@ -1190,7 +1578,7 @@
                 ctx.moveTo(startXPx, startYPx);
                 ctx.lineTo(endXPx, endYPx);
                 ctx.stroke();
-                
+
                 // Draw glow effect
                 ctx.strokeStyle = '#fff200';
                 ctx.lineWidth = 10;
@@ -1201,105 +1589,372 @@
                 ctx.stroke();
                 ctx.globalAlpha = 1.0;
                 ctx.setLineDash([]);
-                
+
                 // Draw start and end points
                 ctx.fillStyle = '#28a745';
                 ctx.beginPath();
                 ctx.arc(startXPx, startYPx, 8, 0, Math.PI * 2);
                 ctx.fill();
-                
+
                 ctx.fillStyle = '#ffc107';
                 ctx.beginPath();
                 ctx.arc(endXPx, endYPx, 8, 0, Math.PI * 2);
                 ctx.fill();
             }
-            
+
             function clearPath() {
                 const pathCanvas = document.getElementById('pathCanvas');
                 if (pathCanvas) {
                     pathCanvas.remove();
                 }
             }
-            
+
             // Room marker selection
             roomMarkers.forEach(marker => {
-                marker.addEventListener('click', function() {
+                marker.addEventListener('click', function () {
                     if (selectedMarker) selectedMarker.classList.remove('selected');
                     this.classList.add('selected');
                     selectedMarker = this;
-                    
+
                     const roomName = this.getAttribute('data-room');
                     locationInfo.innerHTML = `<strong>${roomName}</strong><br>Click an exit to see evacuation path`;
-                    
+
                     const rect = this.getBoundingClientRect();
                     const mapRect = document.querySelector('.map-content').getBoundingClientRect();
-                    let leftPos = rect.left - mapRect.left + rect.width/2 - locationInfo.offsetWidth/2;
+                    let leftPos = rect.left - mapRect.left + rect.width / 2 - locationInfo.offsetWidth / 2;
                     let topPos = rect.top - mapRect.top - locationInfo.offsetHeight - 10;
-                    
+
                     leftPos = Math.max(10, Math.min(leftPos, mapRect.width - locationInfo.offsetWidth - 10));
                     topPos = Math.max(10, topPos);
 
                     locationInfo.style.left = leftPos + 'px';
                     locationInfo.style.top = topPos + 'px';
                     locationInfo.style.display = 'block';
-                    
+
                     clearPath();
                 });
             });
-            
+
             // Exit marker selection
             exitMarkers.forEach(marker => {
-                marker.addEventListener('click', function() {
+                marker.addEventListener('click', function () {
                     if (!selectedMarker) {
                         alert('Please select a room first');
                         return;
                     }
-                    
+
                     selectedExit = this;
-                    
+
                     const startX = parseInt(selectedMarker.getAttribute('data-x'));
                     const startY = parseInt(selectedMarker.getAttribute('data-y'));
                     const endX = parseInt(this.getAttribute('data-x'));
                     const endY = parseInt(this.getAttribute('data-y'));
-                    
+
                     drawPath(startX, startY, endX, endY);
-                    
+
                     const roomName = selectedMarker.getAttribute('data-room');
                     const exitName = this.getAttribute('data-room');
                     locationInfo.innerHTML = `<strong>Path from ${roomName} to ${exitName}</strong><br>Direct evacuation route shown`;
                 });
             });
-            
+
             // Show Route button
-            showRouteBtn.addEventListener('click', function() {
+            showRouteBtn.addEventListener('click', function () {
                 if (!selectedMarker) {
                     alert('Please select a room first');
                     return;
                 }
-                
+
                 if (!selectedExit) {
                     alert('Please select an exit to see the evacuation route');
                     return;
                 }
-                
+
                 const roomName = selectedMarker.getAttribute('data-room');
                 const exitName = selectedExit.getAttribute('data-room');
-                
+
                 alert(`Showing evacuation route from ${roomName} to ${exitName}`);
             });
-            
+
             // Reset map
-            resetMapBtn.addEventListener('click', function() {
+            resetMapBtn.addEventListener('click', function () {
                 if (selectedMarker) selectedMarker.classList.remove('selected');
                 selectedMarker = null;
                 selectedExit = null;
                 locationInfo.style.display = 'none';
                 clearPath();
             });
-            
+
             // Initialize
             updateMap();
         });
+
+        // Load User Information from MongoDB database
+        async function loadUserInfo() {
+            try {
+                // First try to get user data from session/localStorage
+                let userData = null;
+
+                // Check localStorage for stored user data
+                const localData = localStorage.getItem('resq_user') || localStorage.getItem('currentUser') || localStorage.getItem('user');
+                if (localData) {
+                    userData = JSON.parse(localData);
+                }
+
+                // If no local data or token exists, try to fetch from backend
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('jwt');
+                if (!userData && token) {
+                    try {
+                        const response = await fetch('http://localhost:5000/api/auth/current', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            userData = await response.json();
+                            // Save to localStorage for future use
+                            localStorage.setItem('resq_user', JSON.stringify(userData));
+                        } else {
+                            console.log('Failed to fetch user from backend:', response.status);
+                        }
+                    } catch (fetchError) {
+                        console.log('Could not fetch user from backend:', fetchError.message);
+                    }
+                }
+
+                if (userData) {
+                    const firstName = userData.firstName || userData.name || userData.username || userData.email?.split('@')[0] || 'User';
+                    const lastName = userData.lastName || '';
+                    const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+
+                    // Update sidebar user profile
+                    const userNameElement = document.getElementById('sidebarUserName');
+                    const userAvatarElement = document.getElementById('userAvatar');
+
+                    if (userNameElement) userNameElement.textContent = fullName;
+                    if (userAvatarElement) userAvatarElement.textContent = firstName.charAt(0).toUpperCase();
+
+                    console.log('User loaded:', fullName);
+                } else {
+                    // Fallback to default values
+                    console.log('No user data found');
+                    setDefaultUser();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                setDefaultUser();
+            }
+        }
+
+        function setDefaultUser() {
+            const userNameElement = document.getElementById('userName');
+            const userPointsElement = document.getElementById('userPoints');
+
+            if (userNameElement) userNameElement.textContent = 'Guest User';
+            if (userPointsElement) userPointsElement.textContent = '0';
+        }
+
+        // FETCHING POINTS AND USER DATA FROM DATABASE
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+
+            // Refresh user data every 5 minutes
+            setInterval(loadUserInfo, 5 * 60 * 1000);
+        });
+
+        /**********************
+  * Menu Navigation
+  *********************/
+
+        function initializeMenuNavigation() {
+            // Exclude dropdown menu from navigation
+            const menuItems = document.querySelectorAll('.menu-item:not(.dropdown-menu)');
+
+            // Define page mappings for each menu item
+            const pageMapping = {
+                'Dashboard': '../dashboard-student.html',
+                'Learning Modules': '.../education-modules.html',
+                "Dos & Don'ts": 'dos&donts.html',
+                'Sandbox Simulator': '../sandbox-simulator.html',
+                'Emergency Contacts': '../emergency_contacts.html',
+                'Drill Schedule': '../drill_schedule.html',
+                'Disaster Map': '../advanced-map.html',
+                'AI Helper': '../chatbot.html',
+                'Gamified Learning': '../gamified-learning.html',
+                'Settings': '../settings.html'
+            };
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Update active state
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Get the menu item text
+                    const menuText = this.querySelector('span').textContent.trim();
+                    const targetPage = pageMapping[menuText];
+
+                    if (targetPage) {
+                        if (targetPage.startsWith('#')) {
+                            // Handle anchor links (scroll to section)
+                            if (targetPage === '#emergency-contacts') {
+                                document.querySelector('.emergency-contacts-section').scrollIntoView({
+                                    behavior: 'smooth'
+                                });
+                            }
+                        } else {
+                            // Navigate to page
+                            navigateToPage(targetPage, menuText);
+                        }
+                    }
+                });
+
+                // Add hover effect
+                item.addEventListener('mouseenter', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                    }
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    if (!this.classList.contains('active')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        }
+
+        function navigateToPage(targetPage, menuText) {
+            // Show loading indicator
+            showLoadingIndicator();
+
+            // Add smooth transition
+            document.body.style.opacity = '0.8';
+            document.body.style.transition = 'opacity 0.3s ease';
+
+            setTimeout(() => {
+                try {
+                    window.location.href = targetPage;
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    hideLoadingIndicator();
+                    showNavigationError(menuText);
+                    document.body.style.opacity = '1';
+                }
+            }, 300);
+        }
+
+        function showLoadingIndicator() {
+            // Create loading overlay if it doesn't exist
+            if (!document.getElementById('loadingOverlay')) {
+                const loadingHTML = `
+                    <div id="loadingOverlay" style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(26, 115, 232, 0.9);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                        color: white;
+                    ">
+                        <div style="
+                            width: 50px;
+                            height: 50px;
+                            border: 3px solid rgba(255, 255, 255, 0.3);
+                            border-top: 3px solid white;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            margin-bottom: 20px;
+                        "></div>
+                        <h3>Loading...</h3>
+                        <p>Navigating to your selected page</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `;
+                document.body.insertAdjacentHTML('beforeend', loadingHTML);
+            }
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoadingIndicator() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+
+        function showNavigationError(menuText) {
+            alert(`⚠️ Navigation Error\n\nSorry, the ${menuText} page is currently unavailable.\n\nThis might be because:\n• The page is still being developed\n• The file path has changed\n• There's a temporary server issue\n\nPlease try again later or contact support.`);
+        }
+
+        // Add keyboard navigation
+        function initializeKeyboardNavigation() {
+            document.addEventListener('keydown', function (e) {
+                if (e.altKey) {
+                    const menuItems = document.querySelectorAll('.menu-item');
+                    const currentActive = document.querySelector('.menu-item.active');
+                    let currentIndex = Array.from(menuItems).indexOf(currentActive);
+
+                    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        currentIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+                        menuItems[currentIndex].click();
+                    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        currentIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
+                        menuItems[currentIndex].click();
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize everything in proper order
+            console.log('🚀 Initializing dashboard...');
+
+            // 1. First load user info
+            loadUserInfo();
+
+
+            // 3. Initialize navigation
+            initializeMenuNavigation();
+            initializeKeyboardNavigation();
+
+            // Handle dropdown menu
+            const educationDropdown = document.getElementById('educationDropdown');
+            if (educationDropdown) {
+                educationDropdown.addEventListener('click', function (event) {
+                    // Stop propagation to prevent unwanted side effects
+                    event.stopPropagation();
+                    this.classList.toggle('active');
+                });
+
+                const dropdownItems = educationDropdown.querySelectorAll('.dropdown-item');
+                dropdownItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Stop inner clicks from closing the dropdown
+                        const link = this.getAttribute('data-link');
+                        if (link) {
+                            window.location.href = link;
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
+
 </html>

@@ -1,6 +1,28 @@
 document.addEventListener('DOMContentLoaded', function () {
     const signupForm = document.getElementById('signupForm');
-    const API_BASE_URL = 'http://localhost:5000/api/auth';
+    const API_BASE_URL = 'http://localhost:5001/api/auth';
+
+    // Show/hide admin fields based on user type selection
+    document.querySelectorAll('input[name="userType"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            const adminFields = document.getElementById('adminFields');
+            const phoneInput = document.getElementById('phoneNumber');
+            const departmentInput = document.getElementById('department');
+            const floorInput = document.getElementById('floor');
+
+            if (this.value === 'admin') {
+                adminFields.style.display = 'block';
+                phoneInput.required = true;
+                departmentInput.required = true;
+                floorInput.required = true;
+            } else {
+                adminFields.style.display = 'none';
+                phoneInput.required = false;
+                departmentInput.required = false;
+                floorInput.required = false;
+            }
+        });
+    });
 
     signupForm.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -42,7 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     email,
                     password,
                     institution,
-                    userType
+                    userType,
+                    ...(userType === 'admin' && {
+                        phoneNumber: document.getElementById('phoneNumber').value || undefined,
+                        department: document.getElementById('department').value || undefined,
+                        floor: document.getElementById('floor').value ? parseInt(document.getElementById('floor').value) : 0
+                    })
                 })
             });
 

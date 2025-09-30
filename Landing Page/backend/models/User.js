@@ -6,10 +6,36 @@ const userSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    phoneNumber: {
+        type: String,
+        required: function () {
+            return this.userType === 'admin';
+        },
+        validate: {
+            validator: function (v) {
+                return /^\d{10}$/.test(v);
+            },
+            message: props => `${props.value} is not a valid phone number! Must be 10 digits.`
+        }
+    },
     institution: { type: String, required: true },
     userType: { type: String, enum: ['student', 'admin'], required: true },
     points: { type: Number, default: 0 },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    floor: {
+        type: Number,
+        required: function () {
+            return this.userType === 'admin';
+        },
+        min: 0,
+        max: 3
+    },
+    department: {
+        type: String,
+        required: function () {
+            return this.userType === 'admin';
+        }
+    }
 });
 
 // Password encryption before saving

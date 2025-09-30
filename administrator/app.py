@@ -16,6 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)  # Session expires after 2 hours
 
 # Enable CORS for cross-origin requests
 CORS(app)
@@ -33,6 +34,13 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     role = db.Column(db.String(20), nullable=False)  # admin, spoc, responder, student
+    
+    # ✅ ADD THESE FIELDS FOR ADMIN USERS
+    institution = db.Column(db.String(100))
+    phone_number = db.Column(db.String(20))
+    department = db.Column(db.String(50))
+    floor = db.Column(db.Integer)
+    
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Incident(db.Model):
@@ -129,10 +137,31 @@ class StudentDrillParticipation(db.Model):
     drill = db.relationship('Drill', backref='student_participations')
 
 # Helper functions
+def update_database_schema():
+    """Update database with new columns"""
+    with app.app_context():
+        try:
+            # For SQLite, we need to handle schema updates differently
+            # This is a simple approach - in production you'd use migrations
+            inspector = db.inspect(db.engine)
+            columns = [col['name'] for col in inspector.get_columns('user')]
+            
+            new_columns = ['institution', 'phone_number', 'department', 'floor']
+            missing_columns = [col for col in new_columns if col not in columns]
+            
+            if missing_columns:
+                print(f"⚠️  Missing columns: {missing_columns}")
+                print("💡 For development: Delete emergency_management.db and restart to create new schema")
+            else:
+                print("✅ Database schema is up to date")
+                
+        except Exception as e:
+            print(f"❌ Error checking database schema: {e}")
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
+            flash('Please log in to access this page.', 'warning')
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -156,6 +185,8 @@ def index():
         return redirect(url_for('dashboard'))
     return redirect(url_for('login'))
 
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -165,6 +196,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         
         if user and check_password_hash(user.password_hash, password):
+            session.permanent = True  # Enable session timeout
             session['user_id'] = user.id
             session['user_role'] = user.role
             session['user_name'] = user.name
@@ -174,11 +206,187 @@ def login():
             flash('Invalid email or password', 'error')
     
     return render_template('login_new.html')
+@app.route('/api/auth/login', methods=['POST', 'OPTIONS'])
+def api_login():
+    try:
+        # Handle CORS preflight
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'ok'}), 200
+            
+        print("🔐 API Login endpoint hit!")
+        print("Headers:", dict(request.headers))
+        print("Content-Type:", request.content_type)
+        
+        if not request.is_json:
+            print("❌ Request is not JSON")
+            return jsonify({
+                'success': False,
+                'message': 'Request must be JSON',
+                'content_type': request.content_type
+            }), 400
+        
+        data = request.get_json()
+        print("📦 Request data:", data)
+        
+        email = data.get('email')
+        password = data.get('password')
+        user_type = data.get('userType')
+        
+        print(f"🔐 Admin login attempt: {email}")
+        
+        if not email or not password:
+            return jsonify({
+                'success': False,
+                'message': 'Email and password are required'
+            }), 400
+        
+        user = User.query.filter_by(email=email).first()
+        print(f"📊 User found: {user is not None}")
+        
+        if user:
+            print(f"🔍 User details - Name: {user.name}, Role: {user.role}")
+            password_valid = check_password_hash(user.password_hash, password)
+            print(f"🔑 Password valid: {password_valid}")
+        else:
+            password_valid = False
+        
+        if user and password_valid:
+            # Create JWT token
+            access_token = create_access_token(identity=user.id)
+            
+            print(f"✅ Admin login successful: {user.name}")
+            
+            return jsonify({
+                'success': True,
+                'token': access_token,
+                'user': {
+                    'id': user.id,
+                    'name': user.name,
+                    'email': user.email,
+                    'role': user.role
+                },
+                'redirectUrl': '/dashboard'
+            })
+        else:
+            print("❌ Admin login failed: Invalid credentials")
+            return jsonify({
+                'success': False,
+                'message': 'Invalid email or password',
+                'user_exists': user is not None,
+                'password_valid': password_valid if user else False
+            }), 401
+            
+    except Exception as e:
+        print(f"❌ Admin login error: {str(e)}")
+        import traceback
+        print(f"Stack trace: {traceback.format_exc()}")
+        return jsonify({
+            'success': False,
+            'message': f'Server error: {str(e)}'
+        }), 500
+    
+# ✅ ADD SIGNUP ROUTE FOR ADMIN USERS
+@app.route('/api/auth/signup', methods=['POST', 'OPTIONS'])
+def api_signup():
+    try:
+        # Handle CORS preflight
+        if request.method == 'OPTIONS':
+            return jsonify({'status': 'ok'}), 200
+            
+        print("🔐 API Signup endpoint hit!")
+        data = request.get_json()
+        print("📦 Signup request data:", data)
+        
+        first_name = data.get('firstName')
+        last_name = data.get('lastName')
+        email = data.get('email')
+        password = data.get('password')
+        institution = data.get('institution')
+        user_type = data.get('userType')
+        phone_number = data.get('phoneNumber')
+        department = data.get('department')
+        floor = data.get('floor')
+        
+        # Validation
+        if not all([first_name, last_name, email, password, institution, user_type]):
+            return jsonify({
+                'success': False,
+                'message': 'All fields are required'
+            }), 400
+        
+        # Check if user already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            return jsonify({
+                'success': False,
+                'message': 'User with this email already exists'
+            }), 400
+        
+        # Create new user
+        full_name = f"{first_name} {last_name}"
+        new_user = User(
+            name=full_name,
+            email=email,
+            password_hash=generate_password_hash(password),
+            role=user_type,  # This will be 'admin' for admin users
+            institution=institution,
+            phone_number=phone_number,
+            department=department,
+            floor=floor
+        )
+        
+        db.session.add(new_user)
+        db.session.commit()
+        
+        print(f"✅ New {user_type} user created: {email}")
+        
+        # Create JWT token
+        access_token = create_access_token(identity=new_user.id)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Account created successfully!',
+            'token': access_token,
+            'user': {
+                'id': new_user.id,
+                'name': new_user.name,
+                'email': new_user.email,
+                'role': new_user.role,
+                'institution': new_user.institution
+            }
+        })
+        
+    except Exception as e:
+        print(f"❌ Signup error: {str(e)}")
+        import traceback
+        print(f"Stack trace: {traceback.format_exc()}")
+        return jsonify({
+            'success': False,
+            'message': f'Server error during signup: {str(e)}'
+        }), 500
+    
+# Add this test route to verify Flask API is working
+@app.route('/api/test')
+def api_test():
+    return jsonify({
+        'message': 'Flask server is running!',
+        'timestamp': datetime.utcnow().isoformat(),
+        'status': 'OK',
+        'port': 5001
+    })
 
-@app.route('/logout')
+# Add this route to test if the API login endpoint is accessible
+@app.route('/api/auth/test')
+def api_auth_test():
+    return jsonify({
+        'message': 'Auth endpoint is accessible!',
+        'endpoint': '/api/auth/login'
+    })
+
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.clear()
-    flash('You have been logged out', 'info')
+    flash('You have been logged out successfully!', 'success')
     return redirect(url_for('login'))
 
 @app.route('/dashboard')
@@ -518,6 +726,33 @@ def add_student():
         
     return redirect(url_for('students'))
 
+@app.route('/api/students/<int:student_id>', methods=['GET'])
+@login_required
+def api_get_student(student_id):
+    """Get student details"""
+    student = Student.query.get_or_404(student_id)
+    
+    try:
+        student_data = {
+            'id': student.id,
+            'student_id': student.student_id,
+            'name': student.name,
+            'email': student.email,
+            'class': student.class_name,
+            'emergency_contact_name': student.emergency_contact_name,
+            'emergency_contact_phone': student.emergency_contact_phone,
+            'medical_conditions': student.medical_conditions,
+            'drill_participation': student.drill_participation,
+            'last_checkin': student.last_checkin.isoformat() if student.last_checkin else None,
+            'status': student.status,
+            'created_at': student.created_at.isoformat(),
+            'updated_at': student.updated_at.isoformat()
+        }
+        
+        return jsonify({'success': True, 'student': student_data})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/api/students/<int:student_id>/update', methods=['POST'])
 @login_required
 @admin_required
@@ -736,6 +971,12 @@ def init_db():
         
         db.session.commit()
 
+@app.route('/settings')
+@login_required
+def settings():
+    """Admin settings page"""
+    return render_template('settings.html')
+
 # Error handlers
 @app.errorhandler(404)
 def page_not_found(e):
@@ -747,4 +988,5 @@ def internal_server_error(e):
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    update_database_schema()
+    app.run(debug=True, host='0.0.0.0', port=5001)

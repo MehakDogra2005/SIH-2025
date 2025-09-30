@@ -7,12 +7,25 @@ const router = express.Router();
 // Signup API
 router.post('/signup', async (req, res) => {
     try {
-        const { firstName, lastName, email, password, institution, userType } = req.body;
+        const { firstName, lastName, email, password, institution, userType, phoneNumber, department, floor } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists with this email' });
+        }
+
+        // Validate admin fields if user type is admin
+        if (userType === 'admin') {
+            if (!phoneNumber || !department || floor === undefined) {
+                return res.status(400).json({ message: 'Phone number, department, and floor are required for admin users' });
+            }
+            if (!/^\d{10}$/.test(phoneNumber)) {
+                return res.status(400).json({ message: 'Invalid phone number format. Must be 10 digits.' });
+            }
+            if (floor < 0 || floor > 3) {
+                return res.status(400).json({ message: 'Floor number must be between 0 and 3' });
+            }
         }
 
         // Create new user
@@ -22,7 +35,12 @@ router.post('/signup', async (req, res) => {
             email,
             password,
             institution,
-            userType
+            userType,
+            ...(userType === 'admin' && {
+                phoneNumber,
+                department,
+                floor
+            })
         });
 
         // Generate JWT token
@@ -42,7 +60,12 @@ router.post('/signup', async (req, res) => {
                 email: newUser.email,
                 userType: newUser.userType,
                 institution: newUser.institution,
-                points: newUser.points   // <-- this is added : D
+                points: newUser.points,
+                ...(newUser.userType === 'admin' && {
+                    phoneNumber: newUser.phoneNumber,
+                    department: newUser.department,
+                    floor: newUser.floor
+                })
             }
         });
 
@@ -121,7 +144,12 @@ router.get('/current', auth, async (req, res) => {
             email: user.email,
             userType: user.userType,
             institution: user.institution,
-            points: user.points   // ✅ ab hamesha fresh hoga
+            points: user.points,
+            ...(user.userType === 'admin' && {
+                phoneNumber: user.phoneNumber,
+                department: user.department,
+                floor: user.floor
+            })
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

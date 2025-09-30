@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const streakRoutes = require('./routes/streakRoutes');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/streak', streakRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ✅ FIXED MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/sih2025';
@@ -51,7 +53,7 @@ app.get('/api/test', (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 app.listen(PORT, () => {
     console.log(`🚀 SERVER RUNNING ON PORT ${PORT}`);
     console.log(`📡 Test URL: http://localhost:${PORT}/api/test`);

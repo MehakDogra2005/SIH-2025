@@ -325,6 +325,90 @@
             margin-bottom: 30px;
         }
 
+        /* New styles for teacher contacts */
+        .filters {
+            margin-top: 20px;
+        }
+
+        .form-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 200px;
+            margin-bottom: 20px;
+            background-color: white;
+        }
+
+        #emergency-contacts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .floor-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .floor-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-card h3 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .contact-card p {
+            margin: 5px 0;
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .contact-card p strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
         .action-card {
             background: white;
             border-radius: 12px;
@@ -869,74 +953,66 @@
             </div>
 
             <!-- Emergency Contacts -->
+            <!-- Current Floor Teachers Section -->
+            <!-- <div class="contacts-section">
+                <div class="section-header">
+                    <h3 class="section-title">Teachers on Your Floor</h3>
+                    <p class="section-subtitle">Quick access to teachers on your current floor</p>
+                </div>
+                <div id="current-floor-teachers" class="contacts-grid">
+                   
+                </div>
+            </div> -->
+
+            <!-- Recently Added Teachers Section -->
             <div class="contacts-section">
                 <div class="section-header">
-                    <h3 class="section-title">Emergency Contacts</h3>
-                    <p class="section-subtitle">Important contacts for immediate assistance</p>
+                    <h3 class="section-title">Recently Added Teachers</h3>
+                    <p class="section-subtitle">Latest faculty members who joined the platform</p>
                 </div>
+                <div id="recent-teachers" class="contacts-grid">
+                    <!-- Recently added teachers will be loaded here -->
+                </div>
+            </div>
 
+            <!-- All Teachers Section -->
+            <div class="contacts-section">
+                <div class="section-header">
+                    <h3 class="section-title">All College Staff</h3>
+                    <p class="section-subtitle">Find teachers by floor and department</p>
+                    <div class="filters">
+                        <select id="departmentFilter" class="form-select">
+                            <option value="">All Departments</option>
+                            <!-- Departments will be loaded dynamically -->
+                        </select>
+                        <select id="floorFilter" class="form-select">
+                            <option value="">All Floors</option>
+                            <option value="0">Ground Floor</option>
+                            <option value="1">First Floor</option>
+                            <option value="2">Second Floor</option>
+                            <option value="3">Third Floor</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="all-teachers" class="contacts-grid">
+                    <!-- All teachers will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Security Guards Section -->
+            <div class="contacts-section">
+                <div class="section-header">
+                    <h3 class="section-title">Security Guards</h3>
+                    <p class="section-subtitle">Contact security personnel for immediate assistance</p>
+                </div>
                 <div class="contacts-grid">
-                    <div class="contact-card">
-                        <div class="contact-icon action-emergency">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="contact-info">
-                            <div class="contact-name">Emergency Helpline</div>
-                            <div class="contact-role">24/7 Emergency Response</div>
-                            <div class="contact-phone">
-                                <i class="fas fa-phone"></i> 112 / 100
-                            </div>
-                        </div>
-                        <div class="contact-actions">
-                            <button class="btn btn-primary call-btn" data-number="112">
-                                <i class="fas fa-phone"></i> Call
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="contact-card">
-                        <div class="contact-icon action-medical">
-                            <i class="fas fa-ambulance"></i>
-                        </div>
-                        <div class="contact-info">
-                            <div class="contact-name">Medical Emergency</div>
-                            <div class="contact-role">Ambulance & Medical Help</div>
-                            <div class="contact-phone">
-                                <i class="fas fa-phone"></i> 102 / 108
-                            </div>
-                        </div>
-                        <div class="contact-actions">
-                            <button class="btn btn-primary call-btn" data-number="102">
-                                <i class="fas fa-phone"></i> Call
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="contact-card">
-                        <div class="contact-icon action-emergency">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="contact-info">
-                            <div class="contact-name">Fire Department</div>
-                            <div class="contact-role">Fire Emergency</div>
-                            <div class="contact-phone">
-                                <i class="fas fa-phone"></i> 101
-                            </div>
-                        </div>
-                        <div class="contact-actions">
-                            <button class="btn btn-primary call-btn" data-number="101">
-                                <i class="fas fa-phone"></i> Call
-                            </button>
-                        </div>
-                    </div>
-
                     <div class="contact-card">
                         <div class="contact-icon action-security">
                             <i class="fas fa-shield-alt"></i>
                         </div>
                         <div class="contact-info">
-                            <div class="contact-name">Campus Security</div>
-                            <div class="contact-role">IGDTUW Security Control Room</div>
+                            <div class="contact-name">Main Gate Security</div>
+                            <div class="contact-role">24/7 Security</div>
                             <div class="contact-phone">
                                 <i class="fas fa-phone"></i> +91-11-2390-0156
                             </div>
@@ -947,14 +1023,13 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="contact-card">
-                        <div class="contact-icon action-medical">
-                            <i class="fas fa-hospital"></i>
+                        <div class="contact-icon action-security">
+                            <i class="fas fa-shield-alt"></i>
                         </div>
                         <div class="contact-info">
-                            <div class="contact-name">Campus Medical Center</div>
-                            <div class="contact-role">IGDTUW Health Services</div>
+                            <div class="contact-name">Emergency Security</div>
+                            <div class="contact-role">Emergency Response Team</div>
                             <div class="contact-phone">
                                 <i class="fas fa-phone"></i> +91-11-2390-0157
                             </div>
@@ -965,26 +1040,10 @@
                             </button>
                         </div>
                     </div>
-
-                    <div class="contact-card">
-                        <div class="contact-icon action-campus">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <div class="contact-info">
-                            <div class="contact-name">Principal's Office</div>
-                            <div class="contact-role">IGDTUW Administration</div>
-                            <div class="contact-phone">
-                                <i class="fas fa-phone"></i> +91-11-2390-0158
-                            </div>
-                        </div>
-                        <div class="contact-actions">
-                            <button class="btn btn-primary call-btn" data-number="+911123900158">
-                                <i class="fas fa-phone"></i> Call
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
+
+
 
             <!-- Emergency Procedures -->
             <div class="procedures-section">
@@ -1278,26 +1337,38 @@
             setInterval(loadUserInfo, 5 * 60 * 1000);
         });
         document.addEventListener('DOMContentLoaded', function () {
-            // Quick action buttons
-            document.getElementById('emergencyCall').addEventListener('click', function () {
-                alert('Calling Emergency Services: 112');
-                // In a real app, this would initiate a phone call
-            });
+            // Quick action buttons with null checks
+            const emergencyCall = document.getElementById('emergencyCall');
+            if (emergencyCall) {
+                emergencyCall.addEventListener('click', function () {
+                    alert('Calling Emergency Services: 112');
+                    // In a real app, this would initiate a phone call
+                });
+            }
 
-            document.getElementById('medicalEmergency').addEventListener('click', function () {
-                alert('Calling Medical Emergency: 102');
-                // In a real app, this would initiate a phone call
-            });
+            const medicalEmergency = document.getElementById('medicalEmergency');
+            if (medicalEmergency) {
+                medicalEmergency.addEventListener('click', function () {
+                    alert('Calling Medical Emergency: 102');
+                    // In a real app, this would initiate a phone call
+                });
+            }
 
-            document.getElementById('campusSecurity').addEventListener('click', function () {
-                alert('Calling Campus Security: +91-11-2390-0156');
-                // In a real app, this would initiate a phone call
-            });
+            const campusSecurity = document.getElementById('campusSecurity');
+            if (campusSecurity) {
+                campusSecurity.addEventListener('click', function () {
+                    alert('Calling Campus Security: +91-11-2390-0156');
+                    // In a real app, this would initiate a phone call
+                });
+            }
 
-            document.getElementById('campusServices').addEventListener('click', function () {
-                alert('Calling Campus Services: +91-11-2390-0158');
-                // In a real app, this would initiate a phone call
-            });
+            const campusServices = document.getElementById('campusServices');
+            if (campusServices) {
+                campusServices.addEventListener('click', function () {
+                    alert('Calling Campus Services: +91-11-2390-0158');
+                    // In a real app, this would initiate a phone call
+                });
+            }
 
             // Contact call buttons
             const callButtons = document.querySelectorAll('.call-btn');
@@ -1310,11 +1381,14 @@
                 });
             });
 
-            // Download contacts button
-            document.querySelector('.page-title .btn').addEventListener('click', function () {
-                alert('Downloading emergency contacts as PDF');
-                // In a real app, this would generate and download a PDF
-            });
+            // Download contacts button (if it exists)
+            const downloadBtn = document.querySelector('.page-title .btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function () {
+                    alert('Downloading emergency contacts as PDF');
+                    // In a real app, this would generate and download a PDF
+                });
+            }
         });
 
         // Initialize accordion functionality
@@ -1367,6 +1441,8 @@
         initializeKeyboardNavigation();
         initializeAccordion();
     </script>
+    <script src="/student/assets/js/emergency-contacts.js"></script>
+    <script src="/student/assets/js/test-api.js"></script>
 </body>
 
 </html>
